@@ -222,6 +222,10 @@ class CsMixin:
             return C["kassa_b"]
         if "from convert_assignments order by id" in s:
             return C["convert_assignments"]
+        if s == "select valute from avalute":
+            return [{"VALUTE": c["VALUTE"]} for c in A["avalute"]]
+        if "from trdestination d order by id" in s:
+            return sorted(C["trdestination"], key=lambda r: r["ID"])
         if "from trdestination d order by name" in s:
             return sorted(C["trdestination"], key=lambda r: r["NAME"])
         if "from reportdescs d order by name" in s:
