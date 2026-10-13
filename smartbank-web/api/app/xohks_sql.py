@@ -91,3 +91,25 @@ SHABLON_FIELDS = ['MEBLEG', 'ODENISH_KOD', 'BANKIN_KODU', 'HESAB_NO', 'ADI', 'KO
 LINES_ODS_INSTITUTION = ['SELECT a.rowid,a.*', '  FROM xs_institution a', 'order by a.description']
 LINES_ODS_BUDGETLEVEL = ['SELECT b.rowid,b.*', '  FROM xs_budgetlevel b', 'order by b.description']
 LINES_ODS_DESTINATION = ['SELECT c.rowid,c.*', '  FROM xs_destination c', 'order by c.description']
+
+# ---------------------------------------------------------------------------------------------- step 3b
+# Data_Unit.dfm:928-940 TransTypeName / :946-977 TransTypeCode (Master TransTypeName, MasterFields/DetailFields ID)
+LINES_TRANSTYPENAME = ['select', '   *', 'from', '    XS_transtype_name', ' order by id']
+LINES_TRANSTYPECODE = ['select', '   *', 'From', '  xs_transtype_code x', 'where ', '  x.nameID=:ID', ' ']
+# PrepareFile_Unit.dfm:885-890 SendingBatchs / :979-986 ReadyBatchs (:Title otSubst, default 'id') / :1077-1082 xs_batchs
+LINES_SENDINGBATCHS = ['Select ', '   *', ' From ', '    xs_SendingBatchs']
+LINES_READYBATCHS = ['Select', '    *', 'From', '  xs_ReadyBatchs', '', 'order by :Title']
+TITLE_READY_DEFAULT = "id"
+LINES_PF_XS_BATCHS = ['Select', '   *', 'From', '   xs_sendingbatchs']
+# PrepareFile_Unit.pas CreateFile: DataTemp.SQL.Add(...) one-line texts. Delphi concatenates the values in quotes / bare;
+# here they are bound (same comparison: Oracle converts the quoted text implicitly).
+LINES_PF_CONFIG = ['Select * from xs_config']                                                            # :170
+LINES_PF_BRANCH = ["select a.filial as Branch, c.inn from account a,customers c where (a.kli_ID=c.id)and(a.id=:acc_id)"]  # :264
+LINES_PF_BANKINFO_T = ['Select kod_b,krno,inn,swift from bankinfo_t where kod_fil=:kod_fil']             # :272
+LINES_PF_ACCOUNT = ['Select account from xs_config']                                                     # :298
+LINES_PF_MESSAGES = ["select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId=:batch_id)and (x.val_cod=v.valute)"]  # :310
+LINES_PF_BANKM_SWIFT = ['Select swift from bankm where id=:id']                                          # :327
+LINES_PF_BANKM_KRNO = ['Select krno,inn,bankcode from bankm where id=:id']                               # :346
+# FileSend_Unit.dfm:253-262 SentInfo / :278-280 ForCheck
+LINES_SENTINFO = ['select ', '    *', ' from ', '    XS_SENTINFO', 'where', '    create_date>=:BeginDate  and create_date<=:EndDate', '', 'order by id']
+LINES_FORCHECK = ['select out_dir from xs_config']

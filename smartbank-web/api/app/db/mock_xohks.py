@@ -14,7 +14,7 @@ from .. import xohks_sql as Q
 
 _DB = None
 _PATS = None
-DATE_COLS = {"TRANSDATE", "VAL_DATE", "SDATE", "TRANS_DATE"}
+DATE_COLS = {"TRANSDATE", "VAL_DATE", "SDATE", "TRANS_DATE", "CREATE_DATE"}
 
 
 def _osubstr(s, p, n):
@@ -51,6 +51,13 @@ def _db():
             c.execute(f"create table {t} ({', '.join(cols)})")
             for r in rows:
                 c.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))
+        # step 3b: PrepareFile views (DDL not in the repo). Emulated: authorised batches (status msAvtorizator = 6) are 'ready'
+        # (send = 0) or 'sending' (send = 1); columns = the PrepareFile_Unit.dfm TFields.
+        sel = ("select x.id, x.f_id, x.opercode, x.acc_id, x.client_name, x.client_code, x.trans_ref, x.amount, x.val_acc, "
+               "x.transdate, x.send, x.status, x.filial, x.transaction_id, x.client_inn, x.userid, x.format, a.acc_no, v.val_name "
+               "from xs_batchs x, account a, avalute v where x.acc_id = a.id and v.valute = a.val_acc and x.status = 6 and x.send = ")
+        c.execute("create view xs_ReadyBatchs as " + sel + "0")
+        c.execute("create view xs_SendingBatchs as " + sel + "1")
         c.commit()
         _DB = c
     return _DB
@@ -86,6 +93,9 @@ class XohksMixin:
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
         s = re.sub(r"\buid\b", ":uid__", s)
         params = {k.lower(): _v(v) for k, v in (b or {}).items()}
+        for k in ("acc_id", "batch_id", "kod_fil", "id"):          # Oracle implicit text -> number (step 3b quoted values)
+            if isinstance(params.get(k), str) and params[k].lstrip("-").isdigit():
+                params[k] = int(params[k])
         if ":uid__" in s:
             params["uid__"] = self.user.get("user_id", 0)
         cur = _db().execute(s, params)
@@ -125,6 +135,10 @@ class XohksMixin:
                       (i, opercode, name, code, ref, amount, int(val), self._xs_usedate(), filial,
                        self.user.get("user_id", 0), self.username))
             return i
+        if key == "XS_CONTROL.GETNEWFILEREFERENCE":                      # step 3b (format unknown)
+            return "XF" + self.st["sys"]["tek_dat"][2:10].replace("-", "") + "%04d" % self._xs_seq("fref")
+        if key == "XS_CONTROL.GETBATCHAMOUNT":                           # sum of the sending batches (emulated)
+            return float(c.execute("select nvl(sum(amount),0) from xs_SendingBatchs").fetchone()[0])
         if key == "XS_CONTROL.GETNEWBATCHREFRENCE":
             return "XS" + self.st["sys"]["tek_dat"][2:10].replace("-", "") + "%04d" % self._xs_seq("bref")
         if key == "XS_CONTROL.GETNEWBENEFICIARYREFERENCE":
@@ -217,6 +231,21 @@ class XohksMixin:
             return {}
         if key == "XS_CONTROL.XS_BATCHS205":
             self.__dict__.setdefault("xs_calls", []).append((key, list(args)))   # body unknown: recorded only
+            return {}
+        # ---- step 3b PrepareFile (bodies unknown): (id, all) - all = 1 moves every batch
+        if key in ("XS_CONTROL.BATCHTOREADYBATCHS", "XS_CONTROL.BATCHTOSENDINGBATCHS"):
+            to, frm = (0, 1) if key.endswith("READYBATCHS") else (1, 0)
+            if int(args[1]) == 1:
+                c.execute("update xs_batchs set send=? where status=6 and send=?", (to, frm))
+            else:
+                c.execute("update xs_batchs set send=? where id=? and status=6", (to, args[0]))
+            return {}
+        if key == "XS_CONTROL.XS_SENTINFO_INSERT":
+            fmt, snd, rcv, typ, pri, dn, upri, d, ref, bf = args
+            c.execute("insert into xs_sentinfo (id, format, sender, receiver, type, priority, del_notif, user_priority, create_date, "
+                      "user_reference, batchfile) values (?,?,?,?,?,?,?,?,?,?,?)",
+                      (self._xs_seq("sent") + 1, fmt, snd, rcv, typ, pri, dn, upri, _v(d), ref, bf))
+            c.execute("update xs_batchs set status=3, send=2 where send=1")      # emulated: file created (msFileCreated)
             return {}
         if key == "XS_CONTROL.XS_BENEFICIARY_SHABLON_INSERT":
             cols = [x.strip() for x in " ".join(Q.LINES_ODS_SHABLON[:3]).replace("SELECT", "").split(",")]

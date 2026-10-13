@@ -1,5 +1,5 @@
 {
- "_note": "XÖHKS mock (Packages/LVPCSSManager_Turan). Columns from Data_Unit.dfm persistent fields; values illustrative.",
+ "_note": "XÖHKS mock (Packages/LVPCSSManager_Turan). Columns from Data_Unit.dfm persistent fields; values illustrative. Step 3b: XS_transtype_name, NAME on xs_transtype_code, bankinfo_t, XS_SENTINFO; xs_ReadyBatchs / xs_SendingBatchs are SQLite views (mock_xohks.py).",
  "XS_CONFIG": [
   {
    "ID": 1,
@@ -667,19 +667,28 @@
  "xs_transtype_code": [
   {
    "CODE": 101,
-   "NAMEID": 1
+   "NAMEID": 1,
+   "NAME": "Vergi ödənişi"
   },
   {
    "CODE": 105,
-   "NAMEID": 5
+   "NAMEID": 5,
+   "NAME": "Əmək haqqı"
   },
   {
    "CODE": 101,
-   "NAMEID": 5
+   "NAMEID": 5,
+   "NAME": "Digər büdcə"
   },
   {
    "CODE": 200,
-   "NAMEID": 2
+   "NAMEID": 2,
+   "NAME": "Kommunal xidmət"
+  },
+  {
+   "CODE": 900,
+   "NAMEID": 2,
+   "NAME": "Digər"
   }
  ],
  "customers": [
@@ -759,6 +768,53 @@
   "batch": 300,
   "benef": 100,
   "bref": 1,
-  "nref": 1
- }
+  "nref": 1,
+  "fref": 1,
+  "sent": 1
+ },
+ "XS_transtype_name": [
+  {
+   "ID": 1,
+   "NAME": "Büdcə ödənişləri"
+  },
+  {
+   "ID": 2,
+   "NAME": "Kommunal ödənişlər"
+  },
+  {
+   "ID": 5,
+   "NAME": "Digər köçürmələr"
+  }
+ ],
+ "bankinfo_t": [
+  {
+   "KOD_FIL": 0,
+   "KOD_B": 507699,
+   "KRNO": "AZ62NABZ01350100000000014944",
+   "INN": "1300016391",
+   "SWIFT": "TURAAZ22"
+  },
+  {
+   "KOD_FIL": 101,
+   "KOD_B": 507699,
+   "KRNO": "AZ62NABZ01350100000000014944",
+   "INN": "1300016391",
+   "SWIFT": "TURAAZ22"
+  }
+ ],
+ "XS_SENTINFO": [
+  {
+   "ID": 1,
+   "FORMAT": "S",
+   "SENDER": "TURAAZ22AXXX",
+   "RECEIVER": "NABZAZ2C",
+   "TYPE": "150",
+   "PRIORITY": "N",
+   "DEL_NOTIF": "N",
+   "USER_PRIORITY": "C099",
+   "CREATE_DATE": "2026-10-12 00:00:00",
+   "USER_REFERENCE": "XF2610120001",
+   "BATCHFILE": 0
+  }
+ ]
 }

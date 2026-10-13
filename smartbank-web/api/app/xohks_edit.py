@@ -177,6 +177,8 @@ def tx_new(ws) -> dict:
     conn = ws.conn
     _check(conn, "XOHKS_ADD")
     tx = _prepare(ws)
+    from .xohks_file import build_tree
+    build_tree(ws)                                                   # createTransCodeTree :2640
     _st(ws).update(after_add=False, MT=True, mess_edit=False)
     tx["new_id"] = _func(conn, "XS_BATCHS_insert", ["CREDIT", 0, tx["client_name"], tx["client_code"], tx["ref"],
                                                     float(0), float(tx["valute"]), 0])

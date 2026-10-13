@@ -15,9 +15,23 @@
   };
   const ST = ['msDefault', 'msCommit', 'msReject', 'msFileCreated', 'msVerifikator', 'msFVerifikator', 'msAvtorizator', 'msReturnBack', 'msReturn'];
   const cell = (r, f) => { const v = r[f.toLowerCase()]; return f === 'STATUS' ? (ST[v] ? K('st_' + ST[v]) : (v ?? '')) : (v ?? ''); };
+  // GridBatchsDrawColumnCell :1928 - the OnDrawColumnCell of ALL six grids (LVPCSSImpl.dfm:340/542/1820/2252/3191/3930;
+  // GridIncomingDrawColumnCell :2868 is not assigned). ImageList index by Status (img/xohks/status_N.png, extracted from
+  // LVPCSSImpl.dfm:4299) drawn instead of DataCol 2 - on the beneficiary grids that is the 'Tarix' column (kept: their own
+  // status column shows the number). Filial: ImageListFilial[0] over DataCol 1 when FILIAL <> MsHeadOffice (0), only on
+  // GridBatchs / GridIncoming / DBGridOUTArchBatchs / GridIncomingArchive and only when a status image exists.
+  const IMG = { 0: 3, 1: 10, 2: 4, 3: 5, 4: 18, 5: 17, 6: 19, 7: 16, 8: 4 };
+  function td(r, f, i, benefGrid) {
+    const ii = IMG[+r.status], txt = esc(f === 'STATUS' && benefGrid ? (r.status ?? '') : cell(r, f));
+    if (i === 2 && ii !== undefined && r.status != null)
+      return `<td class="st st${esc(r.status)}"><img src="/img/xohks/status_${ii}.png" width="16" height="16" alt="${esc(cell(r, 'STATUS'))}" title="${esc(cell(r, 'STATUS'))}"></td>`;
+    if (i === 1 && !benefGrid && ii !== undefined && +(r.filial ?? 0) !== 0)
+      return `<td><img src="/img/xohks/filial_0.png" width="16" height="16" alt="" style="vertical-align:middle"> ${txt}</td>`;
+    return `<td>${txt}</td>`;
+  }
   function table(id, cols, rows, sortable) {
     return `<table class="grid acc-grid" id="${id}"><thead><tr>${cols.map(([f, c]) => `<th data-c="${esc(c)}" ${sortable ? 'style="cursor:pointer"' : ''}>${esc(c === '' ? K('c_status') : c)}</th>`).join('')}</tr></thead>
-      <tbody>${rows.map((r, i) => `<tr data-i="${i}">${cols.map(([f]) => `<td class="${f === 'STATUS' ? 'st st' + r.status : ''}">${esc(cell(r, f))}</td>`).join('')}</tr>`).join('')
+      <tbody>${rows.map((r, i) => `<tr data-i="${i}">${cols.map(([f], ci) => td(r, f, ci, cols === C.benef)).join('')}</tr>`).join('')
       || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table>`;
   }
   const box = (title, inner, h) => `<fieldset class="card" style="margin:8px 0;padding:8px 12px;min-width:0"><legend>${esc(title)}</legend><div class="tablewrap" style="max-height:${h || 30}vh">${inner}</div></fieldset>`;
@@ -64,7 +78,9 @@
         <div class="toolbar" style="gap:6px">
           <button class="btn" id="x_bacc">Modifikator</button><button class="btn secondary" id="x_ver">Verifikator</button>
           <button class="btn secondary" id="x_avt">Avtorizator</button><button class="btn secondary" id="x_ret">${esc(K('b_return'))}</button>
-          <button class="btn secondary" id="x_arch">${esc(K('b_archive'))}</button></div>
+          <button class="btn secondary" id="x_arch">${esc(K('b_archive'))}</button>
+          <span style="width:16px"></span><button class="btn secondary" id="x_pf"><img src="/img/xohks/status_5.png" width="16" height="16" alt=""> Faylı Hazırla</button>
+          <button class="btn secondary" id="x_sent"><img src="/img/xohks/status_11.png" width="16" height="16" alt=""> Gedən fayl</button></div>
         ${box(K('box_batchs'), table('g_b', C.batchs, d.batchs, true))}
         ${st.benef_visible ? box(K('box_benef'), '<div id="xb"></div>') : ''}`;
       v('x_ref').onclick = async () => { st.beg = v('x_beg').value; st.end = v('x_end').value;
@@ -86,6 +102,8 @@
       v('x_avt').onclick = async () => { if (st.cur) after(await call('/batch/authorize', { id: st.cur.id })); };
       v('x_ret').onclick = async () => { if (st.cur) after(await call('/batch/return', { id: st.cur.id, benef_id: st.curb ? st.curb.id : null })); };
       v('x_arch').onclick = async () => { const r = await call('/archive/send'); if (r) toast(K('msg_archived')); };
+      v('x_pf').onclick = async () => { const r = await call('/pf/open'); if (r) pfForm(r); };            // ToolButton11Click
+      v('x_sent').onclick = () => sentForm();                                                             // ToolButton5Click
       if (st.benef_visible) v('x_macc').onclick = async () => {   // MessagesOutAccept: SelectedRows + current
         if (!st.cur || !st.curb) return;
         const g = v('g_xb'); const ids = [...g.querySelectorAll('tbody tr.msel')].map(tr => (st.brows[+tr.dataset.i] || {}).id).filter(x => x != null);
@@ -214,7 +232,7 @@
             ${[0, 1, 2].map(i => fld('pf_i' + (i + 1), K('pf_inf') + ' ' + (i + 1), p.inf[i], ro, 220)).join('')}</div></fieldset>
           <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-top:6px">
             ${fld('pf_ref', K('ref'), p.ref, ro, 140)}<button class="btn secondary" id="pf_newref" ${ro ? 'disabled' : ''}>${esc(K('new_ref'))}</button>
-            ${fld('pf_amt', K('amount'), p.amount, ro, 110)}${fld('pf_tc', K('pf_tc'), p.trans_code, ro, 70)}
+            ${fld('pf_amt', K('amount'), p.amount, ro, 110)}${fld('pf_tc', K('pf_tc'), p.trans_code, ro, 70)}<button class="btn secondary" id="pf_tcb" ${ro ? 'disabled' : ''} title="TTransCodeForm">...</button>
             <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('tf_val'))}<select class="input" id="pf_val" ${ro ? 'disabled' : ''}>${p.valutes.map(x => `<option value="${x.valute}" ${+p.valute === +x.valute ? 'selected' : ''}>${esc(x.val_name)}</option>`).join('')}</select></label></div>
           <div class="actions">
             ${p.radio !== 'RB_102T' ? `<button class="btn secondary" id="pf_tpl" ${ro ? 'disabled' : ''}>${esc(K('pf_tpl_load'))}</button><button class="btn secondary" id="pf_tsave" ${p.template_saved_enabled && !ro ? '' : 'disabled'}>${esc(K('pf_tpl_save'))}</button>` : ''}
@@ -224,6 +242,7 @@
         const q = (id) => w.querySelector('#' + id);
         if (q('pf_bank')) q('pf_bank').onchange = async () => { if (q('pf_bank').value === '') return; const r = await call('/pd/bank', { bank_id: +q('pf_bank').value }); if (r) { p = r; render(); } };
         q('pf_newref').onclick = async () => { const r = await call('/pd/ref'); if (r) { p = r; render(); } };
+        q('pf_tcb').onclick = () => treeForm((code) => { q('pf_tc').value = code; });       // SpeedButton1Click
         if (q('pf_add')) q('pf_add').onclick = async () => { const r = await call('/pd/add', { fields: fields() }); if (r) { p = r; render(); toast(K('added'), 'success'); } };
         q('pf_fin').onclick = async () => { const r = await call('/pd/finish', { fields: fields() }); if (r && r.closed) done(r); else if (r) { p = r; render(); } };
         q('pf_close').onclick = async () => { const r = await call('/pd/close'); done(r); };
@@ -252,6 +271,87 @@
         q('tp_close').onclick = () => w.remove();
       }
       render();
+    }
+    async function treeForm(onOk) {
+      // TransTypeUnit.pas TTransCodeForm: tree of XS_transtype_name / xs_transtype_code built by createTransCodeTree (Mt102Insert),
+      // all nodes collapsed; OK / double click only accept a child node (ImageIndex 2) -> Edit_TransCode := StateIndex
+      const r = await call('/transcode/tree', undefined, 'GET'); if (!r) return;
+      let sel = null;
+      const w = layer(`<h3>${esc(K('tc_title'))}</h3><div class="tablewrap" style="max-height:55vh;min-width:360px" id="tc_t">
+        ${r.tree.length ? r.tree.map((n, i) => `<details data-i="${i}"><summary class="tc-n" data-p="${i}">${esc(n.text)}</summary>
+          ${n.children.map((c, j) => `<div class="tc-n" data-p="${i}" data-c="${j}" style="padding-left:24px;cursor:pointer">${esc(c.text)}</div>`).join('')}</details>`).join('')
+          : `<p class="muted">${esc(K('empty'))}</p>`}</div>
+        <div class="actions"><button class="btn" id="tc_ok">OK</button><button class="btn secondary" id="tc_x">${esc(K('cancel'))}</button></div>`, 6);
+      const ok = async () => { const res = await call('/transcode/ok', { node: sel }); if (res && res.closed) { w.remove(); onOk(res.trans_code); } };
+      w.querySelectorAll('.tc-n').forEach(e => { e.addEventListener('click', () => {
+        w.querySelectorAll('.tc-n').forEach(x => x.classList.remove('sel')); e.classList.add('sel');
+        const n = r.tree[+e.dataset.p]; sel = e.dataset.c != null ? n.children[+e.dataset.c] : { text: n.text, image: n.image }; });
+        e.addEventListener('dblclick', ok); });
+      w.querySelector('#tc_ok').onclick = ok; w.querySelector('#tc_x').onclick = () => w.remove();
+    }
+    const dl = (f) => { const b = Uint8Array.from(atob(f.b64), c => c.charCodeAt(0)); const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([b], { type: 'application/xml' })); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); };
+    const PFC = [['ID', '№'], ['TRANSDATE', 'Tarix'], ['ACC_NO', 'Debet'], ['VAL_NAME', '$'], ['AMOUNT', 'Debet Məbləğ'], ['TRANS_REF', 'Qeydiyyat №']];
+    function pfForm(d0) {
+      // PrepareFile_Unit.pas TPrepareFile_Form 'Faylın yaradılması'
+      let d = d0, curR = null, curS = null;
+      const w = layer('<div id="pf_"></div>', 4);
+      const grid = (id, rows) => `<table class="grid acc-grid" id="${id}"><thead><tr>${PFC.map(([f, c]) => `<th data-c="${esc(c)}" style="cursor:pointer">${esc(c)}</th>`).join('')}</tr></thead><tbody>
+        ${rows.map((r, i) => `<tr data-i="${i}">${PFC.map(([f]) => `<td>${esc(r[f.toLowerCase()] ?? '')}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${PFC.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table>`;
+      const take = (r) => { if (!r) return; if (r.warning) toast(t(r.warning, r), 'error'); d = Object.assign({}, d, r, { pf: Object.assign({}, d.pf, r.pf || {}) }); render(); };
+      function render() {
+        const f = d.pf;
+        w.querySelector('#pf_').innerHTML = `<h3>Faylın yaradılması</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">${fld('pf_snd', 'Göndərən İştrakçı:', f.Edit_sender, true, 160)}${fld('pf_rcv', 'Alan İştrakçı:', f.Edit_receiver, true, 160)}
+            <label style="display:flex;flex-direction:column;font-size:12px;min-width:200px">Ümumi faylın qeydiyyat №:<span style="display:flex;gap:4px"><input class="input" id="pf_ref" value="${esc(f.Edit_reference)}"><button class="btn secondary" id="pf_newr">...</button></span></label>
+            ${fld('pf_typ', 'Faylın Tipi:', f.Edit1, true, 80)}${fld('pf_cnt', 'Paket ödənişlərin sayı:', f.Edit_count, true, 120)}${fld('pf_amt', 'Məbləğ:', String(f.CurrencyEdit1 ?? 0), true, 120)}</div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:8px">
+            <div class="tablewrap" style="max-height:40vh">${grid('pf_ready', d.ready)}</div>
+            <div style="display:flex;flex-direction:column;gap:6px"><button class="btn secondary" id="pf_to" title="But_tosend">&gt;</button><button class="btn secondary" id="pf_all" title="All_to_send">&gt;&gt;</button>
+              <button class="btn secondary" id="pf_no" title="But_noSend">&lt;</button><button class="btn secondary" id="pf_noall" title="All_to_Nosend">&lt;&lt;</button></div>
+            <div class="tablewrap" style="max-height:40vh">${grid('pf_send', d.sending)}</div></div>
+          <div class="actions"><button class="btn" id="pf_mk">XML Faylını yarat</button><button class="btn secondary" id="pf_x">Çıxış</button></div>`;
+        const q = (id) => w.querySelector('#' + id);
+        const pick = (gid, rows, set) => { const tb = q(gid); tb.querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
+          tb.querySelectorAll('tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); set(rows[+tr.dataset.i]); });
+          const i = Math.max(0, rows.findIndex(r => r === (gid === 'pf_ready' ? curR : curS))); const tr = tb.querySelector(`tbody tr[data-i="${i}"]`);
+          if (tr) { tr.classList.add('sel'); set(rows[i]); } else set(null); };
+        pick('pf_ready', d.ready, (r) => { curR = r; }); pick('pf_send', d.sending, (r) => { curS = r; });
+        q('pf_ready').querySelectorAll('th').forEach(h => h.onclick = async () => take(await call('/pf/sort', { caption: h.dataset.c })));
+        q('pf_ref').oninput = async () => { const r = await call('/pf/set-ref', { ref: q('pf_ref').value }); if (r) { d.pf.Edit_reference = r.Edit_reference; q('pf_ref').value = r.Edit_reference; } };
+        q('pf_newr').onclick = async () => { const r = await call('/pf/ref'); if (r) { d.pf.Edit_reference = r.Edit_reference; render(); } };
+        q('pf_to').onclick = async () => take(await call('/pf/tosend', { id: curR ? curR.id : null }));
+        q('pf_all').onclick = async () => take(await call('/pf/tosend', { id: curR ? curR.id : null, all: true }));
+        q('pf_no').onclick = async () => take(await call('/pf/nosend', { id: curS ? curS.id : null }));
+        q('pf_noall').onclick = async () => take(await call('/pf/nosend', { all: true }));
+        q('pf_mk').onclick = async () => { const r = await call('/pf/create'); if (!r) return;
+          if (r.file) { dl(r.file); toast(K('pf_created').replace('{name}', r.file.name), 'success'); if (r.batchs) { st.d.batchs = r.batchs; } } take(r); };
+        q('pf_x').onclick = async () => { await call('/pf/close'); w.remove(); draw(); };
+      }
+      render();
+    }
+    async function sentForm() {
+      // FileSend_Unit.pas TSendFileForm 'Sent File': both pickers = today, RefDate; DblClick opens the file
+      const today = new Date().toISOString().slice(0, 10);   // DateTimePicker1/2.Date := date
+      let beg = today, end = today, rows = [];
+      const w = layer('<div id="sf"></div>', 4);
+      async function load() { const r = await call('/sent/list', { beg, end }); rows = r ? r.rows : []; render(); }
+      function render() {
+        w.querySelector('#sf').innerHTML = `<h3>Sent File</h3><div class="toolbar" style="gap:8px;align-items:center">
+            <input type="date" class="input" id="sf_b" value="${beg}"> -dən <input type="date" class="input" id="sf_e" value="${end}"> -dək
+            <button class="btn secondary" id="sf_r">Yenilə</button></div>
+          <div class="tablewrap" style="max-height:50vh"><table class="grid acc-grid" id="g_sf"><thead><tr><th>№</th><th></th><th>Qeydiyyat №</th><th>Tip(MT150)</th><th>Tarix</th></tr></thead><tbody>
+          ${rows.map((r, i) => `<tr data-i="${i}" style="cursor:pointer"><td>${esc(r.id)}</td><td>${+r.batchfile === 0 ? '<img src="/img/xohks/status_5.png" width="16" height="16" alt="">' : esc(r.user_reference ?? '')}</td>
+            <td>${esc(r.user_reference ?? '')}</td><td>${esc(r.type ?? '')}</td><td>${esc(r.create_date ?? '')}</td></tr>`).join('') || `<tr><td colspan="5" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>
+          <div class="actions"><button class="btn secondary" id="sf_x">Çıxış</button></div>`;
+        const q = (id) => w.querySelector('#' + id);
+        q('sf_r').onclick = () => { beg = q('sf_b').value; end = q('sf_e').value; load(); };
+        q('sf_x').onclick = () => w.remove();
+        q('g_sf').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.ondblclick = async () => {
+          const r = await call('/sent/open', { rec: rows[+tr.dataset.i] }); if (!r) return;
+          if (r.file) dl(r.file); else if (r.warning) toast(K('err_file_not_found').replace('{name}', r.file_name), 'error'); });
+      }
+      load();
     }
     function drawIn() {
       v('xbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="x_iref">${esc(K('refresh'))}</button>

@@ -326,3 +326,5 @@ from . import xohks_edit  # noqa: E402
 app.include_router(xohks_edit.make_router(current, require_module, err))
 from . import xohks_status  # noqa: E402
 app.include_router(xohks_status.make_router(current, require_module, err))
+from . import xohks_file  # noqa: E402
+app.include_router(xohks_file.make_router(current, require_module, err))

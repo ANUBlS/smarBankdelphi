@@ -1,6 +1,6 @@
 # XÖHKS parity (Packages/LVPCSSManager_Turan)
 
-Status: **steps 1-2 done, step 3a done** (accept actions + status chain) (4 tabs read-only; OUT add / edit / delete of batches and beneficiaries, templates). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
+Status: **steps 1-2 done, step 3a done** (accept actions + status chain), **step 3b done** (status images, TransCode tree, PrepareFile / Gedən fayl) (4 tabs read-only; OUT add / edit / delete of batches and beneficiaries, templates). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
 
 ## Identity
 - ActiveX: `LVPCSSManager.ocx`, CoClass `LVPCSS` = `{E0D210EC-D799-46D2-A172-789782B5F96C}` (LVPCSSManager_TLB.pas:56), form
@@ -142,6 +142,30 @@ xs_batchs_today fixture, so they do not change in mock mode.
 Unverified: all of the above bodies; whether XS_CONTROL commits internally (Delphi issues no Commit after Verif/Avt/Return/benef accept -
 on the web, as in Delphi, those stay pending in the user's session until the next Commit / Rollback); the DBEdit1 display format.
 
+## Step 3b. Status images, TransCode tree, PrepareFile / Gedən fayl (done)
+API `api/app/xohks_file.py` (`/api/xohks/transcode/*`, `/pf/*`, `/sent/*`), signer interface `api/app/xohks_crypto.py`, SQL in
+`xohks_sql.py` (step-3b block), mock views / procs in `mock_xohks.py`, tests `tests/test_xohks_file.py`, web in `xohks.js`, E2E
+`e2e/xohks_file_screens.py`, screenshots 150-154. Images `web/public/img/xohks/status_0..20.png` + `filial_0.png` were extracted
+from the ImageList / ImageListFilial bitmaps of LVPCSSImpl.dfm:4299 / :4718 (16x16, 16-bit + mask).
+
+| Delphi | Web | Notes |
+|---|---|---|
+| GridBatchsDrawColumnCell :1928 | `td()` in xohks.js | the OnDrawColumnCell of **all six** grids (GridIncomingDrawColumnCell :2868 is not assigned). Status 0→3, 1→10, 2→4, 3→5, 4→18, 5→17, 6→19, 7→16, 8→4, drawn instead of **DataCol 2** - on the beneficiary grids that is 'Tarix' (kept; their status column shows the number). Filial icon over DataCol 1 when FILIAL ≠ 0 on the four batch / incoming grids, only when a status image exists |
+| createTransCodeTree :1114 (Mt102InsertExecute :2640 only) | `build_tree` in `/tx/new` | XS_transtype_name order by id → children xs_transtype_code (nameID = :ID), StateIndex = CODE. Built only by 'Yeni batch': before that the tree is empty (as in Delphi) |
+| Payment_Det SpeedButton1Click :205, TransTypeUnit But_OkClick / DblClick / TreeView1Changing | `GET /transcode/tree`, `/transcode/ok`, '...' next to the trans code | OK accepts only a child node (ImageIndex 2) → Edit_TransCode := StateIndex; on a parent the form stays open. ButtonFinish still forces '900' (step 2), so the code matters for 'Əlavə et' (Button4) |
+| ToolButton11Click :2105 'Faylı Hazırla' | `/pf/open` | XOHKS_CREATEFILE (not in try); sender = BankInfo.SWIFT+'AXXX', receiver = XS_CONFIG.NB_SWIFT, Edit1 '150', `XS_CONTROL.BatchToReadyBatchs(0,1)`, ReadyBatchs (`order by :Title`, otSubst, default id) / SendingBatchs |
+| But_tosend / All_to_send | `/pf/tosend` {id, all} | limit check of the CURRENT ready record vs XS_CONFIG.amount_limit, then 'Təsdiq olunmuş "Batch" yoxdur !'; `BatchToSendingBatchs(id,0)` / `(0,1)`; `GetBatchAmount`, count |
+| But_noSend / All_to_Nosend | `/pf/nosend` | exit when sending is empty; `BatchToReadyBatchs(id,0)` / `(0,1)` |
+| GridReadyBatchsTitleClick | `/pf/sort` | №→id, Debet→ACC_NO, 'Debet Məbləğ'→AMOUNT, Tarix→TRANSDATE; others exit |
+| SpeedButton1Click / Edit_referenceKeyPress | `/pf/ref`, `/pf/set-ref` | `INS.GetNewFileReference` only when sending is not empty; allowed chars 0-9 a-z A-Z / - : ( ) . , ' + { } space |
+| Button_fileClick :798 → CreateFile :152 | `/pf/create` | exit when sending empty; 'Qeydiyyat №-si verilməyib !'; XML as Delphi (header lines CRLF in XOHKS_FILE_CODEPAGE, MessageBody UTF8String raw UTF-8 with #10, :32A: date from the last beneficiary - 991230 when none, MT205 branch by the first sending batch's FORMAT); `xs_SentInfo_insert('S',sender,receiver,Edit1,'N','N','C099',date,ref,0)` (no commit); edits cleared, RefreshDataBatchs. File returned for download + copy in XOHKS_OUT_DIR when set (Delphi: out_dir\<ref>.xml) |
+| ToolButton5Click / TSendFileForm RefDate, BitBtn1Click, DBGrid1DblClick | `/sent/list`, `/sent/open` | XS_SENTINFO by Trunc dates; DblClick looks for out_dir\ddmmyy(today)\[Batches\]<ref>.xml (under XOHKS_OUT_DIR); 'File %s not found !'. CreateFile writes without the date folder, so as in Delphi such files are normally not found |
+| cryptounit SetSign / SignCheck | `xohks_crypto.Signer` (XOHKS_SIGNER=none / mock) | never called by the Delphi build (SetSign lines in CreateFile are commented out); interface kept for a later signed format |
+Not ported: CreateBatchFile / but_batchClick (button Visible = False). ToolButton6 'Baxmaq' :3907 → step 4.
+Unverified: XS_CONTROL BatchToReadyBatchs / BatchToSendingBatchs / GetBatchAmount / GetNewFileReference / xs_SentInfo_insert bodies and
+the xs_ReadyBatchs / xs_SendingBatchs views (mock: status 6 with send 0 / 1; file → status 3), CreateFile's `xs_batchs.Refresh` on the
+never-opened local dataset (:239 - in TDataSet that raises 'closed dataset'; the web assumes DOA re-executes it), the file code page
+(cp1254 assumed), XS_SENTINFO columns, bankinfo_t columns.
+
 ## Resume point
-Step 3b: status images + GridBatchsDrawColumnCell colours, TTransCodeForm tree, then PrepareFile / FileSend + crypto,
-step 4 IN file load / convert / accept, reports as PDF, settings forms.
+Step 4: IN file load (manual upload, one file), convert, accept; ToolButton6 'Baxmaq'; reports as PDF; settings forms.
