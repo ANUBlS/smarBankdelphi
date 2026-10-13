@@ -21,6 +21,40 @@
       <tbody>${rows.map((r, i) => `<tr data-i="${i}">${cols.map(c => `<td>${esc(val(r, c) ?? '')}</td>`).join('')}</tr>`).join('')
       || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table>`;
   }
+  // dgMultiSelect grid (Grid_out, GRIDOUT2, Gridin): click = current row, Ctrl+click toggles SelectedRows (TBookmarkList)
+  function multi(tb, rows, st, key) {
+    const ms = key + '_m';
+    st[ms] = (st[ms] || []).filter(id => rows.some(r => r.id === id));
+    if (!rows.some(r => r.id === st[key])) st[key] = null;
+    const mark = () => tb.querySelectorAll('tbody tr[data-i]').forEach(tr => {
+      const id = rows[+tr.dataset.i].id; tr.classList.toggle('sel', st[ms].includes(id) || id === st[key]);
+    });
+    tb.querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('click', (e) => {
+      const id = rows[+tr.dataset.i].id;
+      if (e.ctrlKey || e.metaKey) st[ms] = st[ms].includes(id) ? st[ms].filter(x => x !== id) : [...st[ms], id];
+      else st[ms] = [id];
+      st[key] = id; mark();
+    }));
+    mark();
+  }
+  // MessageDlg(mtConfirmation, [mbYes, mbNo, mbCancel(, mbYesToAll)]) -> 'yes' | 'no' | 'cancel' | 'all'
+  function dlg(text, yesAll, noNo) {
+    return new Promise(res => modal(`<p>${esc(text)}</p><div class="actions">
+      <button class="btn" data-a="yes">${esc(K('yes'))}</button>${noNo ? '' : `<button class="btn secondary" data-a="no">${esc(K('no'))}</button>`}
+      <button class="btn secondary" data-a="cancel">${esc(K('cancel'))}</button>${yesAll ? `<button class="btn" data-a="all">${esc(K('yes_all'))}</button>` : ''}</div>`,
+      (m, close) => m.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => { close(); res(b.dataset.a); })));
+  }
+  // The Delphi loop: per selected row (grid order) ask; mbYesToAll -> second dialog '%d sayda ...' with Count-Index (Yes / Cancel)
+  async function ask(ids, q, qa) {
+    const answers = [];
+    for (let i = 0; i < ids.length; i++) {
+      let a = await dlg(K(q).replace('%d', ids[i]), !!qa);
+      if (a === 'all') a = (await dlg(K(qa).replace('{n}', ids.length - i), false, true)) === 'yes' ? 'all' : 'all_no';
+      answers.push(a);
+      if (a === 'cancel' || a === 'all') break;
+    }
+    return answers;
+  }
   async function page(el) {
     const st = { tab: 'out', d: null, in_order: '', in2: '' };
     el.innerHTML = `<div class="card"><div class="toolbar" style="gap:8px"><h2 style="margin:0">${esc(K('title'))}</h2></div>
@@ -44,10 +78,8 @@
         v('g_in2').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => { st.in2 = h.dataset.s; load({}); });
         v('z_arxin').onclick = () => arch('in');
         v('z_konv').onclick = () => v('z_konvf').click();
-        v('g_in').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
-          v('g_in').querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr)); st.sel_in = d.sw_in[+tr.dataset.i].id;
-        });
-        v('z_indel').onclick = () => act('in_delete', st.sel_in, 'q_delete');      // ToolButton6Click -> DeleteExecute
+        multi(v('g_in'), d.sw_in, st, 'sel_in');
+        v('z_indel').onclick = () => act('in_delete', 'sel_in', 'q_delete', 'qa_delete');      // ToolButton6Click -> DeleteExecute
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
@@ -55,7 +87,7 @@
           <button class="btn" id="z_new">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
           <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button>
           <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button>
-          <button class="btn danger" id="z_odel">${esc(K('delete'))}</button><button class="btn" id="z_verify">${esc(K('verify'))}</button>
+          <button class="btn danger" id="z_odel">${esc(K('delete'))}</button><button class="btn" id="z_modif">${esc(K('modif'))}</button><button class="btn" id="z_verify">${esc(K('verify'))}</button>
           <button class="btn secondary" id="z_back">${esc(K('back'))}</button><button class="btn secondary" id="z_sback">${esc(K('sending_back'))}</button>
           <button class="btn secondary" id="z_tsend">${esc(K('transend'))}</button></div>
           <input class="input" readonly id="z_memo2" style="width:100%;margin-top:6px" value="${esc(st.memo2 || '')}">
@@ -63,10 +95,7 @@
           <input class="input" readonly id="z_s2" style="width:100%;margin-top:4px" value="${esc(d.sum_verify_text != null ? 'Bu gün verifikasiya olunacaq ümumi məbləğ = ' + d.sum_verify_text + ' AZN' : '')}">
           ${box(K('box_out'), table('g_out', C.out, d.sw_out))}${box(K('box_out2'), table('g_out2', C.out2, d.sw_out_2))}${box(K('box_out3'), table('g_out3', C.out3, d.sw_out3))}`;
         v('z_arxout').onclick = () => arch('out');
-        const pick = (gid, rows, key) => v(gid).querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
-          v(gid).querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr)); st[key] = rows[+tr.dataset.i].id;
-        });
-        pick('g_out', d.sw_out, 'sel_out'); pick('g_out2', d.sw_out_2, 'sel_out2');
+        multi(v('g_out'), d.sw_out, st, 'sel_out'); multi(v('g_out2'), d.sw_out_2, st, 'sel_out2');
         // Gridout3 (dgMultiSelect): click = current row, Ctrl+click toggles a selected row (TBookmarkList)
         st.sel3 = (st.sel3 || []).filter(id => d.sw_out3.some(r => r.id === id));
         const mark3 = () => v('g_out3').querySelectorAll('tbody tr[data-i]').forEach(tr => {
@@ -80,11 +109,12 @@
         });
         mark3();
         v('z_file').onclick = () => createFiles(d);
-        v('z_odel').onclick = () => act('out_delete', st.sel_out, 'q_delete');          // ToolButton9Click -> out_deleteExecute
-        v('z_back').onclick = () => act('out_back', st.sel_out2, 'q_back');             // opendayClick -> backClick -> geriExecute
+        v('z_odel').onclick = () => act('out_delete', 'sel_out', 'q_delete', 'qa_delete');
+        v('z_modif').onclick = () => act('modifikator', 'sel_out', 'q_modif', 'qa_modif');        // ToolButton11Click -> addtrans2Execute          // ToolButton9Click -> out_deleteExecute
+        v('z_back').onclick = () => act('out_back', 'sel_out2', 'q_back', 'qa_back');             // opendayClick -> backClick -> geriExecute
         v('z_verify').onclick = () => verify(d);                                        // ToolButton13Click -> commitingExecute + Form12
-        v('z_sback').onclick = () => act('sending_back', st.cur3, null);                // Geriqaytar1Click
-        v('z_tsend').onclick = () => act('transend', st.sel_out, null);                 // mliyyatGnnsndlringondrm1Click
+        v('z_sback').onclick = () => act('sending_back', null, null, null, st.cur3);                // Geriqaytar1Click
+        v('z_tsend').onclick = () => act('transend', null, null, null, st.sel_out);                 // mliyyatGnnsndlringondrm1Click
         const AE = window.SB.azipsEdit;
         const AN = window.SB.azipsNew;
         v('z_new').onclick = () => AN.open('1', 'toolbutton1', () => load({}));   // toolbar 'Yeni' = ToolButton1Click -> filereport.bpl 'Azipsnew' '1'
@@ -101,30 +131,50 @@
       v('z_ref').onclick = () => load({});
     }
     // part 4a row actions (api/app/azips_actions.py): MessageDlg per row -> answers sent with the request
-    async function act(kind, id, q, form12) {
-      if (id == null) return toast(K('pick_row'), 'error');
-      if (q && !confirm(K(q).replace('%d', id))) return;
+    // selected ids in grid order (TBookmarkList is sorted); none selected -> current row
+    function chosen(key) {
+      const rows = { sel_out: st.d.sw_out, sel_out2: st.d.sw_out_2, sel_in: st.d.sw_in }[key] || [];
+      const m = st[key + '_m'] || [];
+      return m.length ? rows.map(r => r.id).filter(id => m.includes(id)) : (st[key] != null ? [st[key]] : []);
+    }
+    async function act(kind, key, q, qa, single, form12, answers) {
+      const ids = key ? chosen(key) : (single != null ? [single] : []);
+      if (!ids.length) return toast(K('pick_row'), 'error');
+      if (q && !answers) { answers = await ask(ids, q, qa); if (!answers.some(a => a === 'yes' || a === 'all')) return; }
       try {
-        const r = await api(P + '/action', { method: 'POST', body: { kind, current: id, answers: (q || kind === 'out_commit') ? ['yes'] : [], form12: form12 || [] } });
+        const r = await api(P + '/action', { method: 'POST', body: { kind, selected: key ? (st[key + '_m'] || []) : [], current: key ? st[key] : single,
+          answers: answers || [], form12: form12 || [] } });
         if (r.memo2) st.memo2 = r.memo2;
         if (r.message) toast(r.message, r.wrong ? 'error' : undefined); else toast(K('done'));
+        if (key) st[key + '_m'] = [];
       } catch (e) { toast(errT(e), 'error'); }
       load({});
     }
+    // commitingExecute: [mbYes, mbNo, mbCancel] per row (no YesToAll), Form12 for each Yes; 'Çıx' or a mismatch exits the loop
     async function verify(d) {
-      const id = st.sel_out2;
-      if (id == null) return toast(K('pick_row'), 'error');
-      if (!confirm(K('q_verify').replace('%d', id))) return;
+      const ids = chosen('sel_out2');
+      if (!ids.length) return toast(K('pick_row'), 'error');
       let cur = [];
       try { cur = await api(P + '/commit-currencies'); } catch (e) { return toast(errT(e), 'error'); }
-      modal(`<h3>Avtorizasiya</h3><div class="toolbar" style="gap:8px"><select class="input" id="f12c">${cur.map(c => `<option>${esc(c)}</option>`).join('')}</select>
-        <input class="input" id="f12a" inputmode="decimal" placeholder="${esc(K('amount'))}"></div>
-        <div class="actions"><button class="btn" id="f12ok">Təsdiq et</button><button class="btn secondary" id="f12x">Çıx</button></div>`, (m, close) => {
-        const a = m.querySelector('#f12a');
-        a.onkeypress = (e) => { if (!/[0-9.]/.test(e.key)) e.preventDefault(); };      // Edit1KeyPress: 0..9, #8, '.'
-        m.querySelector('#f12ok').onclick = () => { close(); act('out_commit', id, null, [{ amount: a.value, curr: m.querySelector('#f12c').value }]).then(() => {}); };
-        m.querySelector('#f12x').onclick = () => { close(); act('out_commit', id, null, [{ close: true }]); };
-      });
+      const answers = [], forms = [];
+      for (const id of ids) {
+        const a = await dlg(K('q_verify').replace('%d', id), false);
+        answers.push(a);
+        if (a === 'cancel') break;
+        if (a !== 'yes') continue;
+        const f = await new Promise(res => modal(`<h3>Avtorizasiya #${esc(id)}</h3><div class="toolbar" style="gap:8px"><select class="input" id="f12c">${cur.map(c => `<option>${esc(c)}</option>`).join('')}</select>
+          <input class="input" id="f12a" inputmode="decimal" placeholder="${esc(K('amount'))}"></div>
+          <div class="actions"><button class="btn" id="f12ok">Təsdiq et</button><button class="btn secondary" id="f12x">Çıx</button></div>`, (m, close) => {
+          const a = m.querySelector('#f12a');
+          a.onkeypress = (e) => { if (!/[0-9.]/.test(e.key)) e.preventDefault(); };      // Edit1KeyPress: 0..9, #8, '.'
+          m.querySelector('#f12ok').onclick = () => { close(); res({ amount: a.value, curr: m.querySelector('#f12c').value }); };
+          m.querySelector('#f12x').onclick = () => { close(); res({ close: true }); };
+        }));
+        forms.push(f);
+        if (f.close) break;
+      }
+      if (!answers.includes('yes')) return;
+      act('out_commit', 'sel_out2', null, null, null, forms, answers);
     }
     async function load(extra) {
       try {

@@ -236,7 +236,20 @@ Loop semantics are kept: SelectedRows, or the current row when nothing is select
 YesToAll (second dialog). The browser asks first and sends the answers in order. `exit` inside the commiting loop skips the final
 `SBSession.Commit`, so `sw_out_commit` calls made before it stay uncommitted in the user's session, as in Delphi. Memo2 uses the loop
 variable after the loop. Delphi leaves that undefined after a completed loop; the web uses the last index (Count-1).
-Not ported yet: ToolButton11Click "Modifikator" → `addtrans2Execute` :5146.
+Part 4b (done): the browser now supports multi-select on Grid_out, GRIDOUT2 and Gridin (click = row, Ctrl+click toggles
+SelectedRows, actions use grid order, none selected = current row) and asks per row with Yes / No / Cancel / Yes to all; Yes to
+all opens the second `'%d sayda ...'` dialog (Count-Index, Yes / Cancel only). Verifikator asks Yes / No / Cancel per row (no Yes
+to all, as Delphi) and shows Form12 for each Yes; the server stops at the first Form12 mismatch or `Çıx`, so any later forms
+are ignored. Screenshots 119-121.
+
+| Delphi | Right | Call |
+|---|---|---|
+| ToolButton11Click :3097 "Modifikator" → addtrans2Execute :5146-5260 | SW_OUT_COMMIT (empty grid_out → `Heç bir format yoxdur!`) | per row: setprow `select * from sw_prow where format=:Q` (Unit2.dfm:3671, :Q = MESSAGETYPE); transac SQL[0] rebuilt verbatim from KREDIT/DEBET/SUMM (:5205-5207); `sw_main.add_transaction(ID, debet, kredit, summa, MF32A_DATE, DESTINATION(=mf70), vbic, tax, k1)`; one Commit after the loop |
+
+Modifikator details: `vbic` is set to `'BIC'` only when KREDIT = `RECEIVERBIC` and keeps that value for later rows, as the Delphi
+local does. `k1` is never assigned in Delphi (WorldCheck is commented out) and is sent as 0. **Deliberate difference:** the
+sw_prow column names are checked as plain Oracle identifiers before they are concatenated into the SQL. A bad value returns
+`azips.prow_bad` instead of running. Unverified: what `add_transaction` does (the mock moves the row to status 5).
 
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
@@ -251,7 +264,7 @@ between processes.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Part 4a (row actions, see §4a) is done. Next is part 4b: Modifikator `addtrans2Execute` :5146, incoming postings (`comitClick` :3906 → `AddINTransNewExecute`
+Parts 4a and 4b-1 (row actions, multi-select / Yes to all, Modifikator, see §4a) are done. Next: incoming postings (`comitClick` :3906 → `AddINTransNewExecute`
 :7118, `AddInTransExecute` :4015, `AddTransExecute` :3629), account checks (`ceskingClick` :5330, Checkacc, acc_check, Tranzit_account,
 `Hesabiyoxla1Click` :4323), IN edit (`ToolButton5Click` → Unit4), settings (ToolButton10/12 → insett / AzipsSett, MTsett, Unit3), prints
 (`ToolButton8Click` :6179, printClick :3984, cap, qrp1, qr5, qrp5), UFX credit (UFX71, `ufxcredit` :6931), template load

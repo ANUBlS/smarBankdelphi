@@ -219,6 +219,12 @@ def _azf_query(D, sql, L, b):
     if sql == Q.text(Q.LINES_SW_SETTINGS):
         return [dict(D["sw_settings"])]
     sel = lambda ref: [r for r in D["sw_out_new"] if r.get("MF20_REFERENCE") == ref]      # noqa: E731
+    if L[0] == Q.LINES_SETPROW[0]:          # part 4b, illustrative sw_prow
+        return [dict(r) for r in D.get("sw_prow", []) if r["FORMAT"] == b.get("Q")]
+    m = re.fullmatch(r"select a\.(\w+) as kredit, a\.(\w+) as debet, a\.(\w+) as summa, a\.mf70 as destination, id  from sw_out_new a where a\.id=:ids1 ", sql)
+    if m:
+        return [{"KREDIT": r.get(m.group(1)), "DEBET": r.get(m.group(2)), "SUMMA": r.get(m.group(3)), "DESTINATION": r.get("MF70"),
+                 "ID": r["ID"]} for r in D["sw_out_new"] if r["ID"] == b.get("ids1")]
     if L[0] == Q.LINES_MT102DATA[0]:
         return _rows([r for r in sel(b.get("refer")) if r["MESSAGETYPE"] == "MT102" and r["STATUS"] == 1])
     if L[0] == Q.LINES_MT102SUM[0]:
@@ -259,11 +265,12 @@ def _azf_proc(D, key, args):
         return {}
     # part 4a, illustrative only (sw_main body not in the repo)
     if key in ("SW_MAIN.SW_OUT_DELETE", "SW_MAIN.SW_OUT_BACK", "SW_MAIN.SW_OUT_COMMIT", "SW_MAIN.TRANSEND",
-               "SW_MAIN.DEL_STD_TRANSACTION"):
+               "SW_MAIN.DEL_STD_TRANSACTION", "SW_MAIN.ADD_TRANSACTION"):
         D.setdefault("in_calls", []).append([key, list(args)])
         rid = args[1] if key == "SW_MAIN.DEL_STD_TRANSACTION" else args[0]
         new = {"SW_MAIN.SW_OUT_DELETE": 96, "SW_MAIN.SW_OUT_BACK": 2, "SW_MAIN.SW_OUT_COMMIT": 1,
-               "SW_MAIN.TRANSEND": None, "SW_MAIN.DEL_STD_TRANSACTION": 5}[key]
+               "SW_MAIN.TRANSEND": None, "SW_MAIN.DEL_STD_TRANSACTION": 5,
+               "SW_MAIN.ADD_TRANSACTION": 5}[key]
         for r in D["sw_out_new"]:
             if r["ID"] == rid and new is not None:
                 r["STATUS"] = new

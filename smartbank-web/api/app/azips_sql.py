@@ -74,3 +74,14 @@ BRANCH_LINE = 'and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELEC
 PKG_MAIN = 'sw_main'          # Unit2.dfm:920-922 sw_in_insert TOraclePackage PackageName
 # Unit2.dfm:5043-5046 ValuteForCommit (yoxp.pas Form12 DBLookupComboBox1: KeyField VALU_NAME, ListField VAL_NAME)
 LINES_VALUTEFORCOMMIT = ['select * from avalute', '']
+
+# part 4b: Modifikator (addtrans2Execute :5146) - Unit2.dfm:3669-3671 setprow, :3729-3731 transac (SQL[0] rebuilt at :5205-5207)
+LINES_SETPROW = ['select * from sw_prow where format=:Q']
+LINES_TRANSAC = ['select  *  from  sw_out_new where id=:ids1']
+
+
+def transac_sql0(kredit, debet, summa):
+    """SWIFT_MAINImpl1.pas:5205-5207 verbatim concatenation (column names come from sw_prow)."""
+    return ('select a.' + kredit + ' as kredit, a.' + debet + ' as debet, a.' + summa + ' as summa, '
+            + 'a.mf70'
+            + ' as destination, id ' + ' from sw_out_new a where a.id=:ids1 ')

@@ -67,3 +67,28 @@ def test_in_delete_and_currencies():
     r = A.in_delete(c, list(Q.LINES_SW_IN), [i[0]], None, ["yes"])
     assert r["done"] == [i[0]] and i[0] not in ids(c, Q.LINES_SW_IN)
     assert A.commit_currencies(c)
+
+
+def test_modifikator_add_transaction():
+    """addtrans2Execute :5146: setprow(:Q=MESSAGETYPE) -> transac SQL[0] -> sw_main.add_transaction(...); vbic 'BIC' when
+    KREDIT='RECEIVERBIC'; k1 = 0; YesToAll = no further questions."""
+    c = conn(); rows = c.query(Q.text(Q.LINES_SW_OUT)); out = [r["ID"] for r in rows]
+    r = A.modifikator(c, False, out, None, ["all"])
+    assert r["done"] == out
+    adds = [a for k, a in calls() if k == "SW_MAIN.ADD_TRANSACTION"]
+    assert len(adds) == len(out)
+    x = rows[0]
+    assert adds[0][:4] == [x["ID"], x["MF50_ACCOUNT"], x["RECEIVERBIC"], float(x["MF32A_AMOUNT"])]
+    assert adds[0][5] == (x.get("MF70") or "") and adds[0][6] == "BIC" and adds[0][8] == 0
+
+
+def test_modifikator_empty_and_bad_prow():
+    c = conn()
+    for r in mock_azips._load()["sw_out_new"]:
+        r["STATUS"] = 1
+    assert A.modifikator(c, False, [], None, [])["message"] == A.AZN_NO_FORMAT
+    c = conn(); mock_azips._load()["sw_prow"][0]["DEBET"] = "x from dual--"
+    out = [r["ID"] for r in c.query(Q.text(Q.LINES_SW_OUT)) if r["MESSAGETYPE"] == "MT103"]
+    import pytest
+    with pytest.raises(A.ProwError):
+        A.modifikator(c, False, out[:1], None, ["yes"])

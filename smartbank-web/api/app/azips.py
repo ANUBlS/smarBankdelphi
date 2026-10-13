@@ -192,7 +192,7 @@ class Form12In(BaseModel):
 
 
 class ActionIn(BaseModel):
-    kind: Literal["out_delete", "out_back", "out_commit", "in_delete", "sending_back", "transend"]
+    kind: Literal["out_delete", "out_back", "out_commit", "in_delete", "sending_back", "transend", "modifikator"]
     selected: list[int] = Field(default_factory=list, max_length=1000)
     current: int | None = None
     answers: list[Literal["yes", "no", "cancel", "all", "all_no"]] = Field(default_factory=list, max_length=1000)
@@ -283,6 +283,11 @@ def make_router(current, require_module, err):
             return A.in_delete(c, lines, b.selected, b.current, b.answers)
         if b.kind == "sending_back":
             return A.sending_back(c, rs, b.current)
+        if b.kind == "modifikator":
+            try:
+                return A.modifikator(c, rs, b.selected, b.current, b.answers)
+            except A.ProwError:
+                err(400, "azips.prow_bad")
         return A.transend(c, rs, b.current)
 
     @r.get("/commit-currencies")

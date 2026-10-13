@@ -173,3 +173,48 @@ def transend(conn, restricted, current):
         return {"done": []}
     conn.call_proc(Q.PKG_MAIN, "transend", [current, 999], commit=False)
     return {"done": [current]}
+
+
+# ------------------------------------------------------------------ part 4b: Modifikator
+import re as _re
+_IDENT = _re.compile(r"[A-Za-z][A-Za-z0-9_$#]{0,29}")
+
+
+class ProwError(ValueError):
+    """sw_prow column name that is not a plain Oracle identifier (Delphi would concatenate it into SQL as is)."""
+
+
+def modifikator(conn, restricted, selected, current, answers):
+    """ToolButton11Click :3097 (SW_OUT_COMMIT right; empty grid -> ShowMessage 'Heç bir format yoxdur!') ->
+    addtrans2Execute :5146-5260: per selected grid_out row, setprow(:Q = MESSAGETYPE), transac SQL[0] rebuilt from the
+    sw_prow column names, sw_main.add_transaction(ID, debet, kredit, summa, MF32A_DATE, DESTINATION, vbic, tax, k1);
+    one SBSession.Commit after the loop. vbic is only assigned when KREDIT = 'RECEIVERBIC' and keeps its value for the
+    following rows (local string, '' at start); k1 is never assigned (WorldCheck commented out) -> 0."""
+    conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["SW_OUT_COMMIT"])
+    rows = _rows(conn, Q.LINES_SW_OUT, restricted)
+    if not rows:
+        return {"done": [], "message": AZN_NO_FORMAT}
+    by_id = {r.get("ID"): r for r in rows}
+    sel = _pick(rows, selected, current)
+    st = {"vbic": ""}
+
+    def one(tid):
+        g = by_id[tid]
+        p = (conn.query(Q.text(Q.LINES_SETPROW), {"Q": str(g.get("MESSAGETYPE") or "")}) or [{}])[0]
+        kredit = str(p.get("KREDIT") or "")
+        if kredit.strip() == "RECEIVERBIC":
+            st["vbic"] = "BIC"
+        debet, summa = str(p.get("DEBET") or ""), str(p.get("SUMM") or "")
+        for x in (kredit, debet, summa):
+            if not _IDENT.fullmatch(x):
+                raise ProwError(x)
+        t = (conn.query(Q.transac_sql0(kredit, debet, summa), {"ids1": int(g.get("ID") or 0)}) or [{}])[0]
+        sm = t.get("SUMMA")
+        conn.call_proc(Q.PKG_MAIN, "add_transaction",
+                       [int(t.get("ID") or 0), str(t.get("DEBET") or ""), str(t.get("KREDIT") or ""),
+                        float(sm) if sm is not None else 0.0, g.get("MF32A_DATE"), str(t.get("DESTINATION") or ""),
+                        st["vbic"], str(g.get("TAX") or ""), 0], commit=False)
+
+    done, _ = _run(sel, answers, one)
+    conn.commit()
+    return {"done": done, "message": None}
