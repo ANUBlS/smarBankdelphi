@@ -30,6 +30,31 @@
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
   }
 
+  // Tclients2 edit boxes -> label column (FormActivate :172 field mapping, api/app/cards.py FORM_FIELDS)
+  const FF = [['DBLookupComboBox6', 'f_account'], ['Edit14', 'f_kli'], ['Edit29', 'c_CURRENCY'], ['DBEdit17', 'f_ostat'], ['Edit24', 'c_CARDNUMBER'],
+    ['Edit15', 'c_FNAME'], ['Edit16', 'c_LNAME'], ['Edit18', 'c_PASSPORT'], ['DateTimePicker7', 'c_BIRTHDAY'], ['Edit17', 'c_HOMEPHONE'],
+    ['Edit27', 'c_WORKPHONE'], ['Edit20', 'c_COUNTRY'], ['Edit19', 'c_CITY'], ['Edit22', 'c_ADDRESS'], ['ComboBox4', 'c_RESIDENT'],
+    ['ComboBox1', 'c_CARDTYPE'], ['ComboBox12', 'c_CARDSTATUS'], ['Edit28', 'c_CREDIT_LIM'], ['DateTimePicker5', 'c_DATEOPEN'],
+    ['DateTimePicker6', 'c_EXPIRY'], ['Edit26', 'c_REFERENCE'], ['Edit23', 'c_EMBOSSNAME'], ['ComboBox2', 'c_COMPANY'], ['Edit25', 'c_SECURITY'],
+    ['Edit21', 'c_LANG_CODE'], ['ComboBox11', 'c_TYPES'], ['ComboBox10', 'c_TITUL'], ['ComboBox5', 'f_with']];
+  async function form(mode, id) {
+    let d;
+    try { d = await api(P + '/clients/form', { method: 'POST', body: { mode, id } }); } catch (e) { toast(errT(e), 'error'); return; }
+    const f = d.fields, dis = d.enabled ? '' : 'disabled';
+    const grid = (cols, rows, gid) => `<div class="tablewrap" style="max-height:22vh"><table class="grid" id="${gid}"><thead><tr>${cols.map(c => `<th>${esc(K('c_' + c))}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r => `<tr>${cols.map(c => `<td>${esc(DATECOLS.has(c) ? fmtD(r[c.toLowerCase()]) : (r[c.toLowerCase()] ?? ''))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+    window.SB.modal(`<h2>${esc(mode === 'NEW' ? K('form_new') : K('form_edit'))}</h2>
+      <p class="alert">${esc(K('form_readonly'))}</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px 12px">
+        <label>${esc(K('f_apptype'))}<br><select disabled>${d.apptype.map(x => `<option>${esc(x)}</option>`).join('')}</select></label>
+        <label><input type="checkbox" disabled ${d.multicard ? 'checked' : ''}> MultiCard</label>
+        ${FF.map(([k, l]) => `<label>${esc(K(l))}<br><input id="cf_${k}" ${k.startsWith('DateTime') ? 'type="date"' : ''} value="${esc(f[k] ?? '')}" ${dis} style="width:100%"></label>`).join('')}</div>
+      ${mode === 'EDIT' ? `<h3>${esc(K('g_cards'))}</h3>${grid(d.grid5, d.cards, 'cf_g5')}<h3>${esc(K('g_ops'))}</h3>${grid(d.grid6, d.operations, 'cf_g6')}
+        <h3>${esc(K('g_credits'))}</h3>${grid(['NUMBEROFCREDIT'], d.credits, 'cf_g1')}` : ''}
+      <div class="actions"><button class="btn secondary" id="cf_close">${esc(t('common.close') || 'Close')}</button></div>`,
+      (m, close) => { m.style.maxWidth = '1200px'; m.style.width = '95vw'; m.querySelector('#cf_close').onclick = close; });
+  }
+
   async function clients(box) {
     const st = { d: null, cur: 0 };
     const call = async (path, body) => { try { return await api(P + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
@@ -87,7 +112,9 @@
     v('c_flt').onclick = () => toggle('c_p5');           // ToolButton13Click: Panel5.Visible toggle
     v('c_srch').onclick = () => toggle('c_p4');          // ToolButton21Click: Panel4.Visible toggle
     v('c_ref').onclick = async () => { const r = await call('/clients/refresh'); if (r) { box.querySelectorAll('[data-e]').forEach(i => i.value = ''); draw(r); } };
-    v('c_add').onclick = v('c_edit').onclick = () => toast(K('not_ported'));
+    // isertbtnClick :208 / ToolButton3Click :228 -> Tclients2 (Unitclient2.pas FormShow + FormActivate). Read-only for now.
+    v('c_add').onclick = () => form('NEW');
+    v('c_edit').onclick = () => { const r = st.d.rows[st.cur]; if (r) form('EDIT', r.id); };
     v('c_xls').onclick = async () => {   // ToolButton7Click :778 -> toexcelExecute :672 (cliexcel) - .xlsx download instead of live Excel
       const res = await fetch(P + '/clients/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: '{}' });
       if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }

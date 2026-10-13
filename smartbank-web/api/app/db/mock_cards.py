@@ -37,6 +37,18 @@ def _db():
         fil = {r["ID"]: r["NAME"] for r in D["filial_t"]}
         c.create_function("card_main_findfilial", 1, lambda f: fil.get(f))
         c.create_function("sb_aca_getuserbyid", 1, lambda i: None if i is None else users.get(str(int(i))))
+        mains = {r["ID"]: r for r in D["card_clients"]}
+        # card_main.mainfind body not in the repo: assumed 'MAIN' for a main card (MAINCARD empty), else 'SUB'
+        c.create_function("card_main_mainfind", 1, lambda i: None if i not in mains else ("SUB" if mains[i].get("MAINCARD") else "MAIN"))
+
+        def decode(*a):
+            v, rest = a[0], list(a[1:])
+            while len(rest) >= 2:
+                k, r = rest.pop(0), rest.pop(0)
+                if k == v:
+                    return r
+            return rest[0] if rest else None
+        c.create_function("decode", -1, decode)
         c.create_function("to_char", 1, lambda v: None if v is None else (str(int(v)) if isinstance(v, (int, float)) else str(v)))
         c.execute("create table dual (dummy text)")
         c.execute("insert into dual values ('X')")
@@ -73,8 +85,10 @@ class CardsMixin:
         s = re.sub(r"\bsmart\.", "", sql)
         s = re.sub(r"card_main\.findfilial", "card_main_findfilial", s, flags=re.I)
         s = re.sub(r"sb_aca\.getuserbyid", "sb_aca_getuserbyid", s, flags=re.I)
+        s = re.sub(r"card_main\.mainfind", "card_main_mainfind", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
         params = {k.lower(): v for k, v in (b or {}).items()}
+        s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower() if m.group(1).lower() in params else m.group(0), s)
         if ":user__" in s:
             params["user__"] = self.username
         s = re.sub(r"--[^\r\n]*", "", s)

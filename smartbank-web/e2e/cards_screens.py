@@ -36,4 +36,11 @@ with sync_playwright() as p:
     print("excel rows", sh.max_row - 1)
     pg.wait_for_timeout(300)
     shot(pg, "165-cards-clients-excel.png")
+    pg.click("#c_ref"); pg.wait_for_timeout(400)
+    pg.click("#g_c tr[data-i='0']"); pg.click("#c_edit"); pg.wait_for_selector("#cf_g5")
+    assert pg.input_value("#cf_Edit15") == "Elchin"
+    shot(pg, "166-cards-client-edit.png")
+    pg.click("#cf_close"); pg.click("#c_add"); pg.wait_for_selector("#cf_Edit19")
+    assert pg.input_value("#cf_Edit19") == "BAKU"
+    shot(pg, "167-cards-client-new.png")
     b.close()

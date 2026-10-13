@@ -223,6 +223,87 @@ def delete(ws, rid: int, confirmed: bool) -> dict:
     return _view(ws)
 
 
+# ------------------------------------------------------------------------------------------------ Tclients2 (Unitclient2.pas)
+# DBGrid5 'Kartlar' (clientcardssource -> cliencards) and DBGrid6 (CARDOPERATIONSOURCE -> CARDOPERATION) columns, Unitclient2.dfm
+GRID5_COLS = ["TIP", "CARDNUMBER", "RBSNUMBER", "FNAME", "LNAME", "CARDHOLDER", "CREDIT_LIM", "CARDTYPE", "COMPANY", "FIL", "CURRENCY",
+              "CARDSTATUS", "DATEOPEN", "EXPIRY", "EMBOSSNAME", "PASSPORT", "BIRTHDAY", "HOMEPHONE", "WORKPHONE", "ADDRESS", "RESIDENT",
+              "ID", "CREAT", "MODI", "DAT", "CRDAT"]
+GRID6_COLS = ["EMELIYYAT", "CARDNUMBER", "RBSNUMBER", "RBSCLOSE", "FNAME", "LNAME", "CARDHOLDER", "CREDIT_LIM", "CARDTYPE", "COMPANY",
+              "FIL", "CURRENCY", "CARDSTATUS", "DATEOPEN", "EXPIRY", "EMBOSSNAME", "PASSPORT", "BIRTHDAY", "HOMEPHONE", "WORKPHONE",
+              "ADDRESS", "RESIDENT", "ID", "CREAT", "MODI", "DAT", "CRDAT"]
+# edit box -> Clients field, as FormActivate :172 (EDIT branch) fills them
+FORM_FIELDS = {"Edit15": "FNAME", "Edit16": "LNAME", "Edit18": "PASSPORT", "DateTimePicker7": "BIRTHDAY", "Edit17": "HOMEPHONE",
+               "Edit27": "WORKPHONE", "Edit20": "COUNTRY", "Edit19": "CITY", "Edit22": "ADDRESS", "ComboBox4": "RESIDENT",
+               "ComboBox1": "CARDTYPE", "ComboBox12": "CARDSTATUS", "Edit28": "CREDIT_LIM", "DateTimePicker5": "DATEOPEN",
+               "DateTimePicker6": "EXPIRY", "DateTimePicker8": "EXPIRY", "Edit26": "REFERENCE", "Edit23": "EMBOSSNAME",
+               "ComboBox2": "COMPANY", "Edit25": "SECURITY", "Edit21": "LANG_CODE", "ComboBox11": "TYPES", "ComboBox10": "TITUL",
+               "Edit24": "CARDNUMBER"}
+
+
+def _fs(v) -> str:
+    """Field.AsString for the edit boxes (dates as DateToStr)."""
+    if isinstance(v, datetime.datetime):
+        return v.date().isoformat()
+    return _asstr(v)
+
+
+def form_open(ws, mode: str, rid: int | None = None) -> dict:
+    """isertbtnClick :208 (right card_madd) / ToolButton3Click :228 (right card_medit) -> Tclients2 (Unitclient2.pas).
+    FormShow :2254: CARDTYPES names into ComboBox1; Edit19 'BAKU', Edit20 'AZE', Edit21 'AZE', ComboBox12 'CARD OK'.
+    FormActivate :172: apptype -> ComboBox9 (' ' first); NEW clears and enables the boxes (dates = Date, ComboBox4 'RESIDENT',
+    Edit28 '0' disabled); EDIT fills them from the current Clients row, all disabled, and opens multicount / hesab / cliencards /
+    CARDOPERATION (by Clients.multi_acc), editval, cariqaliq2 (by ACCID) and allclientcredits (by DBLookupComboBox6.Text).
+    ComboBox5 := 'WITH' in both. Read-only in the web for now: saving (Button2Click :676) is the next step."""
+    _need(ws)
+    conn = ws.conn
+    if mode not in ("NEW", "EDIT"):
+        raise ValueError(mode)
+    if mode == "NEW":
+        conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_madd"], commit=False)
+    else:
+        conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_medit"], commit=False)
+    apptype = [" "] + [_asstr(r.get("TYPE")) for r in _q(conn, Q.LINES_APPTYPE)]
+    cardtypes = [_asstr(r.get("NAME")) for r in _q(conn, Q.LINES_CARDTYPES)]
+    today = datetime.date.today().isoformat()
+    f = {"Edit19": "BAKU", "Edit20": "AZE", "Edit21": "AZE", "ComboBox12": "CARD OK", "ComboBox5": "WITH"}
+    out = {"mode": mode, "apptype": apptype, "cardtypes": cardtypes, "cards": [], "operations": [], "credits": [], "accounts": [],
+           "grid5": GRID5_COLS, "grid6": GRID6_COLS, "multicard": False, "button3": mode == "EDIT"}
+    if mode == "NEW":
+        for k in FORM_FIELDS:
+            if k not in f:
+                f[k] = ""
+        f.update(ComboBox12="CARD OK", ComboBox4="RESIDENT", Edit28="0", DateTimePicker5=today, DateTimePicker6=today,
+                 DateTimePicker7=today, DateTimePicker8=today, Edit14="", Edit29="", Edit33="", DBLookupComboBox6="")
+        out.update(fields=f, enabled=True)
+        return out
+    cur = next((r for r in _st(ws).get("rows") or [] if r.get("ID") == rid), None)
+    if cur is None:
+        raise LookupError(rid)
+    multi = cur.get("MULTI_ACC")
+    mc = _q(conn, Q.LINES_MULTICOUNT, {"rbs": multi})
+    out["multicard"] = int((mc[0].get("MULTI") if mc else 0) or 0) > 1               # CheckBox4 'MultiCard'
+    hes = _q(conn, Q.LINES_HESAB, {"CID": None, "p_AccNO": multi})
+    out["accounts"] = [r.get("ACC_NO") for r in hes]
+    out["cards"] = [row(r) for r in _q(conn, Q.LINES_CLIENCARDS, {"numb": multi})]
+    out["operations"] = [row(r) for r in _q(conn, Q.LINES_CARDOPERATION, {"RBS": multi})]
+    ev = _q(conn, Q.LINES_EDITVAL, {"RBSNUMBER": multi})
+    car = _q(conn, Q.LINES_CARIQALIQ2, {"acc_id": cur.get("ACCID")})
+    lookup_text = multi if multi in out["accounts"] else ""          # DBLookupComboBox6.Text = KeyValue when it is in the hesab list
+    out["credits"] = [row(r) for r in _q(conn, Q.LINES_ALLCLIENTCREDITS, {"rbsnumber": lookup_text})]
+    for k, col in FORM_FIELDS.items():
+        f[k] = _fs(cur.get(col))
+        if k.startswith("DateTimePicker"):
+            v = f[k]                                     # .AsDateTime into a picker; a string field goes through StrToDate (dd.mm.yyyy)
+            if len(v) >= 10 and v[2] == "." and v[5] == ".":
+                v = v[6:10] + "-" + v[3:5] + "-" + v[0:2]
+            f[k] = v[:10]
+    f.update(Edit14=str(int((hes[0].get("KLI_ID") if hes else 0) or 0)),                 # inttostr(hesab.kli_id.AsInteger)
+             Edit29=_asstr(ev[0].get("VAL_NAME")) if ev else "", DBLookupComboBox6=lookup_text,
+             DBEdit17=_asstr(car[0].get("OSTAT")) if car else "")                        # Edit33 is hidden at the end; DBEdit17 shows OSTAT
+    out.update(fields=f, enabled=False)
+    return out
+
+
 # toexcelExecute customers.pas:672-776 header row (Cells[1, 1..28]) and the cliexcel field per column
 EXCEL_COLS = [(" #", None), ("RBSNUMBER", "RBSNUMBER"), ("CARDHOLDER", "CARDHOLDER"), ("CARDNUMBER", "CARDNUMBER"), ("FIRST NAME", "FNAME"),
               ("LAST NAME", "LNAME"), ("CURRENCY", "CURRENCY"), ("CARDTYPE", "CARDTYPE"), ("CARDSTATUS", "CARDSTATUS"),
@@ -304,6 +385,11 @@ class SortIn(BaseModel):
     field: str
 
 
+class FormIn(BaseModel):
+    mode: str
+    id: int | None = None
+
+
 class DeleteIn(BaseModel):
     id: int
     confirmed: bool = False
@@ -342,6 +428,15 @@ def make_router(current, require_module, err):
         from fastapi import Response
         return Response(excel(ws), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         headers={"Content-Disposition": 'attachment; filename="CARDS.xlsx"'})
+
+    @r.post("/clients/form")
+    def _fo(b: FormIn, ws=Depends(g)):
+        if b.mode not in ("NEW", "EDIT"):
+            err(400, "error.bad_request")
+        try:
+            return form_open(ws, b.mode, b.id)
+        except LookupError:
+            err(404, "error.not_found")
 
     @r.post("/clients/delete")
     def _de(b: DeleteIn, ws=Depends(g)):

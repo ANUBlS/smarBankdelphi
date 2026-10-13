@@ -126,3 +126,33 @@ def test_filter_parser():
         TF.apply(rows, "A = 'x", {"A"}); assert False
     except TF.FilterError:
         pass
+
+
+def test_form_new_defaults():
+    login(); P("/clients/open")
+    r = P("/clients/form", {"mode": "NEW"})
+    f = r["fields"]
+    assert r["enabled"] and not r["button3"] and r["apptype"][0] == " " and "SUB CARD" in r["apptype"]
+    assert f["ComboBox12"] == "CARD OK" and f["ComboBox4"] == "RESIDENT" and f["Edit28"] == "0" and f["Edit19"] == "BAKU"
+    assert f["Edit20"] == f["Edit21"] == "AZE" and f["ComboBox5"] == "WITH" and f["Edit15"] == ""
+    assert "VISA CLASSIC" in r["cardtypes"]
+
+
+def test_form_edit_loads_by_multi_acc():
+    login(); P("/clients/open")
+    r = P("/clients/form", {"mode": "EDIT", "id": 1})
+    f = r["fields"]
+    assert not r["enabled"] and r["button3"] and f["Edit15"] == "Elchin" and f["Edit24"] == "4169730000001111"
+    assert f["DBLookupComboBox6"] == "38110019440000000001" and r["accounts"] == ["38110019440000000001"]
+    assert f["Edit14"] == "501" and f["Edit29"] == "AZN" and f["DBEdit17"] == "1250.5" and f["Edit25"] == "ANA"
+    assert [c["id"] for c in r["cards"]] == [1] and "tip" in r["cards"][0] and not r["multicard"]
+    assert [o["emeliyyat"] for o in r["operations"]] == ["PROLONGATION"]                  # MESSTYPE<>1, status in (1,4)
+    assert [c["numberofcredit"] for c in r["credits"]] == ["KR-2025-071"]
+    r = P("/clients/form", {"mode": "EDIT", "id": 3})                                     # multi_acc NULL -> all empty
+    assert r["cards"] == [] and r["fields"]["Edit14"] == "0" and r["fields"]["DBLookupComboBox6"] == ""
+    P("/clients/form", {"mode": "EDIT", "id": 999}, 404)
+
+
+def test_form_rights():
+    login("TELLER", "Teller#2026"); P("/clients/open")
+    assert client.post(B + "/clients/form", json={"mode": "NEW"}).status_code in (400, 403)
