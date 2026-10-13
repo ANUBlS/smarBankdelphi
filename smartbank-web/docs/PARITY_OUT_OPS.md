@@ -68,10 +68,23 @@ whether the SearchCombo `ItemIndex 0` is an "all" entry or the first user/branch
 the DFM but bound as integer `InBalanceChar`, as Delphi does.
 Not ported: the AVI animations; `ShowAdvancedOptions` drag/dock behaviour.
 
-## 3. `Packages/OutExcelImport` – belongs to the off-balance family
+## 3. Off-balance Excel Import (`Packages/OutExcelImport`) – ported
 
-CLSID `{9B81586F-881D-480A-AE1B-AAC7DF45622B}` (`OutExcelImport_TLB.pas:52`), `OutExcelImporter.dpr` compiles only `OutExcelImport.pas`.
-It loads an Excel sheet into `out_exceltable` (OutExcelImport.dfm:3281-3282 `select rowid,t. * from out_exceltable  t where userid=uid`,
-rows inserted in ToolButton1Click OutExcelImport.pas:502-…), then posts them as off-balance transactions with
-`excelpkg.OUTEXCELTRANSACTIONS` (:605) and clears with `excelpkg.Del_outexcel` / `del_outinspayments` (:329, :607, :625-627).
-It works only on `out_*` objects, so it is an off-balance module: it gets its own Off-balance tree entry when it is ported (after out_repair).
+CLSID `{9B81586F-881D-480A-AE1B-AAC7DF45622B}` (`OutExcelImport_TLB.pas:52`), tree `Item8\Item13`, plugin `Item30`, route `/m/out-excel-import`.
+`OutExcelImporter.dpr` compiles only `OutExcelImport.pas`. API `api/app/out_excel_import.py`, web `web/public/modules/out_excel_import.js`,
+mock `api/app/db/mock_oexi.py`, tests `api/tests/test_out_excel_import.py`, screenshots 99–100.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| `ActiveFormCreate` (.pas:324-330) | `GET /init` | opens `select rowid,t. * from out_exceltable  t where userid=uid` (verbatim), then `excelpkg.Del_outexcel` – opening the screen clears the user's rows, as in Delphi. |
+| `ToolButton1Click` (.pas:502-597) Excel OLE | "Load file" → `POST /upload` (raw body, ≤20 MB) | openpyxl, active sheet, rows 2..last used row, columns 1..68 → F1..F68, one INSERT per row (DOA Insert/Post), commit. Empty string cells → NULL. Header-only sheet → error (Delphi's final `Post` fails). |
+| `ToolButton3Click` (.pas:599-610) | "Send to the day's documents" | question → `OUTEXCELTRANSACTIONS`, "Əməliyyatlar göndərildi!", `Del_outexcel`; `SBSession.commit` runs for Yes **and** No. |
+| `ToolButton5Click` (.pas:613-620) | Refresh | reopens both datasets (`select * from vid_op` is opened but not shown, as in Delphi). |
+| `ToolButton7Click` (.pas:622-628) | "Delete transactions" | **no question** (Delphi has none) → `del_outinspayments`, message, `Del_outexcel`; no commit in the unit, so none here. |
+| DBGrid1 `dgEditing` / `dgConfirmDelete` | inline cell edit (F1..F75), Ctrl+Del with confirm | DOA-style `update … set <col> = :val where rowid = :doa_rowid` (column whitelisted) / `delete … where rowid = :doa_rowid`, commit on post. |
+
+**Unverified (needs real DB):** `excelpkg` body not in the repo (what the F columns mean, what `del_outinspayments` removes);
+`USERID` is never set by the unit, so the table must fill it (default/trigger = `uid`) – otherwise rows would not show after loading;
+`Del_outexcel`/`del_outinspayments` stay uncommitted until the next commit in the user's session (same as Delphi);
+cell types: Excel values are bound as read (number/date/text) and Oracle converts them to the column type.
+Not ported: legacy `.xls` (openpyxl reads .xlsx/.xlsm only); the two unbound lookup combos (no ListSource in the DFM); inserting new rows from the grid.

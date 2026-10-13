@@ -29,6 +29,7 @@ from .mock_oacc import OaccMixin
 from .mock_oset import OsetMixin
 from .mock_omem import OmemMixin
 from .mock_orep import OrepMixin
+from .mock_oexi import OexiMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -63,7 +64,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -154,6 +155,9 @@ class MockConnection(OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMi
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._oexi_proc(key)
+        if r is not NotImplemented:
+            return r
         r = self._omem_proc(key, args)
         if r is not NotImplemented:
             return r
@@ -187,6 +191,9 @@ class MockConnection(OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMi
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._oexi_query(sql, b)  # Packages/OutExcelImport
+        if r is not NotImplemented:
+            return r
         r = self._orep_query(sql, b)  # Packages/out_repair
         if r is not NotImplemented:
             return r
@@ -247,6 +254,8 @@ class MockConnection(OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMi
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._oexi_exec(sql, binds or {}):
+            return
         if self._omem_execute(sql, binds or {}):
             return
         if self._oset_execute(sql, binds or {}):
