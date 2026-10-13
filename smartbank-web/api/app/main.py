@@ -301,3 +301,5 @@ from . import out_statement  # noqa: E402
 app.include_router(out_statement.make_router(current, require_module, err))
 from . import out_account  # noqa: E402
 app.include_router(out_account.make_router(current, require_module, err))
+from . import out_balrefedit  # noqa: E402
+app.include_router(out_balrefedit.make_router(current, require_module, err))

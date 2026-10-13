@@ -26,6 +26,7 @@ from . import mock_out
 from .mock_out import OutMixin
 from . import mock_oacc
 from .mock_oacc import OaccMixin
+from .mock_oset import OsetMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -60,7 +61,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -172,6 +173,9 @@ class MockConnection(OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._oset_query(sql, b)  # off-balance settings screens (mock_oset)
+        if r is not NotImplemented:
+            return r
         r = self._oacc_query(sql, b)  # Packages/Out_account (verbatim text match)
         if r is not NotImplemented:
             return r
@@ -223,6 +227,8 @@ class MockConnection(OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._oset_execute(sql, binds or {}):
+            return
         if self._bal_execute(sql, binds or {}):
             return
         if self._cs_execute(sql, binds or {}):
