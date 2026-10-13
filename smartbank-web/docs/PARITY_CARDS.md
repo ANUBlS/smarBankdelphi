@@ -18,7 +18,7 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Prosedur ▸ Müştərilər | N11Click :1007 | card_clients | Tclients (customers.pas, 1440 lines) | **list + Excel ported** |
 | Prosedur ▸ Balans | N21Click :999 | card_balans | TBalance (balans.pas) | planned |
 | Prosedur ▸ Payment | N1Click :1015 | card_payment | TPayments (payment.pas) | planned |
-| Prosedur ▸ Application | N9Click :1068 | card_application | TApplications (applicationpas.pas) | planned |
+| Prosedur ▸ Application | N9Click :1068 | card_application | TApplications (applicationpas.pas) | **list ported (3a); FAYL YARAT planned (3b)** |
 | Prosedur ▸ Yeni kartlar | N10Click :1082 | card_newcard | TForm9 (U9.pas) | planned |
 | Prosedur ▸ Verifikasiya | N13Click :1286 (visible only when card_settings.dord = 1, PopupMenu1Popup :1273) | VERIF | Tverification (unitverification.pas) | planned (menu visibility done) |
 | Prosedur ▸ Online Cards | OnlineCards1Click :990 | – (no right, no myswift check) | Tonline (onlinec.pas) | planned |
@@ -122,6 +122,22 @@ Unverified (2b): card_main.new_card / edit_card / setreference / findcredit2 and
 
 Unverified (2c): card_main.delete_application body (mock deletes the card_client_app row); `account.currencyname` column (used by multiform, mock adds it); new_card / edit_card with the extra 31st/33rd Edit3 argument (overload in card_main not in the repo; mock stores it as MULTI_ACC); ComboBox1Enter with ItemIndex ≠ 0 does not reopen CARDTYPES, so Delphi reads from wherever the cursor is (likely EOF → the last name repeated); the web re-reads all names. TDBLookupComboboxEh moving the OracleDataSet1 cursor to the picked account (assumed, as hesab). Screenshots 172-175.
 
+## Step 3a: Application (applicationpas.pas TApplications) – list done
+
+API `api/app/cards_app.py` (`/api/cards/applications`), tests `api/tests/test_cards_app.py`, E2E `e2e/cards_app.py`, screenshots 176-177.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| N9Click :1068 (right card_application); FormShow :1444 | `POST /applications/open` | DateTimePicker1 := Date; urgent (Unit18.dfm:1185, URG=1) / simple (:1266, URG=0) by dat1 (DOA otDate) Open; hidden Button6/Button7 → 'ORDER BY STATUS' Refresh |
+| Button1Click :119 'YENİLƏ' | `POST /applications/refresh {date}` | both reopened with the current SQL lines (no order: the sort line was blanked) |
+| DBGrid1/2TitleClick :1590/:1611, Button6/7 | `POST /applications/sort {grid, field}` | SQL.Add('ORDER BY F'); Refresh; SQL[pos] := '' – the blank lines accumulate as in Delphi; exit when empty / no FieldName |
+| DBGrid1/2DrawColumnCell :1476/:1515 | status icon column (DataCol 1, no FieldName) | STATUS 1→25, 2→3, 3→26, 4→13 of ImageList1 (applicationpas.dfm:984), extracted to `web/public/img/cards/app_status_N.png` |
+| dgMultiSelect, PopupMenu1 selectall1 / PopupMenu2 MenuItem1 'SELECT ALL' | Ctrl/Shift-click, right-click → SELECT ALL | selection kept client-side for 3b |
+| Button3Click :1458 (card_excel1, urgent) / Button4Click :1467 (card_excel2, simple) | `POST /applications/excel {grid}` | CMExcelExport.ExportDataset(ds, 'Application', True): all fields + title row, sheet 'Application', as .xlsx download |
+| Button2Click :1416 / Button5Click :1393 'FAYL YARAT' (cardcreatefilenr; cr_file2 then cr_file1, :346-1390) | button shows "not ported" | step 3b. simplefileExecute :132 is only referenced from commented code |
+
+Unverified (3a): `to_char(a.TRANDATE,'DD-mon-YYYY') = :dat1` with a DATE bind relies on Oracle converting the char back to DATE with NLS_DATE_FORMAT (mock compares days); CMExcelExport column order / formatting (the web uses dataset field order, raw values); the TDBGrid columns with lower-case FieldNames ('fil', 'CREATer', 'Modifier', 'crdat') resolve case-insensitively as in DB.
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya.
@@ -131,4 +147,4 @@ Unverified (2c): card_main.delete_application body (mock deletes the card_client
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Plan step 2: Applications (applicationpas.pas, N9Click :1068, right card_application), then Yeni kartlar (U9, N10Click :1082), Verifikasiya (unitverification.pas).
+Step 3b: Application FAYL YARAT (applicationpas.pas Button2Click :1416 / Button5Click :1393 → cr_file2 :346, cr_file1 :516, right cardcreatefilenr, uses the DBGrid SelectedRows). Then Yeni kartlar (U9.pas, N10Click :1082), Verifikasiya (unitverification.pas, N13Click :1286).

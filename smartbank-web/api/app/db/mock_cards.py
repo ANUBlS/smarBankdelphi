@@ -49,6 +49,8 @@ def _db():
                     return r
             return rest[0] if rest else None
         c.create_function("decode", -1, decode)
+        c.create_function("to_char", 2, lambda v, f: None if v is None else str(v)[:10])   # to_char(date, 'DD-mon-YYYY') compared
+        # with a DATE bind: Oracle converts the char back to DATE (NLS_DATE_FORMAT, unverified) -> a day comparison; the mock binds ISO days
         c.create_function("to_char", 1, lambda v: None if v is None else (str(int(v)) if isinstance(v, (int, float)) else str(v)))
         c.create_function("nvl", 2, lambda a, b: b if a is None else a)
         c.create_function("convertpack_convert_int", 1, lambda v: v)          # convertpack body not in the repo: identity
@@ -67,7 +69,9 @@ def _db():
                 continue
             cols = list(dict.fromkeys(k for r in rows for k in r))
             c.execute(f"create table {t} ({', '.join(cols)})")
+            today = dt.datetime.combine(dt.date.today(), dt.time()).isoformat()
             for r in rows:
+                r = {k: (today if v == "TODAY" else v) for k, v in r.items()}           # fixture token: the server date
                 c.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))
         c.commit()
         _DB = c
@@ -84,6 +88,8 @@ def _pats():
                 t = re.escape(Q.text(L))
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
+                if n in ("LINES_URGENT", "LINES_SIMPLE"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                    t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
         for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC):
@@ -103,7 +109,7 @@ class CardsMixin:
         s = re.sub(r"card_main\.findcredit2", "card_main_findcredit2", s, flags=re.I)
         s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
-        params = {k.lower(): v for k, v in (b or {}).items()}
+        params = {k.lower(): (v.isoformat() if type(v) is dt.date else v) for k, v in (b or {}).items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower() if m.group(1).lower() in params else m.group(0), s)
         if ":user__" in s:
             params["user__"] = self.username

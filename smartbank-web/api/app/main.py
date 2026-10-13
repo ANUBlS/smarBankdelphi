@@ -332,3 +332,5 @@ from . import xohks_in  # noqa: E402
 app.include_router(xohks_in.make_router(current, require_module, err))
 from . import cards  # noqa: E402
 app.include_router(cards.make_router(current, require_module, err))
+from . import cards_app  # noqa: E402
+app.include_router(cards_app.make_router(current, require_module, err))

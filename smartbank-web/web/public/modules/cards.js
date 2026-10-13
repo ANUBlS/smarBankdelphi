@@ -25,6 +25,7 @@
     }
     function item(i) {
       if (i === 'clients') return clients(el.querySelector('#cbody'));
+      if (i === 'application') return applications(el.querySelector('#cbody'));
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
@@ -175,6 +176,45 @@
           if (r.close) close();
         };
       });
+  }
+
+  // Prosedur ▸ Application (applicationpas.pas TApplications, api/app/cards_app.py): DBGrid1 = urgent (TƏCİLİ), DBGrid2 = simple (NORMAL)
+  async function applications(box) {
+    const call = async (path, body) => { try { return await api(P + '/applications' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    const sel = { urgent: new Set(), simple: new Set() };
+    const hdr = (c) => c === '' ? '' : K('c_' + c.toUpperCase());
+    const cell = (r, c) => { if (c === '') { const n = d.status_img[r.status]; return n !== undefined ? `<img src="/img/cards/app_status_${n}.png" alt="${esc(r.status)}" title="STATUS ${esc(r.status)}">` : ''; }
+      const v = r[c.toLowerCase()]; return esc(DATECOLS.has(c.toUpperCase()) ? fmtD(v) : (v ?? '')); };
+    const grid = (g) => `<div class="tablewrap" style="max-height:30vh"><table class="grid" id="ap_${g}"><thead><tr>${d.cols.map(c => `<th data-f="${esc(c)}" style="cursor:pointer">${esc(hdr(c))}</th>`).join('')}</tr></thead>
+      <tbody>${d[g].map(r => `<tr data-id="${r.id}" class="${sel[g].has(r.id) ? 'sel' : ''}">${d.cols.map(c => `<td>${cell(r, c)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${d.cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_application'))}</h3>
+        <div class="toolbar" style="gap:6px"><label>${esc(K('ap_date'))} <input type="date" id="ap_d" value="${esc(d.date)}"></label><button class="btn" id="ap_ref">${esc(K('b_refresh'))}</button></div>
+        ${['urgent', 'simple'].map(g => `<h4 style="margin:10px 0 4px">${esc(K('ap_' + g))}</h4>
+          <div class="toolbar" style="gap:6px"><button class="btn secondary" data-file="${g}">${esc(K('ap_file'))}</button><button class="btn secondary" data-xls="${g}">${esc(K('b_excel'))}</button>
+          <span class="muted">${esc(K('count'))}: ${d[g].length}</span></div>${grid(g)}`).join('')}`;
+      box.querySelector('#ap_ref').onclick = async () => { const r = await call('/refresh', { date: box.querySelector('#ap_d').value }); if (r) { d = r; sel.urgent.clear(); sel.simple.clear(); draw(); } };
+      ['urgent', 'simple'].forEach(g => {
+        const tb = box.querySelector('#ap_' + g);
+        tb.querySelectorAll('th').forEach(th => th.onclick = async () => { const r = await call('/sort', { grid: g, field: th.dataset.f }); if (r) { d = r; draw(); } });
+        // dgMultiSelect: Ctrl/Shift-click toggles, a plain click selects one row
+        tb.querySelectorAll('tbody tr[data-id]').forEach(tr => tr.onclick = (e) => { const id = +tr.dataset.id;
+          if (e.ctrlKey || e.metaKey || e.shiftKey) { sel[g].has(id) ? sel[g].delete(id) : sel[g].add(id); } else { sel[g].clear(); sel[g].add(id); } draw(); });
+        // PopupMenu1 selectall1 / PopupMenu2 MenuItem1 'SELECT ALL'
+        tb.oncontextmenu = (e) => { e.preventDefault(); document.querySelectorAll('.cf_pop').forEach(x => x.remove());
+          const pm = document.createElement('div'); pm.className = 'cf_pop'; pm.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:1200;background:#fff;border:1px solid #888`;
+          pm.innerHTML = `<button class="btn secondary" id="ap_all">SELECT ALL</button>`; document.body.appendChild(pm);
+          const off = () => { pm.remove(); document.removeEventListener('click', off); }; setTimeout(() => document.addEventListener('click', off), 0);
+          pm.querySelector('#ap_all').onclick = () => { off(); d[g].forEach(r => sel[g].add(r.id)); draw(); }; };
+      });
+      box.querySelectorAll('[data-xls]').forEach(b => b.onclick = async () => {
+        const res = await fetch(P + '/applications/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify({ grid: b.dataset.xls }) });
+        if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
+        const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Application.xlsx'; a.click(); });
+      box.querySelectorAll('[data-file]').forEach(b => b.onclick = () => toast(K('not_ported')));   // Button2 / Button5 'FAYL YARAT' -> step 3b
+    }
+    draw();
   }
 
   async function clients(box) {
