@@ -491,6 +491,7 @@ class Routine:
     """A procedure / function of a whole unit (parse_unit), callable from the interpreter with Delphi parameter passing:
     value parameters are copied, var parameters are written back to the caller's variable when the routine returns."""
     pascal_byref = True
+    factories: dict = {}                                  # extra local-type constructors (e.g. TextFile), set per runner
 
     def __init__(self, unit, name, selfobj, builtins):
         self.unit, self.name, self.selfobj, self.builtins = unit, name, selfobj, builtins
@@ -507,7 +508,7 @@ class Routine:
         for (pn, _byref, _t), v in zip(r["params"], vals):
             loc[pn] = v
         consts = {k: v for k, v in r["vars"].items() if isinstance(v, tuple)}
-        loc.update(init_locals({k: v for k, v in r["vars"].items() if not isinstance(v, tuple)}, {"array": PArray}))
+        loc.update(init_locals({k: v for k, v in r["vars"].items() if not isinstance(v, tuple)}, {"array": PArray, **self.factories}))
         if r["rtype"]:
             loc["result"] = init_locals({"result": r["rtype"]}, {})["result"]
         it = Interp(self.selfobj, self.builtins() if callable(self.builtins) else self.builtins, loc)
@@ -518,10 +519,13 @@ class Routine:
         for nn, nr in r.get("nested", {}).items():
             it.locals[nn] = Nested(nr, it)
         it.execute(r["body"])
+        fname = r["name"].split(".")[-1]
         if interp is not None and argnodes is not None:
             for (pn, byref, _t), node in zip(r["params"], argnodes):
                 if byref:
                     interp.assign(node, it.locals[pn])
+        if r["rtype"] and it.locals.get(fname) is not None:
+            return it.locals[fname]                       # 'when2Str := wd' assigns the function name = Result
         return it.locals.get("result") if r["rtype"] else None
 
 

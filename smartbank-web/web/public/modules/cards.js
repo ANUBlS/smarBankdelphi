@@ -212,7 +212,20 @@
         const res = await fetch(P + '/applications/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify({ grid: b.dataset.xls }) });
         if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
         const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Application.xlsx'; a.click(); });
-      box.querySelectorAll('[data-file]').forEach(b => b.onclick = () => toast(K('not_ported')));   // Button2 / Button5 'FAYL YARAT' -> step 3b
+      // Button2Click :1416 (urgent) / Button5Click :1393 (simple) 'FAYL YARAT': right + MessageDlg, then cr_file2 / cr_file1 on the
+      // selected rows (DBGrid.SelectedRows); the created files are downloaded (CARDS_OUT_DIR keeps a server copy)
+      const MSG = { 'Fayl yaratmaq istəyirsiniz?': 'msg_ap_file_q', 'Fayl yaradıldı!': 'msg_ap_file_done' };
+      const tr = (m) => MSG[m] ? K(MSG[m]) : m;
+      box.querySelectorAll('[data-file]').forEach(b => b.onclick = async () => {
+        const g = b.dataset.file, body = { grid: g, ids: [...sel[g]] };
+        const q = await call('/file', body); if (!q) return;
+        if (!window.confirm(tr(q.confirm))) return;
+        const r = await call('/file', Object.assign(body, { confirmed: true })); if (!r) return;
+        r.files.forEach(f => { const bb = Uint8Array.from(atob(f.b64), c => c.charCodeAt(0)); const a = document.createElement('a');
+          a.href = URL.createObjectURL(new Blob([bb], { type: 'application/octet-stream' })); a.download = f.name; a.click(); });
+        if (r.error) toast(r.error, 'error');
+        r.messages.forEach(m => toast(tr(m) + (r.files.length ? ' ' + r.files.map(f => f.name).join(', ') : '')));
+        d = r.view; sel[g].clear(); draw(); });
     }
     draw();
   }

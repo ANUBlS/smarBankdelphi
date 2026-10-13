@@ -1,7 +1,7 @@
 """Cards ▸ Prosedur ▸ Application (cards_azericard applicationpas.pas TApplications), opened by MAINFORMImpl1.pas N9Click :1068
 (right card_application). Two grids: DBGrid1 = DataMod_CARDS.urgent (URG = 1), DBGrid2 = DataMod_CARDS.simple (URG = 0), both by
 :dat1 = DateTimePicker1 (a DOA otDate variable, Unit18.dfm:1185/1266). Step 3a: list, refresh, title sort, status icons, select all,
-Excel. 'FAYL YARAT' (Button2 / Button5 → cr_file1 / cr_file2, :346-1390) is step 3b."""
+Excel. Step 3b: 'FAYL YARAT' (Button2 / Button5 -> cr_file2 / cr_file1, :346-1438) in cards_app_file.py."""
 from __future__ import annotations
 import datetime
 import io
@@ -110,6 +110,30 @@ def excel(ws, grid: str) -> bytes:
     return bio.getvalue()
 
 
+def create_file(ws, grid: str, ids: list[int], confirmed: bool) -> dict:
+    """Button2Click :1416 (urgent) / Button5Click :1393 (simple). Without confirmed: the right check (first line of the handler)
+    and the MessageDlg text; with confirmed the whole handler runs verbatim (cards_app_file), then the grid shows the Refresh."""
+    from . import cards_app_file as F
+    s = _ap(ws)
+    if grid not in DS:
+        raise ValueError(grid)
+    if not confirmed:
+        ws.conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["cardcreatefilenr"], commit=False)
+        return {"confirm": "Fayl yaratmaq istəyirsiniz?"}
+    rows = [dict(r) for r in s["rows"][grid]]
+    res = F.create_file(ws.conn, grid, rows, [int(i) for i in ids])
+    if res["error"] is None:                              # DataMod_CARDS.<grid>.Refresh (:1408 / :1432)
+        _open(ws, grid)
+    res["view"] = _view(ws)
+    return res
+
+
+class FileIn(BaseModel):
+    grid: str
+    ids: list[int] = []
+    confirmed: bool = False
+
+
 class RefreshIn(BaseModel):
     date: datetime.date
 
@@ -146,6 +170,10 @@ def make_router(current, require_module, err):
     @r.post("/sort")
     def _s(b: SortIn, ws=Depends(g)):
         return _fe(sort, ws, b.grid, b.field)
+
+    @r.post("/file")
+    def _f(b: FileIn, ws=Depends(g)):
+        return _fe(create_file, ws, b.grid, b.ids, b.confirmed)
 
     @r.post("/excel")
     def _x(b: GridIn, ws=Depends(g)):

@@ -62,6 +62,8 @@ def _db():
         c.create_function("card_main_setreference", 1, setref)
         kred = {int(k): v for k, v in D.get("_findcredit2", {}).items()}
         c.create_function("card_main_findcredit2", 1, lambda a: kred.get(int(a or 0), 0))
+        fk = {int(k): v for k, v in D.get("_filialkod", {}).items()}
+        c.create_function("card_main_filialkod", 1, lambda k: fk.get(int(k or 0)))   # card_main.filialkod body not in the repo
         c.execute("create table dual (dummy text)")
         c.execute("insert into dual values ('X')")
         for t, rows in D.items():
@@ -92,9 +94,16 @@ def _pats():
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
-        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC):
+        from .. import cards_app_file as F
+        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2):
             _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
     return _PATS
+
+
+# applicationpas.pas cr_file1 / cr_file2: one call per written message
+DONE = {"CARD_MAIN." + n.upper() for n in ("donenewcard", "donesupcard", "doneprolongation", "donereplace", "donecredit",
+                                           "doneattempsclear", "donestatuschange", "donerbsnumberchange", "contractclose",
+                                           "DONESECURE", "cardnamechange")}
 
 
 class CardsMixin:
@@ -107,6 +116,7 @@ class CardsMixin:
         s = re.sub(r"card_main\.mainfind", "card_main_mainfind", s, flags=re.I)
         s = re.sub(r"card_main\.setreference", "card_main_setreference", s, flags=re.I)
         s = re.sub(r"card_main\.findcredit2", "card_main_findcredit2", s, flags=re.I)
+        s = re.sub(r"card_main\.filialkod", "card_main_filialkod", s, flags=re.I)
         s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
         params = {k.lower(): (v.isoformat() if type(v) is dt.date else v) for k, v in (b or {}).items()}
@@ -149,6 +159,14 @@ class CardsMixin:
                 rec.update(CARDNUMBER=a[29], WITHP=a[30])
             db.execute(f"insert into card_client_app ({', '.join(rec)}) values ({', '.join('?' * len(rec))})", list(rec.values()))
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+            return {}
+        if key in DONE:
+            # card_main bodies not in the repo: emulated as STATUS 2 (= sent, the urgent / simple lists show 1-3) on the
+            # card_client_app row; donenewcard also stores its file name argument. No commit (as the Delphi caller)
+            sets = "STATUS = 2" + (", FILENAME = ?" if key == "CARD_MAIN.DONENEWCARD" else "")
+            _db().execute(f"update card_client_app set {sets} where id = ?", list(args[1:2]) + [int(args[0])]
+                          if key == "CARD_MAIN.DONENEWCARD" else [int(args[0])])
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
         if key == "CARD_MAIN.DELETE_APPLICATION":
             # card_main body not in the repo: emulated as a delete of the card_client_app row (no commit, as the Delphi caller)
