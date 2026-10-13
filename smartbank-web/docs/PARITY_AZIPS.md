@@ -19,9 +19,9 @@ in the part that uses them (UFX credit, `ufxcredit` :6931), copied from the Delp
 ## Plan (clean pushed commits)
 1. **Lists, totals, archives** (done) – see §1.
 2. **Outgoing message editor / creation** (done) – see §2. Open follow-up 2b: `filereport.bpl` `Azipsnew` (`Packages/Cards_New/FileReprt/Unitazips.pas`, 4 707 lines), which is what the visible "Yeni" button and "Redaktə et" for non-103 rows open.
-3. Conversion / export files: `PACS0008Execute` (:686-2110), `KonvertexExecute`, `Konver102Execute`, `fayl102Execute`,
-   `CreateFaylExecute`, `createfile2Execute`, `konvertExecute`/`konvert2Execute`/`konvert3Execute`, `ToolButton8Click` (print/list),
-   with golden-file tests generated from the Delphi format code (byte-identical, encoding and CRLF as Delphi writes them).
+3. Conversion / export files. **3a done** (outgoing files: `CreateFileClick` → `PACS0008Execute`) – see §3.
+   **3b open**: incoming import `ToolButton4Click` (button "Konvert", also `Timer1Timer`) → `KonvertexExecute` (:538) / `konvert3Execute` (:6480)
+   and `Konver102Execute` (:2112, called from Konvertex); `ToolButton8Click` (:6179, QuickRep list – button Visible=False).
 4. Remaining actions: commit/verify/modify/authorise (`comitClick`, `commitingExecute`, `ToolButton11/13Click`, `CreateFileClick`),
    back/delete (`geriExecute`, `out_deleteExecute`, `DeleteExecute`, `Geriqaytar1Click`), incoming postings (`AddTrans*`,
    `AddINTransNew`, `addtrans2`), checks (`cheskaccount`, Checkacc, acc_check, Tranzit_account), settings (Unit3, Azipsn,
@@ -111,6 +111,57 @@ Same layout as MT103 on `sw_out_2` (Committed), everything read-only, no save.
 - TRichEdit line separators in `OF70_RichEdit.Text` (CR vs CRLF) – web sends CRLF.
 - `Edit3_MF50` in MT103 is filled from MF36 (FormActivate), so a 50K message with empty MF36 fails the account check until the account is retyped – kept.
 
+## 3. Outgoing files – Avtorizator (3a, done)
+API `api/app/azips_files.py` (`POST /api/azips/create-files`), UI button "Authorize (create file)" on the OUT tab (Delphi ToolButton
+`CreateFile`, caption 'Avtorizator'), tests `api/tests/test_azips_files.py`, golden files `api/tests/golden/azips/`, E2E
+`e2e/azips_files_screens.py`, screenshots 110-111.
+
+**How it is ported.** The two procedures are not re-typed. Their source is copied unchanged into `api/app/delphi_src/`
+(`CreateFileClick.pas` = SWIFT_MAINImpl1.pas:3115-3203, `PACS0008Execute.pas` = :686-2071) and run by `api/app/pascal.py`, a small
+interpreter for the Pascal subset these procedures use (begin/end, if, for, case, try, with, assignment, calls; Delphi `with`
+scope rules). Runtime objects give the VCL/DOA behaviour: `TDataSet.FieldByName(..).AsString/AsFloat/AsDateTime/AsInteger`,
+`TStringList.Text` (CR, LF or CRLF split; `Lines[i]` out of range → `List index out of bounds (i)`), `TBookmarkList` (sorted in
+dataset order), `TOraclePackage.CallProcedure/CallIntegerFunction`, `AssignFile/Rewrite/Writeln/CloseFile`, `Copy` (index 0 → 1),
+`FormatDateTime`, `StringReplace`/`ReplaceStr`, `FloatToStr`. An unsupported construct stops with an error, nothing is skipped.
+
+| Delphi | Web |
+|---|---|
+| CreateFileClick :3117-3121 right by `SW_OUT3.mf32a_amount` of the current row: ≤10 000 `SW_OUT10`, ≤100 000 `SW_OUT100`, ≤1 500 000 `SW_OUT15`, ≤2 500 000 `SW_OUT25`, else `SW_OUT250` | same (SB_ACA.CheckAdvancedObjectAccess) |
+| :3126-3132 `MT102data` / `mt102sum` opened with `:refer` (Unit2.dfm:6079, :6638 verbatim) – results unused | same |
+| :3134 `sw_main.updout(id)` when the grid has rows; else `Heç bir format yoxdur!` | same |
+| MT102/MT103/MT205: `Pluginloader('filereport.bpl','Azipsnew','-'+id)` then PACS0008; MT999/MT298: PACS0008 only | Azipsnew not ported yet (plan 2b) – the result says so; PACS0008 runs |
+| PACS0008 :709-736 loop over `Gridout3.SelectedRows` (none selected → current row), MessageDlg per row with Yes-to-all | one browser confirm = Yes to all + Yes; the two Delphi dialog texts are returned in `confirms` |
+| :738 `sw_out_fileafter(id, GRIDOUT2.MF32A_DATE)` = 6 → file; else `sw_out_CreateFile(GRIDOUT2.id, 'Təsdiq olunmamış əməliyyat var!', 0)` | same; the UI sends the current row of the Committed grid (first row if none clicked), as GRIDOUT2's cursor |
+| :749-773 status 1 only; `path_out\pacs`+id left-padded with 0 to 5+`.xml` | file name the same; content returned for download; copy into `AZIPS_OUT_DIR` when set |
+| MT298 (mf12 200 camt.056 / 800 pacs.028 / 202), MT205 (codex 99 / other, camt.050), MT999 (MONITORING text/days/pass), MT103 (pacs.008), MT102 (pacs.008 with `datatemps` rows) | run from the source |
+| :2010 `Writeln(output, swmessage)` | text + CRLF, encoded `AZIPS_FILE_CODEPAGE` (default cp1254), unmappable → `?` |
+| :2018-2019 `sw_out_CreateFile(id,'Fayl yaradılıb!',1)`; :2054 Edit2 total; :2069 `SBSession.Commit` | same (Edit2 text returned) |
+
+`datatemps` (:1793, :1841) is built by concatenating `mf20_reference` as a quoted literal. The web sends the same statement with
+each literal turned into a bind variable (`:b0`, `:b1`), so the result is the same and no value reaches the SQL text.
+
+Delphi quirks kept (they come from the source): the UETR is the constant `4e7b08db-…`; `CreDtTm` of camt.056 ends `+04:00+`;
+`<Nm>` of Dbtr is `mf50_bic`; MT102 `recinfo`/`recinfo2` are never cleared, so each later transaction repeats the earlier `<Ustrd>`
+lines, and its `Mf70` is read from the selected row (`with v_dataset1`), not from `datatemps`; `<NbOfTxs>` is `L01` of the max-L01 row;
+the XML says `encoding="UTF-8"` but Writeln writes ANSI, so Azerbaijani **Ə/ə** (not in cp1254) become `?`; on an exception
+(e.g. a name/address memo with fewer lines than Delphi indexes) the file already created by `Rewrite` stays empty, earlier rows
+keep their files, and there is no commit.
+
+Not reachable in Delphi, therefore not ported: `CreateFaylExecute` (:2612, action not linked and never executed), `createfile2Execute`
+(:4570, its only call in CreateFileClick is commented out) and `fayl102Execute` (:334, called only from createfile2),
+`konvertExecute` (:5416 – action `konvert` has `OnExecute = Redakteet1Click`), `konvert2Execute` (:5954, never executed),
+the commented copy to `\\192.168.1.187\c$\Swift\out` (:2040-2048).
+
+### Unverified / to check on the real database (part 3)
+- `sw_main.sw_out_fileafter`, `updout`, `sw_out_CreateFile` bodies are not in the repo (mock: fileafter = 6; CreateFile flag 1 moves the
+  row to status 55 – illustrative only).
+- ANSI code page of the Delphi client PCs (cp1254 assumed) and their decimal separator (`,` assumed; only reaches places without
+  StringReplace – none in PACS0008 amounts).
+- `DateTimeToStr`/`AsString` of date fields is not used in the file; `FormatDateTime(..., now)` uses the server clock (Delphi: client PC).
+- Golden files: MT298/200 is compared with text typed by hand from the source; MT103, MT205 (codex 99), MT999 (text) and MT102 are
+  committed files produced by the interpreter from the fixtures and spot-checked by hand. MT298 800/202, MT205 other, MT999 days/pass
+  run but have no golden file yet.
+
 ## Unverified (part 1, needs the real database)
 - `sw_main` package body is not in the repo: what `new_dat` does exactly (mock: moves status-96 incoming rows dated before the
   operating day into `SW_ARCHIVE`, only to illustrate).
@@ -118,4 +169,6 @@ Same layout as MT103 on `sw_out_2` (Committed), everything read-only, no save.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Next: part 3 – conversion / export files (`PACS0008Execute`, `Konvertex`, `Konver102`, `fayl102`, `CreateFayl`, `createfile2`, `konvert*`, print list) with golden files; then 2b (`filereport.bpl` Azipsnew) and part 4.
+Next: 3b – incoming import (`ToolButton4Click` → `KonvertexExecute` / `konvert3Execute`, `Konver102Execute`; files from upload or
+`AZIPS_IN_DIR`; reuse `pascal.py` with the verbatim source) and `ToolButton8Click` (hidden list print); then 2b (`filereport.bpl`
+Azipsnew = `Packages/Cards_New/FileReprt/Unitazips.pas`) and part 4.

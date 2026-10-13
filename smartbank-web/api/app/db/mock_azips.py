@@ -49,6 +49,9 @@ class AzipsMixin:  # noqa: D101 (part 2 below: AzipsEditMixin)
         nm = lambda i: names.get(str(i), "")    # noqa: E731
         if first == Q.LINES_USERFIL[0]:
             return [{"FILIALID": fil}]
+        r = _azf_query(D, sql, L, b)        # part 3: file generation datasets
+        if r is not NotImplemented:
+            return r
         if first == Q.LINES_SWMAMMOUNT[0] or first == Q.LINES_SW_AMOUNT[0]:
             st = 1 if first == Q.LINES_SWMAMMOUNT[0] else 5
             xs = [r["MF32A_AMOUNT"] for r in D["sw_out_new"] if r["STATUS"] == st]
@@ -106,6 +109,9 @@ class AzipsMixin:  # noqa: D101 (part 2 below: AzipsEditMixin)
         return NotImplemented
 
     def _az_proc(self, key, args):
+        r = _azf_proc(_load(), key, args)
+        if r is not NotImplemented:
+            return r
         if key == "SW_MAIN.NEW_DAT":
             D = _load()
             day = dt.datetime.fromisoformat(self.st["sys"]["tek_dat"])
@@ -120,6 +126,8 @@ class AzipsMixin:  # noqa: D101 (part 2 below: AzipsEditMixin)
         return NotImplemented
 
     def _az_func(self, key, args):
+        if key == "SW_MAIN.SW_OUT_FILEAFTER":
+            return _load().get("fileafter", 6)        # 6 = file may be created (PACS0008Execute :744)
         if key == "SB_ACA.CHECKADVANCEDOBJECTACCESS_FUNC":
             return 1 if (self.user.get("is_adm") or args[0] in self.user.get("advanced_access", [])) else 0
         return NotImplemented
@@ -202,3 +210,39 @@ class AzipsEditMixin:
             tgt[0][col] = b[bind]
         tgt[0]["_POSTED"] = True
         return True
+
+
+# ---------------------------------------------------------------------------------------------- part 3: file generation
+def _azf_query(D, sql, L, b):
+    """sw_settings / settings (Unit2.dfm:1855, :1986), MT102data / mt102sum (sw_out_new_t), datatemps texts built by
+    PACS0008Execute :1793 / :1841 (literals arrive as :b0, :b1)."""
+    if sql == Q.text(Q.LINES_SW_SETTINGS):
+        return [dict(D["sw_settings"])]
+    sel = lambda ref: [r for r in D["sw_out_new"] if r.get("MF20_REFERENCE") == ref]      # noqa: E731
+    if L[0] == Q.LINES_MT102DATA[0]:
+        return _rows([r for r in sel(b.get("refer")) if r["MESSAGETYPE"] == "MT102" and r["STATUS"] == 1])
+    if L[0] == Q.LINES_MT102SUM[0]:
+        xs = [r["MF32A_AMOUNT"] for r in sel(b.get("refer")) if r["MESSAGETYPE"] == "MT102" and r["STATUS"] == 1]
+        return [{"SUM(MF32A_AMOUNT)": sum(xs) if xs else None}]
+    if L[0] == "select * from sw_out_new ase where  mf20_reference=:b0 and L01 in (select max(L01) from sw_out_new where mf20_reference=:b1)":
+        rs = sel(b["b0"])
+        mx = max((r.get("L01") or 0 for r in rs), default=None)
+        return _rows([r for r in rs if (r.get("L01") or 0) == mx])
+    if L[0] == "select * from sw_out_new  where  mf20_reference=:b0":
+        return _rows(sel(b["b0"]))
+    return NotImplemented
+
+
+def _azf_proc(D, key, args):
+    """sw_main body is not in the repo. Illustrative: updout / sw_out_CreateFile record the call; sw_out_CreateFile with
+    flag 1 writes INFO and moves the row out of 'Sending' (status 55, shown under Committed)."""
+    if key == "SW_MAIN.UPDOUT":
+        return {}
+    if key == "SW_MAIN.SW_OUT_CREATEFILE":
+        for r in D["sw_out_new"]:
+            if r["ID"] == args[0]:
+                r["INFO"] = args[1]
+                if args[2] == 1:
+                    r["STATUS"] = 55
+        return {}
+    return NotImplemented

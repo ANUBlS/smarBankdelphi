@@ -1,5 +1,5 @@
 /* AZIPS – port of Packages/SWIFT_MANAGER_IBAN_NEW (TSWIFT_MAIN), part 1: IN / OUT grids, totals, archives.
-   Logic in api/app/azips.py (verbatim Unit2.dfm SQL, branch rule, SQL[i] edits). Part 2 (editor / creation) in azips_edit.js; conversion follows. */
+   Logic in api/app/azips.py (verbatim Unit2.dfm SQL, branch rule, SQL[i] edits). Part 2 (editor / creation) in azips_edit.js; part 3 file generation (Avtorizator) below, logic in api/app/azips_files.py. */
 (function () {
   const { api, t, esc, toast, modal } = window.SB;
   const P = '/api/azips', K = (k) => t('azips.' + k);
@@ -44,7 +44,8 @@
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
           <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button>
           <button class="btn" id="z_new" title="Ctrl+N">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
-          <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button></div>
+          <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button>
+          <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button></div>
           <input class="input" readonly id="z_s1" style="width:100%;margin-top:6px" value="${esc(d.sum_send_text != null ? 'Bu gün göndəriləcək ümumi məbləğ = ' + d.sum_send_text + ' AZN' : '')}">
           <input class="input" readonly id="z_s2" style="width:100%;margin-top:4px" value="${esc(d.sum_verify_text != null ? 'Bu gün verifikasiya olunacaq ümumi məbləğ = ' + d.sum_verify_text + ' AZN' : '')}">
           ${box(K('box_out'), table('g_out', C.out, d.sw_out))}${box(K('box_out2'), table('g_out2', C.out2, d.sw_out_2))}${box(K('box_out3'), table('g_out3', C.out3, d.sw_out3))}`;
@@ -53,6 +54,19 @@
           v(gid).querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr)); st[key] = rows[+tr.dataset.i].id;
         });
         pick('g_out', d.sw_out, 'sel_out'); pick('g_out2', d.sw_out_2, 'sel_out2');
+        // Gridout3 (dgMultiSelect): click = current row, Ctrl+click toggles a selected row (TBookmarkList)
+        st.sel3 = (st.sel3 || []).filter(id => d.sw_out3.some(r => r.id === id));
+        const mark3 = () => v('g_out3').querySelectorAll('tbody tr[data-i]').forEach(tr => {
+          const id = d.sw_out3[+tr.dataset.i].id; tr.classList.toggle('sel', st.sel3.includes(id) || id === st.cur3);
+        });
+        v('g_out3').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = (e) => {
+          const id = d.sw_out3[+tr.dataset.i].id;
+          if (e.ctrlKey || e.metaKey) st.sel3 = st.sel3.includes(id) ? st.sel3.filter(x => x !== id) : [...st.sel3, id];
+          else st.sel3 = [id];
+          st.cur3 = id; mark3();
+        });
+        mark3();
+        v('z_file').onclick = () => createFiles(d);
         const AE = window.SB.azipsEdit;
         v('z_new').onclick = () => AE.newForm(() => load({}));                    // Yeni action (YeniExecute)
         v('z_edit').onclick = () => st.sel_out ? AE.edit(st.sel_out, () => load({})) : toast(K('pick_row'), 'error');   // ToolButton2Click
@@ -69,6 +83,32 @@
         st.d = r; st.in_order = r.in_order;
       } catch (e) { toast(errT(e), 'error'); }
       draw();
+    }
+    // 'Avtorizator' (CreateFileClick -> PACS0008Execute), part 3: files come back for download (+ optional server folder)
+    async function createFiles(d) {
+      const cur = st.cur3 ?? (d.sw_out3[0] || {}).id;
+      if (cur == null) { toast(K('pick_row'), 'error'); return; }
+      const n = st.sel3.length || 1;
+      if (!confirm(K('file_confirm').replace('{n}', n))) return;
+      let r;
+      try {
+        r = await api(P + '/create-files', { method: 'POST', body: { selected: st.sel3, current: cur, out2_current: st.sel_out2 ?? (d.sw_out_2[0] || {}).id ?? null } });
+      } catch (e) { toast(errT(e), 'error'); return; }
+      const link = (f) => {
+        const b = Uint8Array.from(atob(f.b64), c => c.charCodeAt(0));
+        return `<a class="btn secondary" download="${esc(f.name)}" href="${URL.createObjectURL(new Blob([b], { type: 'application/xml' }))}">${esc(f.name)} (${f.size} B)</a>`;
+      };
+      modal(`<h3>${esc(K('files_title'))}</h3>
+        ${r.error ? `<p class="error">${esc(r.error)}</p>` : ''}
+        <div class="toolbar" style="gap:8px;flex-wrap:wrap" id="fl">${r.files.map(link).join('') || `<span class="muted">${esc(K('no_files'))}</span>`}</div>
+        ${r.server_dir ? `<p class="muted">${esc(K('server_dir'))}: ${esc(r.server_dir)}</p>` : ''}
+        ${r.messages.map(m => `<p>${esc(m)}</p>`).join('')}
+        ${r.plugins.length ? `<p class="muted">${esc(K('plugin_np'))}</p>` : ''}
+        ${r.files[0] ? `<pre id="fprev" style="max-height:40vh;overflow:auto;font-size:12px">${esc(new TextDecoder('windows-1254').decode(Uint8Array.from(atob(r.files[0].b64), c => c.charCodeAt(0))))}</pre>` : ''}
+        <div class="actions"><button class="btn secondary" id="fx">${esc(K('close'))}</button></div>`, (m, close) => {
+        m.style.width = "min(1000px, 95vw)"; m.style.maxWidth = "95vw";
+        m.querySelector('#fx').onclick = () => { close(); load({}); };
+      }, true);
     }
     function arch(kind) {
       const today = new Date().toISOString().slice(0, 10);

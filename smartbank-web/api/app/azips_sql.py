@@ -48,12 +48,18 @@ LINES_CHK_ACCNO = ['select cust_type from bal_spr1 where bal_cn=(select bal_cn1 
 LINES_SWMAMMOUNT = ['select sum(mf32a_amount) as summ from sw_out_new where status=1']
 # Unit2.dfm:5892-5942 sw_in2
 LINES_SW_IN2 = ['select s.rowid, s.*,sw_main.Find_UserName2_in(s.id) as userh from sw_in  s  where s.status=96 ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ' ', ' ', '', '', '', '', '', '', '', '', '', '', '']
+# Unit2.dfm:6079-6082 MT102data
+LINES_MT102DATA = ['select * from sw_out_new_t where', '', "messagetype='MT102' and mf20_reference=:refer and status=1"]
 # Unit2.dfm:6258-6264 Operators
 LINES_OPERATORS = [" select -1 as ID, 'Butun operatorlar' as Name from Dual", 'Union all', 'select id,name from (', ' select ID, Name from User$', 'Order by name) ', ' ']
 # Unit2.dfm:6410-6413 userfil
 LINES_USERFIL = ['SELECT filialid', '                   FROM sba_objinf', '                  WHERE obj = (SELECT USER FROM DUAL)']
 # Unit2.dfm:6476-6477 SW_amount
 LINES_SW_AMOUNT = ['select sum(mf32a_amount) as summ from sw_out_new where status=5']
+# Unit2.dfm:6638-6641 mt102sum
+LINES_MT102SUM = ['select sum(mf32a_amount) from sw_out_new_t where', '', "messagetype='MT102' and mf20_reference=:refer and status=1"]
+# Unit2.dfm:7333-7334 datatemps
+LINES_DATATEMPS = ['select * from sw_out_new']
 
 
 def text(lines, **repl):

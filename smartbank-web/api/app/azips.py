@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from . import azips_edit
+from . import azips_files
 from . import azips_sql as Q
 from .customers import row
 from .delphi import date_only
@@ -162,6 +163,12 @@ class ListIn(BaseModel):
     in2_sort: str | None = Field(default=None, max_length=30)
 
 
+class FilesIn(BaseModel):
+    selected: list[int] = Field(default_factory=list, max_length=500)   # Gridout3.SelectedRows (in click order)
+    current: int | None = None                                           # Gridout3 current row (SW_OUT3)
+    out2_current: int | None = None                                      # GRIDOUT2 current row (used by sw_out_fileafter :744)
+
+
 class ArxIn(BaseModel):
     dat1: datetime.date
     dat2: datetime.date
@@ -206,6 +213,19 @@ def make_router(current, require_module, err):
     @r.post("/archive-out")
     def _aout(b: ArxIn, ws=Depends(g)):
         return {"rows": guard(archive_out, ws.conn, b.dat1, b.dat2, b.oper, b.mt_index, b.title), "types": ARX_OUT_TYPES}
+
+    @r.post("/create-files")
+    def _files(b: FilesIn, ws=Depends(g)):
+        """'Avtorizator' ToolButton (CreateFile) -> CreateFileClick :3115 -> PACS0008Execute :686 (part 3)."""
+        bl = _b(branch_restricted(ws.conn))
+        o3 = ws.conn.query(Q.text(Q.LINES_SW_OUT3, **bl))
+        o2 = ws.conn.query(Q.text(Q.LINES_SW_OUT_2, **bl))
+        ids = {x.get("ID") for x in o3}
+        sel = [i for i in dict.fromkeys(b.selected) if i in ids]
+        cur = b.current if b.current in ids else (sel[-1] if sel else None)
+        if cur is None:
+            err(400, "azips.pick_row")
+        return azips_files.create_files(ws.conn, o3, o2, sel, cur, b.out2_current)
 
     azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
     return r
