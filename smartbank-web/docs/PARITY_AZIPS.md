@@ -315,6 +315,14 @@ Biznes process tab; save errors are shown as messages (try/except ShowMessage), 
 Unverified: label ↔ edit mapping of the IN 'Bizness prosess' tab (Edit4 = 'Adı', Edit5 = 'Təyinatı' assumed from positions);
 the `sw_main` setting procedure bodies are not in the repo.
 
+## 4d. IN prints (done)
+'Çap et' (printClick :3984, also GridINDblClick :4186) and 'XML CAP' (ToolButton17Click :7106): SW_IN_PRINT right, text of the current
+GridIN row (`all_text2` / `all_text`) → cap.pas `TPrintform`. Text starting with '<' is shown like the TWebBrowser (sandboxed iframe,
+no scripts); otherwise like the RichEdit, and 'Print' gives a PDF (prt.Print('A.Z.I.P.S'): PDF title A.Z.I.P.S, DejaVu 12 pt instead of
+MS Sans Serif 16 px). API `POST /api/azips/in-print`, screenshots 131-132. The QuickReport1 code in printClick is commented out in Delphi.
+Not done yet: the OUT print ToolButton8Click :6179 (QuickReport, reached from the OUT popups Capet1Click / N3Click / CapEt2Click) with
+qrp1 / qr5 / qrp5.
+
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
 forced to **one worker**: Dockerfile `--workers 1` (with a comment), `app/main.py` refuses to start when `WEB_CONCURRENCY` > 1, and the
@@ -328,6 +336,6 @@ between processes.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Part 4c (IN edit, settings) is done. Remaining AZIPS: prints
-(`ToolButton8Click` :6179, printClick :3984, ToolButton17Click :7106, cap, qrp1, qr5, qrp5), template load (Şablondan yüklə / Ttemplate).
+Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Parts 4c (IN edit, settings) and 4d (IN prints, cap.pas) are done. Remaining AZIPS: OUT print
+(`ToolButton8Click` :6179 via Capet1Click / N3Click / CapEt2Click, qrp1, qr5, qrp5), template load (Şablondan yüklə / Ttemplate).
 After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.

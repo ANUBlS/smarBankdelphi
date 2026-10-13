@@ -7,6 +7,7 @@ user value that Delphi concatenates into those lines (message type combo, sort c
 Delphi list first and then bound or written as the same literal - nothing free-form reaches the SQL text.
 """
 from __future__ import annotations
+import base64
 import datetime
 import re
 from typing import Literal
@@ -240,6 +241,11 @@ class SettDelIn(BaseModel):
     id: int
 
 
+class PrintIn(BaseModel):
+    id: int
+    field: Literal["ALL_TEXT2", "ALL_TEXT"]
+
+
 class TranzitIn(BaseModel):
     main_acc: str = Field(default="", max_length=64)
     tranzit_acc: str = Field(default="", max_length=64)
@@ -414,6 +420,15 @@ def make_router(current, require_module, err):
         res = S.delete(ws.conn, form, b.tab, b.id)
         if res is None:
             err(400, "azips.pick_row")
+        return res
+
+    @r.post("/in-print")
+    def _inprint(b: PrintIn, ws=Depends(g)):
+        """printClick :3984 / GridINDblClick (ALL_TEXT2), ToolButton17Click 'XML CAP' (ALL_TEXT)."""
+        res = I.in_print(ws.conn, _in_lines(ws.conn), b.id, b.field)
+        if res is None:
+            err(400, "azips.pick_row")
+        res["pdf_b64"] = base64.b64encode(I.text_pdf(res["text"])).decode()
         return res
 
     @r.get("/tranzit")

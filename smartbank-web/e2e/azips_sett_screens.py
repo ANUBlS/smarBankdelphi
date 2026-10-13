@@ -28,3 +28,16 @@ with sync_playwright() as p:
     assert pg.locator("#f_bank option").count() == 3      # empty + 2 AZN banks (all_banks :valute = combo text)
     shot(pg, "130-azips-settings-out-mt205.png"); pg.click("#sx")
     b.close()
+# prints (cap.pas): Çap et = all_text2 as text/PDF, XML CAP = all_text in a sandboxed browser view
+with sync_playwright() as p:
+    b = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else None, args=["--no-sandbox"])
+    pg = b.new_page(viewport={"width": 1440, "height": 1000})
+    pg.goto(BASE); pg.wait_for_selector("#loginForm")
+    pg.fill("#u", "ADMIN"); pg.fill("#p", "Admin#2026"); pg.click("#loginBtn"); pg.wait_for_selector("#tree .node")
+    pg.fill("#treeSearch", "AZIPS"); pg.wait_for_timeout(300)
+    pg.locator("#tree .node[data-path='9.0']").click(); pg.wait_for_selector("#g_out tr")
+    pg.click(".tabs button[data-tab='in']"); pg.wait_for_selector("#g_in tr[data-i='0']")
+    pg.locator("#g_in tbody tr", has_text="AZIPS2610130006").dblclick(); pg.wait_for_selector("pre#cap_v")
+    assert ":20:AZIPS2610130006" in pg.inner_text("#cap_v"); shot(pg, "131-azips-in-print.png"); pg.click("#cap_x")
+    pg.click("#z_xmlcap"); pg.wait_for_selector("iframe#cap_v"); pg.wait_for_timeout(300); shot(pg, "132-azips-in-xml-cap.png")
+    b.close()

@@ -154,3 +154,13 @@ def test_in_redakte_unit16():
     assert I.in_redakte(c, Q.LINES_SW_IN, 5006, "AZ00X", "1234567890") == {"done": True}
     assert calls("SW_MAIN.UPDIN")[0][1] == ["AZ00X", "1234567890", "5006"]
     assert I.in_redakte(c, Q.LINES_SW_IN, 1, "a", "b") is None
+
+
+def test_in_print_text_and_xml():
+    c = conn()
+    r = I.in_print(c, Q.LINES_SW_IN, 5006, "ALL_TEXT2")
+    assert not r["html"] and r["text"].startswith("{1:F01")
+    assert I.in_print(c, Q.LINES_SW_IN, 5006, "ALL_TEXT")["html"]
+    pdf = I.text_pdf(r["text"])
+    assert pdf[:4] == b"%PDF" and b"A.Z.I.P.S" in pdf
+    assert I.in_print(c, Q.LINES_SW_IN, 1, "ALL_TEXT") is None

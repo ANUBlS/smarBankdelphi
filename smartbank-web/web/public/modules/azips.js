@@ -77,6 +77,8 @@
           <button class="btn secondary" id="z_inred">${esc(K('in_redakte'))}</button>
           <button class="btn secondary" id="z_tranzit">${esc(K('tranzit'))}</button>
           <button class="btn secondary" id="z_settin">${esc(K('settings'))}</button>
+          <button class="btn secondary" id="z_inprint">${esc(K('print'))}</button>
+          <button class="btn secondary" id="z_xmlcap">XML CAP</button>
           <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
         v('g_in').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => load({ in_sort: h.dataset.s }));
@@ -92,6 +94,11 @@
         }));
         v('z_inred').onclick = () => inRedakte();                                       // popup Rdk 'Redaktə et' (Redaktet1Click :3595 -> Unit16)
         v('z_tranzit').onclick = () => tranzit();
+        v('z_inprint').onclick = () => inPrint('ALL_TEXT2');                           // printClick :3984
+        v('z_xmlcap').onclick = () => inPrint('ALL_TEXT');                             // ToolButton17Click :7106
+        v('g_in').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('dblclick', () => {
+          st.sel_in = d.sw_in[+tr.dataset.i].id; inPrint('ALL_TEXT2');                 // GridINDblClick -> printClick
+        }));
         v('z_settin').onclick = () => window.SB.azipsSett.open('in', () => load({}));      // ToolButton10Click -> insett.pas                                        // ToolButton7Click :5391 -> Tranzit_account.pas
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
@@ -230,6 +237,21 @@
           } catch (e) { toast(errT(e), 'error'); }
         };
       });
+    }
+    // cap.pas TPrintform 'Cap': text starting with '<' -> browser view (TWebBrowser), else RichEdit text -> PDF (prt.Print('A.Z.I.P.S'))
+    async function inPrint(field) {
+      if (st.sel_in == null) return toast(K('pick_row'), 'error');
+      let r;
+      try { r = await api(P + '/in-print', { method: 'POST', body: { id: st.sel_in, field } }); } catch (e) { return toast(errT(e), 'error'); }
+      const url = URL.createObjectURL(new Blob([Uint8Array.from(atob(r.pdf_b64), c => c.charCodeAt(0))], { type: 'application/pdf' }));
+      const view = r.html ? `<iframe sandbox="" id="cap_v" style="width:100%;height:60vh;border:1px solid #ccc;background:#fff"></iframe>`
+        : `<pre id="cap_v" style="max-height:60vh;overflow:auto;font-size:14px;white-space:pre-wrap">${esc(r.text)}</pre>`;
+      modal(`<h3>Cap</h3>${view}<div class="actions"><a class="btn" id="cap_p" href="${url}" target="_blank" download="AZIPS-${esc(st.sel_in)}.pdf">Print (PDF)</a>
+        <button class="btn secondary" id="cap_x">Bagla</button></div>`, (m, close) => {
+        m.style.width = 'min(1000px, 95vw)'; m.style.maxWidth = '95vw';
+        if (r.html) m.querySelector('#cap_v').srcdoc = r.text;
+        m.querySelector('#cap_x').onclick = close;
+      }, true);
     }
     // Unit16.pas TrdkİN 'Redakte İN': Hesab № (Edit1), Vöen (Edit2), 'Yadda saxla' -> sw_main.UPDIN
     function inRedakte() {

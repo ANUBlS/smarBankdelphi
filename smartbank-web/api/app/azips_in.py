@@ -303,3 +303,45 @@ def in_redakte(conn, lines, rid: int, acount: str, voin2: str):
         return None
     conn.call_proc(Q.PKG_MAIN, "UPDIN", [acount, voin2, str(rid)], commit=False)
     return {"done": True}
+
+
+# ------------------------------------------------------------------ prints: printClick :3984 / GridINDblClick :4186 / ToolButton17Click :7106
+def in_print(conn, lines, rid: int, field: str):
+    """SW_IN_PRINT right; a := current GridIN row 'all_text2' (Çap et, double click) or 'all_text' (XML CAP);
+    cap.pas TPrintform: text starting with '<' is shown in a TWebBrowser (HTML/XML), otherwise in the RichEdit and printed
+    with prt.Print('A.Z.I.P.S'). Returns the text and the mode; the web renders the RichEdit case as PDF."""
+    conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["SW_IN_PRINT"])
+    r = _row(conn, lines, rid)
+    if r is None:
+        return None
+    a = str(r.get(field) or "")
+    return {"text": a, "html": a[:1] == "<"}
+
+
+def text_pdf(text: str, title: str = "A.Z.I.P.S") -> bytes:
+    """TRichEdit.Print(title): plain text, MS Sans Serif 16 px (~12 pt) -> DejaVu 12 pt (Azerbaijani letters), A4."""
+    import io
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+    from .report_render import _font
+    font = _font()
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    c.setTitle(title)
+    w, h = A4
+    y = h - 40
+    for line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        while True:
+            chunk = line
+            while chunk and c.stringWidth(chunk, font, 12) > w - 80:
+                chunk = chunk[:-1]
+            if y < 40:
+                c.showPage(); y = h - 40
+            c.setFont(font, 12)
+            c.drawString(40, y, chunk)
+            y -= 15
+            line = line[len(chunk):]
+            if not line:
+                break
+    c.save()
+    return buf.getvalue()
