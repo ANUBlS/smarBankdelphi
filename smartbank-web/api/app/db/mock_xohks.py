@@ -130,6 +130,15 @@ class XohksMixin:
         if key == "XS_CONTROL.GETNEWBENEFICIARYREFERENCE":
             return "BN%06d" % self._xs_seq("nref")
         if key == "XS_CONTROL.XS_BATCHS_CHANGESTATUS":
+            # step 3: Mt102AcceptExecute :2381 treats 1 as success; else 'Batch-də olan bütün messajların düzgünlüyü
+            # təsdiq olunmalıdır !' -> emulated as: status 1 only when every beneficiary of the batch is accepted (status <> 0)
+            if int(args[1]) == 1:
+                n0 = c.execute("select count(*) from xs_beneficiary where batchid=? and status=0", (args[0],)).fetchone()[0]
+                n = c.execute("select count(*) from xs_beneficiary where batchid=?", (args[0],)).fetchone()[0]
+                if n == 0 or n0:
+                    return 0
+                c.execute("update xs_batchs set status=1 where id=?", (args[0],))
+                return 1
             c.execute("update xs_batchs set status=? where id=?", (args[1], args[0]))
             return 0
         return NotImplemented
@@ -174,6 +183,37 @@ class XohksMixin:
             return {}
         if key == "XS_CONTROL.XS_BENEFICIARY_DELETE":
             c.execute("delete from xs_beneficiary where id=?", (args[0],))
+            return {}
+        # ---- step 3 status chain (bodies unknown; status numbers from Data_Unit.pas:276-286 and the Delphi callers)
+        u = self.username
+        if key.endswith(("VERIFSTATUS", "AVTSTATUS", "XS_BATCHS_ERROR")):
+            args = [int(args[0])] + list(args[1:])      # TVerify passes dbedit4.Text (Oracle converts implicitly)
+        if key == "XS_CONTROL.UPDATEBATCHREFERENCE":
+            c.execute("update xs_batchs set trans_ref=? where id=?", (args[1], args[0]))
+            return {}
+        if key in ("XS_CONTROL.XS_BATCHS_VERIFSTATUS", "XS_CONTROL.XS_BATCHS_FVERIFSTATUS", "XS_CONTROL.XS_BATCHS_AVTSTATUS"):
+            st, col = {"VERIFSTATUS": (4, "vuserid"), "FVERIFSTATUS": (5, "fuserid"), "AVTSTATUS": (6, "auserid")}[key.split("_")[-1]]
+            c.execute(f"update xs_batchs set status=?, {col}=?" + (", sdate=?" if st == 4 else "") + " where id=?",
+                      (st, u, self._xs_usedate(), args[0]) if st == 4 else (st, u, args[0]))
+            return {}
+        if key in ("XS_CONTROL.XS_BENEFICIARY_VERIFSTATUS", "XS_CONTROL.XS_BENEFICIARY_FVERIFSTATUS",
+                   "XS_CONTROL.XS_BENEFICIARY_AVTSTATUS"):
+            st = {"VERIFSTATUS": 4, "FVERIFSTATUS": 5, "AVTSTATUS": 6}[key.split("_")[-1]]
+            c.execute("update xs_beneficiary set status=? where batchid=?", (st, args[0]))
+            return {}
+        if key == "XS_CONTROL.XS_BATCHS_ERROR":          # TVerify amount mismatch; emulated as status 8 (re-verifiable)
+            c.execute("update xs_batchs set status=8 where id=?", (args[0],))
+            c.execute("update xs_beneficiary set status=8 where batchid=?", (args[0],))
+            return {}
+        if key == "XS_CONTROL.XS_BATCHS_RETURNCHANGESTATUS":
+            c.execute("update xs_batchs set status=? where id=?", (args[1], args[0]))
+            return {}
+        if key == "XS_CONTROL.XS_BENEFICIARY_RETURNSTATUS":
+            c.execute("update xs_beneficiary set status=? where batchid=?", (args[1], args[0]))
+            return {}
+        if key in ("XS_CONTROL.SETBATCHSTRANSACTION", "XS_CONTROL.SETBATCHSAVTOTRANSACTION", "XS_CONTROL.XS_BATCHS_DELETETRANS",
+                   "XS_CONTROL.SENDTOARCHIVE"):
+            self.__dict__.setdefault("xs_calls", []).append((key, list(args)))   # body unknown: recorded only
             return {}
         if key == "XS_CONTROL.XS_BATCHS205":
             self.__dict__.setdefault("xs_calls", []).append((key, list(args)))   # body unknown: recorded only
