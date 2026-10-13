@@ -201,8 +201,20 @@ Not ported because Delphi never shows them. `Form_Setting` (Unit_setting.pas: XS
 `Form_Admin_Setting` (Admin_Setting.pas: xs_Admin_in_Add / _Del) are only created in ActiveFormCreate :804-805. No ShowModal / Show call
 exists in any unit of the package, and no .dfm event opens them, so neither form can be reached in the Delphi build.
 
+## Status: on hold by user (2026-10-13)
+All XÖHKS functions are ported except the prints, which the user put on hold on 2026-10-13 (step 4c, not started; nothing of it is in the code).
+The notes below are kept so the work can resume.
+
+Prints inventory (for when the hold is lifted). Popup menus (LVPCSSImpl.dfm) → handler → QuickReport form:
+- GridBeneficiary / PopupMessOut: N21Click :3066 → Form_Report (Unit_Report.dfm, one form; QRDBText1/2/5/6/8 re-pointed to XS_Batchs)
+- GridBatchs / PopupMT102: N23Click :3466 → ReportX (Unit_ReportX.dfm, detail band per beneficiary of the batch, ODS_Report group-by SQL)
+- DBGridOUTArchBeneficiary / PopMenuArchPrint: Print1Click → Form_Report on the archive datasets
+- DBGridOUTArchBatchs / PopMenuArc: MenuItem15Click :4057 → ReportX on the archive datasets
+- GridIncoming / PopupMessIn: N22Click :3192 → Form_Report_in (ODS_CODEID NAMEID=1 → DataSum Sumammount); N25Click :3922 → ReportinX (all rows of the TYPECODE)
+- GridIncomingArchive / PopupMenu1: N24Click :4427 → Form_Report_in; N26Click :4586 → ReportinX (TYPECODE + INCBDATE/INCEDATE, CheckBox2 filial)
+- EnterClick :2957: no OnClick in any .dfm, so it can't be reached (not to be ported).
+- Unit_ReportinX.dfm is a binary DFM (TPF0) and needs converting to text first. Form_Report / Form_Report_in put their controls directly on
+  TQuickRep without a detail band, so check on a real printer whether they print one page or one page per dataset record.
+
 ## Resume point
-Step 4c: the prints as PDF. Popup menu items on the IN / OUT grids (LVPCSSImpl.dfm ~:4860-4890): N21Click :3066, N22, N23, N24, N25Click
-'Hamısını çap et' (ReportinX / Form_Report_in with ODS_CODEID NAMEID branch, :3166-3300), N26. EnterClick :2957 (Form_Report) has no
-OnClick in the .dfm, so check whether it is reachable before porting it. QuickReport layouts are in Unit_Report*.dfm / Unit_ReportX.dfm /
-Unit_ReportinX.dfm; render them like the AZIPS prints (report_render.py). After that, mark XÖHKS complete.
+On hold by user: step 4c (prints, above). After the hold is lifted, port the prints, then mark XÖHKS complete.
