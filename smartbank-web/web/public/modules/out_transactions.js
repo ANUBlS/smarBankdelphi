@@ -70,7 +70,7 @@
   const selectedIds = () => st.sel.size ? st.rows.filter(r => st.sel.has(r.id)).map(r => r.id) : (st.cur ? [st.cur] : []);
 
   async function stepCommit(el) {
-    // ActionStepCommitExecute (TransactionManagerImpl.pas:1279-1345)
+    // ActionStepCommitExecute (Out_ TransactionManagerImpl.pas:1704-1767)
     if (!await ask(t('customers.confirm_commit'))) return;
     const keep = st.cur;
     try {
@@ -82,7 +82,7 @@
     } catch (e) { info(errText(e)); }
   }
   async function rejectTr(el) {
-    // ActionRejectExecute :1347 – InputQuery('İnkarolunma !!! ', 'Təyinat:')
+    // ActionRejectExecute :1661-1702 – InputQuery('İnkarolunma !!! ', 'Təyinat:')
     const reason = await new Promise(res => modal(`<h3>${esc(t('transactions.reject_title'))}</h3><div class="field"><label>${esc(t('transactions.reject_prompt'))}</label><input id="rr"></div>
       <div class="actions"><button class="btn secondary" id="rc">${esc(t('password.cancel'))}</button><button class="btn" id="ro">OK</button></div>`,
       (m, c) => { const i = m.querySelector('#rr'); i.focus(); m.querySelector('#ro').onclick = () => { c(); res(i.value); }; m.querySelector('#rc').onclick = () => { c(); res(null); };
@@ -95,7 +95,7 @@
     } catch (e) { info(errText(e)); }
   }
   async function deleteTr(el) {
-    // ActionDeleteExecute :962-1024
+    // ActionDeleteExecute :934-978 (no try/except in the Out_ unit: an error stops the loop)
     const ids = selectedIds(); if (!ids.length) return;
     const multi = ids.length > 1; let wait = true, any = false;
     for (let i = 0; i < ids.length; i++) {
@@ -150,12 +150,13 @@
     el.innerHTML = `<div class="card" style="max-width:none">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">${esc(t('out_transactions.title'))}</h2>
         <input type="date" id="trDate" value="${st.date}" title="${esc(t('transactions.date'))}">
-        <label class="chip"><input type="checkbox" id="statusT" ${st.statusFirst ? 'checked' : ''}> ${esc(t('transactions.status_order'))}</label><div style="flex:1"></div>
+        <div style="flex:1"></div>
         <button class="btn secondary" data-a="refresh" title="F5">⟳ ${esc(t('accounts.refresh'))}</button>
         <button class="btn" data-a="insert" title="Ins">＋ ${esc(t('transactions.insert'))}</button>
         <button class="btn secondary" data-a="edit" title="Ctrl+E">${esc(t('customers.edit'))}</button>
         <button class="btn secondary" data-a="delete" title="Del">✖ ${esc(t('transactions.delete'))}</button>
         <button class="btn secondary" data-a="commit">✔ ${esc(t('customers.commit'))}</button>
+        <button class="btn secondary" data-a="commitall">✔✔ ${esc(t('out_transactions.commit_bulk'))}</button>
         <button class="btn secondary" data-a="reject">${esc(t('transactions.reject'))}</button>
         <button class="btn secondary" data-a="commission">${esc(t('transactions.commission'))}</button>
         <button class="btn secondary" data-a="filter" title="Ctrl+F">${esc(t('accounts.filter_panel'))}</button></div>
@@ -167,13 +168,19 @@
       <div id="trDetail" class="grid4"></div></div>`;
     const $ = (s) => el.querySelector(s);
     $('#trDate').onchange = (e) => { st.date = e.target.value; };   // DTPCurrentDateChange: no refresh until F5
-    $('#statusT').onchange = async (e) => { st.statusFirst = e.target.checked; await api('/api/out-transactions/status-order', { method: 'PUT', body: { on: st.statusFirst } }); };
     $('[data-a=refresh]').onclick = () => refresh(el);
     $('[data-a=insert]').onclick = () => editor(el, 'insert');
     $('[data-a=edit]').onclick = () => { const r = st.rows.find(x => x.id === st.cur); if (r) editor(el, 'edit', r); };
     $('[data-a=delete]').onclick = () => deleteTr(el);
     $('[data-a=commit]').onclick = () => stepCommit(el);
     $('[data-a=reject]').onclick = () => rejectTr(el);
+    $('[data-a=commitall]').onclick = async () => {
+      // ActionCommitExecute :1769-1815 – one transactions_delayed_commit call for all selected delayed/rejected rows
+      const ids = st.sel.size ? st.rows.filter(r => st.sel.has(r.id)).map(r => r.id) : [];
+      const n = ids.length ? st.rows.filter(r => st.sel.has(r.id) && (r.status === 1 || r.status === 3)).length : 1;
+      if (!await ask(t('out_transactions.confirm_commit_n', { n }))) return;
+      try { await api('/api/out-transactions/commit-bulk', { method: 'POST', body: { date: st.date, ids, current_id: st.cur } }); await refresh(el); } catch (e) { info(errText(e)); }
+    };
     $('[data-a=commission]').onclick = () => commissions(el);
     $('[data-a=filter]').onclick = () => { st.showFilter = !st.showFilter; $('#trFilter').style.display = st.showFilter ? 'grid' : 'none'; };
     el.querySelectorAll('[data-ss]').forEach(i => { i.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); speedSearch(el, i.dataset.ss, i); } }; i.onblur = () => { i.value = ''; }; });   // EditIDExit clears

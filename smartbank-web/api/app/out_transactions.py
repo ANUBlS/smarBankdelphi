@@ -11,7 +11,9 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from .db import DBError
-from .delphi import subst, round_new, to_currency, date_only
+import math
+
+from .delphi import subst, to_currency, date_only, delphi_frac
 from . import out_tm_sql as Q
 from .customers import row, TS_DELAYED, TS_COMMITED, TS_REJECTED  # status constants shared with CO/TM
 
@@ -27,7 +29,7 @@ TRDEL_MSG = {"delete": "out_transactions.err_trdelete", "edit": "out_transaction
 
 # ------------------------------------------------------------------------------------------------ list
 def title_value(ordered_title: str, status_first: bool) -> str:
-    """ActionRefreshExecute :603-607 / GridTransactionsTitleClick :694-695."""
+    """Out_ unit has no title variable (TransactionManagerImpl.pas:1376 commented out); kept for API symmetry."""
     return (" Status desc, " + ordered_title) if status_first else ordered_title
 
 
@@ -43,7 +45,7 @@ def set_status_first(conn, on: bool) -> None:
 
 def list_transactions(conn, date: datetime.date, title: str) -> list[dict]:
     """Out_ Transactions SQL has no :Title bind. GridTransactionsTitleClick temporarily
-    SQL.Add('ORDER BY '+FieldName) then clears it (TransactionManagerImpl.pas:1442-1458)."""
+    SQL.Add('ORDER BY '+FieldName) then clears it (TransactionManagerImpl.pas:1442-1461)."""
     sql = Q.SQL_TRANSACTIONS.rstrip()
     order = (title or "").strip()
     if order and order.upper() in TITLE_FIELDS:
@@ -53,7 +55,7 @@ def list_transactions(conn, date: datetime.date, title: str) -> list[dict]:
 
 
 def build_filter(f: dict) -> str:
-    """ActionFilterExecute :1093-1235 - the exact TDataSet.Filter string Delphi builds (kept for parity/tests).
+    """ActionFilterExecute TransactionManagerImpl.pas:663-843 - the exact TDataSet.Filter string Delphi builds (kept for parity/tests).
     f: currencies [(id, checked)], op_types [(id, checked)], debit_branch, credit_branch, operator (None = box unchecked),
     delayed/committed/rejected booleans."""
     def gen(items, fmt, two):
@@ -97,18 +99,33 @@ def apply_filter(rows: list[dict], f: dict) -> list[dict]:
 
 
 # ------------------------------------------------------------------------------------------------ editor rules
+def round_new_out(x: float, precision: int) -> float:
+    """Out_ TransactionPropertiesImpl.pas:303-313 RoundNew: rounds the scaled fraction up at >= 0.4 (not 0.5 like the
+    on-balance editor), down at <= -0.4."""
+    scaled = delphi_frac(x) * precision
+    temp = delphi_frac(scaled)
+    scaled = float(math.trunc(scaled))
+    if temp >= 0.4:
+        scaled += 1
+    if temp <= -0.4:
+        scaled -= 1
+    return math.trunc(x) + scaled / precision
+
+
 def set_amounts(side: str, debit: float, credit: float, lamount: float, debit_cur: int | None, credit_cur: int | None,
                 debit_rate: float, credit_rate: float) -> dict:
-    """TransactionPropertiesImpl.pas:193-243 SetAmmounts. Rates are the currencies' TEMPRATE rates (not the editable
-    rate fields). Returns the three edit values after the change of `side` ('debit' | 'credit' | 'lamount')."""
+    """Out_ TransactionPropertiesImpl.pas:380-422 SetAmmounts. Rates = DebitCurrencyData/CreditCurrencyData 'Rate'
+    (AsCurrency). LAmmount/CreditAmmount/DebitAmmount are Currency locals (4-decimal) rounded with precision 10000;
+    no same-currency shortcut in the Out_ unit. tsUnknown copies the equivalent to a side whose currency ID = 0."""
+    dr, cr = float(to_currency(debit_rate)), float(to_currency(credit_rate))
     if side == "debit":
-        l = round_new(debit * debit_rate, 1000000)
-        c = debit if debit_cur == credit_cur else round_new(l / credit_rate, 1000000)
-        lamount, credit = round_new(l, 100), round_new(c, 100)
+        l = float(to_currency(round_new_out(debit * dr, 10000)))
+        c = float(to_currency(round_new_out(l / cr, 10000)))
+        lamount, credit = round_new_out(l, 100), round_new_out(c, 100)
     elif side == "credit":
-        l = round_new(credit * credit_rate, 1000000)
-        d = credit if debit_cur == credit_cur else round_new(l / debit_rate, 1000000)
-        lamount, debit = round_new(l, 100), round_new(d, 100)
+        l = float(to_currency(round_new_out(credit * cr, 10000)))
+        d = float(to_currency(round_new_out(l / dr, 10000)))
+        lamount, debit = round_new_out(l, 100), round_new_out(d, 100)
     else:  # tsUnknown (the equivalent field)
         if debit_cur == 0:
             debit = lamount
@@ -118,7 +135,7 @@ def set_amounts(side: str, debit: float, credit: float, lamount: float, debit_cu
 
 
 def cash_symbol_filter(debit_acc: dict | None, credit_acc: dict | None) -> int:
-    """SetCashSymbol :245-258 -> kassa_b filter 'Mediocrity = N'."""
+    """SetCashSymbol TransactionPropertiesImpl.pas:424-439 -> kassa_b filter 'Mediocrity = N'."""
     if debit_acc and int(debit_acc.get("iscacheaccount") or 0) == 1 and int(debit_acc.get("val_acc") or 0) == 0:
         return 0
     if credit_acc and int(credit_acc.get("iscacheaccount") or 0) == 1 and int(credit_acc.get("val_acc") or 0) == 0:
@@ -158,11 +175,11 @@ class TrError(Exception):
 
 def validate_transaction(conn, t: TrIn) -> None:
     """Editor checks before ActionInsert can run:
-    - ActionInsertUpdate :604-611: DebitID, CreditID set and LAmount <> 0 (button disabled otherwise)
-    - DebitCurrencyIDEditExit / CreditCurrencyIDEditExit :556-581: CheckCurrency = Avalute.Locate('valute')
-    - CashSymbolDBEditExit :627-646: kassa_b.Locate('Symbol', case-insensitive) else Modifed := False
-    - ConvertationSymbolIDBEditExit :652-671: CONVERT_ASSIGNMENTS.Locate('ID') else Modifed := False
-    - account lookups are filtered to val_acc = chosen currency (SetCurrencyFilter :142-151) - enforced here."""
+    - ActionInsertUpdate TransactionPropertiesImpl.pas:972-981: DebitID, CreditID set and LAmount <> 0 (button disabled otherwise)
+    - DebitCurrencyIDEditExit :472-486 / CreditCurrencyIDEditExit :797-811 (CheckCurrency :466-470): CheckCurrency = Avalute.Locate('valute')
+    - CashSymbolDBEditExit :773-796: kassa_b.Locate('Symbol', case-insensitive) else Modifed := False
+    - ConvertationSymbolIDBEditExit :737-760: CONVERT_ASSIGNMENTS.Locate('ID') else Modifed := False
+    - account lookups are filtered to val_acc = chosen currency (SetCurrencyFilter :195-204) - enforced here."""
     if t.debit_id is None or t.credit_id is None:
         raise TrError("out_transactions.err_accounts", "debit_id" if t.debit_id is None else "credit_id")
     if t.lamount == 0:
@@ -185,28 +202,38 @@ def validate_transaction(conn, t: TrIn) -> None:
             raise TrError("out_transactions.err_convert_symbol", "outbalancechar")
 
 
+def as_integer(v) -> int:
+    """TField.AsInteger: NULL/'' -> 0; non-numeric text raises EConvertError (here: validation error)."""
+    if v in (None, ""):
+        return 0
+    try:
+        return int(str(v).strip())
+    except ValueError:
+        raise TrError("out_transactions.err_cash_symbol", "inbalancechar")
+
+
 def add_params(t: TrIn, tr_id: int | None) -> dict:
-    """TransactionsApplyRecord.BuildTransaction (:216-243) -> AddTransaction (:382-412) named parameters."""
+    """TransactionDataModuleUnit.pas:200-223 BuildTransaction -> AddTransaction :364-393 named parameters."""
     return {
         "TransactionDate": date_only(t.transaction_date), "DebitID": t.debit_id, "CreditID": t.credit_id,
         "DebitAmount": to_currency(t.debit_amount), "CreditAmount": to_currency(t.credit_amount),
         "LAmount": to_currency(t.lamount),
         "DebitRate": to_currency(t.debit_rate or 0), "CreditRate": to_currency(t.credit_rate or 0),   # AsCurrency of NULL = 0
-        "TrName": t.name or None, "Flags": 0, "InBalanceChar": t.inbalancechar or None,
+        "TrName": t.name or None, "Flags": 0, "InBalanceChar": as_integer(t.inbalancechar),        # FieldByName('InbalanceChar').AsInteger
         "OutBalanceChar": int(t.outbalancechar or 0),                                                  # AsInteger
         "TransactionID": tr_id, "OperationType": t.operation_code, "TransactionNo": t.operation_no or None,
     }
 
 
 def save_transaction(conn, t: TrIn, current: dict | None) -> int:
-    """SaveTransaction (TransactionPropertiesImpl.pas:376-411) + TransactionsApplyRecord (TransactionDataModuleUnit.pas:245-266)."""
+    """SaveTransaction (TransactionPropertiesImpl.pas:354-378) + TransactionsApplyRecord (TransactionDataModuleUnit.pas:194-256)."""
     validate_transaction(conn, t)
     if t.mode == "edit":
         if not current:
             raise TrError("error.not_found")
-        conn.call_proc("SB_ACA", "CheckObjectAccess", ["out_Transactionmanagerform", "update"], commit=False)   # ActionEditExecute :922
+        conn.call_proc("SB_ACA", "CheckObjectAccess", ["out_Transactionmanagerform", "update"], commit=False)   # ActionEditExecute TransactionManagerImpl.pas:922-932
     else:
-        conn.call_proc("SB_ACA", "CheckObjectAccess", ["out_Transactionmanagerform", "insert"], commit=False)   # ActionInsertExecute :661
+        conn.call_proc("SB_ACA", "CheckObjectAccess", ["out_Transactionmanagerform", "insert"], commit=False)   # ActionInsertExecute TransactionManagerImpl.pas:907-920
     if t.mode == "edit":
         # 'U': DeleteTransaction(ID); AddTransaction(Transaction) with the same ID
         conn.call_proc("OUT_SB_TRANSACTION", "transaction_delete", [], named={"TransactionID": t.id}, commit=False)
@@ -226,7 +253,7 @@ def save_transaction(conn, t: TrIn, current: dict | None) -> int:
 
 
 def reject(conn, rows_by_id: dict, ids: list[int], reason: str) -> dict:
-    """ActionRejectExecute :1347-1387: rows with status 1/3 -> transaction_reject(TransactionID, RejectReason) + commit;
+    """ActionRejectExecute TransactionManagerImpl.pas:1661-1702: rows with status 1/3 -> transaction_reject(TransactionID, RejectReason) + commit;
     errors only counted (cs_RejectInformation)."""
     ok, bad = 0, 0
     for i in ids:
@@ -244,22 +271,18 @@ def reject(conn, rows_by_id: dict, ids: list[int], reason: str) -> dict:
 
 
 def delete_one(conn, row_: dict, multi: bool) -> dict:
-    """ActionDeleteExecute :962-1024 (per row)."""
+    """ActionDeleteExecute TransactionManagerImpl.pas:934-978: CheckObjectAccess delete, then per row DeleteTransaction + SBCommit.
+    The Out_ unit has no try/except around DeleteTransaction: an Oracle error aborts the loop (rows already deleted stay
+    committed)."""
     conn.call_proc("SB_ACA", "CheckObjectAccess", ["out_Transactionmanagerform", "delete"], commit=False)
-    try:
-        conn.call_proc("OUT_SB_TRANSACTION", "transaction_delete", [], named={"TransactionID": row_["id"]}, commit=False)
-    except DBError as e:
-        if not multi:
-            raise
-        conn.commit()
-        return {"failed": e.message}
+    conn.call_proc("OUT_SB_TRANSACTION", "transaction_delete", [], named={"TransactionID": row_["id"]}, commit=False)
     conn.commit()
     return {"deleted": True}
 
 
 # ------------------------------------------------------------------------------------------------ lookups
 def accounts(conn, cust_id: int | None = None) -> list[dict]:
-    """DebitAccData/CreditAccData: OUT_ACCOUNT filtered by :v_custid (TransactionPropertiesImpl.pas:282/541).
+    """DebitAccData/CreditAccData: OUT_ACCOUNT filtered by :v_custid (TransactionPropertiesImpl.pas:275-293 Kredit_CustidChange / :534-552 Debt_CustidChange).
     Empty/invalid cust id uses -999999 so the bind is set and the result is empty."""
     cid = int(cust_id) if cust_id not in (None, "",) else -999999
     try:
@@ -287,7 +310,7 @@ def editor_lookups(conn, cust_id: int | None = None) -> dict:
 
 
 def out_step_commit(conn, rows_by_id: dict, ids: list[int]) -> dict:
-    """ActionStepCommitExecute (Out TransactionManagerImpl.pas:1687+): CheckAdvanced OUTTRANSACTIONCOMMITRIGHT,
+    """ActionStepCommitExecute (TransactionManagerImpl.pas:1704-1767): CheckAdvanced OUTTRANSACTIONCOMMITRIGHT,
     then OUT_SB_TRANSACTION.transaction_commit per delayed/rejected row + SBCommit."""
     conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["OUTTRANSACTIONCOMMITRIGHT"], commit=False)
     committed, errors, last = 0, 0, None
@@ -303,6 +326,20 @@ def out_step_commit(conn, rows_by_id: dict, ids: list[int]) -> dict:
         except DBError as e:
             last, errors = e.message, errors + 1
     return {"committed": committed, "errors": errors, "last_error": last, "total": committed + errors}
+
+
+def out_bulk_commit(conn, rows_by_id: dict, ids: list[int], current_id: int | None) -> dict:
+    """ActionCommitExecute TransactionManagerImpl.pas:1769-1815: no selection -> the current row ID (any status);
+    selection -> IDs of delayed/rejected rows joined by ','; transactions_delayed_commit(OverloadIDsStr, CommitTemp)."""
+    conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["OUTTRANSACTIONCOMMITRIGHT"], commit=False)
+    if not ids:
+        sel = [] if current_id is None else [current_id]
+    else:
+        sel = [i for i in ids if (rows_by_id.get(i) or {}).get("status") in (TS_DELAYED, TS_REJECTED)]
+    n = conn.call_func("OUT_SB_TRANSACTION", "transactions_delayed_commit", [], int,
+                       named={"OverloadIDsStr": ",".join(str(i) for i in sel), "CommitTemp": True})
+    conn.commit()
+    return {"count": len(sel), "result": n}
 
 
 # ------------------------------------------------------------------------------------------------ router
@@ -322,6 +359,10 @@ class FilterIn(BaseModel):
 class IdsIn(BaseModel):
     date: datetime.date
     ids: list[int]
+
+
+class BulkIn(IdsIn):
+    current_id: int | None = None
 
 
 class RejectIn(IdsIn):
@@ -348,7 +389,7 @@ def make_router(current, require_module, err):
     guard = require_module(CLSID)
 
     def resolve_title(ws, title: str) -> str:
-        # GridTransactionsTitleClick :687: OrderedTitle := Column.FieldName ('' for the icon column -> the variable
+        # GridTransactionsTitleClick :1442-1461: OrderedTitle := Column.FieldName ('' for the icon column -> the variable
         # keeps its previous value because ActionRefresh only sets TITLE when OrderedTitle <> '')
         t = title.strip().upper()
         if title.strip() == "":
@@ -385,6 +426,10 @@ def make_router(current, require_module, err):
     @r.post("/commit")
     def _commit(body: IdsIn, ws=Depends(guard)):
         return out_step_commit(ws.conn, _rows(ws, body.date), body.ids)
+
+    @r.post("/commit-bulk")
+    def _commit_bulk(body: BulkIn, ws=Depends(guard)):
+        return out_bulk_commit(ws.conn, _rows(ws, body.date), body.ids, body.current_id)
 
     @r.post("/reject")
     def _reject(body: RejectIn, ws=Depends(guard)):

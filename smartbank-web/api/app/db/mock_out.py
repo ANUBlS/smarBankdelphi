@@ -91,6 +91,14 @@ class OutMixin:
             t["STATUS"] = 2
             t["COMMIT_OPID"] = 1
             return 1
+        if key == "OUT_SB_TRANSACTION.TRANSACTIONS_DELAYED_COMMIT":
+            ids = [int(x) for x in str(n.get("OverloadIDsStr") or "").split(",") if x.strip()]
+            done = 0
+            for i in ids:
+                t = self._out_tr(i)
+                if t["STATUS"] != 2:
+                    t.update(STATUS=2, COMMIT_OPID=1); done += 1
+            return done
         if key.startswith("OUT_SB_COMPLEX_TRANSACTIONS.GETACCOUNT"):
             return ""
         return NotImplemented

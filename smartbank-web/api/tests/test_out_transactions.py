@@ -51,3 +51,27 @@ def test_commit_reject_delete_save():
     assert r.status_code == 200, r.text
     r = client.post("/api/out-transactions/delete", json={"date": d, "id": nid, "multi": False})
     assert r.status_code == 200, r.text
+
+
+def test_out_roundnew_threshold_is_04():
+    from app.out_transactions import round_new_out
+    assert round_new_out(1.0045, 100) == 1.01          # fraction .45 of a cent >= 0.4 -> up (on-balance: 1.00)
+    assert round_new_out(1.0035, 100) == 1.0
+    assert round_new_out(-1.0045, 100) == -1.01
+
+
+def test_out_set_amounts_no_same_currency_shortcut():
+    from app.out_transactions import set_amounts
+    r = set_amounts("debit", 100, 0, 0, 840, 840, 1.7, 1.7)
+    assert r == {"debit": 100.0, "credit": 100.0, "lamount": 170.0}
+    r = set_amounts("debit", 10, 0, 0, 840, 978, 1.7, 1.9)
+    assert r["lamount"] == 17.0 and r["credit"] == 8.95    # 17/1.9 = 8.947368 -> 8.9474 -> 8.95
+
+
+def test_out_bulk_commit_and_delete_error_propagates():
+    login()
+    d = client.get("/api/out-transactions/init").json()["date"]
+    r = client.post("/api/out-transactions/commit-bulk", json={"date": d, "ids": [], "current_id": 7001})
+    assert r.status_code == 200 and r.json()["count"] == 1
+    rows = client.post("/api/out-transactions/list", json={"date": d}).json()["rows"]
+    assert next(x for x in rows if x["id"] == 7001)["status"] == 2

@@ -21,3 +21,12 @@ Web label: **Off-balance Transactions** (tree keeps Delphi caption from SmartBan
 
 ## Tests
 `api/tests/test_out_transactions.py` (mock mode).
+
+## Review fixes (adopted commit 21bbb194)
+- Citations re-pointed to `Packages/Out_transaction_manager/ocx/*` line numbers (they had pointed at the on-balance unit).
+- `RoundNew` of the Out unit (TransactionPropertiesImpl.pas:303-313) uses the 0.4 threshold → `round_new_out`; `SetAmmounts`
+  (:380-422) ported literally: Currency locals rounded to 4 dp, results RoundNew(…,100), no same-currency shortcut.
+- `InBalanceChar` read with AsInteger semantics; delete no longer swallows errors (ActionDeleteExecute :934-978 has no try/except).
+- Added bulk commit (ActionCommitExecute :1769-1815 → `transactions_delayed_commit(OverloadIDsStr, CommitTemp)`), POST `/api/out-transactions/commit-bulk`.
+- Removed the "status first" checkbox (Out_ has no ODS_StatusT).
+- Tree: "Off-balance" section → Off-balance Transactions (screenshot 71-out-transactions.png, tree 70-offbalance-tree.png).

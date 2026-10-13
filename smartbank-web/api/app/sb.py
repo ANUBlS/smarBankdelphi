@@ -203,7 +203,7 @@ def build_tree(ws) -> list[dict]:
         for i in range(int(ini_read(ws, section, "Count", "0") or 0)):
             s = f"{section}\\Item{i}"
             node = {"path": ".".join(map(str, path + [i])), "caption": ini_read(ws, s, "Caption", "<no data>"),
-                    "icon": ini_read(ws, s, "Icon", ""), "clsid": None, "params": "", "allowed": True}
+                    "icon": ini_read(ws, s, "Icon", ""), "caption_key": ini_read(ws, s, "CaptionKey", "") or None, "clsid": None, "params": "", "allowed": True}
             idx, params = _parse_action(ini_read(ws, s, "Action", ""))
             if idx is not None and 0 <= idx < len(plugins):
                 p = plugins[idx]
