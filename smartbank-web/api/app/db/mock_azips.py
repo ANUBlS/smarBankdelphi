@@ -35,7 +35,7 @@ def _rows(rs):
     return [{k: (_d(v) if k in ("DAT", "CDAT", "FDAT", "TDAT", "MF32A_DATE") else v) for k, v in r.items()} for r in rs]
 
 
-class AzipsMixin:
+class AzipsMixin:  # noqa: D101 (part 2 below: AzipsEditMixin)
     def _az_user_filial(self):
         return _load()["sba_objinf"].get(str(self.username).upper(), 0)
 
@@ -79,6 +79,8 @@ class AzipsMixin:
                         r[col] = nm(src.get(k))
                     for k in ("C", "M", "V"):
                         r.pop(k, None)
+                    r["ROWID"] = _rid(src["ID"])
+                    r.pop("_CALL", None); r.pop("_POSTED", None)
                     out.append(r)
                 return out
         if first == Q.LINES_ARXIVIN[0]:
@@ -121,3 +123,82 @@ class AzipsMixin:
         if key == "SB_ACA.CHECKADVANCEDOBJECTACCESS_FUNC":
             return 1 if (self.user.get("is_adm") or args[0] in self.user.get("advanced_access", [])) else 0
         return NotImplemented
+
+
+# ---------------------------------------------------------------------------------------------- part 2: editor / creation
+def _rid(i):
+    return "AAAz9x" + str(i).rjust(12, "A")
+
+
+class AzipsEditMixin:
+    """Emulates the datasets used by OUT_FORM / MT103 / MT103AZN / MT103Show and the sw_main calls. sw_main body is not in
+    the repo: Set_Referense returns OUT+yymmdd+4-digit counter; savetransaction / saving205 insert a status-2 row (illustrative)."""
+
+    def _aze_query(self, sql, b):
+        D = _load()
+        L = sql.split("\r\n")
+        first = L[0]
+        if first == Q.LINES_BANKINFO[0]:
+            return [dict(D["bankinfo"])]
+        if first == Q.LINES_MT[0]:
+            return [{"COLUMN_NAME": "MT103"}, {"COLUMN_NAME": "MT205"}]
+        if first == Q.LINES_VALUTE[0]:
+            return [{"VAL_NAME": v} for v in D["avalute"]]
+        if first == Q.LINES_BANKS[0]:
+            return [dict(x) for x in D["sw_banks"] if x["CITY"] == "BAKU"]     # city='BAKU' line
+        if first == Q.LINES_TOBIC[0]:
+            return [dict(x) for x in D["sw_banks"] if x["BIC"] == b.get("dbs")]
+        if first == Q.LINES_ACCOUNT[0]:
+            return sorted([dict(x) for x in D["account"]], key=lambda x: x["ACC_NO"])
+        if first == Q.LINES_ACCS_FOR_COMISSION[0]:
+            return [{"ID": x["ID"], "ACC_NO": x["ACC_NO"]} for x in D["account"] if x["KLI_ID"] == b.get("v_acc_no")]
+        if first == Q.LINES_CHK_ACCNO[0]:
+            return [{"CUST_TYPE": x["CUST_TYPE"]} for x in D["account"] if x["ACC_NO"] == b.get("acc_no")]
+        if first == Q.LINES_CORR[0]:
+            return [{"CORACOUNT": x["CORACOUNT"]} for x in D["sw_coraccounts"] if x["BIC"] == b.get("b") and x["VAL_NAME"] == b.get("v")]
+        if first == Q.LINES_REFERANS[0]:
+            D["ref_seq"] = D.get("ref_seq", 0) + 1
+            return [{"REFE": "OUT" + dt.date.today().strftime("%y%m%d") + str(D["ref_seq"]).rjust(4, "0")}]
+        if first == Q.LINES_COMBOITEMS[0]:
+            m = re.fullmatch(r"and (\w+) is not null order by sw_field", L[1])
+            col = m.group(1) if m else None
+            rs = [x for x in D["sw_fields"] if x["SW_MAIN_FIELD"] == b.get("comboname") and x["CATEGORY"] != "00" and col and x.get(col)]
+            return sorted(rs, key=lambda x: x["SW_FIELD"])
+        if first == Q.LINES_COMBOSELECT[0]:
+            return [x for x in D["sw_fields"] if x["SW_MAIN_FIELD"] == b.get("name") and x["CATEGORY"] == b.get("selected")]
+        if first == Q.LINES_AFTERCOMBOSELECT[0]:
+            return [x for x in D["sw_fields"] if x["SW_MAIN_FIELD"] == b.get("name") and x["CATEGORY"] != b.get("selected")]
+        return NotImplemented
+
+    def _aze_proc(self, key, args):
+        D = _load()
+        if key in ("SW_MAIN.SAVETRANSACTION", "SW_MAIN.SAVING205"):
+            nid = max(r["ID"] for r in D["sw_out_new"]) + 1
+            day = dt.datetime.strptime(args[0], "%d.%m.%Y").isoformat()
+            if key == "SW_MAIN.SAVETRANSACTION":
+                r = {"MESSAGETYPE": "MT103", "MF20_REFERENCE": args[1], "MF50_ACCOUNT": args[2], "RECEIVERBIC": args[3],
+                     "MF59_ACCOUNT": args[5], "FINCOPY": args[7], "MF70": args[8], "MF72": args[9], "MF32A_AMOUNT": args[10],
+                     "MF50_NAME$ADRESS": args[13], "MF59_NAME$ADRESS": args[14], "MF32A_CURR": args[19]}
+            else:
+                r = {"MESSAGETYPE": "MT205", "RECEIVERBIC": args[1], "MF20_REFERENCE": args[2], "MF21": args[3],
+                     "MF32A_AMOUNT": args[4], "MF50_NAME$ADRESS": args[5], "MF59_NAME$ADRESS": args[6], "MF70": args[7],
+                     "FINCOPY": args[10], "MF32A_CURR": "AZN"}
+            r.update(ID=nid, STATUS=2, SENDERLT="103", MF32A_DATE=day, INFO="", CDAT=dt.datetime.now().isoformat(timespec="seconds"),
+                     FDAT=None, TDAT=None, BRANCH=self._az_user_filial() or 101, C=self.user.get("id", 2), M=0, V=0, _CALL=[key, list(args)])
+            D["sw_out_new"].append(r)
+            return {}
+        return NotImplemented
+
+    def _aze_execute(self, sql, b):
+        m = re.fullmatch(r"update SW_OUT_NEW set (.+) where rowid = :doa__rowid", sql)
+        if not m:
+            return False
+        D = _load()
+        tgt = [r for r in D["sw_out_new"] if _rid(r["ID"]) == b["doa__rowid"]]
+        if not tgt:
+            raise RuntimeError("ORA-01410: invalid ROWID")
+        for part in m.group(1).split(", "):
+            col, bind = part.split(" = :")
+            tgt[0][col] = b[bind]
+        tgt[0]["_POSTED"] = True
+        return True

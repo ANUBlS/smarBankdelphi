@@ -43,7 +43,7 @@ def test_lists_admin_all_branches():
     login()
     r = client.post(B + "/list", json={}).json()
     assert [x["id"] for x in r["sw_out3"]] == [9102, 9101]                     # status 1, order by id desc
-    assert [x["id"] for x in r["sw_out"]] == [9104] and [x["id"] for x in r["sw_out_2"]] == [9103]
+    assert [x["id"] for x in r["sw_out"]] == [9106, 9105, 9104] and [x["id"] for x in r["sw_out_2"]] == [9103]
     assert [x["id"] for x in r["sw_in"]] == [5001, 5002] and [x["id"] for x in r["sw_in2"]] == [5003]
     assert r["sum_send_text"] == "4200.25" and r["sum_verify_text"] == "9800"
     assert r["sw_out3"][0]["sw_main.find_username_out(s.id)"] == "Teller One"

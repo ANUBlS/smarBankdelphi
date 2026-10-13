@@ -17,8 +17,8 @@ Unit16, Checkacc, Tranzit_account, AzipsSett, MTsett, insett, acc_check, UFX71. 
 in the part that uses them (UFX credit, `ufxcredit` :6931), copied from the Delphi code, nothing invented.
 
 ## Plan (clean pushed commits)
-1. **Lists, totals, archives** (this commit) – see §1.
-2. Outgoing message editor / creation: `OUT_MT` (Yeni), `Edit_outExecute`, `editmt103`, `Editmt103Show`, `formmt103`, `createmess`.
+1. **Lists, totals, archives** (done) – see §1.
+2. **Outgoing message editor / creation** (done) – see §2. Open follow-up 2b: `filereport.bpl` `Azipsnew` (`Packages/Cards_New/FileReprt/Unitazips.pas`, 4 707 lines), which is what the visible "Yeni" button and "Redaktə et" for non-103 rows open.
 3. Conversion / export files: `PACS0008Execute` (:686-2110), `KonvertexExecute`, `Konver102Execute`, `fayl102Execute`,
    `CreateFaylExecute`, `createfile2Execute`, `konvertExecute`/`konvert2Execute`/`konvert3Execute`, `ToolButton8Click` (print/list),
    with golden-file tests generated from the Delphi format code (byte-identical, encoding and CRLF as Delphi writes them).
@@ -51,8 +51,71 @@ Deliberate/kept quirks:
 - DateTimePicker3/4 on the OUT tab are not used by any query (`bdat/edat` code commented out) – not shown.
 - Search boxes in the archive forms (`SearchRecord`, partial, case-insensitive) – use the browser search / grid; not yet ported.
 
-## Unverified (needs the real database)
+## 2. Message editor / creation (done)
+API `api/app/azips_edit.py` (routes under `/api/azips`), UI `web/public/modules/azips_edit.js`, tests `api/tests/test_azips_edit.py`,
+E2E `e2e/azips_edit_screens.py`, screenshots 105-109. New verbatim SQL in `azips_sql.py` (generated, Unit2.dfm line ranges in comments):
+`MT`, `mt_select`, `ComboItems`, `Comboselect`, `aftercomboselect`, `valute`, `banks`, `Tobic`, `referans`, `bankinfo`, `CORR`,
+`DS_AccsForComission`, `Chk_AccNo`, `Account`.
+
+### What is reachable in Delphi (and therefore ported)
+| Delphi entry | How it is reached | Web |
+|---|---|---|
+| `YeniExecute` :2604 → `TOUT_FORM` (OUT_MT.pas) | action `Yeni`, ShortCut 16462 = **Ctrl+N** (no button uses the action); hidden ToolButton15 'Swift' (Visible=False) | "New message" button + Ctrl+N on the OUT tab |
+| `ToolButton2Click` :3530 "Redaktə et" | right `SW_OUT_EDIT`; `SENDERLT<>'103'` → `Pluginloader('filereport.bpl','Azipsnew',id)`; MT103 + FINCOPY<>'AZN' → `TMT103` (editmt103); MT103 + 'AZN' → `TMT103AZN` (formmt103) | "Edit" on the selected *New created messages* row; plugin case → message "not ported yet" |
+| `Redakteet1Click` :3578 (action `konvert`) | Committed grid: FINCOPY='AZN' → `Form7` (Unit7, not this step), else `TMT103Show` (Editmt103Show, read-only) | "View committed" |
+| `Edit_outExecute` :3205-3528 | **not connected**: action `Edit_out` has `OnExecute = Capet1Click` (SWIFT_MAINImpl1.dfm:2871-2874) | not in UI; mapping ported as `edit_out_prefill()` for reference |
+| `createmess.pas` (`TForm5`) | never created (no CreateForm in SWIFT_MANAGER.dpr, no `TForm5.Create`) | not ported |
+| ToolButton1 "Yeni" (the visible button) :2337 | `sw_settings.EXpire_t` time check, right `SW_OUT_NEW`, then `Pluginloader('filereport.bpl','Azipsnew','1')` | **not ported yet** (other package, see plan 2b) |
+
+### OUT_FORM (CreateMessageBeginExecute OUT_MT.pas:771-1266)
+- Defaults (FormActivate :1298): sender = `bankinfo.SWIFT`, 'Institution', FIN, priority/monitoring N, date = today, FIN-copy = **AZN**,
+  currency fixed AZN (disabled); `FINChange` :596 clears the option combos, AZN ↔ currency enabled/empty.
+- Option combos are filled from `sw_fields` (InsertComboBoxItems :467: `ComboItems.SQL[1] := 'and '+fin+fincopy+' is not null order by sw_field'`,
+  `:comboname` = component name, first item ''); `fin`/`fincopy` accepted only from MT list / {'', 'AZN'} before being written into SQL[1].
+  Selecting an item runs `aftercomboselect` (hide) / `Comboselect` (show) by `SW_FIELD` (CMF50Change :654).
+- Validation message exactly `' '+dolmayan+' Xanalar doldurulmayıb!'`; only MF23B, currency, amount and MF71A block the save
+  (MF50/MF57/MF59 are added to the text but their stat stays 'nextprosedure', as in Delphi).
+- Reference: `sw_main.Set_Referense(:FORMATS,:currensy)`; amount `StrToFloat` ('.' decimal; keypress allows 0-9 and '.').
+- MT103 → `sw_main.savetransaction` with the 20 arguments in Delphi order (incl. constants `0, 1, 'AZN'`, receiver name/city from Edit2/Edit3,
+  `DateToStr(mf32_date)`); others (MT205) → `sw_main.saving205` (12 args: sender type 'Institution', constant `25`).
+- MF50 account/name per CMF50 index (non-AZN: 1=50A Edit1/Memo1, 2=50F Edit4/Memo2, 3=50K Edit3/Memo2; AZN: index 1 = 50K Edit3/Memo2);
+  `Chk_AccNo` is opened but its error is commented out (kept: no check). `voen` is computed and never used (not ported).
+- Text rules: name/address memos UpCase, 4×35 (Memo1_MF50KeyPress); OF70 GetRichEditLine (4×35, no Enter, 148 max);
+  OF72 GetRichEditLine2 (`/BNF/`+30, `//`+33 ×4, `//`+27); MF20 max 16, MF21 max 3, amount max 15.
+
+### MT103 edit (CreatMessageExecute editmt103.pas:970-1353) – sw_out.Post
+- Opens with `open_edit_form` (CMF index from M50/M52/M54/M55/M56/M58/M59, CMF53 fixed to B and disabled, CORR, MF71A, MF71G split at
+  `LastDelimiter('|')`, DS_AccsForComission), then FormActivate (runs after TabSheet1Show) sets `Edit3_MF50 := DBEdit_M36.Text` (MF36).
+- Validation: MF23B, currency, **currency again** for 'mebleq' (Delphi checks `mf32a_val` twice, not the amount), MF50, MF57, MF59, MF71A – all blocking.
+- Writes a **new** `MF20_REFERENCE` from `Set_Referense` on every save (DBEdit bound to the field).
+- `if DBEdit_M36.Text<>'' then` governs only `SENDERTYPE` (the rest of the header fields are always written).
+- 50K: `TAX := trim(copy(Lines[1],0,20))` of the name memo; Chk_AccNo NULL → `MF50 - Hesab nömrəsi düzgün deyil!`; cust_type 1 → TAX ''.
+- CMF57 writes the **58** fields with Delphi's letters: 1→`:58A:`, 2→`:58B:`, 3→`:57C:` (clears MF58_NAME$LOCATION), 4→`:58D:`.
+- Post = `update SW_OUT_NEW set <fields> where rowid = :doa__rowid` + commit (DOA CommitOnPost); `sw_outBeforePost` sets `M70=':70:'` when MF70<>''.
+
+### MT103AZN (Change1Click formmt103.pas:257-272)
+59A → `MF59_NAME$ADRESS := RichEdit1`; `MF70 := trim(OF70)`; `MF72 := trim(RichEdit3)`; DB-bound fields (receiver BIC, country, hesabat,
+amount, MF32A date, MF50 account/name, MF59 account/name/BIC); Post + commit. FormActivate copies DB memo lines 0-3 / 0-5 into the rich edits.
+
+### MT103Show
+Same layout as MT103 on `sw_out_2` (Committed), everything read-only, no save.
+
+### Unverified / to check on the real database (part 2)
+- `sw_main` body is not in the repo: `Set_Referense`, `savetransaction`, `saving205` are called with Delphi's arguments; the mock only
+  illustrates (status-2 row, reference OUT+yymmdd+counter).
+- `DateToStr` uses the Windows short date format of the Delphi client; the web sends `dd.mm.yyyy` (Azerbaijani default).
+- `TSearchEdit` (third-party, no source) on `banks` / `Account`: these datasets are opened only by the hidden ToolButton15; the web always
+  looks them up. `banks` keeps its `city='BAKU'` line, so only Baku BICs are found (as the SQL says).
+- editmt103.dfm binds `MF26T_edit` to `MF26T` and `DBEdit*_MF57` / `DBMemo*_MF57` to `MF57_ACCOUNT` / `MF57_NAME$LOCATION`, which are not
+  persistent fields of `sw_out`; in Delphi that normally raises "Field not found" when the form opens. The web shows them but does not save them.
+- TRichEdit line separators in `OF70_RichEdit.Text` (CR vs CRLF) – web sends CRLF.
+- `Edit3_MF50` in MT103 is filled from MF36 (FormActivate), so a 50K message with empty MF36 fails the account check until the account is retyped – kept.
+
+## Unverified (part 1, needs the real database)
 - `sw_main` package body is not in the repo: what `new_dat` does exactly (mock: moves status-96 incoming rows dated before the
   operating day into `SW_ARCHIVE`, only to illustrate).
 - Column names of `sw_in`, `sw_out_new`, `SW_ARCHIVE`, `sw_out_sba` come from grid FieldNames; the mock tables are illustrative.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
+
+## Resume point
+Next: part 3 – conversion / export files (`PACS0008Execute`, `Konvertex`, `Konver102`, `fayl102`, `CreateFayl`, `createfile2`, `konvert*`, print list) with golden files; then 2b (`filereport.bpl` Azipsnew) and part 4.

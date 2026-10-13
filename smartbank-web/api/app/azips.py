@@ -13,6 +13,7 @@ import re
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
+from . import azips_edit
 from . import azips_sql as Q
 from .customers import row
 from .delphi import date_only
@@ -176,7 +177,7 @@ def make_router(current, require_module, err):
     def guard(fn, *a, **k):
         try:
             return fn(*a, **k)
-        except AzError as e:
+        except (AzError, azips_edit.AzEditError) as e:
             err(400, e.key, **e.extra)
 
     @r.post("/list")
@@ -206,4 +207,5 @@ def make_router(current, require_module, err):
     def _aout(b: ArxIn, ws=Depends(g)):
         return {"rows": guard(archive_out, ws.conn, b.dat1, b.dat2, b.oper, b.mt_index, b.title), "types": ARX_OUT_TYPES}
 
+    azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
     return r

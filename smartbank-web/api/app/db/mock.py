@@ -31,7 +31,7 @@ from .mock_omem import OmemMixin
 from .mock_orep import OrepMixin
 from .mock_oexi import OexiMixin
 from . import mock_azips
-from .mock_azips import AzipsMixin
+from .mock_azips import AzipsMixin, AzipsEditMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -67,7 +67,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(AzipsMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -162,6 +162,8 @@ class MockConnection(AzipsMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, Oac
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
         r = self._az_proc(key, args)
+        if r is NotImplemented:
+            r = self._aze_proc(key, args)
         if r is not NotImplemented:
             return r
         r = self._oexi_proc(key)
@@ -201,6 +203,8 @@ class MockConnection(AzipsMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, Oac
         s = " ".join(sql.lower().split())
         b = binds or {}
         r = self._az_query(sql, b)  # Packages/SWIFT_MANAGER_IBAN_NEW (AZIPS)
+        if r is NotImplemented:
+            r = self._aze_query(sql, b)
         if r is not NotImplemented:
             return r
         r = self._oexi_query(sql, b)  # Packages/OutExcelImport
@@ -266,6 +270,8 @@ class MockConnection(AzipsMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, Oac
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._aze_execute(sql, binds or {}):
+            return
         if self._oexi_exec(sql, binds or {}):
             return
         if self._omem_execute(sql, binds or {}):

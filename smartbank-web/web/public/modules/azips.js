@@ -1,5 +1,5 @@
 /* AZIPS – port of Packages/SWIFT_MANAGER_IBAN_NEW (TSWIFT_MAIN), part 1: IN / OUT grids, totals, archives.
-   Logic in api/app/azips.py (verbatim Unit2.dfm SQL, branch rule, SQL[i] edits). Editor / creation / conversion follow. */
+   Logic in api/app/azips.py (verbatim Unit2.dfm SQL, branch rule, SQL[i] edits). Part 2 (editor / creation) in azips_edit.js; conversion follows. */
 (function () {
   const { api, t, esc, toast, modal } = window.SB;
   const P = '/api/azips', K = (k) => t('azips.' + k);
@@ -42,11 +42,21 @@
         v('z_arxin').onclick = () => arch('in');
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
-          <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button></div>
+          <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button>
+          <button class="btn" id="z_new" title="Ctrl+N">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
+          <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button></div>
           <input class="input" readonly id="z_s1" style="width:100%;margin-top:6px" value="${esc(d.sum_send_text != null ? 'Bu gün göndəriləcək ümumi məbləğ = ' + d.sum_send_text + ' AZN' : '')}">
           <input class="input" readonly id="z_s2" style="width:100%;margin-top:4px" value="${esc(d.sum_verify_text != null ? 'Bu gün verifikasiya olunacaq ümumi məbləğ = ' + d.sum_verify_text + ' AZN' : '')}">
           ${box(K('box_out'), table('g_out', C.out, d.sw_out))}${box(K('box_out2'), table('g_out2', C.out2, d.sw_out_2))}${box(K('box_out3'), table('g_out3', C.out3, d.sw_out3))}`;
         v('z_arxout').onclick = () => arch('out');
+        const pick = (gid, rows, key) => v(gid).querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
+          v(gid).querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr)); st[key] = rows[+tr.dataset.i].id;
+        });
+        pick('g_out', d.sw_out, 'sel_out'); pick('g_out2', d.sw_out_2, 'sel_out2');
+        const AE = window.SB.azipsEdit;
+        v('z_new').onclick = () => AE.newForm(() => load({}));                    // Yeni action (YeniExecute)
+        v('z_edit').onclick = () => st.sel_out ? AE.edit(st.sel_out, () => load({})) : toast(K('pick_row'), 'error');   // ToolButton2Click
+        v('z_view').onclick = () => st.sel_out2 ? AE.view(st.sel_out2) : toast(K('pick_row'), 'error');                // Redakteet1Click
         v('z_now').onclick = async () => {
           try { toast((await api(P + '/archive-now', { method: 'POST' })).message); load({}); } catch (e) { toast(errT(e), 'error'); }
         };
@@ -91,6 +101,11 @@
         q('ago').onclick = go; go();                                  // FormActivate opens with today..today
       }, true);
     }
+    const onKey = (e) => {                                                   // Yeni ShortCut 16462 = Ctrl+N
+      if (!document.body.contains(el)) { document.removeEventListener('keydown', onKey); return; }
+      if (e.ctrlKey && (e.key === 'n' || e.key === 'N') && st.tab === 'out') { e.preventDefault(); window.SB.azipsEdit.newForm(() => load({})); }
+    };
+    document.addEventListener('keydown', onKey);
     load({});
   }
   window.SB.pages['/m/azips'] = page;
