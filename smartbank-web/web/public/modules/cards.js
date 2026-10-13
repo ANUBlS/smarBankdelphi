@@ -26,6 +26,7 @@
     function item(i) {
       if (i === 'clients') return clients(el.querySelector('#cbody'));
       if (i === 'application') return applications(el.querySelector('#cbody'));
+      if (i === 'newcards') return newcards(el.querySelector('#cbody'));
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
@@ -226,6 +227,35 @@
         if (r.error) toast(r.error, 'error');
         r.messages.forEach(m => toast(tr(m) + (r.files.length ? ' ' + r.files.map(f => f.name).join(', ') : '')));
         d = r.view; sel[g].clear(); draw(); });
+    }
+    draw();
+  }
+
+  // Prosedur ▸ Yeni kartlar (U9.pas TForm9, api/app/cards_newcards.py): newcard grid, 'Silmək', 'Excel', 'Axtarış' (Panel4, inert edits)
+  async function newcards(box) {
+    const call = async (path, body) => { try { return await api(P + '/newcards' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    let cur = d.rows.length ? d.rows[0].id : null, p4 = false;
+    let nf = 0;
+    const hdr = (c) => c === '' ? d.titles_nofield[nf++] : K('c_' + c);
+    function draw() {
+      nf = 0;
+      if (!d.rows.some(r => r.id === cur)) cur = d.rows.length ? d.rows[0].id : null;
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_newcards'))}</h3>
+        <div class="toolbar" style="gap:6px"><button class="btn danger" id="nc_del">${esc(K('b_delete'))}</button><button class="btn secondary" id="nc_xls">${esc(K('b_excel'))}</button>
+        <button class="btn secondary ${p4 ? 'active' : ''}" id="nc_search">${esc(K('b_search'))}</button><span class="muted">${esc(K('count'))}: ${d.rows.length}</span></div>
+        <div class="tablewrap" style="max-height:60vh"><table class="grid" id="nc_grid"><thead><tr>${d.cols.map(c => `<th>${esc(hdr(c))}</th>`).join('')}</tr></thead>
+        <tbody>${d.rows.map(r => `<tr data-id="${r.id}" class="${r.id === cur ? 'sel' : ''}">${d.cols.map(c => `<td>${c ? esc(DATECOLS.has(c) ? fmtD(r[c.toLowerCase()]) : (r[c.toLowerCase()] ?? '')) : ''}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${d.cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>
+        ${p4 ? `<div class="toolbar" id="nc_p4" style="gap:6px;flex-wrap:wrap">${d.panel4.map(n => `<input style="text-transform:uppercase;width:130px" title="${esc(n)}" placeholder="${esc(K('c_' + n.slice(4)))}">`).join('')}</div>` : ''}`;
+      box.querySelectorAll('#nc_grid tbody tr[data-id]').forEach(tr => tr.onclick = () => { cur = +tr.dataset.id; draw(); });
+      box.querySelector('#nc_search').onclick = () => { p4 = !p4; draw(); };          // ToolButton21Click: Panel4.Visible toggled
+      box.querySelector('#nc_del').onclick = async () => {                            // ToolButton1Click :92
+        const ok = window.confirm(K('msg_nc_del_q'));
+        const r = await call('/delete', { id: cur, confirmed: ok }); if (r) { d = r; draw(); } };
+      box.querySelector('#nc_xls').onclick = async () => {
+        const res = await fetch(P + '/newcards/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: '{}' });
+        if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
+        const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'CARDS.xlsx'; a.click(); };
     }
     draw();
   }

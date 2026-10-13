@@ -155,6 +155,21 @@ API `api/app/cards_app_file.py` (`POST /applications/file {grid, ids, confirmed}
 
 Unverified (3b): card_main done* / contractclose / DONESECURE / cardnamechange / filialkod bodies (mock: STATUS := 2, donenewcard also sets FILENAME); card_currencydecode / card_branch_codes columns (taken from the Delphi field names); the file number cannot see files Delphi clients wrote on their own C: drive (only CARDS_OUT_DIR); AsString of a NUMBER CREDIT_LIM with decimals (FloatToStr, ',' assumed); TBookmarkList order = dataset order. The STATUS CHANGE row is 2 characters shorter when CARDSTATUS is none of the six names (as Delphi).
 
+## Step 3c: Yeni kartlar (U9.pas TForm9 'New Cards') – done
+
+API `api/app/cards_newcards.py` (`/api/cards/newcards`), tests `api/tests/test_cards_newcards.py`, E2E `e2e/cards_newcards.py`, screenshot 179.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| N10Click :1082 (right card_newcard); FormShow :86 newcard.Open; FormPaint :118 Refresh | `POST /newcards/open` | newcard (Unit18.dfm:2491) `select c.rowid,c.* from CARD_CLIENT_APP c where c.messtype=1 and c.status=1` |
+| DBGrid1 (U9.dfm:113) | grid | 21 FieldName columns ('FIL' is not a newcard field → empty column) + 4 columns without FieldName (CREATED USER, MODIFIED USER, CREATE DATE, MODIFY DATE: empty). No OnTitleClick |
+| ToolButton1 'Silmək' :92 | `POST /newcards/delete {id, confirmed}` | 'Kart silinsin?' Yes → card_main.delete_application(current row id; empty set → 0); Refresh after Yes or No; no right, no commit |
+| ToolButton7 'Excel' :105 | `POST /newcards/excel` → CARDS.xlsx | ExportDataset(newcard, 'CARDS', True): all fields + titles, sheet 'CARDS' |
+| ToolButton21 'Axtarış' :69 | toggles Panel4 | the eight Panel4 edits (ecUpperCase) have no handlers in Delphi: nothing is filtered |
+| ToolButton3 'Redaktə Etmək' | not shown | Visible = False, no OnClick |
+
+Unverified (3c): whether newcard has persistent TFields that would make 'FIL' a lookup/calculated field (none in the .dfm, so the column is empty); delete_application body (mock deletes the row).
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya.
@@ -164,4 +179,4 @@ Unverified (3b): card_main done* / contractclose / DONESECURE / cardnamechange /
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Step 3c: Yeni kartlar (U9.pas, N10Click :1082), Verifikasiya (unitverification.pas, N13Click :1286).
+Step 3d: Verifikasiya (unitverification.pas, N13Click :1286).
