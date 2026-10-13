@@ -303,3 +303,10 @@ def test_deca_export_binds_number():
 def test_module_requires_right():
     c = cl("ADMIN", "Admin#2026")
     assert c.get("/api/credits/init").status_code == 200
+
+
+def test_deca_sql_line_indices_match_delphi_tstrings():
+    from app import cr_sql as Q
+    L_ = Q.SQL_DECA_DECADATA_CLOS.split("\n")
+    assert "DATEOFCONCLUSION<=:HDATE" in L_[76] and "P.ID = B.CUSTOMERTYPE" in L_[77]
+    assert Q.SQL_CUST_ACCS.split("\n")[14] == ""

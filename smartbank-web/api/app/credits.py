@@ -9,6 +9,7 @@ SQL is verbatim in cr_sql.py (generated from the DFMs). Pure logic + Oracle sema
 """
 from __future__ import annotations
 import datetime
+import re
 import io
 from decimal import Decimal
 
@@ -405,6 +406,9 @@ def deca_closed(conn, bank_id: str, bank_name: str, rep_date: datetime.date, hda
     if number:
         sql = L.replace_sql_line(sql, 77, "and b.numberofcredit=:numberofcredit")
         binds["numberofcredit"] = number
+    # Delphi's SQL[76] replaces the "B.DATEOFCONCLUSION<=:HDATE" line and SQL[77] the "P.ID = B.CUSTOMERTYPE" line
+    # (DecaMainForm.pas:594/596); only bind variables still present in the text may be passed to Oracle.
+    binds = {k: v for k, v in binds.items() if re.search(r":" + k + r"\b", sql, re.I)}
     rows = conn.query(sql, binds)
     tags = conn.query(Q.SQL_DECA_TAGSETTINGS)
     return L.deca_closed_export(bank_id, bank_name, rep_date, tags, rows)
