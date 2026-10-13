@@ -215,6 +215,12 @@ class CheckAccIn(BaseModel):
     acc: str = Field(default="", max_length=64)
 
 
+class RedakteIn(BaseModel):
+    id: int
+    acount: str = Field(default="", max_length=64)
+    voin2: str = Field(default="", max_length=64)
+
+
 class TranzitIn(BaseModel):
     main_acc: str = Field(default="", max_length=64)
     tranzit_acc: str = Field(default="", max_length=64)
@@ -348,6 +354,13 @@ def make_router(current, require_module, err):
     @r.post("/in-checkacc")
     def _checkacc(b: CheckAccIn, ws=Depends(g)):
         res = I.checkinacc(ws.conn, _in_lines(ws.conn), b.id, b.acc)
+        if res is None:
+            err(400, "azips.pick_row")
+        return res
+
+    @r.post("/in-redakte")
+    def _inred(b: RedakteIn, ws=Depends(g)):
+        res = I.in_redakte(ws.conn, _in_lines(ws.conn), b.id, b.acount, b.voin2)
         if res is None:
             err(400, "azips.pick_row")
         return res

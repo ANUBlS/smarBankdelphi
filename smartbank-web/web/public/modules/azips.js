@@ -74,6 +74,7 @@
           <button class="btn danger" id="z_indel">${esc(K('delete'))}</button>
           <button class="btn" id="z_incommit">${esc(K('in_commit'))}</button>
           <button class="btn secondary" id="z_checkacc">${esc(K('checkacc'))}</button>
+          <button class="btn secondary" id="z_inred">${esc(K('in_redakte'))}</button>
           <button class="btn secondary" id="z_tranzit">${esc(K('tranzit'))}</button>
           <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
@@ -88,6 +89,7 @@
         v('g_in').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('contextmenu', (e) => {
           e.preventDefault(); st.sel_in = d.sw_in[+tr.dataset.i].id; checkAcc();
         }));
+        v('z_inred').onclick = () => inRedakte();                                       // popup Rdk 'Redaktə et' (Redaktet1Click :3595 -> Unit16)
         v('z_tranzit').onclick = () => tranzit();                                        // ToolButton7Click :5391 -> Tranzit_account.pas
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
@@ -222,6 +224,21 @@
             m.querySelector('#ca2').value = r.name;
             if (r.closed) { close(); load({}); }
           } catch (e) { toast(errT(e), 'error'); }
+        };
+      });
+    }
+    // Unit16.pas TrdkİN 'Redakte İN': Hesab № (Edit1), Vöen (Edit2), 'Yadda saxla' -> sw_main.UPDIN
+    function inRedakte() {
+      const r0 = (st.d.sw_in || []).find(x => x.id === st.sel_in);
+      if (!r0) return toast(K('pick_row'), 'error');
+      modal(`<h3>Redakte İN</h3><div class="toolbar" style="gap:8px;flex-wrap:wrap">
+        <label class="field"><span>Hesab №</span><input class="input" id="rd1" value="${esc(r0.acount || '')}"></label>
+        <label class="field"><span>Vöen</span><input class="input" id="rd2" value="${esc(r0.voin2 || '')}"></label></div>
+        <div class="actions"><button class="btn" id="rdok">Yadda saxla</button><button class="btn secondary" id="rdx">${esc(K('close'))}</button></div>`, (m, close) => {
+        m.querySelector('#rdx').onclick = close;
+        m.querySelector('#rdok').onclick = async () => {
+          try { await api(P + '/in-redakte', { method: 'POST', body: { id: r0.id, acount: m.querySelector('#rd1').value, voin2: m.querySelector('#rd2').value } }); close(); load({}); }
+          catch (e) { toast(errT(e), 'error'); }
         };
       });
     }

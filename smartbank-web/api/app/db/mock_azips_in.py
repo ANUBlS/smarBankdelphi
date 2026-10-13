@@ -86,6 +86,12 @@ class AzipsInMixin:
             _call(D, key, args)
             D.setdefault("ufx_sent", []).append(args[0])
             return {}
+        if key == "SW_MAIN.UPDIN":
+            _call(D, key, args)
+            for r in D["sw_in"]:
+                if str(r["ID"]) == args[2]:
+                    r["ACOUNT"], r["VOIN2"] = args[0], args[1]
+            return {}
         if key in ("SW_MAIN.UPD_NONE", "SW_MAIN.SW_TRANZIT_INSERT"):
             _call(D, key, args)
             if key == "SW_MAIN.SW_TRANZIT_INSERT":

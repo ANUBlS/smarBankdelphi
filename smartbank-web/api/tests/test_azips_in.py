@@ -147,3 +147,10 @@ def test_tranzit():
     assert len(I.tranzit_list(c)) == 2
     assert I.tranzit_delete(c, rows[0]["ROWID"]) and not I.tranzit_delete(c, "bogus")
     assert [r["MAIN_ACC"] for r in I.tranzit_list(c)] == ["A1"]
+
+
+def test_in_redakte_unit16():
+    c = conn()
+    assert I.in_redakte(c, Q.LINES_SW_IN, 5006, "AZ00X", "1234567890") == {"done": True}
+    assert calls("SW_MAIN.UPDIN")[0][1] == ["AZ00X", "1234567890", "5006"]
+    assert I.in_redakte(c, Q.LINES_SW_IN, 1, "a", "b") is None

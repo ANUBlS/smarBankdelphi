@@ -293,3 +293,13 @@ def tranzit_delete(conn, rowid: str):
     conn.execute("delete from SW_TRANSIT_ACC where rowid = :doa__rowid", {"doa__rowid": rowid})
     conn.commit()
     return True
+
+
+# ------------------------------------------------------------------ Unit16.pas TrdkİN (Redaktet1Click :3595, popup 'Redaktə et')
+def in_redakte(conn, lines, rid: int, acount: str, voin2: str):
+    """Button1Click: sw_main.UPDIN(Edit1 = Hesab №, Edit2 = Vöen, Edit3 = ID text); sw_in.Refresh; Close. No right, no commit.
+    (Unit4 IN_edit is only reachable from ToolButton5, which is Visible=False - not ported.)"""
+    if _row(conn, lines, rid) is None:
+        return None
+    conn.call_proc(Q.PKG_MAIN, "UPDIN", [acount, voin2, str(rid)], commit=False)
+    return {"done": True}
