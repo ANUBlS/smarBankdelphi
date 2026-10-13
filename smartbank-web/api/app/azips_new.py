@@ -15,7 +15,8 @@ and the browser is asked for the form17 input, then the same action is replayed 
 Button2 'Şablondan yüklə' :518-522, which only does Create + ShowModal) runs as a live sub-form: ShowModal fires FormActivate
 and returns to the browser without undoing anything; the grid, filters, title sort, 'Şablonu sil' and the double click are
 then sent as sub-form actions (template_act) and run the verbatim Unittemplate handlers on the same form state.
-TFormat102 (Unit15, MT102 radio) is not ported yet: it stops with a clear message.
+TFormat102 (Unit15) is unreachable: RadioButton3Click :3862-3864 has Create/ShowModal commented out, so the MT102 radio
+only rearranges the form (run verbatim). The guard below stays in case another path ever reaches it.
 """
 from __future__ import annotations
 import copy

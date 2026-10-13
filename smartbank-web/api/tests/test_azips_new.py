@@ -242,3 +242,15 @@ def test_interpreter_ranges_and_var_params():
     loc["k"] = "q"; r(I(), [("name", "k", 1)]); assert loc["k"] == "\x00"
     f = P.Routine(u, "f", S(), {})
     assert f.invoke([2]) == 1 and f.invoke([7]) == 1 and f.invoke([5]) == 0
+
+
+def test_mt102_radio_runs_verbatim():
+    """RadioButton3Click :3860 (MT102): the TFormat102.Create/ShowModal lines :3862-3864 are inside { } in the Delphi source,
+    so Unit15 is never opened; the handler only rearranges the form: Panel1/Panel2 hidden, Button5 shown, ComboBox3 index 0,
+    hidden at :3891 and shown again at :3919."""
+    ws, r = opened("1")
+    r = act(ws, r, "RadioButton3", "click")
+    assert r["error"] is None
+    assert C(r, "RadioButton3")["checked"] and not C(r, "Panel1")["visible"] and not C(r, "Panel2")["visible"]
+    assert C(r, "Button5")["visible"] and C(r, "ComboBox3")["visible"] and not C(r, "RadioButton1")["visible"]
+    assert not C(r, "OF72_RichEdit")["visible"]

@@ -354,7 +354,16 @@ so the `codex := strtoint(teyinat)` line becomes the else branch (with a /BNF/ t
 `case` after it still runs) - the interpreter follows the source. OF72_RichEditChange adds '/BNF/' back after the load (Unitazips :3646). Tests `test_azips_new.py`
 (template_*), E2E `e2e/azips_template_screens.py`, screenshots 136-137.
 Unverified: `sw_main.Templ_del` / `savetemplate` bodies and the `sw_templates` columns (from the grid FieldNames); Button1Click
-(templ.Refresh) has no Button1 in the .dfm (unreachable). Unit15 TFormat102 (MT102 radio) is still not ported.
+(templ.Refresh) has no Button1 in the .dfm (unreachable). Unit15 TFormat102: see 4g.
+
+## 4g. MT102 radio (done)
+`Tazips.RadioButton3Click` (Unitazips.pas:3860, wired at Unitazips.dfm:630) is run verbatim by the interpreter like the other radios.
+Its first lines `{Format102:= TFormat102.Create(Self); Format102.ShowModal; }` (:3862-3864) are a Delphi comment, and no other
+compiled unit creates TFormat102 (grep of Packages/Cards_New/FileReprt), so Unit15 is **never shown** in the bank's build. The radio
+only rearranges the form (Panel1/Panel2 hidden, Button5 shown, ComboBox3 ItemIndex 0, hidden :3891 then shown :3919, OF72 hidden,
+other radios hidden; Button1 by v_dey). Unit15.pas is therefore not copied; the `NOT_PORTED` guard stays only as a safety net.
+Test `test_mt102_radio_runs_verbatim`. Note for the later logic phase: Unit15's Button1/Button2 call `pack.saving102` (20 params,
+k/ids uninitialised-then-0) - if the bank wants a real MT102 editor, that is the Delphi code to start from.
 
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
@@ -371,7 +380,7 @@ between processes.
 ## Status: AZIPS COMPLETE (exact port)
 Parts 1-4f are done: lists/archives, OUT_FORM and editors, Azipsnew (interpreter) with Tform17 and Ttemplate, file creation (PACS.008),
 incoming file load, row actions, Modifikator, incoming postings with UFX, Checkacc / Tranzit, IN edit, settings forms, IN and OUT prints.
-Known open item inside the port: Unit15 TFormat102 (MT102 radio in Azipsnew) stops with a "not ported" message.
+No open items: the MT102 radio is closed in 4g (TFormat102 is unreachable in Delphi).
 
 ## Resume point
 Next module: XÖHKS = `Packages/LVPCSSManager_Turan` (docs/PARITY_XOHKS.md).
