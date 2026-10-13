@@ -57,10 +57,22 @@ class BalMixin:
 
     def _rests(self, day):
         day = _day(day)
-        return {r["ACC_ID"]: r for r in self.bal["archost"] if datetime.date.fromisoformat(r["DATDATE"]) == day}
+        return {r["ACC_ID"]: r for r in self._arch() if datetime.date.fromisoformat(r["DATDATE"]) == day}
+
+    # Off-balance (Out_) packages read the OUT_* twins of the tables (out_account, out_archost, out_provarch, ...).
+    # The fixture keeps one account list; accounts on an off-balance plan line (out_bal_cn) form the OUT_ tables.
+    _bal_out = False
+
+    def _outmode(self, text: str) -> None:
+        self._bal_out = bool(re.search(r"\bout_\w", text, re.I))
 
     def _accs(self):
-        return {a["ID"]: a for a in self.bal["accounts"]}
+        outs = set(self.bal["out_bal_cn"])
+        return {a["ID"]: a for a in self.bal["accounts"] if (a["BAL_CN1"] in outs) == self._bal_out}
+
+    def _arch(self):
+        accs = self._accs()
+        return [r for r in self.bal["archost"] if r["ACC_ID"] in accs]
 
     def _act(self, rest, field, spr):
         return L.mtoutview_active(rest.get(field), spr["TYPEID"], spr["ADDITIONALTYPEID"])
@@ -70,7 +82,7 @@ class BalMixin:
 
     # ------------------------------------------------------------------ packages
     def _bal_func(self, key, args, named):
-        if key in ("SB_BALANCEFILIDS.GETBANKDAY", "SB_BALANCE.GETBANKDAY"):
+        if key in ("SB_BALANCEFILIDS.GETBANKDAY", "SB_BALANCE.GETBANKDAY", "OUT_SB_BALANCEFILIDS.GETBANKDAY"):
             return _d(self.bal["tek_dat"])
         return NotImplemented
 
@@ -96,16 +108,18 @@ class BalMixin:
         return NotImplemented
 
     def _bal_plsql_out(self, sql, binds):
-        m = re.search(r"SB_BalanceFilIDs\.(\w+)\(", sql)
+        self._outmode(sql)
+        m = re.search(r"SB_BalanceFilIDs\.(\w+)\(", sql, re.I)
         if m and m.group(1) in L.BALANCE_PROCS:
             p = {k: (v.date().isoformat() if isinstance(v, datetime.datetime) else v) for k, v in binds.items()
                  if not hasattr(v, "typ")}
             p["proc"] = m.group(1)
+            p["out"] = self._bal_out
             head = ("Select FirstRemainder.FDate,FirstRemainder.FirstActive,FirstRemainder.FirstPassive,LastRemainder.LDate,"
                     "LastRemainder.LastActive,LastRemainder.LastPassive,TurnOver.DTurnOver,TurnOver.KTurnOver,B.BAL_CN,B.BALNAME From ")
             body = "(" + ("x" * 2100) + ")"    # long enough to exercise the 1999-char split of sb_OpenDataSet
             return {"Param1": head + body + "/*mock:" + json.dumps(p) + "*/", "Param2": " Union Select ..."}
-        if "SB_BalanceFilIDs.GetBankInfo" in sql:
+        if "sb_balancefilids.getbankinfo" in sql.lower():
             b = self.bal["bankinfo"][0]
             return {"p0": b["BANK"], "p1": b["KOD_B"], "p2": b["SEDR"], "p3": b["BUHALTR"]}
         return NotImplemented
@@ -117,7 +131,11 @@ class BalMixin:
         m = _MOCK_TAG.search(text)
         if not m or not text.endswith(" Order By Bal_CN"):
             raise DBError("ORA-00933: SQL command not properly ended")
-        return self._balance_rows(json.loads(m.group(1)))
+        p = json.loads(m.group(1))
+        if bool(p.get("out")) != ("out_sb_balancefilids" in sql.lower()):
+            raise DBError("ORA-00942: table or view does not exist")     # text of one package opened by the other
+        self._bal_out = bool(p.get("out"))
+        return self._balance_rows(p)
 
     # ------------------------------------------------------------------ Balance (sb_BalanceSelections semantics)
     def _balance_rows(self, p):
@@ -151,7 +169,7 @@ class BalMixin:
             return out
         fr, lr = agg(fdate), agg(ldate)
         turn = {}
-        for r in self.bal["archost"]:
+        for r in self._arch():
             d = datetime.date.fromisoformat(r["DATDATE"])
             a = accs[r["ACC_ID"]]
             if first <= d <= last and ok(a):
@@ -170,6 +188,7 @@ class BalMixin:
 
     # ------------------------------------------------------------------ DBDBalance (NON_EXSIST_DATES -> dbd_balance)
     def _dbd_fill(self, out, args):
+        self._bal_out = out
         first, last, branch = _day(args[0]), _day(args[1]), args[2]
         add = args[5] or ""
         filt = "".join(x for x in args[6:-1] if x) if not out else (args[6] or "")
@@ -182,14 +201,14 @@ class BalMixin:
         bals = re.search(r"bal_cn\d IN \(([\d, ]+)\)", filt)
         bals = {int(x) for x in bals.group(1).split(",")} if bals else None
         accnos = set(re.findall(r"'([A-Za-z0-9]+)'", filt)) if "acc_no IN" in filt else None
-        spr, accs, outs = self._spr(t), self._accs(), set(self.bal["out_bal_cn"])
+        spr, accs, outs = self._spr(t), {a["ID"]: a for a in self.bal["accounts"]}, set(self.bal["out_bal_cn"])
         ds = self._dates()
         rows = []
         day = first
         while day <= last:
             src = day if day in ds else max([x for x in ds if x < day], default=None)
             agg = {}
-            for aid, r in (self._rests(src).items() if src else []):
+            for aid, r in ({r["ACC_ID"]: r for r in self.bal["archost"] if r["DATDATE"] == src.isoformat()}.items() if src else []):
                 a = accs[aid]
                 bc = a[f"BAL_CN{t}"]
                 if (bc in outs) != out or bc not in spr:
@@ -218,6 +237,7 @@ class BalMixin:
 
     # ------------------------------------------------------------------ SQL
     def _bal_query(self, s, b):
+        self._outmode(s)
         B = self.bal
         st = self.bal_state
         # ---- Balance (UnitDataMod / BalanceImplUnit)
@@ -262,6 +282,9 @@ class BalMixin:
                 for r in rows:
                     r["BANK"], r["KOD_FIL"] = "Ümumi", -1
             return rows
+        if s == "select bank , inn , sedr , buhaltr , managertitle , accountanttitle , logo from bankinfo":
+            r = B["bankinfo"][0]
+            return [{k: r.get(k) for k in ("BANK", "INN", "SEDR", "BUHALTR", "MANAGERTITLE", "ACCOUNTANTTITLE", "LOGO")}]
         if s.startswith("select max(dat) as workdate from operkurs"):
             ds = [x for x in self._dates() if x <= _day(b["RealDate"])]
             return [{"WORKDATE": datetime.datetime.combine(max(ds), datetime.time()) if ds else None}]
@@ -277,7 +300,11 @@ class BalMixin:
         if s.startswith("select restforlastperiod.accountid"):
             return self._ba_account(s, b)
         if s.startswith("select t.id,t.op_id as operatorid"):
-            return self._ba_transactions(s, b)
+            rows = self._ba_transactions(s, b)
+            if self._bal_out:      # Out_ Transaction select list has no kreditbalans / debetbalans
+                for r in rows:
+                    r.pop("KREDITBALANS", None); r.pop("DEBETBALANS", None)
+            return rows
         if s.startswith("select sum(t.ammount) cem,d.bal_cn1 debetbalans ,c.bal_cn1 kreditbalans"):
             return self._ba_balacc(s, b)
         if s == "select * from user$ order by id":
@@ -294,7 +321,7 @@ class BalMixin:
             last = self._rests(self._dates()[-1])
             return [{"ID": a["ID"], "ACCOUNTNO": a["ACC_NO"], "ACCNAME": a["NAME"], "AMOUNT": last[a["ID"]]["OSTAT"],
                      "LAMOUNT": last[a["ID"]]["POK_OSTAT"], "DEBITTURNOVER": last[a["ID"]]["OBR_D"], "DEBITLTURNOVER": last[a["ID"]]["POK_OBR_D"],
-                     "CREDITTURNOVER": last[a["ID"]]["OBR_K"], "CREDITLTURNOVER": last[a["ID"]]["POK_OBR_K"]} for a in B["accounts"]]
+                     "CREDITTURNOVER": last[a["ID"]]["OBR_K"], "CREDITLTURNOVER": last[a["ID"]]["POK_OBR_K"]} for a in self._accs().values()]
         return None
 
     def _bal_execute(self, sql, binds):
@@ -361,14 +388,14 @@ class BalMixin:
     def _tb_iter(self, s, b):
         if "%s" in s or "%d" in s:
             raise DBError("ORA-00911: invalid character")
-        table = re.search(r"from (tenostat|archost) ar", s).group(1)
+        table = re.search(r"from (tenostat|archost|out_archost) ar", s).group(1)
         pre = "pok_" if "ar.pok_ostat" in s else ""
         fil = re.search(r"\(ac\.filial = (\d+)\)", s)
         cur = re.search(r"\(ac\.val_acc = (\d+)\)", s)
         bals = re.search(r"\(ac\.bal_cn1 in \(([\d, ]+)\)\)", s)
         day = _day(b["TargetDate"])
         today = datetime.date.fromisoformat(self.bal["tek_dat"])
-        if (table == "tenostat") != (day == today):
+        if table != "out_archost" and (table == "tenostat") != (day == today):
             return
         rests = self._rests(day)
         spr, accs = self._spr(1), self._accs()
@@ -383,10 +410,11 @@ class BalMixin:
             yield a, r, spr[a["BAL_CN1"]], pre.upper()
 
     def _prov(self, table):
-        return self.bal["provdoc" if table == "provdoc" else "provarch"]
+        accs = self._accs()
+        return [p for p in self.bal["provdoc" if table.endswith("provdoc") else "provarch"] if p["DEBT"] in accs and p["KREDIT"] in accs]
 
     def _tb_transactions(self, s, b):
-        table = re.search(r"from (provdoc|provarch) p", s).group(1)
+        table = re.search(r"from (provdoc|provarch|out_provarch) p", s).group(1)
         day = _day(b["TargetDate"])
         accs = self._accs()
         cur = {r["VALUTE"]: r["VAL_NAME"] for r in self.bal["avalute"]}
@@ -404,7 +432,7 @@ class BalMixin:
         plane = int(re.search(r"bal_spr(\d)", s).group(1))
         fil = re.search(r"(?:ac\.filial in|restforlastperiod\.branchid in) \(([\d,]+)\)", s)
         cur = re.search(r"(?:ac\.val_acc =|restforlastperiod\.currencyid =)(\d+)", s)
-        bals = re.search(r"\(b\.bal_cn in \(([\d.,]+)\) or b\.accgroup in", s)
+        bals = re.search(r"\(b\.bal_cn in \(([\d.,]+)\) or b\.accgroup in", s) or re.search(r"and b\.bal_cn in \(([\d.,]+)\)", s)
         return (pre, plane, {int(x) for x in fil.group(1).split(",")} if fil else None, int(cur.group(1)) if cur else None,
                 {int(float(x)) for x in bals.group(1).split(",")} if bals else None)
 
@@ -429,7 +457,7 @@ class BalMixin:
             return out
         first, last = rest(b["BeginPeriod"]), rest(b["EndDate"])
         turn = {}
-        for r in self.bal["archost"]:
+        for r in self._arch():
             a = accs[r["ACC_ID"]]
             if ok(a) and _day(b["BeginDate"]) <= datetime.date.fromisoformat(r["DATDATE"]) <= _day(b["EndDate"]):
                 t = turn.setdefault(a[f"BAL_CN{plane}"], [Decimal(0), Decimal(0)])
@@ -449,7 +477,7 @@ class BalMixin:
             sp = spr.get(a[f"BAL_CN{plane}"])
             if not sp or (fils is not None and a["FILIAL"] not in fils) or (cur is not None and a["VAL_ACC"] != cur):
                 continue
-            tr = [x for x in self.bal["archost"] if x["ACC_ID"] == aid and _day(b["BeginDate"]) <= datetime.date.fromisoformat(x["DATDATE"]) <= _day(b["EndDate"])]
+            tr = [x for x in self._arch() if x["ACC_ID"] == aid and _day(b["BeginDate"]) <= datetime.date.fromisoformat(x["DATDATE"]) <= _day(b["EndDate"])]
             if not tr:
                 continue
             fr = f.get(aid)
@@ -464,7 +492,7 @@ class BalMixin:
         accs = self._accs()
         cur = {r["VALUTE"]: r["VAL_NAME"] for r in self.bal["avalute"]}
         ops = {o["ID"]: o["NAME"] for o in self.bal["operators"]}
-        for p in self.bal["provarch"]:
+        for p in self._prov("provarch"):
             if _day(b["BeginDate"]) <= _d(p["DAT"]).date() <= _day(b["EndDate"]):
                 yield p, accs[p["DEBT"]], accs[p["KREDIT"]], cur, ops
 

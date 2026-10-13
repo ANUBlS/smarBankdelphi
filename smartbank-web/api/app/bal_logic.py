@@ -315,8 +315,9 @@ def ba_branch_condition(checked: list[int], all_ids: list[int]) -> bool:
 
 
 def ba_balance_sql(sql: str, checked: list[int], all_ids: list[int], currency_on: bool, currency: int | None,
-                   balances: str, view_index: int, plan_index: int) -> tuple[str, str]:
-    """BalanceAnalysImpl.pas BuildBalance."""
+                   balances: str, view_index: int, plan_index: int, with_group: bool = True) -> tuple[str, str]:
+    """BalanceAnalysImpl.pas BuildBalance. with_group=False: Out_BalanceAnalys/BalanceAnalysImpl.pas:556
+    'b.bal_cn in (...)' only."""
     cond = ""
     foreign = currency_on and view_index == 0
     plane = plan_index + 1
@@ -328,7 +329,7 @@ def ba_balance_sql(sql: str, checked: list[int], all_ids: list[int], currency_on
         b = balances.strip()
         if not _NUMLIST.match(b) or not re.match(r"^\d+(\.\d+)?(,\d+(\.\d+)?)*$", b):
             raise BalError("balance.err_balances")
-        cond += " AND " + "(b.bal_cn in (" + b + ") or b.accgroup in (" + b + "))"
+        cond += " AND " + ("(b.bal_cn in (" + b + ") or b.accgroup in (" + b + "))" if with_group else "b.bal_cn in (" + b + ")")
     L = sql_lines(sql)
     pre = "" if foreign else "POK_"
     for i in (10, 17, 30, 31, 41, 48):

@@ -173,14 +173,15 @@
   function renderTree() {
     const q = S.search.trim().toLowerCase();
     const hl = (s) => { if (!q) return esc(s); const i = s.toLowerCase().indexOf(q); return i < 0 ? esc(s) : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + q.length)) + '</mark>' + esc(s.slice(i + q.length)); };
-    const match = (n) => !q || n.caption.toLowerCase().includes(q) || n.children.some(match);
+    const cap = (n) => n.caption_key ? t(n.caption_key) : n.caption;   // web-only locale key for captions added by the port
+    const match = (n) => !q || cap(n).toLowerCase().includes(q) || n.children.some(match);
     const build = (nodes) => '<ul>' + nodes.filter(match).map(n => {
       const folder = n.children.length > 0;
       const denied = n.clsid && !n.allowed;
       const ico = folder ? '📁' : (denied ? '🔒' : '📄');
       return `<li class="${folder ? 'folder' : ''} ${folder && !q ? 'closed' : ''}">
         <div class="node ${denied ? 'denied' : ''} ${S.activePath === n.path ? 'active' : ''}" data-path="${esc(n.path)}" ${denied ? `title="${esc(t('tree.denied'))}"` : ''} tabindex="0">
-          <span class="tw">${folder ? '▸' : ''}</span><span class="ico">${ico}</span><span class="cap">${hl(n.caption)}</span></div>
+          <span class="tw">${folder ? '▸' : ''}</span><span class="ico">${ico}</span><span class="cap">${hl(cap(n))}</span></div>
         ${folder ? build(n.children) : ''}</li>`;
     }).join('') + '</ul>';
     const el = document.getElementById('tree');
@@ -196,14 +197,15 @@
     });
   }
   const findNode = (ns, p) => { for (const n of ns) { if (n.path === p) return n; const f = findNode(n.children, p); if (f) return f; } return null; };
-  const slugFor = (clsid) => (S.modules[clsid] && S.modules[clsid].route) || '/m/unknown';
+  // variant key '<CLSID>@<params>' first: Out_BalanceAnalys shares the BalanceAnalys CLSID (tree Action '#n@Out')
+  const slugFor = (clsid, params) => { const m = (params && S.modules[clsid + '@' + params]) || S.modules[clsid]; return (m && m.route) || '/m/unknown'; };
 
   async function openNode(n) {
     if (!n.allowed) { toast(t('tree.denied'), 'error'); return; }
     try {
       const r = await api('/api/modules/open', { method: 'POST', body: { path: n.path } });
       S.activePath = n.path;
-      location.hash = '#' + slugFor(r.clsid) + '?node=' + encodeURIComponent(n.path);
+      location.hash = '#' + slugFor(r.clsid, r.params) + '?node=' + encodeURIComponent(n.path);
     } catch (e) { toast(t(e.key, e), 'error'); }
   }
 
