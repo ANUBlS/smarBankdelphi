@@ -308,6 +308,7 @@ def form_open(ws, mode: str, rid: int | None = None) -> dict:
              DBEdit17=_asstr(car[0].get("OSTAT")) if car else "")                        # Edit33 is hidden at the end; DBEdit17 shows OSTAT
     out.update(fields=f, enabled=False)
     _form_state(ws, "EDIT", hes, out["cards"], cur)
+    _fs_need(ws).update(ops_rbs=multi, ops=[r.get("id") for r in out["operations"]], credits=[r.get("id") for r in out["credits"]])
     return out
 
 
@@ -426,6 +427,23 @@ class FormIn(BaseModel):
     id: int | None = None
 
 
+class IdIn(BaseModel):
+    id: int
+
+
+class ComboEnterIn(BaseModel):
+    combo: str
+    items: list[str] = []
+    item_index: int = -1
+
+
+class MultiIn(BaseModel):
+    multi1: bool = False
+    multi2: bool = False
+    acc1: str = ""
+    acc2: str = ""
+
+
 class DeleteIn(BaseModel):
     id: int
     confirmed: bool = False
@@ -508,6 +526,32 @@ def make_router(current, require_module, err):
         if bad:
             err(400, "error.bad_request")
         return _fe(save, ws, b)
+
+    @r.post("/clients/form/card-click")
+    def _g5(b: Button3In, ws=Depends(g)):
+        return _fe(grid5_click, ws, b.card_id)
+
+    @r.post("/clients/form/credit-info")
+    def _g1(b: IdIn, ws=Depends(g)):
+        return _fe(credit_info, ws, b.id)
+
+    @r.post("/clients/form/delete-application")
+    def _sil(b: IdIn, ws=Depends(g)):
+        return _fe(delete_application, ws, b.id)
+
+    @r.post("/clients/form/combo-enter")
+    def _ce(b: ComboEnterIn, ws=Depends(g)):
+        if b.combo not in ("ComboBox1", "ComboBox2"):
+            err(400, "error.bad_request")
+        return _fe(combo_enter, ws, b.combo, b.items, b.item_index)
+
+    @r.post("/clients/form/multi/open")
+    def _mo(ws=Depends(g)):
+        return _fe(multi_open, ws)
+
+    @r.post("/clients/form/multi/save")
+    def _ms(b: MultiIn, ws=Depends(g)):
+        return _fe(multi_save, ws, b)
 
     @r.post("/clients/delete")
     def _de(b: DeleteIn, ws=Depends(g)):
@@ -742,6 +786,7 @@ def save(ws, b) -> dict:
 
     def reopen_ops():                                    # CARDOPERATION Close / SetVariable('RBS', DBLookupComboBox6.Text) / Open
         out["operations"] = [row(r) for r in _q(conn, Q.LINES_CARDOPERATION, {"RBS": f["DBLookupComboBox6"]})]
+        fs.update(ops_rbs=f["DBLookupComboBox6"], ops=[r.get("id") for r in out["operations"]])
         out["fields"]["ComboBox9"] = ""
 
     def credit_check():                                  # hesabtap / findcredit (:1287-1300, branch 5)
@@ -775,6 +820,7 @@ def save(ws, b) -> dict:
                             _q(conn, Q.LINES_FINDCREDIT, {"acc": int((h[0].get("ID") if h else 0) or 0)})
                             if b.checkbox4:
                                 out["multicurrency"] = {"Edit3": f["DBLookupComboBox6"], "Edit4": "new"}
+                                fs["multi"] = dict(f=dict(f), urg=urg, kr=kr, wt=wt, edit2=edit2, edit3=f["DBLookupComboBox6"], edit4="new")
                             else:
                                 msgs.append(("added", {}))
                             out["close"] = True
@@ -797,6 +843,7 @@ def save(ws, b) -> dict:
                         msgs.append(("sub_of_sub", {}))
                     if b.checkbox4:
                         out["multicurrency"] = {"Edit3": f["DBLookupComboBox6"], "Edit4": "edit"}
+                        fs["multi"] = dict(f=dict(f), urg=urg, kr=kr, wt=wt, edit2=edit2, edit3=f["DBLookupComboBox6"], edit4="edit")
                     msgs.append(("saved", {}))
                     reopen_ops()
                 else:
@@ -845,3 +892,166 @@ def save(ws, b) -> dict:
     if out.get("confirm"):
         out["confirm"] = {"key": out["confirm"][0], "args": out["confirm"][1]}
     return out                                           # edit2 is not reset by Delphi (only ComboBox9.Text := '')
+
+
+# ------------------------------------------------------------------------------------------------ Tclients2 step 2c
+# creditinfopas.dfm:296 krinfo.CM_ACTIVE (Tkrinfo form, not in Unit18) - verbatim SQL.Strings
+LINES_CM_ACTIVE = ['select *', '  from', '    cm_active where id=:ids', '  ', ' ']
+# multiform.dfm OracleDataSet1 (TMultiCurrency) - verbatim SQL.Strings
+LINES_MULTI_ACC = ['select *', ' from account  ', 'where ', '',
+                   "(close_dat is null) and ((kli_id =:CID) or (Acc_NO like (:p_AccNO))) and (bal_cn1 in (select balans from card_balcn)) order by acc_no ",
+                   '']
+KRINFO_COLS = ["NUMBEROFCREDIT", "CONTRACTACCNO", "VAL_NAME", "NAME", "ANNUALYINTERESTRATE", "REST", "INTERESTREST", "DUEREST",
+               "DUEINTERESTREST", "CREDITLINEAMOUNT", "INITIALAMOUNT", "ANNUALYOVERDUERATE", "ANNUALYPENALTYRATE", "DATEOFCONCLUSION",
+               "DUEDATEFIRSTCONTRACT", "PURPOSEOFCREDIT", "ID", "STOPCALCDATE", "OBLIGATION", "PLEDGEPRICE", "DUEDATELASTCONTRACT",
+               "BOOROWERREST", "INTERESTACCNO", "DUELOANACCNO", "LOANACCNO", "PENALTYREST"]   # creditinfopas.dfm MainGrid columns
+
+
+def _asdate(v) -> str:
+    """.AsDateTime into a TDateTimePicker: a date value, a string field via StrToDate (dd.mm.yyyy), NULL = 0 = 30.12.1899."""
+    if isinstance(v, datetime.datetime):
+        return v.date().isoformat()
+    if isinstance(v, datetime.date):
+        return v.isoformat()
+    s = _asstr(v)
+    if len(s) >= 10 and s[2] == "." and s[5] == ".":
+        return s[6:10] + "-" + s[3:5] + "-" + s[0:2]
+    if len(s) >= 10 and s[4] == "-":
+        return s[:10]
+    return "1899-12-30"
+
+
+def grid5_click(ws, card_id) -> dict:
+    """DBGrid5CellClick :2406 = DBGrid5DblClick :2278 (identical bodies): the boxes are filled from the clicked cliencards row
+    (Edit28 is not - commented out; DateTimePicker5 := DATEOPEN, DateTimePicker6/8 := EXPIRY; CheckBox2 := False), then every box
+    is disabled including ComboBox9, ComboBox8 and ComboBox5 (grids stay enabled). No right check, no SQL."""
+    _need(ws)
+    fs = _fs_need(ws)
+    c = next((x for x in fs["cards"] if x.get("id") == card_id), None)
+    if c is None:
+        raise LookupError(card_id)
+    f = {}
+    for k, col in (("Edit15", "FNAME"), ("Edit16", "LNAME"), ("Edit18", "PASSPORT"), ("Edit17", "HOMEPHONE"), ("Edit27", "WORKPHONE"),
+                   ("Edit20", "COUNTRY"), ("Edit19", "CITY"), ("Edit22", "ADDRESS"), ("ComboBox4", "RESIDENT"), ("ComboBox1", "CARDTYPE"),
+                   ("ComboBox12", "CARDSTATUS"), ("Edit26", "REFERENCE"), ("Edit23", "EMBOSSNAME"), ("ComboBox2", "COMPANY"),
+                   ("Edit25", "SECURITY"), ("Edit21", "LANG_CODE"), ("ComboBox11", "TYPES"), ("ComboBox10", "TITUL"), ("Edit24", "CARDNUMBER")):
+        f[k] = _fs(c.get(col.lower()))
+    f["DateTimePicker7"] = _asdate(c.get("birthday"))
+    f["DateTimePicker5"] = _asdate(c.get("dateopen"))
+    f["DateTimePicker6"] = _asdate(c.get("expiry"))
+    f["DateTimePicker8"] = _asdate(c.get("expiry"))
+    off = ("Edit15", "Edit16", "Edit18", "DateTimePicker7", "Edit17", "Edit27", "Edit20", "Edit19", "Edit22", "ComboBox4", "DBLookupComboBox6",
+           "ComboBox1", "ComboBox12", "Edit28", "DateTimePicker8", "Edit26", "Edit23", "ComboBox2", "Edit25", "Edit21", "CheckBox2", "Edit14",
+           "ComboBox11", "ComboBox10", "ComboBox9", "ComboBox8", "ComboBox5")
+    return {"fields": f, "enabled": {k: False for k in off}, "checkbox2": False}
+
+
+def credit_info(ws, credit_id) -> dict:
+    """DBGrid1DblClick :556: if allclientcredits.RecordCount > 0 -> Tkrinfo, CM_ACTIVE(ids = allclientcredits.id) Open, ShowModal.
+    The id must be a row of the allclientcredits grid the form opened."""
+    _need(ws)
+    fs = _fs_need(ws)
+    if credit_id not in (fs.get("credits") or []):
+        raise LookupError(credit_id)
+    rows = [row(r) for r in _q(ws.conn, LINES_CM_ACTIVE, {"ids": int(credit_id)})]
+    return {"columns": KRINFO_COLS, "rows": rows}
+
+
+def delete_application(ws, app_id) -> dict:
+    """SIL1Click :2114 (DBGrid6 PopupMenu1 'SIL'): mainpacket (card_main).delete_application(DBGrid6.id) - no confirmation, no right
+    check, no commit (as Delphi) - then DBGrid6 (CARDOPERATION) Refresh with its current RBS variable."""
+    _need(ws)
+    fs = _fs_need(ws)
+    if app_id not in (fs.get("ops") or []):
+        raise LookupError(app_id)
+    ws.conn.call_proc("card_main", "delete_application", [int(app_id)], commit=False)
+    ops = [row(r) for r in _q(ws.conn, Q.LINES_CARDOPERATION, {"RBS": fs.get("ops_rbs")})]
+    fs["ops"] = [r.get("id") for r in ops]
+    return {"operations": ops}
+
+
+def combo_enter(ws, combo: str, items: list, item_index: int) -> dict:
+    """ComboBox1Enter :1462 / ComboBox2Enter :1623, verbatim behaviour including the quirks:
+    ComboBox1: ItemIndex = 0 -> Clear, CARDTYPES reopened (ItemIndex is then -1); ItemIndex <> 0 -> for i := 0 to RecordCount:
+      i = 0 adds ' ' to *ComboBox9* (not ComboBox1), else ComboBox1 gets NAME and Next - so the names are appended again (duplicates
+      when the list was not cleared).
+    ComboBox2: always Clear, COMPANi reopened; ItemIndex is -1 after Clear, so ' ' + every COMPANY_NAME is added."""
+    _need(ws)
+    _fs_need(ws)
+    out = {"combobox9_add": 0}
+    if combo == "ComboBox1":
+        names = None
+        if item_index == 0:
+            items, item_index = [], -1
+            names = [_asstr(r.get("NAME")) for r in _q(ws.conn, Q.LINES_CARDTYPES)]
+        if item_index != 0:
+            if names is None:                            # CARDTYPES is not reopened: its cursor is where FormShow / the last Enter left it
+                names = [_asstr(r.get("NAME")) for r in _q(ws.conn, Q.LINES_CARDTYPES)]   # unverified: the web re-reads from First
+            items = list(items) + names
+            out["combobox9_add"] = 1
+        out.update(items=items, item_index=item_index)
+        return out
+    rows = _q(ws.conn, Q.LINES_COMPANI)
+    out.update(items=[" "] + [_asstr(r.get("COMPANY_NAME")) for r in rows], item_index=-1)
+    return out
+
+
+def multi_open(ws) -> dict:
+    """TMultiCurrency FormShow: OracleDataSet1 (CID = clients2.Edit14, p_AccNO NULL) Open. Shown after Button2Click with CheckBox4."""
+    _need(ws)
+    m = _fs_need(ws).get("multi")
+    if not m:
+        raise LookupError("multi")
+    cid = m["f"].get("Edit14", "")
+    cid = int(cid) if cid.strip().lstrip("-").isdigit() else cid
+    rows = _q(ws.conn, LINES_MULTI_ACC, {"CID": cid, "p_AccNO": None})
+    m["accounts"] = {_asstr(r.get("ACC_NO")): _asstr(r.get("CURRENCYNAME")) for r in rows}
+    return {"edit3": m["edit3"], "edit4": m["edit4"],
+            "accounts": [{"acc": a, "currency": c} for a, c in m["accounts"].items()]}
+
+
+def multi_save(ws, b) -> dict:
+    """TMultiCurrency.Button1Click (multiform.pas): max Close/Open; Edit1/Edit2 = currencyname of the picked account
+    (DBLookupComboBox1Change / DBLookupComboboxEh2Change). 'new': multi2 then multi1, each new_card(..., acc, currency, ..., edit2 = 1,
+    ..., DateTimePicker2, Edit3) after referens Close/Open (its value is discarded); the multi1 call shows 'Yeni Multikart əlavə edildi!'.
+    'edit': referens -> clients2.Edit26; fmaincard(CRD = Edit24) opened (not tested); multi1 then multi2, each edit_card(..., acc,
+    clients2.DBEdit18, ..., Edit2, ..., Edit24, wt, DateTimePicker2, Edit3); multi1 shows ' Sub Multikart əlavə edildi!'. No commit."""
+    _need(ws)
+    conn = ws.conn
+    fs = _fs_need(ws)
+    m = fs.get("multi")
+    if not m or "accounts" not in m:
+        raise LookupError("multi")
+    acc = m["accounts"]
+    for a, on in ((b.acc1, b.multi1), (b.acc2, b.multi2)):
+        if on and a not in acc and a != "":
+            raise LookupError(a)
+    e1, e2 = acc.get(b.acc1, ""), acc.get(b.acc2, "")
+    f = dict(m["f"])
+    _q(conn, Q.LINES_MAX)
+    msgs = []
+
+    def args(accno, cur, edit2, tail):
+        g = dict(f, DBLookupComboBox6=accno, DBEdit18=cur)
+        return _card_args(g, edit2, m["urg"], m["kr"], f["Edit28"], tail, m["wt"]) + [m["edit3"]]
+
+    if m["edit4"] == "new":
+        if b.multi2:
+            _q(conn, Q.LINES_REFERENS)
+            conn.call_proc("card_main", "new_card", args(b.acc2, e2, 1, False), commit=False)
+        if b.multi1:
+            _q(conn, Q.LINES_REFERENS)
+            conn.call_proc("card_main", "new_card", args(b.acc1, e1, 1, False), commit=False)
+            msgs.append("multi_added")
+    if m["edit4"] == "edit":
+        ref = _q(conn, Q.LINES_REFERENS)
+        f["Edit26"] = _asstr(ref[0].get("REFE")) if ref else ""
+        _q(conn, Q.LINES_FMAINCARD, {"CRD": f["Edit24"]})
+        if b.multi1:
+            conn.call_proc("card_main", "edit_card", args(b.acc1, f["DBEdit18"], m["edit2"], True), commit=False)
+            msgs.append("multi_sub_added")
+        if b.multi2:
+            conn.call_proc("card_main", "edit_card", args(b.acc2, f["DBEdit18"], m["edit2"], True), commit=False)
+    fs["multi"] = None
+    return {"messages": [{"key": k, "args": {}} for k in msgs], "edit1": e1, "edit2": e2, "fields": {"Edit26": f["Edit26"]},
+            "multiacc": b.acc1, "multival": e1}

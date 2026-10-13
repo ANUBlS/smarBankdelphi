@@ -178,7 +178,7 @@ def test_new_required_and_account_fill():
     r = P("/clients/form/save", {"fields": f})
     assert [m["key"] for m in r["messages"]] == ["required"] and not r["close"]
     r = P("/clients/form/edit14", {"edit14": "501"})
-    assert r["accounts"] == ["38110019440000000001"] and r["fields"]["Edit_acc_name"] == "Mammadov Elchin"
+    assert r["accounts"] == ["38110018400000000101", "38110019440000000001", "38110019780000000102"] and r["fields"]["Edit_acc_name"] == "Mammadov Elchin"
     r = P("/clients/form/account", {"acc": "38110019440000000001", "edit14": "501"})
     g = r["fields"]
     assert g["Edit14"] == "501" and g["Edit15"] == "Elchin" and g["Edit18"] == "AZE C1234567" and g["Edit27"] == "0501234567"
@@ -251,7 +251,65 @@ def test_edit_rbs_change_and_rights():
     MC.reset()
     f = _edit_form()
     r = P("/clients/form/apptype", {"text": "RBS Change", "edit14": f["Edit14"]})
-    assert r["accounts"] == ["38110019440000000001"] and r["fields"]["DBLookupComboBox6"] == "" and r["enabled"]["DBLookupComboBox6"]
+    assert r["accounts"] == ["38110018400000000101", "38110019440000000001", "38110019780000000102"] and r["fields"]["DBLookupComboBox6"] == "" and r["enabled"]["DBLookupComboBox6"]
     login("TELLER", "Teller#2026"); P("/clients/open")
     assert client.post(B + "/clients/form/save", json={"fields": {}}).status_code in (400, 403, 409)
     assert client.post(B + "/clients/form/save", json={"fields": {"Bogus": "1"}}).status_code in (400, 403)
+
+
+# ---------------------------------------------------------------------------------------------------- step 2c
+def test_grid5_click_fills_and_disables():
+    login(); P("/clients/open"); P("/clients/form", {"mode": "EDIT", "id": 1})
+    r = P("/clients/form/card-click", {"card_id": 1})
+    f = r["fields"]
+    assert f["Edit15"] == "Elchin" and f["Edit24"] == "4169730000001111" and "Edit28" not in f      # Edit28 line commented out
+    assert f["DateTimePicker6"] == f["DateTimePicker8"] and f["DateTimePicker5"] != "1899-12-30"
+    assert r["enabled"]["ComboBox9"] is False and r["enabled"]["ComboBox5"] is False and all(v is False for v in r["enabled"].values())
+    P("/clients/form/card-click", {"card_id": 999}, 409)
+
+
+def test_credit_info_krinfo():
+    login(); P("/clients/open"); P("/clients/form", {"mode": "EDIT", "id": 1})
+    r = P("/clients/form/credit-info", {"id": 71})
+    assert r["rows"][0]["numberofcredit"] == "KR-2025-071" and r["columns"][0] == "NUMBEROFCREDIT" and len(r["columns"]) == 26
+    P("/clients/form/credit-info", {"id": 72}, 409)                          # not a row of allclientcredits
+
+
+def test_delete_application_sil():
+    login(); P("/clients/open"); r = P("/clients/form", {"mode": "EDIT", "id": 1})
+    oid = r["operations"][0]["id"]
+    out = P("/clients/form/delete-application", {"id": oid})
+    assert out["operations"] == []
+    P("/clients/form/delete-application", {"id": oid}, 409)
+
+
+def test_combo_enter_quirks():
+    login(); P("/clients/open"); r = P("/clients/form", {"mode": "NEW"})
+    ct = r["cardtypes"]
+    a = P("/clients/form/combo-enter", {"combo": "ComboBox1", "items": ct, "item_index": 0})
+    assert a["items"] == ct and a["item_index"] == -1 and a["combobox9_add"] == 1        # cleared, then appended once
+    b = P("/clients/form/combo-enter", {"combo": "ComboBox1", "items": ct, "item_index": 1})
+    assert b["items"] == ct + ct                                                       # appended again (Delphi duplicates)
+    c = P("/clients/form/combo-enter", {"combo": "ComboBox2", "items": ["x"], "item_index": 2})
+    assert c["items"] == [" ", "TURANBANK", "AZERSUN"]
+    P("/clients/form/combo-enter", {"combo": "ComboBox3"}, 400)
+
+
+def test_multicurrency_new():
+    MC.reset()
+    f = _new_form()
+    P("/clients/form/edit14", {"edit14": "501"})
+    f.update(P("/clients/form/account", {"acc": "38110019440000000001", "edit14": "501"})["fields"])
+    f.update(DBLookupComboBox6="38110019440000000001", ComboBox1="VISA CLASSIC", Edit23="MAMMADOV ELCHIN", Edit25="ANA",
+             Edit14="501", DateTimePicker8=(datetime.date.today() + datetime.timedelta(days=900)).isoformat())
+    P("/clients/form/multi/open", {}, 409)                                      # nothing pending
+    r = P("/clients/form/save", {"fields": f, "checkbox4": True})
+    assert r["multicurrency"]["Edit4"] == "new"
+    o = P("/clients/form/multi/open")
+    assert [a["acc"] for a in o["accounts"]] == ["38110018400000000101", "38110019440000000001", "38110019780000000102"]
+    n = len(_apps())
+    m = P("/clients/form/multi/save", {"multi1": True, "multi2": True, "acc1": "38110018400000000101", "acc2": "38110019780000000102"})
+    assert [x["key"] for x in m["messages"]] == ["multi_added"] and m["edit1"] == "USD" and m["edit2"] == "EUR"
+    new = _apps()[n:]
+    assert [x["RBSNUMBER"] for x in new] == ["38110019780000000102", "38110018400000000101"]        # multi2 first, then multi1
+    P("/clients/form/multi/save", {"multi1": True}, 409)                        # consumed

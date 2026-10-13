@@ -110,6 +110,18 @@ The card_main.mainfind body (TIP column) is not in the repo; the mock returns MA
 
 Unverified (2b): card_main.new_card / edit_card / setreference / findcredit2 and convertpack.convert_int bodies (not in the repo; the mock writes one card_client_app row per call, setreference is a counter); whether new_card / edit_card commit internally; the TDBLookupComboboxEh moving the hesab cursor to the picked account (assumed); DateToStr / FloatToStr with the Azerbaijani locale (dd.mm.yyyy, ',' decimal separator); CheckBox2 / CheckBox3 captions (shown as 'Urgent' / 'KR'); the ComboBox9 items are the card_applicationtype.TYPE values, which must equal the Delphi literals ('Suppl.Card', 'Prolongation', …) on the real DB for any branch to run; musterinfo with no row (Delphi raises on the NULL Variant; the web returns an error). MultiCurrency (CheckBox4) form not migrated yet. Screenshots 168-171.
 
+## Step 2c: Tclients2 remaining handlers – done
+
+| Delphi | Web | Notes |
+|---|---|---|
+| DBGrid5CellClick :2406 = DBGrid5DblClick :2278 (identical bodies) | `POST /clients/form/card-click {card_id}` | boxes from the cliencards row (Edit28 not: commented out); DateTimePicker5 DATEOPEN, 6/8 EXPIRY; CheckBox2 False; everything disabled incl. ComboBox9/8/5. No SQL, no right |
+| DBGrid1DblClick :556 → Tkrinfo (creditinfopas.pas) | `POST /clients/form/credit-info {id}` | RecordCount > 0; CM_ACTIVE (creditinfopas.dfm:296 `select * from cm_active where id=:ids`) by allclientcredits.id; 26 MainGrid columns. The id must be in the opened allclientcredits grid |
+| SIL1Click :2114 (DBGrid6 PopupMenu1 'SIL') | right-click a DBGrid6 row → SIL → `POST /clients/form/delete-application {id}` | card_main.delete_application(id); no confirmation, no right, no commit (as Delphi); CARDOPERATION Refresh with its current RBS |
+| ComboBox1Enter :1462 / ComboBox2Enter :1623 | focus → `POST /clients/form/combo-enter` | quirks kept: ComboBox1 ItemIndex 0 → Clear + CARDTYPES reopen; ItemIndex ≠ 0 → names appended (duplicates) and ' ' added to *ComboBox9*. ComboBox2 always Clear + COMPANi + ' ' + names |
+| TMultiCurrency (multiform.pas), from Button2Click with CheckBox4 | `POST /clients/form/multi/open`, `/multi/save` | FormShow: OracleDataSet1 (same SQL as hesab) CID = Edit14. Button1Click: max reopened; 'new': multi2 then multi1 → new_card(..., acc, currencyname, ..., 1, ..., DateTimePicker2, Edit3); multi1 shows 'Yeni Multikart əlavə edildi!'. 'edit': referens → Edit26, fmaincard opened, multi1 then multi2 → edit_card(..., acc, DBEdit18, ..., edit2, ..., Edit24, wt, DateTimePicker2, Edit3); multi1 shows ' Sub Multikart əlavə edildi!'. No commit. The clients2 values are kept server-side from the save that opened it |
+
+Unverified (2c): card_main.delete_application body (mock deletes the card_client_app row); `account.currencyname` column (used by multiform, mock adds it); new_card / edit_card with the extra 31st/33rd Edit3 argument (overload in card_main not in the repo; mock stores it as MULTI_ACC); ComboBox1Enter with ItemIndex ≠ 0 does not reopen CARDTYPES, so Delphi reads from wherever the cursor is (likely EOF → the last name repeated); the web re-reads all names. TDBLookupComboboxEh moving the OracleDataSet1 cursor to the picked account (assumed, as hesab). Screenshots 172-175.
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya.
@@ -119,4 +131,4 @@ Unverified (2b): card_main.new_card / edit_card / setreference / findcredit2 and
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Step 2c: Tclients2 remaining: DBGrid5 CellClick :2278 / DblClick :2406, DBGrid1DblClick (krinfo), SIL1Click (delete_application on DBGrid6), ComboBox1Enter / ComboBox2Enter reloads, TMultiCurrency (CheckBox4) form. Then plan step 2 (Applications, Yeni kartlar U9, Verifikasiya).
+Plan step 2: Applications (applicationpas.pas, N9Click :1068, right card_application), then Yeni kartlar (U9, N10Click :1082), Verifikasiya (unitverification.pas).

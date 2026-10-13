@@ -41,6 +41,35 @@
   // Edit14KeyPress :468, DBLookupComboBox6 :2120-2248, CheckBox1Click (emboss name), Button2 'Yadda saxla' :676, Button4 'Bağla'.
   const CBI = { ComboBox4: ['RESIDENT', 'NON-RESIDENT'], ComboBox5: ['WITH', 'WITHOUT'], ComboBox10: ['', 'DR', 'DR.', 'MISS', 'MR', 'MR.', 'MRS', 'MRS.', 'MS', 'MS.', 'Ms', 'PR', 'PR.'],
     ComboBox11: ['', 'VIP'], ComboBox12: ['CARD OK', 'Card Do Not Honor -05', 'PickUp-04', 'PickUp L-41', 'PickUp S-43', 'Z-Decline-57'] };
+  // a second dialog on top of the Tclients2 modal (Tkrinfo / TMultiCurrency are ShowModal'ed from inside it)
+  function sub(html, onMount) {
+    const w = document.createElement('div'); w.className = 'backdrop'; w.style.zIndex = 1100;
+    w.innerHTML = `<div class="modal" role="dialog">${html}</div>`; document.body.appendChild(w);
+    const close = () => w.remove(); onMount && onMount(w.querySelector('.modal'), close); return close;
+  }
+
+  // TMultiCurrency (multiform.pas): shown modally from Button2Click when CheckBox4 (MultiCard) is ticked
+  function multi(mc) {
+    return new Promise(async (done) => {
+      let o; try { o = await api(P + '/clients/form/multi/open', { method: 'POST', body: {} }); } catch (e) { toast(errT(e), 'error'); return done(); }
+      const opts = `<option></option>` + o.accounts.map(a => `<option value="${esc(a.acc)}">${esc(a.acc)}</option>`).join('');
+      sub(`<h2>MultiCurrency</h2>
+        <div style="display:grid;grid-template-columns:auto 1fr 60px;gap:6px;align-items:center">
+          <label><input type="checkbox" id="mc_m1"> Multihesab 1</label><select id="mc_a1" style="background:#7fffff">${opts}</select><input id="mc_e1" disabled style="background:#7fffff">
+          <label><input type="checkbox" id="mc_m2"> Multihesab 2</label><select id="mc_a2" style="background:#7fffff">${opts}</select><input id="mc_e2" disabled style="background:#7fffff"></div>
+        <div class="actions"><button class="btn" id="mc_save">${esc(K('b_save'))}</button></div>`, (mm, cl) => {
+        const cur = (a) => (o.accounts.find(x => x.acc === a) || {}).currency || '';
+        mm.querySelector('#mc_a1').onchange = (e) => mm.querySelector('#mc_e1').value = cur(e.target.value);   // DBLookupComboBox1Change
+        mm.querySelector('#mc_a2').onchange = (e) => mm.querySelector('#mc_e2').value = cur(e.target.value);   // DBLookupComboboxEh2Change
+        mm.querySelector('#mc_save').onclick = async () => {
+          let r; try { r = await api(P + '/clients/form/multi/save', { method: 'POST', body: { multi1: mm.querySelector('#mc_m1').checked, multi2: mm.querySelector('#mc_m2').checked,
+            acc1: mm.querySelector('#mc_a1').value, acc2: mm.querySelector('#mc_a2').value } }); } catch (e) { toast(errT(e), 'error'); return; }
+          (r.messages || []).forEach(x => toast(K('msg_' + x.key), 'success')); cl(); done(r);
+        };
+      });
+    });
+  }
+
   async function form(mode, id) {
     let d;
     try { d = await api(P + '/clients/form', { method: 'POST', body: { mode, id } }); } catch (e) { toast(errT(e), 'error'); return; }
@@ -92,7 +121,33 @@
         const say = async (r) => { if (!r) return; if (r.error) toast(r.error, 'error');
           for (const x of r.messages || []) toast(K('msg_' + x.key).replace('{date}', (x.args || {}).date || ''), x.key === 'saved' || x.key === 'added' ? 'success' : 'error'); };
         q('close').onclick = close;
-        m.querySelectorAll('#cf_g5 tbody tr[data-id]').forEach(tr => tr.onclick = () => { st.card = +tr.dataset.id; m.querySelectorAll('#cf_g5 tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); });
+        // DBGrid5CellClick :2406 / DblClick :2278 (same body): fill the boxes from the card row and disable them
+        m.querySelectorAll('#cf_g5 tbody tr[data-id]').forEach(tr => tr.onclick = async () => { st.card = +tr.dataset.id; m.querySelectorAll('#cf_g5 tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel');
+          const r = await call('/card-click', { card_id: st.card }); if (!r) return; put(r.fields); Object.assign(st.en, r.enabled); q('CheckBox2').checked = false; paint(); });
+        // DBGrid1DblClick :556 -> Tkrinfo (creditinfopas.pas, CM_ACTIVE)
+        m.querySelectorAll('#cf_g1 tbody tr[data-id]').forEach(tr => tr.ondblclick = async () => {
+          const r = await call('/credit-info', { id: +tr.dataset.id }); if (!r) return;
+          sub(`<h2>Kredit Info</h2><div class="tablewrap" style="max-height:50vh"><table class="grid" id="kr_g"><thead><tr>${r.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead>
+            <tbody>${r.rows.map(x => `<tr>${r.columns.map(c => `<td>${esc(x[c.toLowerCase()] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+            <div class="actions"><button class="btn secondary" id="kr_close">${esc(t('common.close') || 'Close')}</button></div>`,
+            (mm, cl) => { mm.style.maxWidth = '1300px'; mm.style.width = '95vw'; mm.querySelector('#kr_close').onclick = cl; });
+        });
+        // DBGrid6 PopupMenu1 'SIL' -> SIL1Click :2114 (delete_application, no confirmation, then Refresh)
+        const bindG6 = () => m.querySelectorAll('#cf_g6 tbody tr[data-id]').forEach(tr => tr.oncontextmenu = (e) => {
+          e.preventDefault(); document.querySelectorAll('.cf_pop').forEach(x => x.remove());
+          const pm = document.createElement('div'); pm.className = 'cf_pop'; pm.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:1200;background:#fff;border:1px solid #888;box-shadow:0 2px 6px #0003`;
+          pm.innerHTML = `<button class="btn secondary" id="cf_sil">SIL</button>`; document.body.appendChild(pm);
+          const off = () => { pm.remove(); document.removeEventListener('click', off); }; setTimeout(() => document.addEventListener('click', off), 0);
+          pm.querySelector('#cf_sil').onclick = async () => { off(); const r = await call('/delete-application', { id: +tr.dataset.id }); if (!r) return;
+            q('g6w').innerHTML = grid(d.grid6, r.operations, 'cf_g6'); bindG6(); };
+        });
+        bindG6();
+        // ComboBox1Enter :1462 / ComboBox2Enter :1623 - list reloads (with the Delphi duplicates)
+        ['ComboBox1', 'ComboBox2'].forEach(k => q(k).onfocus = async () => { const e = q(k);
+          const r = await call('/combo-enter', { combo: k, items: [...e.options].map(o => o.value), item_index: e.selectedIndex }); if (!r) return;
+          const v = e.value; e.innerHTML = r.items.map(x => `<option>${esc(x)}</option>`).join('');
+          if (r.items.includes(v)) e.value = v; else e.selectedIndex = r.item_index;
+          if (r.combobox9_add) q('ComboBox9').insertAdjacentHTML('beforeend', '<option> </option>'); });
         q('Edit28').onkeypress = (e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); };          // Edit28KeyPress
         ['Edit15', 'Edit16', 'Edit23'].forEach(k => q(k).onkeypress = (e) => { if (e.key.length === 1 && (e.key.charCodeAt(0) > 126 || e.key === '?')) e.preventDefault(); });
         q('CheckBox1').onclick = () => { if (q('CheckBox1').checked) { read(); put({ Edit23: (st.f.ComboBox10 || '') + '/' + st.f.Edit15 + '/' + st.f.Edit16 }); } };
@@ -115,7 +170,8 @@
           if (r.fields) { if (r.fields.ComboBox9 === '') q('ComboBox9').value = d.apptype[0]; const f = Object.assign({}, r.fields); delete f.ComboBox9; put(f); }
           if (r.edit28_red !== undefined) q('Edit28').style.background = r.edit28_red ? '#ff6060' : '';
           if (r.operations && q('g6w')) q('g6w').innerHTML = grid(d.grid6, r.operations, 'cf_g6');
-          if (r.multicurrency) toast(K('msg_multicurrency'), 'error');
+          if (r.operations && q('g6w')) bindG6();
+          if (r.multicurrency) await multi(r.multicurrency);
           if (r.close) close();
         };
       });

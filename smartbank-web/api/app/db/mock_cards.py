@@ -85,6 +85,9 @@ def _pats():
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 _PATS.append(re.compile(t + r"\Z", re.S))
+        from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
+        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC):
+            _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
     return _PATS
 
 
@@ -125,6 +128,7 @@ class CardsMixin:
         if key in ("CARD_MAIN.NEW_CARD", "CARD_MAIN.EDIT_CARD"):
             # card_main body not in the repo: emulated as one card_client_app row per call (STATUS 1, MESSTYPE = the edit2 argument)
             a = list(args)
+            multi = a.pop() if a and isinstance(a[-1], str) else None             # TMultiCurrency passes Edit3 (the main RBS) last
             iso = lambda v: v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v  # noqa: E731
             db = _db()
             nid = (db.execute("select max(id) from card_client_app").fetchone()[0] or 0) + 1
@@ -133,10 +137,16 @@ class CardsMixin:
                        CARDTYPE=a[13], CARDSTATUS=a[14], CREDIT_LIM=a[15], DATEOPEN=iso(a[16]), EXPIRY=iso(a[17]), REFERENCE=a[18],
                        EMBOSSNAME=a[19], COMPANY=a[20], SECURITY=a[21], MESSTYPE=int(a[22]), URG=a[23], LANG_CODE=a[24], KLI_ID=a[26] or None,
                        TYPES=a[27], TITUL=a[28], STATUS=1, OP_ID=1, FILIAL=101, TRANDATE=iso(a[-1]), DAT=dt.datetime.now().isoformat())
+            if multi is not None:
+                rec["MULTI_ACC"] = multi
             if key.endswith("EDIT_CARD"):
                 rec.update(CARDNUMBER=a[29], WITHP=a[30])
             db.execute(f"insert into card_client_app ({', '.join(rec)}) values ({', '.join('?' * len(rec))})", list(rec.values()))
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+            return {}
+        if key == "CARD_MAIN.DELETE_APPLICATION":
+            # card_main body not in the repo: emulated as a delete of the card_client_app row (no commit, as the Delphi caller)
+            _db().execute("delete from card_client_app where id = ?", [int(args[0])])
             return {}
         return NotImplemented
 
