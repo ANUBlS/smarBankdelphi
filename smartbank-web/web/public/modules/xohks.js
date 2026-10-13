@@ -1,5 +1,6 @@
-/* XÖHKS – port of Packages/LVPCSSManager_Turan (TLVPCSSForm), step 1: the four tabs' lists and archives.
-   Logic in api/app/xohks.py (verbatim Data_Unit.dfm SQL, otSubst titles, BitBtn1 filters). */
+/* XÖHKS – port of Packages/LVPCSSManager_Turan (TLVPCSSForm). Step 1: the four tabs' lists and archives (api/app/xohks.py).
+   Step 2: OUT add / edit / delete of batches and beneficiaries, TTransForm / TPaymentDetalsForm dialogs and templates
+   (api/app/xohks_edit.py; the dialog state lives on the server like the Delphi form variables). */
 (function () {
   const { api, t, esc, toast } = window.SB;
   const P = '/api/xohks', K = (k) => t('xohks.' + k);
@@ -31,7 +32,8 @@
     });
     const call = async (path, body, m) => { try { return await api(P + path, { method: m || 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
     function selectable(tb, rows, onSel) {
-      tb.querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('click', () => {
+      tb.querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('click', (ev) => {
+        if (ev.ctrlKey || ev.metaKey) tr.classList.toggle('msel'); else tb.querySelectorAll('tr.msel').forEach(x => x.classList.remove('msel'));  // dgMultiSelect
         tb.querySelectorAll('tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); onSel(rows[+tr.dataset.i]);
       }));
       const f = tb.querySelector('tbody tr[data-i]'); if (f) { f.classList.add('sel'); onSel(rows[0]); } else onSel(null);  // first record current (AfterScroll)
@@ -42,6 +44,7 @@
       if (!res) return;
       v(target).innerHTML = table('g_' + target, C.benef, res.rows);
       if (archive) v('x_fil').value = res.filial_name || '';
+      else { st.brows = res.rows; selectable(v('g_' + target), res.rows, (b) => { st.curb = b; }); }
     }
     function drawOut() {
       const d = st.d;
@@ -51,13 +54,160 @@
         <button class="btn secondary" id="x_ref">${esc(K('refresh'))}</button>
         <input class="input" readonly id="x_e1" value="${esc(d.edit1)}"><input class="input" readonly id="x_e2" value="${esc(d.edit2)}"><input class="input" readonly id="x_e3" value="${esc(d.edit3)}">
         <span>${esc(K('sum'))}: <b id="x_sum">${esc(d.batchs_sum_text)}</b></span></div>
+        <div class="toolbar" style="gap:6px">
+          <button class="btn" id="x_bnew">${esc(K('b_new'))}</button><button class="btn secondary" id="x_bedit">${esc(K('b_edit'))}</button>
+          <button class="btn secondary" id="x_bdel">${esc(K('b_del'))}</button>
+          ${st.benef_visible ? `<span style="width:16px"></span><button class="btn secondary" id="x_mnew">${esc(K('m_new'))}</button>
+          <button class="btn secondary" id="x_medit">${esc(K('m_edit'))}</button><button class="btn secondary" id="x_mdel">${esc(K('m_del'))}</button>` : ''}
+          <span class="muted">${esc(K('multi_hint'))}</span></div>
         ${box(K('box_batchs'), table('g_b', C.batchs, d.batchs, true))}
         ${st.benef_visible ? box(K('box_benef'), '<div id="xb"></div>') : ''}`;
       v('x_ref').onclick = async () => { st.beg = v('x_beg').value; st.end = v('x_end').value;
         const r = await call('/out/refresh', { beg: st.beg, end: st.end }); if (r) { Object.assign(st.d, r); draw(); } };
       v('g_b').querySelectorAll('th').forEach(h => h.onclick = async () => {
         const r = await call('/out/sort', { caption: h.dataset.c }); if (r) { Object.assign(st.d, r); draw(); } });
-      selectable(v('g_b'), d.batchs, (r) => st.benef_visible && benef('xb', r, false));
+      selectable(v('g_b'), d.batchs, (r) => { st.cur = r; st.curb = null; if (st.benef_visible) benef('xb', r, false); });
+      v('x_bnew').onclick = async () => { const r = await call('/tx/new'); if (r) transForm(r); };
+      v('x_bedit').onclick = async () => { if (!st.cur) return; const r = await call('/tx/edit', { id: st.cur.id }); if (r) transForm(r); };
+      v('x_bdel').onclick = () => delLoop('g_b', d.batchs, st.cur, 'q_del_batch', (ids) => call('/batch/delete', { ids }));
+      if (st.benef_visible) {
+        v('x_mnew').onclick = async () => { if (!st.cur) return; const r = await call('/pd/open-add', { id: st.cur.id }); if (r) payForm(r); };
+        v('x_medit').onclick = async () => { if (!st.cur || !st.curb) return; const r = await call('/pd/open-edit', { batch_id: st.cur.id, id: st.curb.id }); if (r) payForm(r); };
+        v('x_mdel').onclick = () => delLoop('g_xb', st.brows || [], st.curb, 'q_del_benef', (ids) => call('/benef/delete', { batch_id: st.cur.id, ids }));
+      }
+    }
+    // ---------------------------------------------------------------- dialogs (stacked: TTransForm under TPaymentDetalsForm)
+    function layer(html, z) {
+      const w = document.createElement('div'); w.className = 'backdrop'; w.style.zIndex = 1000 + z;
+      w.innerHTML = `<div class="modal" role="dialog" style="max-width:980px;width:96%;max-height:92vh;overflow:auto">${html}</div>`;
+      document.body.appendChild(w); return w;
+    }
+    const ask = (text, buttons) => new Promise(res => {      // MessageDlg with [mbyes, mbno, mbcancel, mball]
+      const w = layer(`<p>${esc(text)}</p><div class="actions">${buttons.map(b => `<button class="btn ${b === 'yes' ? '' : 'secondary'}" data-b="${b}">${esc(K('mb_' + b))}</button>`).join('')}</div>`, 9);
+      w.querySelectorAll('[data-b]').forEach(b => b.onclick = () => { w.remove(); res(b.dataset.b); });
+    });
+    async function delLoop(gid, rows, cur, q, send) {
+      // MT102DeleteExecute / MessOutDeleteExecute: SelectedRows + current row; Yes / No (exit) / Cancel (break) / All
+      const g = v(gid); if (!g || !cur) return;
+      const sel = [...g.querySelectorAll('tbody tr.msel,tbody tr.sel')].map(tr => rows[+tr.dataset.i]).filter(Boolean);
+      const uniq = [...new Map(sel.map(r => [r.id, r])).values()];
+      let changed = null;
+      for (const r of uniq) {
+        const a = await ask(K(q).replace('{id}', r.id), ['yes', 'no', 'cancel', 'all']);
+        if (a === 'yes') { changed = await send([r.id]) || changed; continue; }
+        if (a === 'no' || a === 'cancel') break;      // mrno: exit / mrcancel: Break
+        if (a === 'all') { if (await ask(K('q_del_all').replace('{n}', uniq.length), ['yes', 'no']) === 'yes') changed = await send(uniq.map(x => x.id)) || changed; break; }
+      }
+      if (changed) { Object.assign(st.d, changed); draw(); }
+    }
+    const fld = (id, label, val, ro, w) => `<label style="display:flex;flex-direction:column;font-size:12px;min-width:${w || 140}px">${esc(label)}<input class="input" id="${id}" value="${esc(val ?? '')}" ${ro ? 'readonly' : ''}></label>`;
+    function transForm(t0) {
+      let t = t0;
+      const w = layer('<div id="tf"></div>', 1);
+      const close = async () => { const r = await call('/tx/close'); w.remove(); if (r) { Object.assign(st.d, r); draw(); } };
+      const fields = () => ({ client_name: w.querySelector('#tf_name').value, client_code: w.querySelector('#tf_code').value,
+        client_voen: w.querySelector('#tf_voen').value, ref: w.querySelector('#tf_ref').value, valute: +w.querySelector('#tf_val').value,
+        radio: (w.querySelector('input[name=tf_rb]:checked') || {}).value });
+      function render() {
+        w.querySelector('#tf').innerHTML = `<h3>${esc(K(t.batchs_edit ? 'tf_title_edit' : 'tf_title'))} #${esc(t.new_id)}</h3>
+          <div style="display:flex;gap:12px;margin-bottom:6px">${['RB_102', 'RB_102T', 'MT205'].map(r => `<label><input type="radio" name="tf_rb" value="${r}" ${t.radio === r ? 'checked' : ''}> ${esc(K('rb_' + r))}</label>`).join('')}
+            <span class="muted">${esc(t.edit8)}</span></div>
+          <fieldset class="card"><legend>${esc(K('tf_sender'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${fld('tf_kli', K('tf_kli'), t.kli_id, false, 100)}
+            <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('tf_acc'))}<select class="input" id="tf_acc"><option value=""></option>${t.accounts.map(a => `<option value="${a.id}" ${t.acc_id === a.id || t.acc_no === a.acc_no ? 'selected' : ''}>${esc(a.acc_no)}</option>`).join('')}</select></label>
+            ${fld('tf_name', K('tf_name'), t.client_name, false, 260)}${fld('tf_code', K('tf_code'), t.client_code, false, 80)}${fld('tf_voen', K('tf_voen'), t.client_voen, false, 120)}
+            <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('tf_val'))}<select class="input" id="tf_val">${t.valutes.map(x => `<option value="${x.valute}" ${+t.valute === +x.valute ? 'selected' : ''}>${esc(x.valu_name)}</option>`).join('')}</select></label>
+            <span class="muted" id="tf_fil" style="align-self:end">${esc(t.filial_label)}</span></div></fieldset>
+          <fieldset class="card"><legend>${esc(K('tf_bank'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${fld('tf_bc', K('bank_code'), t.bank.bank_code, true, 90)}${fld('tf_bv', K('tf_voen'), t.bank.voen, true, 110)}${fld('tf_snd', K('tf_snd'), t.bank.sender, true, 120)}
+            ${fld('tf_bik', 'BIK', t.bank.bik, true, 100)}${fld('tf_ba', K('bank_acc'), t.bank.account, true, 240)}${fld('tf_bs', K('bank_sub'), t.bank.account_sub, true, 240)}</div></fieldset>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-top:6px">
+            ${fld('tf_ref', K('ref'), t.ref, false, 160)}<button class="btn secondary" id="tf_newref" ${t.ref_enabled ? '' : 'disabled'}>${esc(K('new_ref'))}</button>
+            ${fld('tf_amt', K('amount'), t.amount_text, true, 120)}${fld('tf_bnf', 'BNF', t.bnf, true, 90)}${fld('tf_date', K('date'), t.date || st.d.use_date || '', true, 110)}</div>
+          <div class="actions"><button class="btn secondary" id="tf_add" ${t.add_enabled ? '' : 'disabled'}>${esc(K('tf_add'))}</button>
+            <button class="btn" id="tf_post" ${t.post_enabled ? '' : 'disabled'}>${esc(K('tf_post'))}</button><button class="btn secondary" id="tf_cancel">${esc(K('cancel'))}</button></div>`;
+        const q = (id) => w.querySelector('#' + id);
+        q('tf_kli').onkeydown = async (e) => { if (e.key !== 'Enter') return; const r = await call('/tx/customer', { kli_id: q('tf_kli').value }); if (r) { t = r; render(); } };
+        q('tf_acc').onchange = async () => { if (!q('tf_acc').value) return; const r = await call('/tx/account', { acc_id: +q('tf_acc').value }); if (r) { t = r; render(); } };
+        q('tf_newref').onclick = async () => { const r = await call('/tx/ref', { fields: fields() }); if (r) { t = r; render(); } };
+        q('tf_add').onclick = async () => { const r = await call('/pd/open-tx', { fields: fields() }); if (r) payForm(r, (nt) => { if (nt) { t = nt; render(); } else w.remove(); }); };
+        q('tf_post').onclick = async () => { const r = await call('/tx/post', { fields: fields() }); if (r) { w.remove(); Object.assign(st.d, r); draw(); toast(K('saved'), 'success'); } };
+        q('tf_cancel').onclick = close;
+      }
+      render();
+    }
+    function payForm(p0, back) {
+      let p = p0, lk = null;
+      const w = layer('<div id="pf"></div>', 2);
+      const fields = () => { const q = (id) => w.querySelector('#' + id); const f = {
+        bank_id: q('pf_bank').value === '' ? null : +q('pf_bank').value, account_sub: q('pf_sub').value, client_acc_no: q('pf_acc').value,
+        client_name: q('pf_name').value, client_code: q('pf_code').value, client_voen: q('pf_voen').value,
+        tey: [1, 2, 3, 4].map(i => q('pf_t' + i).value), inf: [1, 2, 3].map(i => q('pf_i' + i).value),
+        trans_code: q('pf_tc').value, valute: +q('pf_val').value, ref: q('pf_ref').value, amount: q('pf_amt').value };
+        if (p.radio === 'RB_102T') { ['institution', 'budgetlevel', 'destination'].forEach(k => { const e = q('pf_' + k); if (e && e.value !== '') f[k] = e.value; }); delete f.bank_id; }
+        return f; };
+      const done = (r) => { w.remove(); if (back) back(r && r.tx_closed ? null : r && r.tx); if (r && r.batchs) { Object.assign(st.d, r); draw(); } else if (!back && st.cur) draw(); };
+      async function render() {
+        if (p.radio === 'RB_102T' && !lk) lk = await call('/pd/lookups-102t', undefined, 'GET');
+        const ro = p.locked;
+        const sel = (id, list, val, key, lab) => `<select class="input" id="${id}"><option value=""></option>${(list || []).map(o => `<option value="${esc(o[key])}" ${String(val) === String(o[key]) ? 'selected' : ''}>${esc(o[lab])}</option>`).join('')}</select>`;
+        w.querySelector('#pf').innerHTML = `<h3>${esc(K('pf_title_' + (p.mode || 'tx')))}</h3>
+          <fieldset class="card"><legend>${esc(K('pf_self'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${fld('pf_sb', K('bank'), p.self.bank, true, 200)}${fld('pf_sbik', 'BIK', p.self.bik, true, 100)}${fld('pf_sc', K('bank_code'), p.self.code, true, 90)}
+            ${fld('pf_sa', K('bank_acc'), p.self.account, true, 240)}${fld('pf_sv', K('tf_voen'), p.self.voen, true, 110)}</div></fieldset>
+          <fieldset class="card"><legend>${esc(K('pf_rec_bank'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end">
+            <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('bank'))}<select class="input" id="pf_bank" ${ro || p.radio === 'RB_102T' ? 'disabled' : ''}><option value=""></option>${p.banks.map(b => `<option value="${b.id}" ${String(p.bank_id) === String(b.id) ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select></label>
+            ${fld('pf_bc', K('bank_code'), p.bank_code, true, 90)}${fld('pf_bik', 'BIK', p.bik, true, 100)}${fld('pf_ba', K('bank_acc'), p.bank_account, true, 240)}
+            ${fld('pf_bv', K('tf_voen'), p.bank_voen, true, 110)}${fld('pf_sub', K('bank_sub'), p.account_sub, ro, 240)}</div></fieldset>
+          <fieldset class="card"><legend>${esc(K('pf_rec'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${p.radio === 'RB_102T' && lk ? `<label style="display:flex;flex-direction:column;font-size:12px">${esc(K('pf_inst'))}${sel('pf_institution', lk.institution, '', 'id', 'description')}</label>
+              <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('pf_blevel'))}${sel('pf_budgetlevel', lk.budgetlevel, '', 'id', 'description')}</label>
+              <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('pf_dest'))}${sel('pf_destination', lk.destination, '', 'id', 'description')}</label>` : ''}
+            ${fld('pf_acc', K('pf_acc'), p.client_acc_no, ro || p.radio === 'RB_102T', 260)}${fld('pf_name', K('tf_name'), p.client_name, ro || p.radio === 'RB_102T', 260)}
+            ${fld('pf_code', K('tf_code'), p.client_code, ro || p.radio === 'RB_102T', 80)}${fld('pf_voen', K('tf_voen'), p.client_voen, ro || p.radio === 'RB_102T', 120)}</div></fieldset>
+          <fieldset class="card"><legend>${esc(K('pf_purpose'))}</legend><div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${[0, 1, 2, 3].map(i => fld('pf_t' + (i + 1), K('pf_tey') + ' ' + (i + 1), p.tey[i], ro, 220)).join('')}
+            ${[0, 1, 2].map(i => fld('pf_i' + (i + 1), K('pf_inf') + ' ' + (i + 1), p.inf[i], ro, 220)).join('')}</div></fieldset>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-top:6px">
+            ${fld('pf_ref', K('ref'), p.ref, ro, 140)}<button class="btn secondary" id="pf_newref" ${ro ? 'disabled' : ''}>${esc(K('new_ref'))}</button>
+            ${fld('pf_amt', K('amount'), p.amount, ro, 110)}${fld('pf_tc', K('pf_tc'), p.trans_code, ro, 70)}
+            <label style="display:flex;flex-direction:column;font-size:12px">${esc(K('tf_val'))}<select class="input" id="pf_val" ${ro ? 'disabled' : ''}>${p.valutes.map(x => `<option value="${x.valute}" ${+p.valute === +x.valute ? 'selected' : ''}>${esc(x.val_name)}</option>`).join('')}</select></label></div>
+          <div class="actions">
+            ${p.radio !== 'RB_102T' ? `<button class="btn secondary" id="pf_tpl" ${ro ? 'disabled' : ''}>${esc(K('pf_tpl_load'))}</button><button class="btn secondary" id="pf_tsave" ${p.template_saved_enabled && !ro ? '' : 'disabled'}>${esc(K('pf_tpl_save'))}</button>` : ''}
+            ${p.add_visible ? `<button class="btn secondary" id="pf_add" ${ro ? 'disabled' : ''}>${esc(K('pf_add'))}</button>` : ''}
+            <button class="btn" id="pf_fin" ${p.finish_enabled ? '' : 'disabled'}>${esc(K(p.mode === 'edit' ? 'pf_save' : 'pf_finish'))}</button>
+            <button class="btn secondary" id="pf_close">${esc(K('close'))}</button></div>`;
+        const q = (id) => w.querySelector('#' + id);
+        if (q('pf_bank')) q('pf_bank').onchange = async () => { if (q('pf_bank').value === '') return; const r = await call('/pd/bank', { bank_id: +q('pf_bank').value }); if (r) { p = r; render(); } };
+        q('pf_newref').onclick = async () => { const r = await call('/pd/ref'); if (r) { p = r; render(); } };
+        if (q('pf_add')) q('pf_add').onclick = async () => { const r = await call('/pd/add', { fields: fields() }); if (r) { p = r; render(); toast(K('added'), 'success'); } };
+        q('pf_fin').onclick = async () => { const r = await call('/pd/finish', { fields: fields() }); if (r && r.closed) done(r); else if (r) { p = r; render(); } };
+        q('pf_close').onclick = async () => { const r = await call('/pd/close'); done(r); };
+        if (q('pf_tsave')) q('pf_tsave').onclick = async () => { const r = await call('/shablon/save', { fields: fields() }); if (r) { p = r; render(); toast(K('tpl_saved'), 'success'); } };
+        if (q('pf_tpl')) q('pf_tpl').onclick = () => tplForm((r) => { p = r; render(); });
+        w.querySelectorAll('input:not([readonly])').forEach(i => i.addEventListener('input', () => {
+          if (p.mode === 'edit' && i.id !== 'pf_acc' && !p.locked) { p.finish_enabled = true; q('pf_fin').disabled = false; } }));   // OnChange -> ButtonFinish enabled
+      }
+      render();
+    }
+    async function tplForm(onPick) {
+      // TForm_get_to_shablon: ODS_shablon grid, title click = order by FieldName, double click / 'Seç' = pick, 'Sil' = delete
+      const cols = ['MEBLEG', 'ODENISH_KOD', 'BANKIN_KODU', 'HESAB_NO', 'ADI', 'VOEN', 'OD_TEY1', 'SHABLONUN_ADI', 'ODENISH'];
+      let rows = (await call('/shablon/list', {}) || {}).rows || [], cur = rows[0];
+      const w = layer('<div id="tp"></div>', 3);
+      function render() {
+        w.querySelector('#tp').innerHTML = `<h3>${esc(K('tpl_title'))}</h3><div class="tablewrap" style="max-height:50vh"><table class="grid acc-grid" id="g_tp"><thead><tr>${cols.map(c => `<th data-f="${c}" style="cursor:pointer">${esc(c)}</th>`).join('')}</tr></thead>
+          <tbody>${rows.map((r, i) => `<tr data-i="${i}" class="${r === cur ? 'sel' : ''}">${cols.map(c => `<td>${esc(r[c.toLowerCase()] ?? '')}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>
+          <div class="actions"><button class="btn" id="tp_pick">${esc(K('tpl_pick'))}</button><button class="btn secondary" id="tp_del">${esc(K('tpl_del'))}</button><button class="btn secondary" id="tp_close">${esc(K('close'))}</button></div>`;
+        const q = (id) => w.querySelector('#' + id);
+        w.querySelectorAll('th[data-f]').forEach(h => h.onclick = async () => { const r = await call('/shablon/list', { field: h.dataset.f }); if (r) { rows = r.rows; cur = rows[0]; render(); } });
+        const pick = async () => { if (!cur) return; const r = await call('/shablon/pick', { name: cur.shablonun_adi }); if (r) { w.remove(); onPick(r); } };
+        w.querySelectorAll('tbody tr[data-i]').forEach(tr => { tr.onclick = () => { cur = rows[+tr.dataset.i]; render(); }; tr.ondblclick = pick; });
+        q('tp_pick').onclick = pick;
+        q('tp_del').onclick = async () => { if (!cur) return; const r = await call('/shablon/delete', { name: cur.shablonun_adi }); if (r) { rows = r.rows; cur = rows[0]; render(); } };
+        q('tp_close').onclick = () => w.remove();
+      }
+      render();
     }
     function drawIn() {
       v('xbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="x_iref">${esc(K('refresh'))}</button>

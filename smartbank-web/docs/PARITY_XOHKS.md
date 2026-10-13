@@ -1,6 +1,6 @@
 # XÖHKS parity (Packages/LVPCSSManager_Turan)
 
-Status: **step 1 done** (4 tabs: lists + archives, read-only). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
+Status: **steps 1-2 done** (4 tabs read-only; OUT add / edit / delete of batches and beneficiaries, templates). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
 
 ## Identity
 - ActiveX: `LVPCSSManager.ocx`, CoClass `LVPCSS` = `{E0D210EC-D799-46D2-A172-789782B5F96C}` (LVPCSSManager_TLB.pas:56), form
@@ -88,7 +88,39 @@ status images (shown as status text), GridBatchsDrawColumnCell colours, the hidd
 Unverified (needs the real DB): XS_* table / view columns (from TFields only), `xs_batchs_today`, `xs_incomingview` vs
 `XS_INCOMINGVIEWALL` contents, `xs_admin_in` columns, the date column types (DATE assumed; Trunc'd binds as in Delphi).
 
+## Step 2. OUT add / edit / delete, templates (done)
+API `api/app/xohks_edit.py` (`/api/xohks/tx/*`, `/pd/*`, `/shablon/*`, `/batch/delete`, `/benef/delete`), SQL in `xohks_sql.py`
+(step-2 block), mock `XS_CONTROL` emulation in `mock_xohks.py` (DML inside the SQLite transaction; `MockConnection.commit/rollback`
+commit / roll it back), tests `tests/test_xohks_edit.py`, web dialogs in `xohks.js`, E2E `e2e/xohks_edit_screens.py`, screenshots 143-146.
+The two modal forms are server-side state (`module_state['xohks']['tx']` = TTransForm, `['pd']` = TPaymentDetalsForm) holding the
+Delphi globals (new_id, after_add, MT, mess_edit, Batchs_Edit, bnf_count, the current DataAccountIban record, edit8, radios).
+
+| Delphi | Web | Calls / notes |
+|---|---|---|
+| Mt102InsertExecute :2635 | `/tx/new` | XOHKS_ADD; PrepareTrans(0,false); `XS_BATCHS_insert('CREDIT',0,'','/','',0,valute[0],0)` **before** the form, no commit; FormActivate → `GetNewBatchRefrence(valute)` |
+| Mt102EditExecute :2799 | `/tx/edit` | XOHKS_EDIT; PrepareTrans(0,true): DataAccountIban SQL[11] `AND (a.id=:custid)`, BNF `/BNF/`+benef count; batch.status>0 and first benef.status>0 → Batchs_Edit false, SpeedButton1 disabled |
+| EditidKeyPress / AccSearchClick | `/tx/customer`, `/tx/account` | SQL[11] `AND (a.kli_id=:custid)`; 'Müştəri tapılmadı'; name, VÖEN ('/' when NULL), FindFilialID label, ViewBankInfo :1141 (filialinfo by kod_fil, bound) |
+| Button_addClick | `/pd/open-tx` | CheckField(false) + valute check, cleared edits, '900', new beneficiary reference |
+| ButtonPostClick | `/tx/post` | enabled only after a beneficiary add / account pick in edit / ref change (MT205 or edit); CheckField(true) (DataCheck by acc_no, bound), ref not empty, valute = DataAccountIban.val_acc; if BNF ≠ '/BNF/0': edit + same ref + status≠0 → 'Qeydiyyat №-si dəyişilməlidir!'; `xs_Batchs_update(id, edit8, acc_id, name, code, ref, amount, valute, filial, voen, format)`, **Commit**, edit → `xs_Batchs_ChangeStatus(id,0)`; close → FormClose **Rollback** (so that ChangeStatus is rolled back, as in Delphi) |
+| Button2Click / Esc / FormClose | `/tx/close` | Rollback (a cancelled new batch disappears) |
+| MessagesOutAddExecute :2404 | `/pd/open-add` | XOHKS_ADD; After_Add; Button4 → insert, **Commit**, then xs_BatchAmount_update + xs_Batchs_ChangeStatus (uncommitted) |
+| MessagesOutEditExecute :2477 / ShowDetals :1283 | `/pd/open-edit` | XOHKS_EDIT; StrPart :970 splits REMIT_INF / ADD_INF; locked when (batch.status>0 and benef.status>0) or TRANSACTION_ID>0; ButtonFinish disabled until an edit with OnChange changes (Edit_Client_acc_no has none) |
+| Payment_Det Button4Click | `/pd/add` | CheckField (required edits; first char of tey/inf in 0-9 A-Z Ə Ü Ö Ğ Ş Ç İ); `xs_beneficiary_insert(new_id, bank, sub, acc, name, code, voen, tey1|..|tey4|, transcode, inf1|inf2|inf3|, valute, ref, amount, bnf_count)`; TransForm BNF `\BNF\n` (backslashes, as in Delphi), amount += |
+| ButtonFinishClick | `/pd/finish` | TransCode := '900' first; edit: length 28, `SBOP.check_IBAN_acc_num`, VÖEN 10 or '/', CheckField, status 2 → nothing; `xs_Beneficiary_update`, **Commit**, xs_BatchAmount_update, xs_format_update, xs_beneficiary_ChangeStatus, xs_Batchs_ChangeStatus (uncommitted). Add: CheckField + checks + Button4. MT205: `xs_batchs205(amount, ref)`, Commit, closes both forms |
+| Combo_BankNameChange / RB_102TClick | `/pd/bank`, `/pd/lookups-102t` | BankM fields; MT102 T: bank fixed to BANKCODE=210005, client edits from ODS_Institution (ID, NAME, '/'+BOSH, TEK), tey1 = BudgetLevel.ID, tey2 = Destination.ID |
+| Button1Click / add_new_shablon | `/shablon/save` | insert_shablon[1..17] → `xs_Beneficiary_shablon_insert` (no commit), Button1 disabled until a new reference. add_new_shablon (15 values) is not opened anywhere - not ported |
+| Button5Click / TForm_get_to_shablon | `/shablon/list`, `/pick`, `/delete` | ODS_shablon; title click `order by FieldName` (whitelisted to the 17 fields); pick fills Fields[0..13] + bank by name + new reference; Sil → `xs_Beneficiary_shablon_delete(shablonun_adi)` |
+| MT102DeleteExecute :2245 / MessOutDeleteExecute :2280 | `/batch/delete`, `/benef/delete` | XOHKS_DELETE; selected rows + current; dialog Yes / No (exit) / Cancel (break) / All (second confirm, every selected id); `xs_batchs_delete` / `xs_beneficiary_delete` + xs_BatchAmount_update + xs_Batchs_ChangeStatus(0); **no commit** (as Delphi: pending until the next Commit or a TransForm Rollback) |
+
+Notes: a new batch has acc_id NULL until ButtonPost, so it is not in the XS_BATCHS inner join (as in Delphi). Vergi_Unit (TVergiForm) is created in
+ActiveFormCreate :806 but never shown - not ported. The TransCode tree (TTransCodeForm, SpeedButton1) is not ported yet: ButtonFinish forces '900'.
+Unverified (XS_CONTROL body not in the repo): parameter → column mapping of every XS_CONTROL call (mock follows the Delphi argument order),
+what `xs_batchs205` does, `GetNewBatchRefrence` / `GetNewBeneficiaryReference` formats, `xs_beneficiary_shablon` column order vs insert
+order, `filialinfo` / `xs_institution` / `xs_budgetlevel` / `xs_destination` columns, and the effect of the Delphi Rollback after
+ButtonPost's ChangeStatus on the real DB.
+
 ## Resume point
-Step 2: OUT batch / beneficiary add / edit / delete - Mt102InsertExecute / Mt102EditExecute / Mt102DeleteExecute and
-MessagesOutAdd/Edit (PrepareTrans, ShowDetals :1290, Transaction_Unit TTransForm, Payment_Det TPaymentDetalsForm, Vergi_Unit),
-XS_CONTROL calls (Ins / Del / GetReference packages), Delphi commit timing, templates (ODS_shablon, Get_to_shablon_unit, add_new_shablon).
+Step 3: toolbar / popup actions on OUT (Mt102AcceptExecute :2343, MessagesOutAcceptExecute :2496, PopupMT102Popup :2784 n4, BtnSendToArchive,
+verifikator / fverifikator / avtorizator status chain, xs_*_ReturnStatus / ReturnChangeStatus), AfterScroll button enabling
+(XS_BATCHSAfterScroll), status images + GridBatchsDrawColumnCell colours, TTransCodeForm tree, then PrepareFile / FileSend + crypto,
+step 4 IN file load / convert / accept, reports as PDF, settings forms.
