@@ -42,3 +42,20 @@ API `api/app/out_memorial.py`, SQL `api/app/out_mem_sql.py`, UI `web/public/modu
 
 **To verify on the real DB:** `OUT_SB_MEMORIAL` parameter order/types (package source not in the repo), that the user table
 `Memorial_<user>` exists for every user, and the column list of that table (VAL_ACC/CURRENCYID_C are strings in the persistent fields).
+
+## 2. Off-balance Repair (`Packages/out_repair`) – not ported yet
+
+CLSID `{86E3CBB4-1C62-4BD8-BC35-C5E16FACED54}` (`OutRepair_TLB.pas:56`). `OutRepair.dpr` compiles `Out_RepairImpl1.pas`, `RepairNewEdit.pas`,
+`RepairNewDataModule.pas`, `OutRepdelete.pas`. Survey so far: list `TransactionData` (RepairNewDataModule.dfm:6-…, `:DAT`/`:DAT2`/`:Title` variables),
+client filters built in `ReInitializeFilters` (Out_RepairImpl1.pas:854-935: operator, currency/operation check lists, debit/credit branch),
+edit dialog `TOutRepairEdit` with `CheckTransaction` (RepairNewDataModule.pas:194-227) and saving through
+`Out_Correct.Main(Flag, CorMode, TransactionID, TransactionDate, DebitID, CreditID, DebitAmount, CreditAmount, LAmount, DebitRate,
+CreditRate, TrName, InBalanceChar, OutBalanceChar)` (named, :269-302; Flag 0 delete / 1 insert / 2 update). Next run starts here.
+
+## 3. `Packages/OutExcelImport` – belongs to the off-balance family
+
+CLSID `{9B81586F-881D-480A-AE1B-AAC7DF45622B}` (`OutExcelImport_TLB.pas:52`), `OutExcelImporter.dpr` compiles only `OutExcelImport.pas`.
+It loads an Excel sheet into `out_exceltable` (OutExcelImport.dfm:3281-3282 `select rowid,t. * from out_exceltable  t where userid=uid`,
+rows inserted in ToolButton1Click OutExcelImport.pas:502-…), then posts them as off-balance transactions with
+`excelpkg.OUTEXCELTRANSACTIONS` (:605) and clears with `excelpkg.Del_outexcel` / `del_outinspayments` (:329, :607, :625-627).
+It works only on `out_*` objects, so it is an off-balance module: it gets its own Off-balance tree entry when it is ported (after out_repair).
