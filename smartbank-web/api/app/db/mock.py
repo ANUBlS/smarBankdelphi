@@ -24,6 +24,8 @@ from . import mock_ost
 from .mock_bal import BalMixin
 from . import mock_out
 from .mock_out import OutMixin
+from . import mock_oacc
+from .mock_oacc import OaccMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -51,13 +53,14 @@ def reset():
     mock_bal.reset()
     mock_out.reset()
     mock_ost._fix = None
+    mock_oacc.reset()
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -71,6 +74,9 @@ class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, 
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._oacc_func(key, named)
+        if r is not NotImplemented:
+            return r
         r = self._ost_func(key, args)
         if r is not NotImplemented:
             return r
@@ -108,6 +114,9 @@ class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, 
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._oacc_bool(key, named)
+        if r is not NotImplemented:
+            return r
         r = self._bal_bool(key, args, named)
         if r is not NotImplemented:
             return r
@@ -136,6 +145,9 @@ class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, 
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._oacc_proc(key, named)
+        if r is not NotImplemented:
+            return r
         r = self._out_proc(key, args, named)
         if r is not NotImplemented:
             return r
@@ -160,6 +172,9 @@ class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, 
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._oacc_query(sql, b)  # Packages/Out_account (verbatim text match)
+        if r is not NotImplemented:
+            return r
         r = self._ost_query(sql, b)  # OUT_SB_STATEMENT generated SQL (matches on original text)
         if r is not None:
             return r
@@ -240,6 +255,9 @@ class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, 
         return r
 
     def cursor_block(self, sql, cursor_bind, binds=None):
+        r = self._oacc_cursor(sql, cursor_bind, binds or {})
+        if r is not NotImplemented:
+            return r
         r = self._bal_cursor(sql, cursor_bind, binds or {})
         if r is not NotImplemented:
             return r

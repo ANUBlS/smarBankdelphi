@@ -86,5 +86,7 @@ The screenshots are in `docs/screenshots/`.
 ## Migrated modules
 - **Accounts** (`Packages/Accounts`, CLSID `{53E4AB09-4BA7-11D6-B271-00C0262B568B}`): list with filters, ordering and paging, new/edit account, close account, account documents (debit/credit), balance history, CSV export. API in `api/app/accounts.py`, UI in `web/public/modules/accounts.js`. Parity checklist: `docs/PARITY_ACCOUNTS.md`.
 
+- **Off-balance Accounts** (`Packages/Out_account/ocx`, CLSID `{0E7C0852-BA22-45DC-8A22-368D2FF5F4C2}`): list, filter panel, search panel, title sort, new/edit (auto account number, symbols), close, documents for a period, rests & turnovers. API `api/app/out_account.py`, UI `web/public/modules/out_account.js`. Parity: `docs/PARITY_OUT_ACCOUNT.md`.
+
 ## Known limits / to verify on the real DB
 See `docs/PILOT_NOTES.md`.
