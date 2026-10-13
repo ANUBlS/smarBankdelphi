@@ -134,9 +134,26 @@ API `api/app/cards_app.py` (`/api/cards/applications`), tests `api/tests/test_ca
 | DBGrid1/2DrawColumnCell :1476/:1515 | status icon column (DataCol 1, no FieldName) | STATUS 1→25, 2→3, 3→26, 4→13 of ImageList1 (applicationpas.dfm:984), extracted to `web/public/img/cards/app_status_N.png` |
 | dgMultiSelect, PopupMenu1 selectall1 / PopupMenu2 MenuItem1 'SELECT ALL' | Ctrl/Shift-click, right-click → SELECT ALL | selection kept client-side for 3b |
 | Button3Click :1458 (card_excel1, urgent) / Button4Click :1467 (card_excel2, simple) | `POST /applications/excel {grid}` | CMExcelExport.ExportDataset(ds, 'Application', True): all fields + title row, sheet 'Application', as .xlsx download |
-| Button2Click :1416 / Button5Click :1393 'FAYL YARAT' (cardcreatefilenr; cr_file2 then cr_file1, :346-1390) | button shows "not ported" | step 3b. simplefileExecute :132 is only referenced from commented code |
+| Button2Click :1416 / Button5Click :1393 'FAYL YARAT' (cardcreatefilenr; cr_file2 then cr_file1, :346-1390) | see step 3b | simplefileExecute :132 is only referenced from commented code (not ported) |
 
 Unverified (3a): `to_char(a.TRANDATE,'DD-mon-YYYY') = :dat1` with a DATE bind relies on Oracle converting the char back to DATE with NLS_DATE_FORMAT (mock compares days); CMExcelExport column order / formatting (the web uses dataset field order, raw values); the TDBGrid columns with lower-case FieldNames ('fil', 'CREATer', 'Modifier', 'crdat') resolve case-insensitively as in DB.
+
+## Step 3b: Application 'FAYL YARAT' – done (run verbatim by the Pascal interpreter)
+
+API `api/app/cards_app_file.py` (`POST /applications/file {grid, ids, confirmed}`), source `api/app/delphi_src/cards_applicationpas.pas`
+(= applicationpas.pas :73-1438 unchanged), tests `api/tests/test_cards_app_file.py`, E2E `e2e/cards_app_file.py`, screenshot 178.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| Button2Click :1416 (urgent, DBGrid1, urg 1) / Button5Click :1393 (simple, DBGrid2, urg 0) | 'Create file' on each grid | SB_ACA.CheckAdvancedObjectAccess('cardcreatefilenr') → 'Fayl yaratmaq istəyirsiniz?' (browser confirm; the server checks the right before asking) → cr_file2, cr_file1, dataset Refresh, 'Fayl yaradıldı!' |
+| cr_file2 :346 | verbatim | control loop: any selected MessType 5 with STATUS in [1,3], else Exit (no file). File `C:\AZCARD\OUT\DDMMYY\a<BANKID>9<nn>.<day-of-year>` (urg 1) / `a<BANKID>_0<n>` / `a<BANKID>_<nn>` / `a<BANKID><nnn>` (urg 0): first number whose file does not exist; header 'RCDN'; one 0300 row per MessType 5 + STATUS 1 (FCUR INTID, FloatToStr(credit_lim)+'00'); card_main.donecredit(id); footer FT |
+| cr_file1 :516 | verbatim | MessTypes 1,2,3,4,6,7,11,12,13,35 (STATUS 1 is written; STATUS 3 only passes the control loop); header 'CCDN'; NEW (cardbr branch_code, fkod filialkod, umumi1 CODE/SCHEME/SERVICE, BIRTHDAY by StrToDate), SUB, PROLONGATION (withp), REPLACE, PIN ATTEMPTS CLEAR, STATUS CHANGE (six status names → code), RBSNUMBER CHANGE, CONTRACT CLOSE (settings.ACCOUNTCLOSECODE, sysday), SEC WORD, CARDNAME CHANGE; one card_main done* call per row (donenewcard gets copy(filename, length-11, 12)) |
+| umumi1 SQL.Add with the quoted cardtype / currency :703 / :867 | bound | same text, the two literals sent as :b0 / :b1 |
+| DBGrid.SelectedRows | browser selection | ids kept in dataset order (TBookmarkList is sorted) |
+| Errors | as Delphi | an exception (e.g. StrToDate of an empty BIRTHDAY: "'' is not a valid date") stops the routine: the file keeps what was written (no footer), done* calls made so far stay, no message, no Refresh. No commit anywhere (Delphi has none) |
+| Files | download | CRLF lines in CARDS_FILE_CODEPAGE (cp1254); FloatToStr with CARDS_DECIMAL_SEPARATOR (','); CARDS_OUT_DIR = server folder standing for C:\AZCARD\OUT (copy in <dir>/<DDMMYY>/, counted by FileExists); without it the API process remembers the names it created |
+
+Unverified (3b): card_main done* / contractclose / DONESECURE / cardnamechange / filialkod bodies (mock: STATUS := 2, donenewcard also sets FILENAME); card_currencydecode / card_branch_codes columns (taken from the Delphi field names); the file number cannot see files Delphi clients wrote on their own C: drive (only CARDS_OUT_DIR); AsString of a NUMBER CREDIT_LIM with decimals (FloatToStr, ',' assumed); TBookmarkList order = dataset order. The STATUS CHANGE row is 2 characters shorter when CARDSTATUS is none of the six names (as Delphi).
 
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
@@ -147,4 +164,4 @@ Unverified (3a): `to_char(a.TRANDATE,'DD-mon-YYYY') = :dat1` with a DATE bind re
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Step 3b: Application FAYL YARAT (applicationpas.pas Button2Click :1416 / Button5Click :1393 → cr_file2 :346, cr_file1 :516, right cardcreatefilenr, uses the DBGrid SelectedRows). Then Yeni kartlar (U9.pas, N10Click :1082), Verifikasiya (unitverification.pas, N13Click :1286).
+Step 3c: Yeni kartlar (U9.pas, N10Click :1082), Verifikasiya (unitverification.pas, N13Click :1286).
