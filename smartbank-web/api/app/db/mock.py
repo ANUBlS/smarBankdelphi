@@ -36,6 +36,8 @@ from . import mock_azips
 from .mock_azips import AzipsMixin, AzipsEditMixin
 from .mock_azips_in import AzipsInMixin
 from .mock_xohks import XohksMixin
+from .mock_cards import CardsMixin
+from . import mock_cards
 from . import mock_xohks
 from ..config import settings
 
@@ -61,6 +63,7 @@ def reset():
     _state = None
     mock_azips.reset()
     mock_xohks.reset()
+    mock_cards.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -74,7 +77,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -174,7 +177,9 @@ class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsE
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._xs_proc(key, args)       # XÖHKS step 2 (XS_CONTROL)
+        r = self._cards_proc(key, args)    # Cards (card_main)
+        if r is NotImplemented:
+            r = self._xs_proc(key, args)       # XÖHKS step 2 (XS_CONTROL)
         if r is NotImplemented:
             r = self._azi_proc(key, args)      # AZIPS part 4b-2
         if r is NotImplemented:
@@ -270,6 +275,9 @@ class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsE
             return r
         r = self._acc_query(s, b)
         if r is not None:
+            return r
+        r = self._cards_query(sql, b)  # Packages/Cards_New (DataMod_CARDS) - last, its short lookups overlap others
+        if r is not NotImplemented:
             return r
         if "from sysdat" in s:
             sy = self.st["sys"]
