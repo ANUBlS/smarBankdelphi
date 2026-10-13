@@ -36,7 +36,7 @@ def test_sql_verbatim_lines():
 def test_open_admin_all_filials():
     login()
     r = P("/clients/open")
-    assert r["count"] == 5 and r["dateclose"] == 30
+    assert r["count"] == 7 and r["dateclose"] == 30
     a = {x["id"]: x for x in r["rows"]}
     assert a[1]["fil"] == "Baş ofis" and a[3]["fil"] == "Nərimanov filialı" and a[1]["creat"] == "ADMIN" and a[2]["modi"] == "TELLER"
     assert a[1]["cardnumber"] == "4169730000001111" and a[1]["old_acc_no"] == "38110000000001"
@@ -48,7 +48,7 @@ def test_open_teller_sees_all_filials():
     """cards_azericard FormActivate has no CARD_FIL_VIEW branch (Turan-only): every user gets all rows."""
     login("TELLER", "Teller#2026")
     r = P("/clients/open")
-    assert sorted(x["id"] for x in r["rows"]) == [1, 2, 3, 4, 5]
+    assert sorted(x["id"] for x in r["rows"]) == [1, 2, 3, 4, 5, 31, 32]
 
 
 def test_excel_export_cliexcel():
@@ -90,7 +90,7 @@ def test_edit_filter_prefix_case_sensitive():
 def test_refresh_hides_null_rbs():
     login(); P("/clients/open")
     r = P("/clients/refresh")
-    assert r["filter"] == "RBSNUMBER = '*'" and sorted(x["id"] for x in r["rows"]) == [1, 2, 3, 4]
+    assert r["filter"] == "RBSNUMBER = '*'" and sorted(x["id"] for x in r["rows"]) == [1, 2, 3, 4, 31, 32]
 
 
 def test_panel_filter_combinations():
@@ -108,13 +108,13 @@ def test_panel_filter_combinations():
 
 def test_sort_toggle_and_delete():
     login(); P("/clients/open")
-    assert [x["id"] for x in P("/clients/sort", {"field": "LNAME"})["rows"]] == [2, 3, 1, 4, 5]
-    assert [x["id"] for x in P("/clients/sort", {"field": "LNAME"})["rows"]] == [5, 4, 1, 3, 2]
-    assert P("/clients/sort", {"field": "ROWID"})["count"] == 5                              # not a grid column: no change
+    assert [x["id"] for x in P("/clients/sort", {"field": "LNAME"})["rows"]][:5] == [2, 3, 1, 4, 5]
+    assert [x["id"] for x in P("/clients/sort", {"field": "LNAME"})["rows"] if x["id"] < 30] == [5, 4, 1, 3, 2]
+    assert P("/clients/sort", {"field": "ROWID"})["count"] == 7                              # not a grid column: no change
     r = P("/clients/delete", {"id": 2, "confirmed": False})
-    assert r["count"] == 5
+    assert r["count"] == 7
     r = P("/clients/delete", {"id": 2, "confirmed": True})
-    assert sorted(x["id"] for x in r["rows"]) == [1, 3, 4, 5]
+    assert sorted(x["id"] for x in r["rows"]) == [1, 3, 4, 5, 31, 32]
 
 
 def test_filter_parser():

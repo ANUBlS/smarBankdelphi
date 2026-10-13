@@ -16,8 +16,8 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Menu (dfm) | Handler | Right | Form (unit) | Status |
 |---|---|---|---|---|
 | Prosedur ▸ Müştərilər | N11Click :1007 | card_clients | Tclients (customers.pas, 1440 lines) | **list + Excel ported** |
-| Prosedur ▸ Balans | N21Click :999 | card_balans | TBalance (balans.pas) | planned |
-| Prosedur ▸ Payment | N1Click :1015 | card_payment | TPayments (payment.pas) | planned |
+| Prosedur ▸ Balans | N21Click :999 | card_balans | TBalance (balans.pas) | **done (3e)** |
+| Prosedur ▸ Payment | N1Click :1015 | card_payment | TPayments (payment.pas) | **done (3e)** |
 | Prosedur ▸ Application | N9Click :1068 | card_application | TApplications (applicationpas.pas) | **list ported (3a); FAYL YARAT planned (3b)** |
 | Prosedur ▸ Yeni kartlar | N10Click :1082 | card_newcard | TForm9 (U9.pas) | planned |
 | Prosedur ▸ Verifikasiya | N13Click :1286 (visible only when card_settings.dord = 1, PopupMenu1Popup :1273) | VERIF | Tverification (unitverification.pas) | planned (menu visibility done) |
@@ -36,11 +36,11 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Əməliyyat ▸ Kliring | Kliring1Click :1143 | card_klirinq | TKlirinq_form (klirinqUnit.pas) | planned |
 | Əməliyyat ▸ Excel yükləmələr | N12Click :1259 | card_excelfile | TEXCELform (Unitexcel.pas) | planned |
 | Əməliyyat ▸ Card Number Change | cARDNUMBERCHANGE1Click :1266 | card_cardnumber | TCARDNUMBER (cardnumbersource.pas) | planned |
-| Əməliyyat ▸ Möhkəməndirmə | N14Click :1295 → LoadPlugin('FileReport.bpl','REZ') | – | separate BPL (Packages/Cards_New/FileReprt) | planned |
+| Əməliyyat ▸ Möhkəməndirmə | N14Click :1295 → LoadPlugin('FileReport.bpl','REZ') | – | separate BPL (Packages/Cards_New/FileReprt) | **on hold by user** (report) |
 | Əməliyyat ▸ Limitlər | Limitlr1Click :1152 | – | Tlim (limittur.pas) | planned |
 | Əməliyyat ▸ Commission Our POS-ONUS | PostCommisiononus1Click :1279 | card_cfile | TPostCommisionOnus | planned |
 | Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | planned |
-| Hesabatlar | ToolButton7Click :1075 | card_hesabat | THesabatlar (rezform.pas) | planned |
+| Hesabatlar | ToolButton7Click :1075 | card_hesabat | THesabatlar (rezform.pas) | **on hold by user** |
 | F3 (form KeyUp) | ActiveFormKeyUp :670 | – | TFormSearch: shared unit, to check | to check |
 
 Dead code: CTButtonRefreshClick :702 (body commented out), NewfileClick / NewCardClick (empty), test1Click (clients2, no menu item), PopupMenu3 (no handlers).
@@ -185,13 +185,36 @@ API `api/app/cards_verif.py` (`/api/cards/verification`), tests `api/tests/test_
 
 Unverified (3d): card_main.verifi body (mock: STATUS 4 → 1); an error from verifi stops the loop (the finally Refresh / message run when an earlier row was verified, then the error is shown).
 
+## Step 3e: Balans (balans.pas TBalance) and Payment (payment.pas TPayments) – done
+
+API `api/app/cards_balpay.py` (`/api/cards/balance`, `/api/cards/payment`), verbatim Delphi `delphi_src/cards_balans.pas` (balans.pas 89-327) and
+`delphi_src/cards_payment.pas` (payment.pas 203-445) run by pascal.py, tests `api/tests/test_cards_balpay.py`, E2E `e2e/cards_balpay.py`, screenshots 182-183.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| N21Click :999 (card_balans); FormActivate DateTimePicker1 := Date | `POST /balance/open` | grid empty until Button1 |
+| Button1Click 'Balans yığ' (cardbalansopen) | `/balance/collect` | balans (Unit18.dfm:2202) Open; Open on an active dataset = no-op |
+| Button3Click 'Fayl yarat' (cardbalanscreatefile) | `/balance/file {date}` | verbatim routine: Close/Open, b<BANKID>__N.<day of year>, header/RD/FT, 'BALANCE FILE CREATED'; file downloaded (+ CARDS_OUT_DIR) |
+| Button4Click (cardbalansexcel) / Button5Click 'Boşalt' (cardbalansclose) | `/balance/excel`, `/balance/close` | sheet 'payment' |
+| DBGrid1TitleClick | `/balance/sort`, `/payment/sort` | ORDER BY <field> for that Refresh only |
+| N1Click :1015 (card_payment); FormCreate dates := sysdat.tek_dat | `/payment/open` | DateTimePicker2 hidden (= dat2) |
+| Button1Click 'Yenilə' | `/payment/refresh {date}` | vids := first card_vidops VIDOP (Null when the table is empty → NOT IN (NULL): no rows, as Delphi) |
+| Button3Click → Button5Click 'Fayl yarat' | `/payment/file {selected}` | verbatim; per selected row card_main.delete_payment + insert_payment, no commit, Refresh, 'PAYMENT FILE CREATED'. Nothing selected → Exit |
+| Button4Click Excel; PopupMenu SELECT ALL | `/payment/excel`; right click | no right check |
+| Panel4 Edit1-3 / DBLookupComboBox1-2 / CheckBox1 'Filter' | shown, no effect | Delphi sets payment.Filter but never Filtered := True; Edit OnExit clears |
+| Button6Click | not ported | duplicate of Button5 on a hidden button nothing clicks |
+
+Unverified (3e): card_main.findcredit / curaccountostat / getcurr / delete_payment / insert_payment bodies (mocked); DecimalSeparator of the Delphi
+client (CARDS_DECIMAL_SEPARATOR, default ','; FloatToStr of OSTAT / amounts and StringReplace('.') depend on it); TFloatField.AsInteger rounding for
+insert_payment AMMOUNT / LAMMOUNT (the web truncates); the real BANKID length (header length follows it).
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya. (done)
-3. Balans, Payment, Hesabatlar (rezform), Sazlama (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett).
+3. Balans, Payment (done), Hesabatlar (rezform: **on hold by user**), Sazlama (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett).
 4. File operations: C File, Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file (+ excsett), RbsDoFile (+ rbsstate, card_states), RbsTax (+ Taxfilessettings), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission; card_ufx / arxivufx (no UFX71 in this build).
-5. FileReport.bpl 'REZ' (Packages/Cards_New/FileReprt), Online Cards, Karta Mədaxil.
+5. Online Cards, Karta Mədaxil. (FileReport.bpl 'REZ' and every other report screen: **on hold by user**.)
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Plan step 3: Balans (balans.pas, MAINFORMImpl1 menu 'balance'), then Payment, Online / k1 entries of PopupMenu1, Hesabatlar (rezform), Sazlama forms.
+Plan step 3: Online / k1 entries of PopupMenu1 (onlinec.pas, card_ufx.pas), then the Sazlama forms (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett), then step 4. Reports on hold by user.

@@ -64,6 +64,12 @@ def _db():
         c.create_function("card_main_findcredit2", 1, lambda a: kred.get(int(a or 0), 0))
         fk = {int(k): v for k, v in D.get("_filialkod", {}).items()}
         c.create_function("card_main_filialkod", 1, lambda k: fk.get(int(k or 0)))   # card_main.filialkod body not in the repo
+        fc = {int(k): v for k, v in D.get("_findcredit", {}).items()}
+        c.create_function("card_main_findcredit", 1, lambda a: fc.get(int(a or 0), 0))       # card_main body not in the repo
+        co = {int(k): v for k, v in D.get("_curaccountostat", {}).items()}
+        c.create_function("card_main_curaccountostat", 1, lambda a: co.get(int(a or 0), 0))  # card_main body not in the repo
+        cur = {r.get("RBSNUMBER"): r.get("CURRENCY") for r in D["card_clients"]}
+        c.create_function("card_main_getcurr", 1, lambda r: cur.get(r))       # card_main.getcurr body not in the repo: card_clients.currency
         c.execute("create table dual (dummy text)")
         c.execute("insert into dual values ('X')")
         for t, rows in D.items():
@@ -73,7 +79,7 @@ def _db():
             c.execute(f"create table {t} ({', '.join(cols)})")
             today = dt.datetime.combine(dt.date.today(), dt.time()).isoformat()
             for r in rows:
-                r = {k: (today if v == "TODAY" else v) for k, v in r.items()}           # fixture token: the server date
+                r = {k: (today if v == "TODAY" else dt.date.today().isoformat() if v == "TODAY_D" else v) for k, v in r.items()}           # fixture token: the server date
                 c.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))
         c.commit()
         _DB = c
@@ -90,7 +96,7 @@ def _pats():
                 t = re.escape(Q.text(L))
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
-                if n in ("LINES_URGENT", "LINES_SIMPLE"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
@@ -115,6 +121,7 @@ class CardsMixin:
         s = re.sub(r"sb_aca\.getuserbyid", "sb_aca_getuserbyid", s, flags=re.I)
         s = re.sub(r"card_main\.mainfind", "card_main_mainfind", s, flags=re.I)
         s = re.sub(r"card_main\.setreference", "card_main_setreference", s, flags=re.I)
+        s = re.sub(r"card_main\.(findcredit|curaccountostat|getcurr)\b", r"card_main_\1", s, flags=re.I)
         s = re.sub(r"card_main\.findcredit2", "card_main_findcredit2", s, flags=re.I)
         s = re.sub(r"card_main\.filialkod", "card_main_filialkod", s, flags=re.I)
         s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
@@ -166,6 +173,18 @@ class CardsMixin:
             sets = "STATUS = 2" + (", FILENAME = ?" if key == "CARD_MAIN.DONENEWCARD" else "")
             _db().execute(f"update card_client_app set {sets} where id = ?", list(args[1:2]) + [int(args[0])]
                           if key == "CARD_MAIN.DONENEWCARD" else [int(args[0])])
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
+            return {}
+        if key == "CARD_MAIN.DELETE_PAYMENT":
+            # card_main body not in the repo: emulated as 'delete from card_payment' (payment.pas Button5Click; no commit)
+            _db().execute("delete from card_payment")
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
+            return {}
+        if key == "CARD_MAIN.INSERT_PAYMENT":
+            # card_main body not in the repo: emulated as one card_payment row with the 14 arguments (no commit)
+            a = [v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v for v in args]
+            _db().execute("insert into card_payment (ID, CARDNUMBER, RBSNUMBER_1, ACCID, CURRENCY, AMMOUNT, LAMMOUNT, NAME, TIP, DAT, OPID, "
+                          "COMMITEDOPID, FILIAL, TIM) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", a)
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
         if key == "CARD_MAIN.VERIFI":

@@ -28,6 +28,8 @@
       if (i === 'application') return applications(el.querySelector('#cbody'));
       if (i === 'newcards') return newcards(el.querySelector('#cbody'));
       if (i === 'verif') return verification(el.querySelector('#cbody'));
+      if (i === 'balance') return balance(el.querySelector('#cbody'));
+      if (i === 'payment') return payment(el.querySelector('#cbody'));
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
@@ -314,6 +316,69 @@
         const res = await fetch(P + '/verification/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify({ grid: b.dataset.xls }) });
         if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
         const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Verification.xlsx'; a.click(); });
+    }
+    draw();
+  }
+
+  // Prosedur ▸ Balans (balans.pas TBalance) and Payment (payment.pas TPayments), api/app/cards_balpay.py
+  const b64dl = (f) => { const a = document.createElement('a'); a.href = 'data:application/octet-stream;base64,' + f.b64; a.download = f.name; a.click(); };
+  async function xlsx(path) {
+    const res = await fetch(P + path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: '{}' });
+    if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'payment.xlsx'; a.click();
+  }
+  const fileDone = (r) => { (r.files || []).forEach(b64dl); (r.messages || []).forEach(m => toast(m)); if (r.error) toast(r.error, 'error'); };
+  function gridHtml(id, cols, rows, pre, selset) {
+    const cell = (r, c) => { const v = r[c.toLowerCase()]; return esc(DATECOLS.has(c) ? fmtD(v) : (v ?? '')); };
+    return `<div class="tablewrap" style="max-height:60vh"><table class="grid" id="${id}"><thead><tr>${cols.map(c => `<th data-sort="${c}" style="cursor:pointer">${esc(K(pre + c.toUpperCase()))}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r, i) => `<tr data-i="${i}" class="${selset && selset.has(r._bm) ? 'sel' : ''}">${cols.map(c => `<td>${cell(r, c)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+  }
+  async function balance(box) {
+    const call = async (path, body) => { try { return await api(P + '/balance' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_balance'))}</h3>
+        <div class="toolbar" style="gap:6px"><span>${esc(K('bl_accounts'))}</span><button class="btn" id="bl_c">${esc(K('bl_collect'))}</button>
+        <button class="btn" id="bl_f">${esc(K('bl_file'))}</button><button class="btn secondary" id="bl_x">${esc(K('bl_excel'))}</button>
+        <button class="btn secondary" id="bl_z">${esc(K('bl_close'))}</button><input type="date" id="bl_d" value="${esc(d.date)}">
+        <span class="muted">${esc(K('count'))}: ${d.rows.length}</span></div>${gridHtml('bl_g', d.cols, d.rows, 'bc_')}`;
+      const go = async (p, b) => { const r = await call(p, b); if (r) { d = r; fileDone(r); draw(); } };
+      box.querySelector('#bl_c').onclick = () => go('/collect');
+      box.querySelector('#bl_z').onclick = () => go('/close');
+      box.querySelector('#bl_f').onclick = () => go('/file', { date: box.querySelector('#bl_d').value });
+      box.querySelector('#bl_x').onclick = () => xlsx('/balance/excel');
+      box.querySelectorAll('#bl_g th[data-sort]').forEach(th => th.onclick = () => go('/sort', { field: th.dataset.sort }));
+    }
+    draw();
+  }
+  async function payment(box) {
+    const call = async (path, body) => { try { return await api(P + '/payment' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    const sel = new Set(); let filt = false;
+    function draw() {
+      const dis = filt ? '' : 'disabled';
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_payment'))}</h3>
+        <div class="toolbar" style="gap:6px"><input type="date" id="py_d" value="${esc(d.dat1)}"><button class="btn" id="py_r">${esc(K('py_refresh'))}</button>
+        <button class="btn" id="py_f">${esc(K('bl_file'))}</button><button class="btn secondary" id="py_x">${esc(K('bl_excel'))}</button>
+        <span class="muted">${esc(K('count'))}: ${d.rows.length}</span></div>
+        <div class="toolbar" style="gap:6px"><input class="py_e" placeholder="ID" ${dis}><input class="py_e" placeholder="${esc(K('pc_CARDNUMBER'))}" ${dis}>
+        <input class="py_e" placeholder="${esc(K('pc_RBSNUMBER_1'))}" ${dis}><select ${dis}><option></option>${d.filials.map(f => `<option>${esc(f)}</option>`).join('')}</select>
+        <label><input type="checkbox" id="py_cb" ${filt ? 'checked' : ''}> Filter</label></div>${gridHtml('py_g', d.cols, d.rows, 'pc_', sel)}`;
+      const go = async (p, b) => { const r = await call(p, b); if (r) { d = r; fileDone(r); draw(); } };
+      box.querySelector('#py_r').onclick = () => { sel.clear(); go('/refresh', { date: box.querySelector('#py_d').value }); };
+      box.querySelector('#py_f').onclick = async () => { const r = await call('/file', { selected: [...sel] }); if (r) { d = r; fileDone(r); draw(); } };
+      box.querySelector('#py_x').onclick = () => xlsx('/payment/excel');
+      box.querySelector('#py_cb').onchange = (e) => { filt = e.target.checked; draw(); };
+      box.querySelectorAll('.py_e').forEach(i => i.onblur = () => { i.value = ''; });        // Edit1-3 OnExit; Filtered is never True
+      box.querySelectorAll('#py_g th[data-sort]').forEach(th => th.onclick = () => go('/sort', { field: th.dataset.sort }));
+      const g = box.querySelector('#py_g');
+      g.querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = (e) => { const bm = d.rows[+tr.dataset.i]._bm;
+        if (e.ctrlKey || e.metaKey || e.shiftKey) { sel.has(bm) ? sel.delete(bm) : sel.add(bm); } else { sel.clear(); sel.add(bm); } draw(); });
+      g.oncontextmenu = (e) => { e.preventDefault(); document.querySelectorAll('.cf_pop').forEach(x => x.remove());
+        const pm = document.createElement('div'); pm.className = 'cf_pop'; pm.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:1200;background:#fff;border:1px solid #888`;
+        pm.innerHTML = `<button class="btn secondary" id="py_all">SELECT ALL</button>`; document.body.appendChild(pm);
+        const off = () => { pm.remove(); document.removeEventListener('click', off); }; setTimeout(() => document.addEventListener('click', off), 0);
+        pm.querySelector('#py_all').onclick = () => { off(); d.rows.forEach(r => sel.add(r._bm)); draw(); }; };
     }
     draw();
   }
