@@ -18,7 +18,7 @@
       <button class="btn secondary" data-ni="sett">${esc(K('m_sett'))}</button><button class="btn secondary" data-ni="rep">${esc(K('m_rep'))}</button></div>
       <div id="cbody"><p class="muted">${esc(K('mi_clients'))} …</p></div></div>`;
     el.querySelectorAll('details.dd [data-mi]').forEach(b => b.onclick = (ev) => { ev.target.closest('details').open = false; item(b.dataset.mi); });
-    el.querySelectorAll('[data-ni]').forEach(b => b.onclick = () => toast(K('not_ported')));
+    el.querySelectorAll('[data-ni]').forEach(b => b.onclick = () => b.dataset.ni === 'sett' ? settings(el.querySelector('#cbody')) : toast(K('on_hold')));   // Hesabatlar: on hold by user
     function dd(id, title, items) {
       return `<details class="dd" id="${id}" style="position:relative;display:inline-block"><summary class="btn secondary">${esc(title)} ▾</summary>
         <div class="card" style="position:absolute;z-index:20;min-width:240px;padding:4px">${items.map(i => `<button class="btn ghost sm" style="display:block;width:100%;text-align:left" data-mi="${i}">${esc(K('mi_' + i))}</button>`).join('')}</div></details>`;
@@ -318,6 +318,94 @@
         const res = await fetch(P + '/verification/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify({ grid: b.dataset.xls }) });
         if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
         const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Verification.xlsx'; a.click(); });
+    }
+    draw();
+  }
+
+  // Sazlama (setac.pas TForm10 + balhs / comp / datclose / paymentsett), api/app/cards_sett.py
+  async function settings(box) {
+    const S = P + '/sett';
+    const call = async (path, body) => { try { return await api(S + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    let cur = null;
+    const yesno = (text) => new Promise(res => modal(`<p>${esc(text)}</p><div class="actions"><button class="btn" data-a="1">${esc(K('yes'))}</button><button class="btn secondary" data-a="0">${esc(K('no'))}</button></div>`,
+      (m, close) => m.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { close(); res(b.dataset.a === '1'); })));
+    function draw() {
+      if (!d.rows.some(r => r.id === cur)) cur = d.rows.length ? d.rows[0].id : null;
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('m_sett'))}</h3>
+        <div class="toolbar" style="gap:6px"><input id="st_e1" placeholder="KOD" style="width:80px"><input id="st_e2" placeholder="AD"><button class="btn" id="st_open">${esc(K('st_open'))}</button></div>
+        <div class="tablewrap"><table class="grid" id="st_g"><thead><tr><th data-sort="ID" style="cursor:pointer">KOD</th><th data-sort="SAZLAMALAR" style="cursor:pointer">AD</th></tr></thead>
+        <tbody>${d.rows.map(r => `<tr data-id="${r.id}" class="${r.id === cur ? 'sel' : ''}"><td>${esc(r.id)}</td><td>${esc(r.sazlamalar ?? '')}</td></tr>`).join('') || `<tr><td colspan="2" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+      const f1 = box.querySelector('#st_e1'), f2 = box.querySelector('#st_e2');
+      f1.oninput = async () => { const r = await call('/filter', { edit: 1, text: f1.value }); if (r) { d = r; redrawRows(); } };
+      f2.oninput = async () => { const r = await call('/filter', { edit: 2, text: f2.value }); if (r) { d = r; redrawRows(); } };
+      bindRows();
+      box.querySelector('#st_open').onclick = () => openSub(cur, false);
+      box.querySelectorAll('#st_g th[data-sort]').forEach(th => th.onclick = async () => { const r = await call('/sort', { field: th.dataset.sort }); if (r) { d = r; redrawRows(); } });
+    }
+    function redrawRows() { const v1 = box.querySelector('#st_e1').value, v2 = box.querySelector('#st_e2').value, a = document.activeElement && document.activeElement.id;
+      draw(); box.querySelector('#st_e1').value = v1; box.querySelector('#st_e2').value = v2; if (a) box.querySelector('#' + a)?.focus(); }
+    function bindRows() {
+      box.querySelectorAll('#st_g tbody tr[data-id]').forEach(tr => { tr.onclick = () => { cur = +tr.dataset.id; box.querySelectorAll('#st_g tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); };
+        tr.ondblclick = () => openSub(+tr.dataset.id, true); });
+    }
+    function openSub(id, dbl) {
+      const f = d.forms[String(id)]; if (!f || (dbl && !f.dblclick)) return;          // DBGrid1DblClick knows ids 1-10 only
+      if (!f.ported) return toast(K('not_ported'));
+      ({ balhs, comp, datclose, paymentsett })[f.form]();
+    }
+    const tbl = (cols, rows, id) => `<div class="tablewrap" style="max-height:45vh"><table class="grid" id="${id}"><thead><tr>${cols.map(c => `<th>${esc(c[1])}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r => `<tr data-rid="${esc(r.rowid)}">${cols.map(c => `<td>${esc(r[c[0]] ?? '')}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+    const pick = (m, id, st) => m.querySelectorAll(`#${id} tbody tr[data-rid]`).forEach(tr => tr.onclick = () => { st.rid = tr.dataset.rid; m.querySelectorAll(`#${id} tr.sel`).forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); });
+    async function balhs() {
+      let v = await call('/balhs/open'); if (!v) return; const st = { rid: null };
+      modal(`<h2>${esc(K('st_balhs'))}</h2><div id="sb"></div><div class="actions"><button class="btn secondary" data-x>${esc(K('cancel'))}</button></div>`, (m, close) => {
+        m.querySelector('[data-x]').onclick = close;
+        const dr = () => { st.rid = v.rows.length ? v.rows[0].rowid : null;
+          m.querySelector('#sb').innerHTML = `<div class="toolbar" style="gap:6px"><input id="bh_b" list="bh_bl" style="width:120px"><datalist id="bh_bl">${v.balspr.map(x => `<option>${esc(x)}</option>`).join('')}</datalist>
+            <input id="bh_h" list="bh_hl" style="width:120px"><datalist id="bh_hl">${v.reports.map(x => `<option>${esc(x)}</option>`).join('')}</datalist>
+            <button class="btn" id="bh_a">${esc(K('st_add'))}</button><button class="btn secondary" id="bh_d">${esc(K('on_delete'))}</button></div>${tbl([['balans', 'BALANS'], ['hes', 'HESABAT SIMVOLU']], v.rows, 'bh_g')}`;
+          pick(m, 'bh_g', st);
+          m.querySelector('#bh_a').onclick = async () => { const r = await call('/balhs/add', { balans: m.querySelector('#bh_b').value, hes: m.querySelector('#bh_h').value }); if (r) { v = r; dr(); } };
+          m.querySelector('#bh_d').onclick = async () => { const ok = await yesno(v.msg_del); const r = await call('/balhs/delete', { rowid: st.rid, confirmed: ok }); if (r) { v = r; dr(); } }; };
+        dr(); });
+    }
+    async function comp() {
+      let v = await call('/comp/open'); if (!v) return; const st = { rid: null };
+      modal(`<h2>${esc(K('st_comp'))}</h2><div id="sb"></div><div class="actions"><button class="btn secondary" data-x>${esc(K('cancel'))}</button></div>`, (m, close) => {
+        m.querySelector('[data-x]').onclick = close;
+        const dr = () => { st.rid = v.rows.length ? v.rows[0].rowid : null;
+          m.querySelector('#sb').innerHTML = `<div class="toolbar" style="gap:6px"><input id="cp_n"><button class="btn" id="cp_a">${esc(K('st_add'))}</button>
+            <button class="btn secondary" id="cp_d">${esc(K('on_delete'))}</button></div>${tbl([['company_name', 'Şirkət adları']], v.rows, 'cp_g')}`;
+          pick(m, 'cp_g', st);
+          const n = m.querySelector('#cp_n');   // Edit1KeyPress: UpCase, Ord > 126 and '?' dropped
+          n.oninput = () => { n.value = [...n.value].filter(c => c.charCodeAt(0) <= 126 && c !== '?').map(c => c >= 'a' && c <= 'z' ? c.toUpperCase() : c).join(''); };
+          m.querySelector('#cp_a').onclick = async () => { const r = await call('/comp/add', { name: n.value }); if (r) { v = r; dr(); } };
+          m.querySelector('#cp_d').onclick = async () => { const ok = await yesno(v.msg_del); const r = await call('/comp/delete', { rowid: st.rid, confirmed: ok }); if (r) { v = r; dr(); } }; };
+        dr(); });
+    }
+    async function datclose() {
+      let v = await call('/datclose/open'); if (!v) return;
+      modal(`<h2>${esc(K('st_datclose'))}</h2><label>${esc(K('st_datclose_l'))} <input id="dc_v" value="${esc(v.dateclose ?? '')}"></label>
+        <div class="actions"><button class="btn" id="dc_s">${esc(K('st_save'))}</button><button class="btn secondary" data-x>${esc(K('cancel'))}</button></div>`, (m, close) => {
+        m.querySelector('[data-x]').onclick = close;                             // FormClose: settings.Cancel
+        m.querySelector('#dc_s').onclick = async () => { const ok = await yesno(v.msg_save); const r = await call('/datclose/save', { value: m.querySelector('#dc_v').value, confirmed: ok }); if (r) { v = r; m.querySelector('#dc_v').value = v.dateclose ?? ''; } }; });
+    }
+    async function paymentsett() {
+      let v = await call('/paymentsett/open'); if (!v) return;
+      modal(`<h2>Paymentset</h2><div id="sb"></div><div class="actions"><button class="btn secondary" data-x>${esc(K('cancel'))}</button></div>`, (m, close) => {
+        m.querySelector('[data-x]').onclick = close;
+        const dr = () => {          // DBGrid1 with dgEditing: edit a cell and leave the row to Post; Ctrl+Del deletes (dgConfirmDelete)
+          m.querySelector('#sb').innerHTML = `<div class="toolbar" style="gap:6px"><button class="btn" id="pv_i">${esc(K('st_add'))}</button></div>
+            <table class="grid" id="pv_g"><thead><tr><th>ID</th><th>VIDOP</th><th></th></tr></thead><tbody>${v.rows.map(r => `<tr data-rid="${esc(r.rowid)}"><td><input data-f="id" value="${esc(r.id ?? '')}" style="width:70px"></td>
+            <td><input data-f="vidop" value="${esc(r.vidop ?? '')}"></td><td><button class="btn secondary sm" data-del>${esc(K('on_delete'))}</button></td></tr>`).join('')}</tbody></table>`;
+          m.querySelectorAll('#pv_g tbody tr').forEach(tr => {
+            const get = () => ({ id: tr.querySelector('[data-f=id]').value === '' ? null : +tr.querySelector('[data-f=id]').value, vidop: tr.querySelector('[data-f=vidop]').value || null });
+            tr.querySelectorAll('input').forEach(i => i.onchange = async () => { const r = await call('/paymentsett/apply', { op: 'update', rowid: tr.dataset.rid, ...get() }); if (r) { v = r; dr(); } });
+            tr.querySelector('[data-del]').onclick = async () => { if (!(await yesno('Delete record?'))) return; const r = await call('/paymentsett/apply', { op: 'delete', rowid: tr.dataset.rid }); if (r) { v = r; dr(); } };
+          });
+          m.querySelector('#pv_i').onclick = async () => { const r = await call('/paymentsett/apply', { op: 'insert', id: null, vidop: null }); if (r) { v = r; dr(); } }; };
+        dr(); });
     }
     draw();
   }

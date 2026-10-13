@@ -319,6 +319,8 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
             return
         if self._cr_execute(sql, binds or {}):
             return
+        if self._cards_execute(sql, binds or {}):
+            return
         m = re.fullmatch(r'ALTER USER "([A-Z][A-Z0-9_$#]*)" ACCOUNT UNLOCK', sql.strip())
         if m:
             if not self.user.get("is_adm"):

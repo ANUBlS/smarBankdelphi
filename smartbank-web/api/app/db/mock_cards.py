@@ -114,6 +114,9 @@ DONE = {"CARD_MAIN." + n.upper() for n in ("donenewcard", "donesupcard", "donepr
 
 class CardsMixin:
     def _cards_query(self, sql, b):
+        if sql.startswith(Q.text(Q.LINES_SAZLAMALAR)) and "ORDER BY" in sql[len(Q.text(Q.LINES_SAZLAMALAR)):]:
+            # setac.pas DBGrid1TitleClick adds a second ORDER BY after 'order by id': Oracle rejects the statement
+            raise DBError("ORA-00933: SQL command not properly ended", 933)
         if not any(p.match(sql) for p in _pats()):
             return NotImplemented
         s = re.sub(r"\bsmart\.", "", sql)
@@ -201,6 +204,16 @@ class CardsMixin:
             _db().execute("delete from card_client_app where id = ?", [int(args[0])])
             return {}
         return NotImplemented
+
+    def _cards_execute(self, sql, b):
+        """DOA DML of the Sazlama forms (cards_sett.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
+        from .. import cards_sett as S
+        if sql not in S.SQL.values():
+            return False
+        p = {k.lower(): v for k, v in b.items()}
+        s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
+        _db().execute(s, p)
+        return True
 
     def _cards_func(self, key, args):
         return NotImplemented

@@ -342,3 +342,5 @@ from . import cards_balpay  # noqa: E402
 app.include_router(cards_balpay.make_router(current, require_module, err))
 from . import cards_online  # noqa: E402
 app.include_router(cards_online.make_router(current, require_module, err))
+from . import cards_sett  # noqa: E402
+app.include_router(cards_sett.make_router(current, require_module, err))
