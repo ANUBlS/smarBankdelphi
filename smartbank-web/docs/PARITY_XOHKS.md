@@ -169,3 +169,7 @@ never-opened local dataset (:239 - in TDataSet that raises 'closed dataset'; the
 
 ## Resume point
 Step 4: IN file load (manual upload, one file), convert, accept; ToolButton6 'Baxmaq'; reports as PDF; settings forms.
+Entry points: MessageInFileLoadExecute :2849 (OpenDialogIn → FileListIncoming; web = one uploaded file), MessagesInConvertExecute
+:2523 / Convert1Click :2177 / ConvertAll1Click :2664 / ConvertConfirmeClick :2948 → ConvertToBase :1412-1848 (437 lines parsing a
+TRichEdit with FindText / CaretPos.y / Lines[] - port with a small RichEdit text model, or run it through api/app/pascal.py as
+AZIPS does), MessagesInAcceptExecute :2586, MessInDeleteExecute :2204, MessagesInEditExecute :2570 (ReceiveMessDetals_Unit).
