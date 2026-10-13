@@ -15,7 +15,7 @@ from .base import DBError
 
 _DB = None
 _PATS = None
-DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE"}
+DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE", "OP_DATE"}
 
 
 def reset():
@@ -185,6 +185,10 @@ class CardsMixin:
             a = [v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v for v in args]
             _db().execute("insert into card_payment (ID, CARDNUMBER, RBSNUMBER_1, ACCID, CURRENCY, AMMOUNT, LAMMOUNT, NAME, TIP, DAT, OPID, "
                           "COMMITEDOPID, FILIAL, TIM) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", a)
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
+            return {}
+        if key == "CARD_MAIN.CARD_UFX_PROC":
+            # card_main.card_ufx_proc body not in the repo: no-op in the mock (card_ufx is the fixture)
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
         if key == "CARD_MAIN.VERIFI":

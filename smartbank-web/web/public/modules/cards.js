@@ -29,6 +29,8 @@
       if (i === 'newcards') return newcards(el.querySelector('#cbody'));
       if (i === 'verif') return verification(el.querySelector('#cbody'));
       if (i === 'balance') return balance(el.querySelector('#cbody'));
+      if (i === 'online') return online(el.querySelector('#cbody'));
+      if (i === 'k1') return ufx(el.querySelector('#cbody'));
       if (i === 'payment') return payment(el.querySelector('#cbody'));
       toast(K('not_ported'));
     }
@@ -97,7 +99,7 @@
       if (k === 'DBLookupComboBox6') return `<input id="cf_${k}" list="cf_accl" value="${esc(st.f[k] ?? '')}" style="width:100%"><datalist id="cf_accl"></datalist>`;
       return `<input id="cf_${k}" ${k.startsWith('DateTime') ? 'type="date"' : ''} value="${esc(st.f[k] ?? '')}" style="width:100%;${aq}">`;
     };
-    window.SB.modal(`<h2>${esc(mode === 'NEW' ? K('form_new') : K('form_edit'))}</h2>
+    window.SB.modal(`<h2>${esc(mode === 'NEW' ? K('form_new') : mode === 'ONLINE' ? 'ONLINE' : K('form_edit'))}</h2>
       <div class="toolbar" style="gap:6px;flex-wrap:wrap;margin-bottom:6px">
         <label>${esc(K('f_apptype'))} <select id="cf_ComboBox9">${d.apptype.map(x => `<option>${esc(x)}</option>`).join('')}</select></label>
         <label><input type="checkbox" id="cf_CheckBox4" ${d.multicard ? 'checked' : ''}> MultiCard</label>
@@ -317,6 +319,42 @@
         if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
         const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Verification.xlsx'; a.click(); });
     }
+    draw();
+  }
+
+  // Prosedur ▸ Online Cards (onlinec.pas) and Karta Mədaxil (card_ufx.pas + arxivufx.pas), api/app/cards_online.py
+  async function online(box) {
+    let d; try { d = await api(P + '/online/open', { method: 'POST', body: {} }); } catch (e) { toast(errT(e), 'error'); return; }
+    box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_online'))}</h3><div class="toolbar" style="gap:6px"><button class="btn" id="on_p">${esc(K('on_prepare'))}</button>
+      <button class="btn secondary" id="on_d">${esc(K('on_delete'))}</button></div>
+      <div class="tablewrap"><table class="grid"><thead><tr>${d.cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody></tbody></table></div>`;
+    box.querySelector('#on_p').onclick = () => form('ONLINE');
+    box.querySelector('#on_d').onclick = () => {};                        // Button2 'Sil': no OnClick in onlinec.dfm
+  }
+  function ufxGrid(id, d, pre) {
+    const cell = (r, c) => { if (c === '') { const n = d.status_img[r.status]; return n !== undefined ? `<img src="/img/cards/${pre}_status_${n}.png" alt="${esc(r.status)}">` : ''; }
+      const v = r[c.toLowerCase()]; return esc(c === 'OP_DATE' ? fmtD(v) : (v ?? '')); };
+    return `<div class="tablewrap" style="max-height:55vh"><table class="grid" id="${id}"><thead><tr>${d.cols.map(c => `<th>${esc(d.titles[c] || c)}</th>`).join('')}</tr></thead>
+      <tbody>${d.rows.map(r => `<tr>${d.cols.map(c => `<td>${cell(r, c)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${d.cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+  }
+  async function ufx(box) {
+    const call = async (path, body) => { try { return await api(P + '/ufx' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    const draw = () => {
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_k1'))}</h3><div class="toolbar" style="gap:6px"><button class="btn" id="ux_r">${esc(K('py_refresh'))}</button>
+        <button class="btn secondary" id="ux_a">${esc(K('ux_archive'))}</button></div>${ufxGrid('ux_g', d, 'ufx')}`;
+      box.querySelector('#ux_r').onclick = async () => { const r = await call('/refresh'); if (r) { d = r; draw(); } };
+      box.querySelector('#ux_a').onclick = async () => {
+        let a = await call('/arxiv/open'); if (!a) return;
+        modal(`<h2>UFX_ARXIV</h2><div id="ua_b"></div><div class="actions"><button class="btn secondary" data-close>${esc(K('cancel'))}</button></div>`, (m, close) => {
+          const b = m.querySelector('#ua_b');
+          m.querySelector('[data-close]').onclick = close;
+          const dr = () => { b.innerHTML = `<div class="toolbar" style="gap:6px"><input type="date" id="ua_1" value="${esc(a.begdat)}"><input type="date" id="ua_2" value="${esc(a.enddat)}">
+            <button class="btn" id="ua_r">${esc(K('py_refresh'))}</button></div>${ufxGrid('ua_g', a, 'ufxarx')}`;
+            b.querySelector('#ua_r').onclick = async () => { const r = await call('/arxiv/refresh', { begdat: b.querySelector('#ua_1').value, enddat: b.querySelector('#ua_2').value }); if (r) { a = r; dr(); } }; };
+          dr(); });
+      };
+    };
     draw();
   }
 

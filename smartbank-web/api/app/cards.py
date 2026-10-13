@@ -257,11 +257,11 @@ def form_open(ws, mode: str, rid: int | None = None) -> dict:
     ComboBox5 := 'WITH' in both. Read-only in the web for now: saving (Button2Click :676) is the next step."""
     _need(ws)
     conn = ws.conn
-    if mode not in ("NEW", "EDIT"):
+    if mode not in ("NEW", "EDIT", "ONLINE"):
         raise ValueError(mode)
     # FormCreate :1497 runs button1.Click (Button1Click :583, right card_client_new) before FormActivate
     conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_client_new"], commit=False)
-    if mode == "NEW":
+    if mode in ("NEW", "ONLINE"):                     # ONLINE: onlinec.pas Button1Click checks card_madd before Tclients2.Create
         conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_madd"], commit=False)
     else:
         conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_medit"], commit=False)
@@ -273,14 +273,21 @@ def form_open(ws, mode: str, rid: int | None = None) -> dict:
            "cb9": {k: v["enabled"] for k, v in CB9.BRANCHES.items()}, "required": REQUIRED,
            "dbedit18": _st(ws).get("valut2", ""), "cardtypes": cardtypes, "cards": [], "operations": [], "credits": [], "accounts": [],
            "grid5": GRID5_COLS, "grid6": GRID6_COLS, "multicard": False, "button3": mode == "EDIT"}
-    if mode == "NEW":
+    if mode in ("NEW", "ONLINE"):
         for k in FORM_FIELDS:
             if k not in f:
                 f[k] = ""
         f.update(ComboBox12="CARD OK", ComboBox4="RESIDENT", Edit28="0", DateTimePicker5=today, DateTimePicker6=today,
                  DateTimePicker7=today, DateTimePicker8=today, Edit14="", Edit29="", Edit33="", DBLookupComboBox6="")
+        if mode == "ONLINE":
+            # onlinec.pas Button1Click: Edit1 := 'ONLINE' (so FormActivate's NEW branch does not run) and the boxes take
+            # DataMod_CARDS.Online_Cards fields; Online_Cards is never opened (the Open in OnlineCards1Click is commented out),
+            # so every AsString is ''. FormShow then sets Edit19 'BAKU', Edit20 / Edit21 'AZE', ComboBox12 'CARD OK'.
+            f.update({k: "" for k in ("Edit15", "Edit16", "Edit18", "Edit17", "Edit27", "Edit22", "ComboBox4", "ComboBox1", "Edit25",
+                                      "ComboBox10")})
+            f.update(Edit19="BAKU", Edit20="AZE", Edit21="AZE", ComboBox12="CARD OK")
         out.update(fields=f, enabled=True)
-        _form_state(ws, "NEW", [], [])
+        _form_state(ws, mode, [], [])
         return out
     cur = next((r for r in _st(ws).get("rows") or [] if r.get("ID") == rid), None)
     if cur is None:
@@ -485,7 +492,7 @@ def make_router(current, require_module, err):
 
     @r.post("/clients/form")
     def _fo(b: FormIn, ws=Depends(g)):
-        if b.mode not in ("NEW", "EDIT"):
+        if b.mode not in ("NEW", "EDIT", "ONLINE"):
             err(400, "error.bad_request")
         try:
             return form_open(ws, b.mode, b.id)

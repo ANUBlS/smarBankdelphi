@@ -21,8 +21,8 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Prosedur ▸ Application | N9Click :1068 | card_application | TApplications (applicationpas.pas) | **list ported (3a); FAYL YARAT planned (3b)** |
 | Prosedur ▸ Yeni kartlar | N10Click :1082 | card_newcard | TForm9 (U9.pas) | planned |
 | Prosedur ▸ Verifikasiya | N13Click :1286 (visible only when card_settings.dord = 1, PopupMenu1Popup :1273) | VERIF | Tverification (unitverification.pas) | planned (menu visibility done) |
-| Prosedur ▸ Online Cards | OnlineCards1Click :990 | – (no right, no myswift check) | Tonline (onlinec.pas) | planned |
-| Prosedur ▸ Karta Mədaxil | K1Click :547 | – (no right check) | TUFXFORM (card_ufx.pas, UFX card deposit) | planned |
+| Prosedur ▸ Online Cards | OnlineCards1Click :990 | – (no right, no myswift check) | Tonline (onlinec.pas) | **done (3f)** |
+| Prosedur ▸ Karta Mədaxil | K1Click :547 | – (no right check) | TUFXFORM (card_ufx.pas, UFX card deposit) | **done (3f)** |
 | Əməliyyat ▸ C File | MenuItem1Click :1061 | card_cfile | Tcfile (cfilepas.pas, + cfile_addi.pas) | planned |
 | Əməliyyat ▸ Dxxx File | MenuItem2Click :1110 | card_dxxxfile | TDxxx (UnitDxxx.pas) | planned |
 | Əməliyyat ▸ SMS | MenuItem3Click :1096 | card_smsfiles | Tsmsfile (sms.pas) | planned |
@@ -208,6 +208,23 @@ Unverified (3e): card_main.findcredit / curaccountostat / getcurr / delete_payme
 client (CARDS_DECIMAL_SEPARATOR, default ','; FloatToStr of OSTAT / amounts and StringReplace('.') depend on it); TFloatField.AsInteger rounding for
 insert_payment AMMOUNT / LAMMOUNT (the web truncates); the real BANKID length (header length follows it).
 
+## Step 3f: Online Cards (onlinec.pas Tonline) and Karta Mədaxil (card_ufx.pas TUFXFORM + arxivufx.pas TUFX_ARXIV) – done
+
+API `api/app/cards_online.py`, Tclients2 mode ONLINE in `api/app/cards.py`, tests `api/tests/test_cards_online.py`, E2E `e2e/cards_online.py`, screenshots 184-186.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| OnlineCards1Click :990 (no right) | `/online/open` | Online_Cards is never opened: persistent field columns, no rows |
+| Button1Click 'Kartı hazırla' (card_madd) | `/clients/form {mode: ONLINE}` | Tclients2 Edit1 = 'ONLINE'; Online_Cards fields (closed) = ''; FormShow BAKU / AZE / AZE / CARD OK; save = the NEW path (:682) |
+| Button2 'Sil' | button, no action | no OnClick |
+| K1Click :547; FormShow card_main.card_ufx_proc + Card_inn Open | `/ufx/open` | no commit |
+| Button1 'Yenilə' (Card_inn.Refresh) / Button2 'Arxiv' | `/ufx/refresh`, `/ufx/arxiv/open` | archive dates start at the dfm design dates 18.10.2017 |
+| TUFX_ARXIV Button1Click | `/ufx/arxiv/refresh {begdat, enddat}` | card_uxfarxiv dat1 / dat2; Button3 has no OnClick |
+| DBGrid1DrawColumnCell | Status column icons | STATUS 0→13, 1/2→3, 3→0 from each form's own ImageList1 |
+
+Unverified (3f): card_main.card_ufx_proc body (mock no-op); card_uxfarxiv DAT1/DAT2 variable types (sent as dates); the dates Tclients2 Button1Click sets
+(ONLINE skips FormActivate's NEW branch; the web keeps the NEW defaults for the date pickers).
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya. (done)
@@ -217,4 +234,4 @@ insert_payment AMMOUNT / LAMMOUNT (the web truncates); the real BANKID length (h
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Plan step 3: Online / k1 entries of PopupMenu1 (onlinec.pas, card_ufx.pas), then the Sazlama forms (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett), then step 4. Reports on hold by user.
+Plan step 3: the Sazlama forms (ToolButton3Click :1089, right card_setting → TForm10 setac.pas, and its sub-forms banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett), then step 4 (file operations). Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.
