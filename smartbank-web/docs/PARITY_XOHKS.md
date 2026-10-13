@@ -196,9 +196,13 @@ incoming file (tests/data/xohks_in_sample.xml is built from the parser's offsets
 | Button1Click 'Yaddaşa yaz' | `/in/edit/save` {search1, confirmed} | Exits when SearchEdit1 is empty or SearchEdit2 is red. Clicking the button leaves the edit first, so the red test only sees white (kept as in Delphi). Date check ('deyişdirilə bilməz'); 'Əməliyyat #id dəyişdirilsinmi ?'; xs_Incoming_update(id, DataAccount.id, acc_no) and xs_incoming_ChangeStatus(id, 0); no commit |
 | ToolButton6Click 'Baxmaq' :3907 | OUT tab 'Baxmaq' → `/in/witch`, `/in/witch/benef` | Uses the current StDate/EndDate picker values. OracleDataSet1 and detail OracleDataSet2 come from Witch.dfm (LINES_WITCH1/2); grid columns as in Witch.dfm |
 
+## Settings forms
+Not ported because Delphi never shows them. `Form_Setting` (Unit_setting.pas: XS_FILTER balance accounts, xs_Filter_Account_add / _Delete) and
+`Form_Admin_Setting` (Admin_Setting.pas: xs_Admin_in_Add / _Del) are only created in ActiveFormCreate :804-805. No ShowModal / Show call
+exists in any unit of the package, and no .dfm event opens them, so neither form can be reached in the Delphi build.
+
 ## Resume point
-Step 4c: reports as PDF (EnterClick, N25Click ReportinX, Unit_Report*), settings forms (Unit_setting, Admin_Setting).
-Entry points: MessageInFileLoadExecute :2849 (OpenDialogIn → FileListIncoming; web = one uploaded file), MessagesInConvertExecute
-:2523 / Convert1Click :2177 / ConvertAll1Click :2664 / ConvertConfirmeClick :2948 → ConvertToBase :1412-1848 (437 lines parsing a
-TRichEdit with FindText / CaretPos.y / Lines[] - port with a small RichEdit text model, or run it through api/app/pascal.py as
-AZIPS does), MessagesInAcceptExecute :2586, MessInDeleteExecute :2204, MessagesInEditExecute :2570 (ReceiveMessDetals_Unit).
+Step 4c: the prints as PDF. Popup menu items on the IN / OUT grids (LVPCSSImpl.dfm ~:4860-4890): N21Click :3066, N22, N23, N24, N25Click
+'Hamısını çap et' (ReportinX / Form_Report_in with ODS_CODEID NAMEID branch, :3166-3300), N26. EnterClick :2957 (Form_Report) has no
+OnClick in the .dfm, so check whether it is reachable before porting it. QuickReport layouts are in Unit_Report*.dfm / Unit_ReportX.dfm /
+Unit_ReportinX.dfm; render them like the AZIPS prints (report_render.py). After that, mark XÖHKS complete.
