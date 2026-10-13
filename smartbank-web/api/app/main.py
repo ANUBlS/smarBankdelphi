@@ -313,3 +313,5 @@ from . import out_repair  # noqa: E402
 app.include_router(out_repair.make_router(current, require_module, err))
 from . import out_excel_import  # noqa: E402
 app.include_router(out_excel_import.make_router(current, require_module, err))
+from . import azips  # noqa: E402
+app.include_router(azips.make_router(current, require_module, err))

@@ -30,6 +30,8 @@ from .mock_oset import OsetMixin
 from .mock_omem import OmemMixin
 from .mock_orep import OrepMixin
 from .mock_oexi import OexiMixin
+from . import mock_azips
+from .mock_azips import AzipsMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -52,6 +54,7 @@ def reset():
     """Test helper: reload fixtures (drops changed passwords)."""
     global _state
     _state = None
+    mock_azips.reset()
     mock_cs.reset()
     mock_cr.reset()
     mock_bal.reset()
@@ -64,7 +67,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(AzipsMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -78,6 +81,9 @@ class MockConnection(OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstM
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._az_func(key, args)
+        if r is not NotImplemented:
+            return r
         r = self._orep_func(key, named)
         if r is not NotImplemented:
             return r
@@ -155,6 +161,9 @@ class MockConnection(OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstM
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._az_proc(key, args)
+        if r is not NotImplemented:
+            return r
         r = self._oexi_proc(key)
         if r is not NotImplemented:
             return r
@@ -191,6 +200,9 @@ class MockConnection(OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstM
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._az_query(sql, b)  # Packages/SWIFT_MANAGER_IBAN_NEW (AZIPS)
+        if r is not NotImplemented:
+            return r
         r = self._oexi_query(sql, b)  # Packages/OutExcelImport
         if r is not NotImplemented:
             return r
