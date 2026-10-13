@@ -95,3 +95,10 @@ The screenshots are in `docs/screenshots/`.
 
 ## Known limits / to verify on the real DB
 See `docs/PILOT_NOTES.md`.
+
+## Single worker (required)
+The API must run as **one uvicorn worker** (the Dockerfile uses `--workers 1`, and the app refuses to start if
+`WEB_CONCURRENCY` > 1). Each signed-in user has a live Oracle session in memory, the same as Delphi's
+one `TOracleSession` per client, including uncommitted work between calls. The AZIPS forms that run on the
+Pascal interpreter (`Azipsnew`) also keep their open form state in that process. More workers or replicas behind a load
+balancer without sticky sessions would lose them. To handle more load, give the container more CPU; the server is threaded.

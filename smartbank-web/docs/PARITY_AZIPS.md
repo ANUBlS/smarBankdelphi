@@ -217,6 +217,33 @@ Deliberate differences / unverified:
   (:2953, :6748, :6790) – a QuickReport print; ported with the other prints in part 4.
 
 
+## 4a. Row actions (done)
+API `POST /api/azips/action` + `GET /api/azips/commit-currencies` (`api/app/azips_actions.py`), UI buttons on the OUT tab
+(Ləğv et, Verifikator, Geri qaytar!, Geri qaytar (sending), Əməliyyatı günün sənədlərinə göndər) and IN tab (Ləğv et), tests
+`api/tests/test_azips_actions.py`, E2E `e2e/azips_actions_screens.py`, screenshots 114-116. These are short procedures with no file
+building, so they are ported by hand as Python (line references below) instead of running on the interpreter.
+
+| Delphi | Right | Call |
+|---|---|---|
+| ToolButton9Click :2961 → out_deleteExecute :4515 | SW_OUT_DELETE (only when sw_out has rows) | `sw_main.sw_out_delete(id)` per row, Commit, Memo2 `N sayda əməliyyat silindi!` / `Bütün əməliyyatlar silinib!` |
+| opendayClick :4096 → backClick :4428 → geriExecute :4458 | SW_back, then SW_BACK when sw_out_2 has rows (else Memo2 `Əməliyyatlar qaytarılmadı!`) | `sw_main.sw_out_back(id)`, Commit, Memo2 text |
+| ToolButton13Click :3025 / N1Click → commitingExecute :6688 + Form12 (yoxp.pas) | SW_OUT_COMMITS | Form12: typed amount = `MF32A_AMOUNT` display text **and** chosen `VAL_NAME` (ValuteForCommit `select * from avalute`, Unit2.dfm:5043-5046) = `MF32A_CURR` → `sw_main.sw_out_commit(id)`; mismatch → row `STATUS := 7`, `INFO := 'Mebleq ve ya Valyuta duzgun yazilmayib!'`, Post + Commit, exit; `Çıx` → exit. Normal end → Commit |
+| ToolButton6Click :4087 → DeleteExecute :4377 | SW_IN_DELETE | `sw_main.sw_in_delete(id)`, Commit |
+| Geriqaytar1Click :435 (popup on Sending) | SW_BACK | `sw_main.del_std_transaction(tr_id, id)`, no commit (as Delphi) |
+| mliyyatGnnsndlringondrm1Click :6778 | SEND_TRAN | `sw_main.transend(id, 999)`, no commit (as Delphi) |
+
+Loop semantics are kept: SelectedRows, or the current row when nothing is selected; MessageDlg answers Yes / No (skip) / Cancel (break) /
+YesToAll (second dialog). The browser asks first and sends the answers in order. `exit` inside the commiting loop skips the final
+`SBSession.Commit`, so `sw_out_commit` calls made before it stay uncommitted in the user's session, as in Delphi. Memo2 uses the loop
+variable after the loop. Delphi leaves that undefined after a completed loop; the web uses the last index (Count-1).
+Not ported yet: ToolButton11Click "Modifikator" → `addtrans2Execute` :5146.
+
+## Single worker
+Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
+forced to **one worker**: Dockerfile `--workers 1` (with a comment), `app/main.py` refuses to start when `WEB_CONCURRENCY` > 1, and the
+README has a "Single worker" section. Persisting form state in SQLite would not help, because the live Oracle session can't be moved
+between processes.
+
 ## Unverified (part 1, needs the real database)
 - `sw_main` package body is not in the repo: what `new_dat` does exactly (mock: moves status-96 incoming rows dated before the
   operating day into `SW_ARCHIVE`, only to illustrate).
@@ -224,4 +251,8 @@ Deliberate differences / unverified:
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Next: part 4 – commit/verify/authorise, back/delete, incoming postings, account checks, settings forms, prints incl. ToolButton8Click, UFX71/ufxcredit.
+Part 4a (row actions, see §4a) is done. Next is part 4b: Modifikator `addtrans2Execute` :5146, incoming postings (`comitClick` :3906 → `AddINTransNewExecute`
+:7118, `AddInTransExecute` :4015, `AddTransExecute` :3629), account checks (`ceskingClick` :5330, Checkacc, acc_check, Tranzit_account,
+`Hesabiyoxla1Click` :4323), IN edit (`ToolButton5Click` → Unit4), settings (ToolButton10/12 → insett / AzipsSett, MTsett, Unit3), prints
+(`ToolButton8Click` :6179, printClick :3984, cap, qrp1, qr5, qrp5), UFX credit (UFX71, `ufxcredit` :6931), template load
+(Şablondan yüklə / Ttemplate). After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.

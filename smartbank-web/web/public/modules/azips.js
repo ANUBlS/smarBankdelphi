@@ -37,19 +37,28 @@
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
           <button class="btn secondary" id="z_arxin">${esc(K('archive'))}</button>
           <button class="btn" id="z_konv" title="${esc(K('konv_hint'))}">${esc(K('konvert'))}</button>
+          <button class="btn danger" id="z_indel">${esc(K('delete'))}</button>
           <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
         v('g_in').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => load({ in_sort: h.dataset.s }));
         v('g_in2').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => { st.in2 = h.dataset.s; load({}); });
         v('z_arxin').onclick = () => arch('in');
         v('z_konv').onclick = () => v('z_konvf').click();
+        v('g_in').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
+          v('g_in').querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr)); st.sel_in = d.sw_in[+tr.dataset.i].id;
+        });
+        v('z_indel').onclick = () => act('in_delete', st.sel_in, 'q_delete');      // ToolButton6Click -> DeleteExecute
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
           <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button>
           <button class="btn" id="z_new">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
           <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button>
-          <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button></div>
+          <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button>
+          <button class="btn danger" id="z_odel">${esc(K('delete'))}</button><button class="btn" id="z_verify">${esc(K('verify'))}</button>
+          <button class="btn secondary" id="z_back">${esc(K('back'))}</button><button class="btn secondary" id="z_sback">${esc(K('sending_back'))}</button>
+          <button class="btn secondary" id="z_tsend">${esc(K('transend'))}</button></div>
+          <input class="input" readonly id="z_memo2" style="width:100%;margin-top:6px" value="${esc(st.memo2 || '')}">
           <input class="input" readonly id="z_s1" style="width:100%;margin-top:6px" value="${esc(d.sum_send_text != null ? 'Bu gün göndəriləcək ümumi məbləğ = ' + d.sum_send_text + ' AZN' : '')}">
           <input class="input" readonly id="z_s2" style="width:100%;margin-top:4px" value="${esc(d.sum_verify_text != null ? 'Bu gün verifikasiya olunacaq ümumi məbləğ = ' + d.sum_verify_text + ' AZN' : '')}">
           ${box(K('box_out'), table('g_out', C.out, d.sw_out))}${box(K('box_out2'), table('g_out2', C.out2, d.sw_out_2))}${box(K('box_out3'), table('g_out3', C.out3, d.sw_out3))}`;
@@ -71,6 +80,11 @@
         });
         mark3();
         v('z_file').onclick = () => createFiles(d);
+        v('z_odel').onclick = () => act('out_delete', st.sel_out, 'q_delete');          // ToolButton9Click -> out_deleteExecute
+        v('z_back').onclick = () => act('out_back', st.sel_out2, 'q_back');             // opendayClick -> backClick -> geriExecute
+        v('z_verify').onclick = () => verify(d);                                        // ToolButton13Click -> commitingExecute + Form12
+        v('z_sback').onclick = () => act('sending_back', st.cur3, null);                // Geriqaytar1Click
+        v('z_tsend').onclick = () => act('transend', st.sel_out, null);                 // mliyyatGnnsndlringondrm1Click
         const AE = window.SB.azipsEdit;
         const AN = window.SB.azipsNew;
         v('z_new').onclick = () => AN.open('1', 'toolbutton1', () => load({}));   // toolbar 'Yeni' = ToolButton1Click -> filereport.bpl 'Azipsnew' '1'
@@ -85,6 +99,32 @@
         };
       }
       v('z_ref').onclick = () => load({});
+    }
+    // part 4a row actions (api/app/azips_actions.py): MessageDlg per row -> answers sent with the request
+    async function act(kind, id, q, form12) {
+      if (id == null) return toast(K('pick_row'), 'error');
+      if (q && !confirm(K(q).replace('%d', id))) return;
+      try {
+        const r = await api(P + '/action', { method: 'POST', body: { kind, current: id, answers: (q || kind === 'out_commit') ? ['yes'] : [], form12: form12 || [] } });
+        if (r.memo2) st.memo2 = r.memo2;
+        if (r.message) toast(r.message, r.wrong ? 'error' : undefined); else toast(K('done'));
+      } catch (e) { toast(errT(e), 'error'); }
+      load({});
+    }
+    async function verify(d) {
+      const id = st.sel_out2;
+      if (id == null) return toast(K('pick_row'), 'error');
+      if (!confirm(K('q_verify').replace('%d', id))) return;
+      let cur = [];
+      try { cur = await api(P + '/commit-currencies'); } catch (e) { return toast(errT(e), 'error'); }
+      modal(`<h3>Avtorizasiya</h3><div class="toolbar" style="gap:8px"><select class="input" id="f12c">${cur.map(c => `<option>${esc(c)}</option>`).join('')}</select>
+        <input class="input" id="f12a" inputmode="decimal" placeholder="${esc(K('amount'))}"></div>
+        <div class="actions"><button class="btn" id="f12ok">Təsdiq et</button><button class="btn secondary" id="f12x">Çıx</button></div>`, (m, close) => {
+        const a = m.querySelector('#f12a');
+        a.onkeypress = (e) => { if (!/[0-9.]/.test(e.key)) e.preventDefault(); };      // Edit1KeyPress: 0..9, #8, '.'
+        m.querySelector('#f12ok').onclick = () => { close(); act('out_commit', id, null, [{ amount: a.value, curr: m.querySelector('#f12c').value }]).then(() => {}); };
+        m.querySelector('#f12x').onclick = () => { close(); act('out_commit', id, null, [{ close: true }]); };
+      });
     }
     async function load(extra) {
       try {

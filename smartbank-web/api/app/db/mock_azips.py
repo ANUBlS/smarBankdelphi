@@ -257,6 +257,21 @@ def _azf_proc(D, key, args):
         return {}
     if key == "SW_MAIN.UPDOUT":
         return {}
+    # part 4a, illustrative only (sw_main body not in the repo)
+    if key in ("SW_MAIN.SW_OUT_DELETE", "SW_MAIN.SW_OUT_BACK", "SW_MAIN.SW_OUT_COMMIT", "SW_MAIN.TRANSEND",
+               "SW_MAIN.DEL_STD_TRANSACTION"):
+        D.setdefault("in_calls", []).append([key, list(args)])
+        rid = args[1] if key == "SW_MAIN.DEL_STD_TRANSACTION" else args[0]
+        new = {"SW_MAIN.SW_OUT_DELETE": 96, "SW_MAIN.SW_OUT_BACK": 2, "SW_MAIN.SW_OUT_COMMIT": 1,
+               "SW_MAIN.TRANSEND": None, "SW_MAIN.DEL_STD_TRANSACTION": 5}[key]
+        for r in D["sw_out_new"]:
+            if r["ID"] == rid and new is not None:
+                r["STATUS"] = new
+        return {}
+    if key == "SW_MAIN.SW_IN_DELETE":
+        D.setdefault("in_calls", []).append([key, list(args)])
+        D["sw_in"] = [r for r in D["sw_in"] if r["ID"] != args[0]]
+        return {}
     if key == "SW_MAIN.SW_OUT_CREATEFILE":
         for r in D["sw_out_new"]:
             if r["ID"] == args[0]:

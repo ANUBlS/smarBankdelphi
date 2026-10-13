@@ -9,6 +9,7 @@ Delphi list first and then bound or written as the same literal - nothing free-f
 from __future__ import annotations
 import datetime
 import re
+from typing import Literal
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
@@ -16,6 +17,7 @@ from pydantic import BaseModel, Field
 from . import azips_edit, azips_new
 from . import azips_files
 from . import azips_import
+from . import azips_actions as A
 from . import azips_sql as Q
 from .customers import row
 from .delphi import date_only
@@ -183,6 +185,20 @@ class ArxIn(BaseModel):
     oper: int | None = None
 
 
+class Form12In(BaseModel):
+    amount: str = Field(default="", max_length=40)
+    curr: str = Field(default="", max_length=10)
+    close: bool = False
+
+
+class ActionIn(BaseModel):
+    kind: Literal["out_delete", "out_back", "out_commit", "in_delete", "sending_back", "transend"]
+    selected: list[int] = Field(default_factory=list, max_length=1000)
+    current: int | None = None
+    answers: list[Literal["yes", "no", "cancel", "all", "all_no"]] = Field(default_factory=list, max_length=1000)
+    form12: list[Form12In] = Field(default_factory=list, max_length=1000)
+
+
 def make_router(current, require_module, err):
     r = APIRouter(prefix="/api/azips")
     g = require_module(CLSID)
@@ -249,6 +265,29 @@ def make_router(current, require_module, err):
         if branch_restricted(ws.conn):
             lines[10] = Q.BRANCH_LINE
         return azips_import.import_file(ws.conn, name, data, lines)
+
+    @r.post("/action")
+    def _action(b: ActionIn, ws=Depends(g)):
+        """Part 4a row actions (azips_actions.py): out_delete, out_back, out_commit, in_delete, sending_back, transend."""
+        c, rs = ws.conn, branch_restricted(ws.conn)
+        if b.kind == "out_delete":
+            return A.out_delete(c, rs, b.selected, b.current, b.answers)
+        if b.kind == "out_back":
+            return A.out_back(c, rs, b.selected, b.current, b.answers)
+        if b.kind == "out_commit":
+            return A.out_commit(c, rs, b.selected, b.current, b.answers, [f.model_dump() for f in b.form12])
+        if b.kind == "in_delete":
+            lines = list(Q.LINES_SW_IN)
+            if rs:
+                lines[10] = Q.BRANCH_LINE
+            return A.in_delete(c, lines, b.selected, b.current, b.answers)
+        if b.kind == "sending_back":
+            return A.sending_back(c, rs, b.current)
+        return A.transend(c, rs, b.current)
+
+    @r.get("/commit-currencies")
+    def _ccur(ws=Depends(g)):
+        return A.commit_currencies(ws.conn)
 
     azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
     azips_new.add_routes(r, g, err)         # part 2b: filereport.bpl 'Azipsnew' (Unitazips.pas)

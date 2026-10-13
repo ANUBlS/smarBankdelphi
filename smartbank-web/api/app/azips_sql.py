@@ -72,3 +72,5 @@ def text(lines, **repl):
 # SWIFT_MAINImpl1.pas:2445-2450, Unit19.pas:93, archivout.pas:140 - the line written into SQL[10] for branch-restricted users (same text in all units)
 BRANCH_LINE = 'and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))'
 PKG_MAIN = 'sw_main'          # Unit2.dfm:920-922 sw_in_insert TOraclePackage PackageName
+# Unit2.dfm:5043-5046 ValuteForCommit (yoxp.pas Form12 DBLookupComboBox1: KeyField VALU_NAME, ListField VAL_NAME)
+LINES_VALUTEFORCOMMIT = ['select * from avalute', '']

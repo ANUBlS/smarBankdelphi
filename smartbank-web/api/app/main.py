@@ -1,5 +1,10 @@
 """SmartBank web API (pilot: login, splash data, company, tree, password, logout, health)."""
 from __future__ import annotations
+
+import os as _os
+# Single-worker guard: sessions (live Oracle connections + uncommitted work) and AZIPS form state are per-process memory.
+if int(_os.environ.get("WEB_CONCURRENCY", "1") or 1) > 1:
+    raise RuntimeError("SmartBank web API must run with exactly one worker (WEB_CONCURRENCY=1); see README 'Single worker'.")
 import asyncio
 import logging
 
