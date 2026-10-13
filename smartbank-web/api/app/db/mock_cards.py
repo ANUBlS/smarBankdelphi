@@ -168,6 +168,11 @@ class CardsMixin:
                           if key == "CARD_MAIN.DONENEWCARD" else [int(args[0])])
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
+        if key == "CARD_MAIN.VERIFI":
+            # card_main.verifi body not in the repo: emulated as STATUS 4 -> 1 (the row moves to the Application lists); no commit
+            _db().execute("update card_client_app set STATUS = 1 where id = ?", [int(args[0])])
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
+            return {}
         if key == "CARD_MAIN.DELETE_APPLICATION":
             # card_main body not in the repo: emulated as a delete of the card_client_app row (no commit, as the Delphi caller)
             _db().execute("delete from card_client_app where id = ?", [int(args[0])])

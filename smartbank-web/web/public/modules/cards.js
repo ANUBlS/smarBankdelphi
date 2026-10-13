@@ -2,7 +2,7 @@
    (MAINFORMImpl1.dfm toolbar + PopupMenu1 / PopupMenu2) and the card-holder list 'Müştərilər' (customers.pas Tclients,
    api/app/cards.py). Screens not yet ported show a notice; the Delphi right check runs on the server when they are. */
 (function () {
-  const { api, t, esc, toast } = window.SB;
+  const { api, t, esc, toast, modal } = window.SB;
   const P = '/api/cards', K = (k) => t('cards.' + k);
   const errT = (e) => t(e.key || 'error.generic', e) + (e.ora ? ' ' + e.ora : '');
   // isertbtn.DropdownMenu = PopupMenu1, ToolButton1.DropdownMenu = PopupMenu2 (cards_azericard MAINFORMImpl1.dfm; Dilling1 Visible = False).
@@ -27,6 +27,7 @@
       if (i === 'clients') return clients(el.querySelector('#cbody'));
       if (i === 'application') return applications(el.querySelector('#cbody'));
       if (i === 'newcards') return newcards(el.querySelector('#cbody'));
+      if (i === 'verif') return verification(el.querySelector('#cbody'));
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
@@ -256,6 +257,63 @@
         const res = await fetch(P + '/newcards/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: '{}' });
         if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
         const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'CARDS.xlsx'; a.click(); };
+    }
+    draw();
+  }
+
+  // Prosedur ▸ Verifikasiya (unitverification.pas, api/app/cards_verif.py): urgent2 / simple2 (STATUS 4), VERİFİKASİYA per selected row
+  function dlg(text, yesAll, noNo) {          // MessageDlg [mbYes, mbNo, mbCancel(, mbYesToAll)] -> yes | no | cancel | all
+    return new Promise(res => modal(`<p>${esc(text)}</p><div class="actions">
+      <button class="btn" data-a="yes">${esc(K('yes'))}</button>${noNo ? '' : `<button class="btn secondary" data-a="no">${esc(K('no'))}</button>`}
+      <button class="btn secondary" data-a="cancel">${esc(K('cancel'))}</button>${yesAll ? `<button class="btn" data-a="all">${esc(K('yes_all'))}</button>` : ''}</div>`,
+      (m, close) => m.querySelectorAll('button[data-a]').forEach(b => b.onclick = () => { close(); res(b.dataset.a); })));
+  }
+  async function verification(box) {
+    const call = async (path, body) => { try { return await api(P + '/verification' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    let d = await call('/open'); if (!d) return;
+    const sel = { urgent: new Set(), simple: new Set() }, cur = { urgent: null, simple: null };
+    const hdr = (c) => c === '' ? '' : K('c_' + c.toUpperCase());
+    const cell = (r, c) => { if (c === '') { const n = d.status_img[r.status]; return n !== undefined ? `<img src="/img/cards/app_status_${n}.png" alt="${esc(r.status)}">` : ''; }
+      const v = r[c.toLowerCase()]; return esc(DATECOLS.has(c) ? fmtD(v) : (v ?? '')); };
+    const msg = (m) => m === 'Əməliyyatlar verifikasiya edildi!' ? K('msg_vf_done') : m;
+    function draw() {
+      ['urgent', 'simple'].forEach(g => { if (!d[g].some(r => r.id === cur[g])) cur[g] = d[g].length ? d[g][0].id : null; });
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_verif'))}</h3>
+        <div class="toolbar" style="gap:6px"><label>${esc(K('ap_date'))} <input type="date" id="vf_d" value="${esc(d.date)}"></label><button class="btn" id="vf_ref">${esc(K('b_refresh'))}</button></div>
+        ${['urgent', 'simple'].map(g => `<h4 style="margin:10px 0 4px">${esc(K('ap_' + g))}</h4>
+          <div class="toolbar" style="gap:6px"><button class="btn" data-vf="${g}">${esc(K('vf_verify'))}</button><button class="btn secondary" data-xls="${g}">${esc(K('b_excel'))}</button>
+          <span class="muted">${esc(K('count'))}: ${d[g].length}</span></div>
+          <div class="tablewrap" style="max-height:30vh"><table class="grid" id="vf_${g}"><thead><tr>${d.cols.map(c => `<th>${esc(hdr(c))}</th>`).join('')}</tr></thead>
+          <tbody>${d[g].map(r => `<tr data-id="${r.id}" class="${sel[g].has(r.id) || (!sel[g].size && r.id === cur[g]) ? 'sel' : ''}">${d.cols.map(c => `<td>${cell(r, c)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${d.cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`).join('')}`;
+      box.querySelector('#vf_ref').onclick = async () => { const r = await call('/refresh', { date: box.querySelector('#vf_d').value }); if (r) { d = r; sel.urgent.clear(); sel.simple.clear(); draw(); } };
+      ['urgent', 'simple'].forEach(g => {
+        const tb = box.querySelector('#vf_' + g);
+        tb.querySelectorAll('tbody tr[data-id]').forEach(tr => tr.onclick = (e) => { const id = +tr.dataset.id; cur[g] = id;
+          if (e.ctrlKey || e.metaKey || e.shiftKey) { sel[g].has(id) ? sel[g].delete(id) : sel[g].add(id); } else { sel[g].clear(); } draw(); });
+        tb.oncontextmenu = (e) => { e.preventDefault(); document.querySelectorAll('.cf_pop').forEach(x => x.remove());      // PopupMenu SELECT ALL
+          const pm = document.createElement('div'); pm.className = 'cf_pop'; pm.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:1200;background:#fff;border:1px solid #888`;
+          pm.innerHTML = `<button class="btn secondary" id="vf_all">SELECT ALL</button>`; document.body.appendChild(pm);
+          const off = () => { pm.remove(); document.removeEventListener('click', off); }; setTimeout(() => document.addEventListener('click', off), 0);
+          pm.querySelector('#vf_all').onclick = () => { off(); d[g].forEach(r => sel[g].add(r.id)); draw(); }; };
+      });
+      // Button2Click (DBGrid1) / Button5Click (DBGrid2): the Delphi dialog loop in grid order; the server replays it with the answers
+      box.querySelectorAll('[data-vf]').forEach(b => b.onclick = async () => {
+        const g = b.dataset.vf, order = d[g].map(r => r.id);
+        const rows = sel[g].size ? order.filter(i => sel[g].has(i)) : (cur[g] != null ? [cur[g]] : []);
+        const answers = [];
+        for (let i = 0; i < rows.length; i++) {
+          let a = await dlg(K('msg_vf_row'), true);
+          if (a === 'all') a = (await dlg(K('msg_vf_all').replace('%d', rows.length - i), false, true)) === 'yes' ? 'all' : 'all_no';
+          answers.push(a);
+          if (a === 'cancel' || a === 'all') break;
+        }
+        const r = await call('/verify', { grid: g, ids: [...sel[g]], current: cur[g], answers }); if (!r) return;
+        r.messages.forEach(m => toast(msg(m))); if (r.error) toast(r.error, 'error');
+        d = r; sel[g].clear(); draw(); });
+      box.querySelectorAll('[data-xls]').forEach(b => b.onclick = async () => {
+        const res = await fetch(P + '/verification/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify({ grid: b.dataset.xls }) });
+        if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
+        const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'Verification.xlsx'; a.click(); });
     }
     draw();
   }

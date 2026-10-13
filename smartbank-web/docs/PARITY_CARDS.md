@@ -170,13 +170,28 @@ API `api/app/cards_newcards.py` (`/api/cards/newcards`), tests `api/tests/test_c
 
 Unverified (3c): whether newcard has persistent TFields that would make 'FIL' a lookup/calculated field (none in the .dfm, so the column is empty); delete_application body (mock deletes the row).
 
+## Step 3d: Verifikasiya (unitverification.pas Tverification) – done
+
+API `api/app/cards_verif.py` (`/api/cards/verification`), tests `api/tests/test_cards_verif.py`, E2E `e2e/cards_verif.py`, screenshots 180-181.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| N13Click :1286 (right VERIF); FormShow / FormActivate | `POST /verification/open` | DateTimePicker1 := Date; urgent2 (URG 1) / simple2 (URG 0), STATUS = 4 by dat1. Button6 / Button7 have no OnClick: no ORDER BY (unlike TApplications) |
+| Button1Click 'YENİLƏ' | `POST /verification/refresh {date}` | both reopened |
+| Button2Click (DBGrid1) / Button5Click (DBGrid2) 'VERİFİKASİYA' | `POST /verification/verify {grid, ids, current, answers}` | Count = 0 → the current row; per row 'Əmaliyyat verifikasiya edilsin? №' (Format without %d: no id shown) Yes / No / Cancel / YesToAll → '%d  sayda əməliyyat verifikasiya edildi?' (Count-Index; Cancel = Continue, still asking); card_main.verifi(ID); finally Refresh + 'Əməliyyatlar verifikasiya edildi!' only when a call was made. The browser asks in grid order and the server replays the loop with the answers. No commit |
+| DBGrid1/2DrawColumnCell | status icon column | same ImageList mapping as TApplications |
+| Button3Click / Button4Click 'EXCEL' | `POST /verification/excel {grid}` | ExportDataset(urgent2 / simple2, 'Verification', True) |
+| selectall1 / MenuItem1 | right-click → SELECT ALL | |
+
+Unverified (3d): card_main.verifi body (mock: STATUS 4 → 1); an error from verifi stops the loop (the finally Refresh / message run when an earlier row was verified, then the error is shown).
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
-2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya.
+2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya. (done)
 3. Balans, Payment, Hesabatlar (rezform), Sazlama (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett).
 4. File operations: C File, Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file (+ excsett), RbsDoFile (+ rbsstate, card_states), RbsTax (+ Taxfilessettings), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission; card_ufx / arxivufx (no UFX71 in this build).
 5. FileReport.bpl 'REZ' (Packages/Cards_New/FileReprt), Online Cards, Karta Mədaxil.
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Step 3d: Verifikasiya (unitverification.pas, N13Click :1286).
+Plan step 3: Balans (balans.pas, MAINFORMImpl1 menu 'balance'), then Payment, Online / k1 entries of PopupMenu1, Hesabatlar (rezform), Sazlama forms.
