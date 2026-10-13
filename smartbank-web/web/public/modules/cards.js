@@ -36,23 +36,89 @@
     ['Edit27', 'c_WORKPHONE'], ['Edit20', 'c_COUNTRY'], ['Edit19', 'c_CITY'], ['Edit22', 'c_ADDRESS'], ['ComboBox4', 'c_RESIDENT'],
     ['ComboBox1', 'c_CARDTYPE'], ['ComboBox12', 'c_CARDSTATUS'], ['Edit28', 'c_CREDIT_LIM'], ['DateTimePicker5', 'c_DATEOPEN'],
     ['DateTimePicker6', 'c_EXPIRY'], ['Edit26', 'c_REFERENCE'], ['Edit23', 'c_EMBOSSNAME'], ['ComboBox2', 'c_COMPANY'], ['Edit25', 'c_SECURITY'],
-    ['Edit21', 'c_LANG_CODE'], ['ComboBox11', 'c_TYPES'], ['ComboBox10', 'c_TITUL'], ['ComboBox5', 'f_with']];
+    ['Edit21', 'c_LANG_CODE'], ['ComboBox11', 'c_TYPES'], ['ComboBox10', 'c_TITUL'], ['ComboBox5', 'f_with'], ['DateTimePicker8', 'f_expiry8']];
+  // Tclients2 (Unitclient2.pas): FormActivate :172 opens it; Button1 'Yeni' :583, Button3 'Redaktə et' :1506, ComboBox9Click :1652,
+  // Edit14KeyPress :468, DBLookupComboBox6 :2120-2248, CheckBox1Click (emboss name), Button2 'Yadda saxla' :676, Button4 'Bağla'.
+  const CBI = { ComboBox4: ['RESIDENT', 'NON-RESIDENT'], ComboBox5: ['WITH', 'WITHOUT'], ComboBox10: ['', 'DR', 'DR.', 'MISS', 'MR', 'MR.', 'MRS', 'MRS.', 'MS', 'MS.', 'Ms', 'PR', 'PR.'],
+    ComboBox11: ['', 'VIP'], ComboBox12: ['CARD OK', 'Card Do Not Honor -05', 'PickUp-04', 'PickUp L-41', 'PickUp S-43', 'Z-Decline-57'] };
   async function form(mode, id) {
     let d;
     try { d = await api(P + '/clients/form', { method: 'POST', body: { mode, id } }); } catch (e) { toast(errT(e), 'error'); return; }
-    const f = d.fields, dis = d.enabled ? '' : 'disabled';
+    const call = async (path, body) => { try { return await api(P + '/clients/form' + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
+    const st = { f: Object.assign({}, d.fields), en: {}, acc: d.accounts || [], card: (d.cards[0] || {}).id, dbedit18: d.dbedit18 || '' };
+    const all = FF.map(x => x[0]).concat(['ComboBox9', 'CheckBox2', 'CheckBox3', 'Edit_acc_name', 'DateTimePicker2']);
+    all.forEach(k => st.en[k] = d.enabled);
+    if (d.enabled) Object.assign(st.en, { Edit26: false, Edit28: false, ComboBox9: false, ComboBox5: false });
+    else st.en.ComboBox9 = false;
+    if (!st.f.DateTimePicker2) st.f.DateTimePicker2 = new Date().toISOString().slice(0, 10);   // FormShow: DateTimePicker2 := Date
+    const req = new Set(d.required);
     const grid = (cols, rows, gid) => `<div class="tablewrap" style="max-height:22vh"><table class="grid" id="${gid}"><thead><tr>${cols.map(c => `<th>${esc(K('c_' + c))}</th>`).join('')}</tr></thead>
-      <tbody>${rows.map(r => `<tr>${cols.map(c => `<td>${esc(DATECOLS.has(c) ? fmtD(r[c.toLowerCase()]) : (r[c.toLowerCase()] ?? ''))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+      <tbody>${rows.map(r => `<tr data-id="${r.id}" class="${r.id === st.card && gid === 'cf_g5' ? 'sel' : ''}">${cols.map(c => `<td>${esc(DATECOLS.has(c) ? fmtD(r[c.toLowerCase()]) : (r[c.toLowerCase()] ?? ''))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+    const sel = (k, items) => `<select id="cf_${k}" style="width:100%">${(items.includes(st.f[k] ?? '') ? items : [st.f[k] ?? ''].concat(items)).map(x => `<option ${x === (st.f[k] ?? '') ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>`;
+    const ctl = (k) => {
+      const aq = req.has(k) ? 'background:#7fffff;' : '';
+      if (k === 'ComboBox1') return sel(k, [''].concat(d.cardtypes));
+      if (k === 'ComboBox2') return sel(k, [' '].concat(d.companies));
+      if (CBI[k]) return sel(k, CBI[k]);
+      if (k === 'DBLookupComboBox6') return `<input id="cf_${k}" list="cf_accl" value="${esc(st.f[k] ?? '')}" style="width:100%"><datalist id="cf_accl"></datalist>`;
+      return `<input id="cf_${k}" ${k.startsWith('DateTime') ? 'type="date"' : ''} value="${esc(st.f[k] ?? '')}" style="width:100%;${aq}">`;
+    };
     window.SB.modal(`<h2>${esc(mode === 'NEW' ? K('form_new') : K('form_edit'))}</h2>
-      <p class="alert">${esc(K('form_readonly'))}</p>
+      <div class="toolbar" style="gap:6px;flex-wrap:wrap;margin-bottom:6px">
+        <label>${esc(K('f_apptype'))} <select id="cf_ComboBox9">${d.apptype.map(x => `<option>${esc(x)}</option>`).join('')}</select></label>
+        <label><input type="checkbox" id="cf_CheckBox4" ${d.multicard ? 'checked' : ''}> MultiCard</label>
+        <label><input type="checkbox" id="cf_CheckBox2"> ${esc(K('f_urgent'))}</label>
+        <label><input type="checkbox" id="cf_CheckBox3"> ${esc(K('f_kr'))}</label>
+        <label><input type="checkbox" id="cf_CheckBox1"> ${esc(K('f_embauto'))}</label>
+        <label>${esc(K('f_trandate'))} <input type="date" id="cf_DateTimePicker2" value="${esc(st.f.DateTimePicker2)}" style="background:#7fffff"></label>
+        <span class="muted">${esc(K('f_valname'))}: <b id="cf_DBEdit18">${esc(st.dbedit18)}</b></span></div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px 12px">
-        <label>${esc(K('f_apptype'))}<br><select disabled>${d.apptype.map(x => `<option>${esc(x)}</option>`).join('')}</select></label>
-        <label><input type="checkbox" disabled ${d.multicard ? 'checked' : ''}> MultiCard</label>
-        ${FF.map(([k, l]) => `<label>${esc(K(l))}<br><input id="cf_${k}" ${k.startsWith('DateTime') ? 'type="date"' : ''} value="${esc(f[k] ?? '')}" ${dis} style="width:100%"></label>`).join('')}</div>
-      ${mode === 'EDIT' ? `<h3>${esc(K('g_cards'))}</h3>${grid(d.grid5, d.cards, 'cf_g5')}<h3>${esc(K('g_ops'))}</h3>${grid(d.grid6, d.operations, 'cf_g6')}
-        <h3>${esc(K('g_credits'))}</h3>${grid(['NUMBEROFCREDIT'], d.credits, 'cf_g1')}` : ''}
-      <div class="actions"><button class="btn secondary" id="cf_close">${esc(t('common.close') || 'Close')}</button></div>`,
-      (m, close) => { m.style.maxWidth = '1200px'; m.style.width = '95vw'; m.querySelector('#cf_close').onclick = close; });
+        ${FF.map(([k, l]) => `<label>${esc(K(l))}<br>${ctl(k)}</label>`).join('')}
+        <label>${esc(K('f_accname'))}<br><input id="cf_Edit_acc_name" value="${esc(st.f.Edit_acc_name ?? '')}" style="width:100%"></label></div>
+      <div id="cf_grids">${mode === 'EDIT' ? `<h3>${esc(K('g_cards'))}</h3>${grid(d.grid5, d.cards, 'cf_g5')}<h3>${esc(K('g_ops'))}</h3><div id="cf_g6w">${grid(d.grid6, d.operations, 'cf_g6')}</div>
+        <h3>${esc(K('g_credits'))}</h3>${grid(['NUMBEROFCREDIT'], d.credits, 'cf_g1')}` : ''}</div>
+      <div class="actions"><button class="btn secondary" id="cf_b1">${esc(K('b_new'))}</button>
+        ${d.button3 ? `<button class="btn secondary" id="cf_b3">${esc(K('b_edit2'))}</button>` : ''}
+        <button class="btn" id="cf_b2">${esc(K('b_save'))}</button><button class="btn secondary" id="cf_close">${esc(t('common.close') || 'Close')}</button></div>`,
+      (m, close) => {
+        m.style.maxWidth = '1200px'; m.style.width = '95vw';
+        const q = (k) => m.querySelector('#cf_' + k);
+        const read = () => { FF.forEach(([k]) => { const e = q(k); if (e) st.f[k] = e.value; }); st.f.Edit_acc_name = q('Edit_acc_name').value; st.f.DateTimePicker2 = q('DateTimePicker2').value; };
+        const put = (f) => Object.entries(f || {}).forEach(([k, v]) => { st.f[k] = v; const e = q(k); if (!e) return;
+          if (e.tagName === 'SELECT' && ![...e.options].some(o => o.value === v)) e.insertAdjacentHTML('afterbegin', `<option>${esc(v)}</option>`); e.value = v; });
+        const paint = () => { Object.entries(st.en).forEach(([k, on]) => { const e = q(k); if (e) e.disabled = !on; });
+          m.querySelector('#cf_accl').innerHTML = st.acc.map(a => `<option value="${esc(a)}">`).join(''); q('DBEdit18').textContent = st.dbedit18; };
+        paint();
+        const say = async (r) => { if (!r) return; if (r.error) toast(r.error, 'error');
+          for (const x of r.messages || []) toast(K('msg_' + x.key).replace('{date}', (x.args || {}).date || ''), x.key === 'saved' || x.key === 'added' ? 'success' : 'error'); };
+        q('close').onclick = close;
+        m.querySelectorAll('#cf_g5 tbody tr[data-id]').forEach(tr => tr.onclick = () => { st.card = +tr.dataset.id; m.querySelectorAll('#cf_g5 tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); });
+        q('Edit28').onkeypress = (e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); };          // Edit28KeyPress
+        ['Edit15', 'Edit16', 'Edit23'].forEach(k => q(k).onkeypress = (e) => { if (e.key.length === 1 && (e.key.charCodeAt(0) > 126 || e.key === '?')) e.preventDefault(); });
+        q('CheckBox1').onclick = () => { if (q('CheckBox1').checked) { read(); put({ Edit23: (st.f.ComboBox10 || '') + '/' + st.f.Edit15 + '/' + st.f.Edit16 }); } };
+        q('b1').onclick = async () => { const r = await call('/new', {}); if (!r) return; put(r.fields); Object.assign(st.en, r.enabled); st.acc = []; st.dbedit18 = '';
+          q('CheckBox2').checked = false; m.querySelectorAll('#cf_grids tbody').forEach(b => b.innerHTML = ''); paint(); };
+        if (q('b3')) q('b3').onclick = async () => { const r = await call('/edit', { card_id: st.card ?? null }); if (!r) return; put(r.fields); Object.assign(st.en, r.enabled); q('CheckBox2').checked = false; paint(); };
+        q('ComboBox9').onchange = async () => { read(); const r = await call('/apptype', { text: q('ComboBox9').value, edit14: st.f.Edit14 || '', dtp8: st.f.DateTimePicker8 || null });
+          if (!r) return; Object.assign(st.en, r.enabled); if (r.accounts) st.acc = r.accounts; put(r.fields); paint(); };
+        q('Edit14').onkeydown = async (e) => { if (e.key !== 'Enter') return; const r = await call('/edit14', { edit14: q('Edit14').value }); if (!r) return; await say(r);
+          if (r.accounts) st.acc = r.accounts; put(r.fields); paint(); };
+        q('DBLookupComboBox6').onchange = async () => { read(); const r = await call('/account', { acc: q('DBLookupComboBox6').value, edit14: st.f.Edit14 || '', event: 'change' });
+          if (!r) return; await say(r); put(r.fields); if (r.dbedit18 !== undefined) st.dbedit18 = r.dbedit18; paint(); };
+        q('b2').onclick = async () => {
+          read();
+          const body = { fields: Object.fromEntries(Object.entries(st.f).filter(([k]) => !['ComboBox9', 'DBEdit18'].includes(k))), checkbox2: q('CheckBox2').checked,
+            checkbox3: q('CheckBox3').checked, checkbox4: q('CheckBox4').checked, combobox9: q('ComboBox9').value.trim() ? q('ComboBox9').value : '' };
+          let r = await call('/save', body); if (!r) return;
+          if (r.confirm) { if (!window.confirm(K('msg_' + r.confirm.key).replace('{date}', r.confirm.args.date))) return; r = await call('/save', Object.assign(body, { confirmed: true })); if (!r) return; }
+          await say(r);
+          if (r.fields) { if (r.fields.ComboBox9 === '') q('ComboBox9').value = d.apptype[0]; const f = Object.assign({}, r.fields); delete f.ComboBox9; put(f); }
+          if (r.edit28_red !== undefined) q('Edit28').style.background = r.edit28_red ? '#ff6060' : '';
+          if (r.operations && q('g6w')) q('g6w').innerHTML = grid(d.grid6, r.operations, 'cf_g6');
+          if (r.multicurrency) toast(K('msg_multicurrency'), 'error');
+          if (r.close) close();
+        };
+      });
   }
 
   async function clients(box) {

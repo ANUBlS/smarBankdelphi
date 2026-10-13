@@ -43,4 +43,22 @@ with sync_playwright() as p:
     pg.click("#cf_close"); pg.click("#c_add"); pg.wait_for_selector("#cf_Edit19")
     assert pg.input_value("#cf_Edit19") == "BAKU"
     shot(pg, "167-cards-client-new.png")
+    # step 2b: customer ID box -> account -> musterinfo fill, then save (NEW)
+    pg.fill("#cf_Edit14", "501"); pg.press("#cf_Edit14", "Enter"); pg.wait_for_timeout(400)
+    pg.fill("#cf_DBLookupComboBox6", "38110019440000000001"); pg.dispatch_event("#cf_DBLookupComboBox6", "change"); pg.wait_for_timeout(500)
+    assert pg.input_value("#cf_Edit15") == "Elchin" and pg.inner_text("#cf_DBEdit18") == "AZN"
+    pg.select_option("#cf_ComboBox1", "VISA CLASSIC"); pg.fill("#cf_Edit23", "ELCHIN MAMMADOV"); pg.fill("#cf_Edit25", "ANA")
+    pg.fill("#cf_DateTimePicker8", "2029-10-31")
+    shot(pg, "168-cards-client-new-filled.png")
+    pg.click("#cf_b2"); pg.wait_for_timeout(600)
+    shot(pg, "169-cards-client-new-saved.png")
+    # EDIT -> Redakte et -> Credit Limit -> save
+    pg.click("#g_c tr[data-i='0']"); pg.click("#c_edit"); pg.wait_for_selector("#cf_g5")
+    pg.click("#cf_b3"); pg.wait_for_timeout(400)
+    pg.select_option("#cf_ComboBox9", "Credit Limit"); pg.wait_for_timeout(400)
+    assert not pg.is_disabled("#cf_Edit28")
+    pg.fill("#cf_Edit28", "500")
+    shot(pg, "170-cards-client-credit-limit.png")
+    pg.click("#cf_b2"); pg.wait_for_timeout(700)
+    shot(pg, "171-cards-client-edit-saved.png")
     b.close()

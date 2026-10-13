@@ -90,10 +90,25 @@ Excel: Oracle sorts a NULL RBSNUMBER last (the SQLite mock sorts it first).
 |---|---|---|
 | isertbtnClick :208 (right **card_madd**) → Edit1 = 'NEW' | 'Add' → `POST /clients/form {mode: NEW}` | FormShow :2254: ComboBox1 = CARDTYPES names; Edit19 'BAKU', Edit20/21 'AZE', ComboBox12 'CARD OK'. FormActivate :172 NEW: boxes cleared and enabled, dates = Date, ComboBox4 'RESIDENT', Edit28 '0' disabled, ComboBox5 'WITH'. ComboBox9 = ' ' + apptype.TYPE |
 | ToolButton3Click :228 (right card_medit) → Edit1 = 'EDIT' | 'Edit' → `POST /clients/form {mode: EDIT, id}` | FormActivate EDIT: multicount(rbs = Clients.multi_acc) > 1 → CheckBox4; hesab(CID null, p_AccNO = multi_acc) → DBLookupComboBox6 list, Edit14 = hesab.kli_id AsInteger; cliencards(numb) → DBGrid5; CARDOPERATION(RBS) → DBGrid6; editval → Edit29; cariqaliq2(acc_id = ACCID) → DBEdit17 (Edit33 hidden at the end); allclientcredits(rbsnumber = DBLookupComboBox6.Text) → DBGrid1; fields from Clients, all disabled |
-| Button2Click :676 (save, about 770 lines), Button3Click :1506, Button1Click :583, ComboBox9Click :1652 (application type), DBGrid5DblClick / CellClick :2278 / :2406, DBLookupComboBox6 events :2120-2248, Edit14KeyPress :468 | not yet | next steps (2b) |
+| Button2Click :676 … | see step 2b | |
 
 Unverified (2a): the DBLookupComboBox6 OnChange (:2163) fires when FormActivate sets KeyValue while hesab is still open from an earlier state. If hesab has rows then, it fills Edit4/6/7 and Edit_acc_name from musterinfo / new_cust, and FormActivate then overwrites Edit15 and the following boxes from Clients. The web skips this side effect, which only changes boxes the web does not show. DBLookupComboBox6.Text is taken as multi_acc when that account is in the hesab list, otherwise ''.
 The card_main.mainfind body (TIP column) is not in the repo; the mock returns MAIN / SUB. BIRTHDAY is a string field (dd.mm.yyyy), read via StrToDate.
+
+## Step 2b: Tclients2 actions – done (save, Yeni, Redaktə et, application type, account lookup, customer ID box)
+
+| Delphi | Web | Notes |
+|---|---|---|
+| FormCreate :1497 → button1.Click (right **card_client_new**) | `POST /clients/form` | the right is now checked on every open (before card_madd / card_medit) |
+| Button1Click :583 'YENI' | `POST /clients/form/new` | Edit1 'NEW'; grids closed; boxes cleared/enabled; Edit28 '' and disabled (the '0' at :597 is overwritten at :628); dates = Date; DBEdit18 '' |
+| Button3Click :1506 'REDAKTƏ ET' (right **card_client_edit**) | `POST /clients/form/edit {card_id}` | fills from the DBGrid5 (cliencards) row; DateTimePicker5 gets DATEOPEN then EXPIRY (:1557-1558, kept as in Delphi); all disabled, ComboBox9 enabled, ComboBox5 'WITH' |
+| ComboBox9Click :1652 | `POST /clients/form/apptype` | edit2 + Enabled deltas generated from the source (tools/gen_cards_cb9.py → api/app/cards_cb9.py); untouched controls keep their state. 'Prolongation' stores DateTimePicker1 := DateTimePicker8; 'RBS Change' reopens hesab(CID = Edit14) and fills Edit_acc_name from new_cust |
+| CheckBox1Click | client side | Edit23 := ComboBox10 + '/' + Edit15 + '/' + Edit16 |
+| Edit14KeyPress :468 (Enter) | `POST /clients/form/edit14` | '' → hesab(NULL, '%%'); else StrToInt (EConvertError text) → hesab(CID); Edit_acc_name from new_cust(hesab.KLI_ID) |
+| DBLookupComboBox6Change :2152 / Click :2134 / ButtonClick :2120 | `POST /clients/form/account {event}` | change: new_cust, musterinfo(mid = Edit14) → Edit15/16/22 (first 47 chars)/18 ('AZE '+paspnum)/17/27 ('-' removed)/DateTimePicker7; cariqaliq2 → Edit33; valut2(val_acc) → DBEdit18 (kept in the session like the shared vsource). click: Edit14 only |
+| Button2Click :676 'YADDA SAXLA' (right **card_client_save**) | `POST /clients/form/save` | NEW/ONLINE: clAqua boxes (Edit15,16,18-23,25, ComboBox4, ComboBox1) → 'Rəngli xanalar…'; fcardtype(ComboBox1).CURRENCY = DBEdit18 else 'Valyuta səhvdir'; referens → Edit26; Length(Edit23) < 21; DateTimePicker8 > Date; card_main.new_card (30 args, Edit2 = 1); CheckBox4 → MultiCurrency (not migrated: message) else 'Yeni kart əlavə edildi!'; close. EDIT (ComboBox9 ≠ ''): edit2 2 (Edit24, referens, fmaincard.maincard = '' else 'Subkarta…', then 'Yadda saxlanıldı!' in both cases), 3 (MessageDlg confirm, DateTimePicker8 > DateTimePicker1), 4, 12 (wt 0003/0002), 6, 11, 35 (NULL), 7 (closefind empty else 'Suply kartı var!'), 5 (hesabtap/findcredit after the call: Edit28 red + message), 13 (Edit28 × 100 via FloatToStr). After each: CARDOPERATION(RBS = DBLookupComboBox6.Text) reopened, ComboBox9 := ''. StrToFloat errors abort as in Delphi. No commit (Delphi has none) |
+
+Unverified (2b): card_main.new_card / edit_card / setreference / findcredit2 and convertpack.convert_int bodies (not in the repo; the mock writes one card_client_app row per call, setreference is a counter); whether new_card / edit_card commit internally; the TDBLookupComboboxEh moving the hesab cursor to the picked account (assumed); DateToStr / FloatToStr with the Azerbaijani locale (dd.mm.yyyy, ',' decimal separator); CheckBox2 / CheckBox3 captions (shown as 'Urgent' / 'KR'); the ComboBox9 items are the card_applicationtype.TYPE values, which must equal the Delphi literals ('Suppl.Card', 'Prolongation', …) on the real DB for any branch to run; musterinfo with no row (Delphi raises on the NULL Variant; the web returns an error). MultiCurrency (CheckBox4) form not migrated yet. Screenshots 168-171.
 
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
@@ -104,4 +119,4 @@ The card_main.mainfind body (TIP column) is not in the repo; the mock returns MA
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Step 2b: Tclients2 saving, Button2Click :676 (NEW / EDIT branches with their commit points), then Button3Click :1506, ComboBox9Click :1652 (application types), the DBGrid5 click handlers :2278 / :2406, the DBLookupComboBox6 account lookup :2120-2248 and Edit14KeyPress :468.
+Step 2c: Tclients2 remaining: DBGrid5 CellClick :2278 / DblClick :2406, DBGrid1DblClick (krinfo), SIL1Click (delete_application on DBGrid6), ComboBox1Enter / ComboBox2Enter reloads, TMultiCurrency (CheckBox4) form. Then plan step 2 (Applications, Yeni kartlar U9, Verifikasiya).

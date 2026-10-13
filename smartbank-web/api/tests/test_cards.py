@@ -132,7 +132,7 @@ def test_form_new_defaults():
     login(); P("/clients/open")
     r = P("/clients/form", {"mode": "NEW"})
     f = r["fields"]
-    assert r["enabled"] and not r["button3"] and r["apptype"][0] == " " and "SUB CARD" in r["apptype"]
+    assert r["enabled"] and not r["button3"] and r["apptype"][0] == " " and "Suppl.Card" in r["apptype"]
     assert f["ComboBox12"] == "CARD OK" and f["ComboBox4"] == "RESIDENT" and f["Edit28"] == "0" and f["Edit19"] == "BAKU"
     assert f["Edit20"] == f["Edit21"] == "AZE" and f["ComboBox5"] == "WITH" and f["Edit15"] == ""
     assert "VISA CLASSIC" in r["cardtypes"]
@@ -156,3 +156,102 @@ def test_form_edit_loads_by_multi_acc():
 def test_form_rights():
     login("TELLER", "Teller#2026"); P("/clients/open")
     assert client.post(B + "/clients/form", json={"mode": "NEW"}).status_code in (400, 403)
+
+
+# ---------------------------------------------------------------- step 2b: Tclients2 actions
+from app.db import mock_cards as MC
+
+
+def _apps():
+    return [dict(zip(["MESSTYPE", "RBSNUMBER", "CARDNUMBER", "REFERENCE", "WITHP", "CREDIT_LIM", "URG"], r)) for r in MC._db().execute(
+        "select messtype, rbsnumber, cardnumber, reference, withp, credit_lim, urg from card_client_app order by id").fetchall()]
+
+
+def _new_form():
+    login(); P("/clients/open"); r = P("/clients/form", {"mode": "NEW"})
+    return dict(r["fields"])
+
+
+def test_new_required_and_account_fill():
+    MC.reset()
+    f = _new_form()
+    r = P("/clients/form/save", {"fields": f})
+    assert [m["key"] for m in r["messages"]] == ["required"] and not r["close"]
+    r = P("/clients/form/edit14", {"edit14": "501"})
+    assert r["accounts"] == ["38110019440000000001"] and r["fields"]["Edit_acc_name"] == "Mammadov Elchin"
+    r = P("/clients/form/account", {"acc": "38110019440000000001", "edit14": "501"})
+    g = r["fields"]
+    assert g["Edit14"] == "501" and g["Edit15"] == "Elchin" and g["Edit18"] == "AZE C1234567" and g["Edit27"] == "0501234567"
+    assert g["DateTimePicker7"] == "1985-04-12" and g["Edit33"] == "1250.5" and r["dbedit18"] == "AZN"
+    assert P("/clients/form/edit14", {"edit14": "x1"})["error"] == "'x1' is not a valid integer value"
+
+
+def test_new_save_paths():
+    MC.reset()
+    f = _new_form()
+    P("/clients/form/edit14", {"edit14": "501"})
+    f.update(P("/clients/form/account", {"acc": "38110019440000000001", "edit14": "501"})["fields"])
+    f.update(DBLookupComboBox6="38110019440000000001", ComboBox1="VISA GOLD", Edit23="MAMMADOV ELCHIN", Edit25="ANA")
+    r = P("/clients/form/save", {"fields": f})
+    assert [m["key"] for m in r["messages"]] == ["currency_bad"]                     # VISA GOLD is USD, the account AZN
+    f["ComboBox1"] = "VISA CLASSIC"
+    r = P("/clients/form/save", {"fields": f})
+    assert [m["key"] for m in r["messages"]] == ["expiry_bad"]                       # DateTimePicker8 = Date, not > Date
+    f["DateTimePicker8"] = (datetime.date.today() + datetime.timedelta(days=1000)).isoformat()
+    f["Edit23"] = "X" * 21
+    assert [m["key"] for m in P("/clients/form/save", {"fields": f})["messages"]] == ["emboss_long"]
+    f["Edit23"] = "MAMMADOV ELCHIN"
+    n = len(_apps())
+    r = P("/clients/form/save", {"fields": f, "checkbox2": True})
+    assert [m["key"] for m in r["messages"]] == ["added"] and r["close"] and r["fields"]["Edit26"] == "700003"
+    a = _apps()[n:]
+    assert a == [dict(MESSTYPE=1, RBSNUMBER="38110019440000000001", CARDNUMBER=None, REFERENCE="700003", WITHP=None, CREDIT_LIM="0", URG=1)]
+    r = P("/clients/form/save", {"fields": f, "checkbox4": True})
+    assert r["multicurrency"] == {"Edit3": "38110019440000000001", "Edit4": "new"} and r["messages"] == []
+
+
+def _edit_form(rid=1):
+    login(); P("/clients/open"); r = P("/clients/form", {"mode": "EDIT", "id": rid})
+    f = dict(r["fields"])
+    f.update(P("/clients/form/edit", {"card_id": rid})["fields"])
+    return f
+
+
+def test_edit_branches():
+    MC.reset()
+    f = _edit_form()
+    assert f["ComboBox5"] == "WITH" and f["Edit24"] == "4169730000001111"
+    assert P("/clients/form/save", {"fields": f, "combobox9": ""})["messages"] == []            # ComboBox9.Text = ''
+    r = P("/clients/form/apptype", {"text": "Credit Limit", "dtp8": f["DateTimePicker8"]})
+    assert r["enabled"]["Edit28"] is True and r["enabled"]["ComboBox5"] is False
+    n = len(_apps())
+    f["Edit28"] = "500"
+    r = P("/clients/form/save", {"fields": f, "combobox9": "Credit Limit"})
+    assert [m["key"] for m in r["messages"]] == ["credit_diff", "saved"] and r["edit28_red"] and r["fields"]["ComboBox9"] == ""
+    assert _apps()[n:] == [dict(MESSTYPE=5, RBSNUMBER="38110019440000000001", CARDNUMBER=4169730000001111, REFERENCE=None, WITHP=None,
+                                CREDIT_LIM="500", URG=0)] or _apps()[n]["MESSTYPE"] == 5
+    P("/clients/form/apptype", {"text": "Security Word Change"})
+    P("/clients/form/save", {"fields": f, "combobox9": "x"})
+    assert _apps()[-1]["CREDIT_LIM"] == "50000"                                               # floattostr(strtofloat*100)
+    f["Edit28"] = ""
+    assert P("/clients/form/save", {"fields": f, "combobox9": "x"})["error"] == "'' is not a valid floating point value"
+    # prolongation: confirm first, then DateTimePicker8 must be > DateTimePicker1 (= DateTimePicker8 at the ComboBox9 click)
+    P("/clients/form/apptype", {"text": "Prolongation", "dtp8": "2027-01-01"})
+    f["DateTimePicker8"] = "2027-01-01"
+    r = P("/clients/form/save", {"fields": f, "combobox9": "Prolongation"})
+    assert r["confirm"]["key"] == "prolong_q" and r["confirm"]["args"]["date"] == "01.01.2027" and r["messages"] == []
+    assert [m["key"] for m in P("/clients/form/save", {"fields": f, "combobox9": "P", "confirmed": True})["messages"]] == ["date_bad"]
+    f["DateTimePicker8"] = "2029-01-01"
+    n = len(_apps())
+    assert [m["key"] for m in P("/clients/form/save", {"fields": f, "combobox9": "P", "confirmed": True})["messages"]] == ["saved"]
+    assert _apps()[n]["MESSTYPE"] == 3 and _apps()[n]["WITHP"] == "0003"
+
+
+def test_edit_rbs_change_and_rights():
+    MC.reset()
+    f = _edit_form()
+    r = P("/clients/form/apptype", {"text": "RBS Change", "edit14": f["Edit14"]})
+    assert r["accounts"] == ["38110019440000000001"] and r["fields"]["DBLookupComboBox6"] == "" and r["enabled"]["DBLookupComboBox6"]
+    login("TELLER", "Teller#2026"); P("/clients/open")
+    assert client.post(B + "/clients/form/save", json={"fields": {}}).status_code in (400, 403, 409)
+    assert client.post(B + "/clients/form/save", json={"fields": {"Bogus": "1"}}).status_code in (400, 403)

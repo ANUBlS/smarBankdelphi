@@ -50,6 +50,16 @@ def _db():
             return rest[0] if rest else None
         c.create_function("decode", -1, decode)
         c.create_function("to_char", 1, lambda v: None if v is None else (str(int(v)) if isinstance(v, (int, float)) else str(v)))
+        c.create_function("nvl", 2, lambda a, b: b if a is None else a)
+        c.create_function("convertpack_convert_int", 1, lambda v: v)          # convertpack body not in the repo: identity
+        refs = {"n": int(D.get("_reference_start", 100000))}
+
+        def setref(_k):                                                        # card_main.setreference body not in the repo: a counter
+            refs["n"] += 1
+            return refs["n"]
+        c.create_function("card_main_setreference", 1, setref)
+        kred = {int(k): v for k, v in D.get("_findcredit2", {}).items()}
+        c.create_function("card_main_findcredit2", 1, lambda a: kred.get(int(a or 0), 0))
         c.execute("create table dual (dummy text)")
         c.execute("insert into dual values ('X')")
         for t, rows in D.items():
@@ -86,6 +96,9 @@ class CardsMixin:
         s = re.sub(r"card_main\.findfilial", "card_main_findfilial", s, flags=re.I)
         s = re.sub(r"sb_aca\.getuserbyid", "sb_aca_getuserbyid", s, flags=re.I)
         s = re.sub(r"card_main\.mainfind", "card_main_mainfind", s, flags=re.I)
+        s = re.sub(r"card_main\.setreference", "card_main_setreference", s, flags=re.I)
+        s = re.sub(r"card_main\.findcredit2", "card_main_findcredit2", s, flags=re.I)
+        s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
         params = {k.lower(): v for k, v in (b or {}).items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower() if m.group(1).lower() in params else m.group(0), s)
@@ -98,7 +111,7 @@ class CardsMixin:
         for r in cur.fetchall():
             o = {}
             for k, v in zip(names, r):
-                if k in DATE_COLS and isinstance(v, str):
+                if (k in DATE_COLS or (k == "BIRTHDAY" and re.match(r"\d{4}-\d\d-\d\dT", str(v)))) and isinstance(v, str):
                     v = dt.datetime.fromisoformat(v)
                 o[k] = v
             out.append(o)
@@ -108,6 +121,22 @@ class CardsMixin:
         if key == "CARD_MAIN.DELNEW":
             # card_main body not in the repo: emulated as a delete of the card_clients row (no commit, as the Delphi caller)
             _db().execute("delete from card_clients where id = ?", [int(args[0])])
+            return {}
+        if key in ("CARD_MAIN.NEW_CARD", "CARD_MAIN.EDIT_CARD"):
+            # card_main body not in the repo: emulated as one card_client_app row per call (STATUS 1, MESSTYPE = the edit2 argument)
+            a = list(args)
+            iso = lambda v: v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v  # noqa: E731
+            db = _db()
+            nid = (db.execute("select max(id) from card_client_app").fetchone()[0] or 0) + 1
+            rec = dict(ID=nid, CARDHOLDER=a[0], FNAME=a[1], LNAME=a[2], PASSPORT=a[3], BIRTHDAY=a[4], HOMEPHONE=a[5], WORKPHONE=a[6],
+                       COUNTRY=a[7], CITY=a[8], ADDRESS=a[9], RESIDENT=a[10], RBSNUMBER=a[11], MULTI_ACC=a[11], CURRENCY=a[12],
+                       CARDTYPE=a[13], CARDSTATUS=a[14], CREDIT_LIM=a[15], DATEOPEN=iso(a[16]), EXPIRY=iso(a[17]), REFERENCE=a[18],
+                       EMBOSSNAME=a[19], COMPANY=a[20], SECURITY=a[21], MESSTYPE=int(a[22]), URG=a[23], LANG_CODE=a[24], KLI_ID=a[26] or None,
+                       TYPES=a[27], TITUL=a[28], STATUS=1, OP_ID=1, FILIAL=101, TRANDATE=iso(a[-1]), DAT=dt.datetime.now().isoformat())
+            if key.endswith("EDIT_CARD"):
+                rec.update(CARDNUMBER=a[29], WITHP=a[30])
+            db.execute(f"insert into card_client_app ({', '.join(rec)}) values ({', '.join('?' * len(rec))})", list(rec.values()))
+            self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
             return {}
         return NotImplemented
 
