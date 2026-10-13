@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 
 from . import azips_edit
 from . import azips_files
+from . import azips_import
 from . import azips_sql as Q
 from .customers import row
 from .delphi import date_only
@@ -163,6 +164,11 @@ class ListIn(BaseModel):
     in2_sort: str | None = Field(default=None, max_length=30)
 
 
+class ImportIn(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+    b64: str = Field(max_length=14_000_000)       # one file per request (~10 MB)
+
+
 class FilesIn(BaseModel):
     selected: list[int] = Field(default_factory=list, max_length=500)   # Gridout3.SelectedRows (in click order)
     current: int | None = None                                           # Gridout3 current row (SW_OUT3)
@@ -226,6 +232,23 @@ def make_router(current, require_module, err):
         if cur is None:
             err(400, "azips.pick_row")
         return azips_files.create_files(ws.conn, o3, o2, sel, cur, b.out2_current)
+
+    @r.post("/import")
+    def _import(b: ImportIn, ws=Depends(g)):
+        """'Konvert' ToolButton4 -> ToolButton4Click :3786 -> KonvertexExecute :538 / konvert3Execute :6480 (part 3b).
+        One uploaded file = the FileListBox content."""
+        import base64, binascii
+        name = b.name.replace("\\", "/").rsplit("/", 1)[-1]
+        if not name or name in (".", "..") or any(c in name for c in "\x00:*?\"<>|"):
+            err(400, "azips.bad_file")
+        try:
+            data = base64.b64decode(b.b64, validate=True)
+        except (binascii.Error, ValueError):
+            err(400, "azips.bad_file")
+        lines = list(Q.LINES_SW_IN)
+        if branch_restricted(ws.conn):
+            lines[10] = Q.BRANCH_LINE
+        return azips_import.import_file(ws.conn, name, data, lines)
 
     azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
     return r

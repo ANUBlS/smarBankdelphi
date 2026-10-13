@@ -236,6 +236,25 @@ def _azf_query(D, sql, L, b):
 def _azf_proc(D, key, args):
     """sw_main body is not in the repo. Illustrative: updout / sw_out_CreateFile record the call; sw_out_CreateFile with
     flag 1 writes INFO and moves the row out of 'Sending' (status 55, shown under Committed)."""
+    if key in ("SW_MAIN.INSERT_IN", "SW_MAIN.INSERT_IN_OTHER"):
+        # part 3b, illustrative only (body not in the repo): a new incoming row with status 2 (konvert3 passes status:=2)
+        D.setdefault("in_calls", []).append([key, list(args)])
+        if key == "SW_MAIN.INSERT_IN":
+            acc, ref, valu, bic, cur = args[0], args[1], args[2], args[3], args[4]
+            mt = args[9]
+        else:
+            acc, ref, valu, bic, cur, mt = "", args[0], None, args[1], "", args[4]
+        try:
+            v = float(str(valu).replace(",", ".")) if valu not in (None, "") else None
+        except ValueError:
+            v = None
+        D["sw_in"].append({"ID": max([r["ID"] for r in D["sw_in"]] + [0]) + 1, "DAT": dt.datetime.now().replace(microsecond=0).isoformat(),
+                           "REFERANCE": ref, "ACOUNT": acc, "BNK_VOIN": "", "VALU": v, "BIC": bic, "VALUTE": cur, "MT": mt,
+                           "INFO": "", "STATUS": 2, "BRANCH": 101, "USER": 2})
+        return {}
+    if key == "SW_MAIN.CHECK_ACCOUNT":
+        D.setdefault("in_calls", []).append([key, list(args)])
+        return {}
     if key == "SW_MAIN.UPDOUT":
         return {}
     if key == "SW_MAIN.SW_OUT_CREATEFILE":

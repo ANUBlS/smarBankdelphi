@@ -35,11 +35,15 @@
       const box = (title, inner) => `<fieldset class="card" style="margin:8px 0;padding:8px 12px;min-width:0"><legend>${esc(title)}</legend><div class="tablewrap" style="max-height:30vh">${inner}</div></fieldset>`;
       if (st.tab === 'in') {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
-          <button class="btn secondary" id="z_arxin">${esc(K('archive'))}</button></div>
+          <button class="btn secondary" id="z_arxin">${esc(K('archive'))}</button>
+          <button class="btn" id="z_konv" title="${esc(K('konv_hint'))}">${esc(K('konvert'))}</button>
+          <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
         v('g_in').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => load({ in_sort: h.dataset.s }));
         v('g_in2').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => { st.in2 = h.dataset.s; load({}); });
         v('z_arxin').onclick = () => arch('in');
+        v('z_konv').onclick = () => v('z_konvf').click();
+        v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
           <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button>
@@ -83,6 +87,25 @@
         st.d = r; st.in_order = r.in_order;
       } catch (e) { toast(errT(e), 'error'); }
       draw();
+    }
+    // 'Konvert' (ToolButton4Click -> konvert3 / Konvertex), part 3b: ONE uploaded file = the Delphi FileListBox content
+    async function konvert(f) {
+      const buf = new Uint8Array(await f.arrayBuffer());
+      let bin = ''; for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+      let r;
+      try { r = await api(P + '/import', { method: 'POST', body: { name: f.name, b64: btoa(bin) } }); }
+      catch (e) { toast(errT(e), 'error'); return; }
+      const ins = r.calls.filter(c => /^insert_in/.test(c[1]));
+      modal(`<h3>${esc(K('konv_title'))}: ${esc(r.file)}</h3>
+        ${r.error ? `<p class="error">${esc(r.error)}</p>` : ''}
+        ${!r.listed ? `<p class="error">${esc(K('konv_mask').replace('{m}', r.mask))}</p>` : ''}
+        ${r.listed && r.fileformat === 0 ? `<p class="muted">${esc(K('konv_swf'))}</p>` : ''}
+        <p>${esc(K('konv_done').replace('{n}', ins.length))}</p>
+        ${ins.map(c => `<p class="muted">${esc(c[1])}: ${esc(String(c[2][c[1] === 'insert_in' ? 1 : 0]))} ${esc(c[1] === 'insert_in' ? c[2][9] + ' ' + c[2][2] + ' ' + c[2][4] : c[2][4])}</p>`).join('')}
+        ${r.messages.map(m => `<p>${esc(m)}</p>`).join('')}
+        <div class="actions"><button class="btn secondary" id="kx">${esc(K('close'))}</button></div>`, (m, close) => {
+        m.querySelector('#kx').onclick = () => { close(); load({}); };
+      }, true);
     }
     // 'Avtorizator' (CreateFileClick -> PACS0008Execute), part 3: files come back for download (+ optional server folder)
     async function createFiles(d) {

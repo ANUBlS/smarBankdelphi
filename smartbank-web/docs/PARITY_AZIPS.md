@@ -20,12 +20,12 @@ in the part that uses them (UFX credit, `ufxcredit` :6931), copied from the Delp
 1. **Lists, totals, archives** (done) – see §1.
 2. **Outgoing message editor / creation** (done) – see §2. Open follow-up 2b: `filereport.bpl` `Azipsnew` (`Packages/Cards_New/FileReprt/Unitazips.pas`, 4 707 lines), which is what the visible "Yeni" button and "Redaktə et" for non-103 rows open.
 3. Conversion / export files. **3a done** (outgoing files: `CreateFileClick` → `PACS0008Execute`) – see §3.
-   **3b open**: incoming import `ToolButton4Click` (button "Konvert", also `Timer1Timer`) → `KonvertexExecute` (:538) / `konvert3Execute` (:6480)
+   **3b done** (incoming import, see §3b); the hidden list print `ToolButton8Click` moves to part 4 prints. Was: incoming import `ToolButton4Click` (button "Konvert", also `Timer1Timer`) → `KonvertexExecute` (:538) / `konvert3Execute` (:6480)
    and `Konver102Execute` (:2112, called from Konvertex); `ToolButton8Click` (:6179, QuickRep list – button Visible=False).
 4. Remaining actions: commit/verify/modify/authorise (`comitClick`, `commitingExecute`, `ToolButton11/13Click`, `CreateFileClick`),
    back/delete (`geriExecute`, `out_deleteExecute`, `DeleteExecute`, `Geriqaytar1Click`), incoming postings (`AddTrans*`,
    `AddINTransNew`, `addtrans2`), checks (`cheskaccount`, Checkacc, acc_check, Tranzit_account), settings (Unit3, Azipsn,
-   AzipsSett, MTsett, insett), prints (cap, qrp1, qr5, qrp5), UFX credit (UFX71, `ufxcredit`).
+   AzipsSett, MTsett, insett), prints (cap, qrp1, qr5, qrp5, `ToolButton8Click` list print), UFX credit (UFX71, `ufxcredit`).
 
 ## 1. Lists, totals, archives (done)
 | Delphi | Web | SQL / calls (verbatim, `api/app/azips_sql.py`) |
@@ -162,6 +162,42 @@ the commented copy to `\\192.168.1.187\c$\Swift\out` (:2040-2048).
   committed files produced by the interpreter from the fixtures and spot-checked by hand. MT298 800/202, MT205 other, MT999 days/pass
   run but have no golden file yet.
 
+## 3b. Incoming import – "Konvert" (done)
+API `POST /api/azips/import` (`api/app/azips_import.py`), UI button **Konvert (import)** on the Incoming tab with **one file per
+upload** (the bank uploads incoming files by hand), tests `api/tests/test_azips_import.py`, E2E `e2e/azips_import_screens.py`,
+screenshots 112-113. Verbatim source run by `pascal.py`: `delphi_src/ToolButton4Click.pas` (:3786-3818), `KonvertexExecute.pas`
+(:538-684), `konvert3Execute.pas` (:6480-6652), `cheskaccountExecute.pas` (:5284-5325).
+
+- `ToolButton4Click`: mask from `settings.INN_FILETYPE` (0 → `*.SWF`, 1 → `*.fin`, case-insensitive like Windows); the uploaded
+  file is the only FileListBox item when it matches, otherwise the list is empty and nothing is read. `sw_settings.INN_FILETYPE`
+  0 → `Konvertex`, 1 → `konvert3`.
+- **`KonvertexExecute` does nothing**: its whole body is inside `{ ... }` comments (checked with a Pascal comment-aware lexer;
+  the interpreter parses it to an empty block). So `Konver102Execute` (:2112), called only from that commented body, is
+  unreachable and not ported. With INN_FILETYPE = 0 the web, like Delphi, imports nothing.
+- `konvert3Execute`: line parsing exactly as Delphi (`{1:` → `mt` from `INN_MT_READLINE`, bic `copy(7,8)+copy(16,3)`; `:20:`,
+  `:32A:`, `:59:` + 4 following lines, `:50x:` + next line); `all` = `Memo3.Text`: the hidden Memo3 has **210** lines from the .dfm,
+  `Lines[z] := s` beyond them is ignored (TMemoStrings.Put), line 0 stays empty, the `-}{5:` line is not stored, and the memo is
+  never cleared. MT103 → `sw_main.insert_in` (15 args), other → `insert_in_other` (6 args); `SW_KONVERT` right first. Then
+  `cheskaccount` → `check_account(id, ACOUNT)` for every status-2 MT103 row of `sw_in`, and **commit** (`SBSession.Commit`).
+- `movefile(PATH\\f → PATH\\ddmmyy\\f)`: there is no folder for an uploaded file; the move is only reported in the response.
+- On an exception Delphi shows the text and does not commit; the web rolls back the request.
+
+Deliberate differences / unverified:
+- **Timer**: ActiveFormCreate :2421-2431 enables Timer1 (clicks Konvert every `sw_settings.ConvInterval` ms) when ConvInterval > 0.
+  User decision: incoming files are uploaded by hand, so **no scheduled folder poll** and no `AZIPS_IN_DIR`.
+- Upload accepts one file at a time (user decision; Delphi processes every file in the folder in name order).
+- `num`, `num2`, `m` in konvert3 are uninitialised integers in Delphi (garbage); the interpreter starts them at 0. Effect: before
+  the `:59:`/`:50x:` line of the first file, line 1..4 temporarily fill describ2/tax/kod/kor/describ and are overwritten once the
+  tags appear. A file without `:50x:` gets describ = line 1 here (Delphi: depends on the garbage value).
+- `reset(fl, name)` (2 arguments, :6497) is treated as AssignFile + Reset. Memo3 WordWrap (default True, width 487) could split
+  very long lines into several memo lines in Delphi; not emulated.
+- `sw_main.insert_in`, `insert_in_other`, `check_account` bodies are not in the repo (mock: illustrative row with status 2).
+- Mock `sw_settings` now has INN_FILETYPE = 1 and INN_MT_READLINE = 34 (position of the MT in `{1:F01<BIC12><10>}{2:O103`); check the
+  real values.
+- `ToolButton8Click` (:6179, "Çap et", Visible=False) is reached from the OUT grid popups `Capet1Click`/`N3Click`/`CapEt2Click`
+  (:2953, :6748, :6790) – a QuickReport print; ported with the other prints in part 4.
+
+
 ## Unverified (part 1, needs the real database)
 - `sw_main` package body is not in the repo: what `new_dat` does exactly (mock: moves status-96 incoming rows dated before the
   operating day into `SW_ARCHIVE`, only to illustrate).
@@ -169,6 +205,5 @@ the commented copy to `\\192.168.1.187\c$\Swift\out` (:2040-2048).
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Next: 3b – incoming import (`ToolButton4Click` → `KonvertexExecute` / `konvert3Execute`, `Konver102Execute`; files from upload or
-`AZIPS_IN_DIR`; reuse `pascal.py` with the verbatim source) and `ToolButton8Click` (hidden list print); then 2b (`filereport.bpl`
+Next: 2b (`filereport.bpl`
 Azipsnew = `Packages/Cards_New/FileReprt/Unitazips.pas`) and part 4.

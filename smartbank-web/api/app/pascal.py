@@ -145,6 +145,8 @@ class Parser:
                     self.next(); names.append(self.next()[1])
                 self.expect_op(":")
                 typ = self.next()[1]
+                while not self.isop(";"):      # 'array of array[0..1] of Integer' etc.: only the leading word is kept
+                    self.next()
                 self.expect_op(";")
                 for n in names:
                     self.vars[n] = typ
@@ -519,6 +521,8 @@ class Interp:
             return v() if isinstance(v, Bound) else v
         if k == "callx":
             f = n[1]
+            if f[0] == "name" and getattr(self.builtins.get(f[1]), "pascal_byref", False):
+                return self.builtins[f[1]](self, n[2])      # var parameters (Readln(f, s)): gets the argument nodes
             args = [self.ev(a) for a in n[2]]
             if f[0] == "name":
                 fn = self.lookup(f[1], f[2])
