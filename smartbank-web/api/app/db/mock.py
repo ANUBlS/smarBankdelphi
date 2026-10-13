@@ -27,6 +27,7 @@ from .mock_out import OutMixin
 from . import mock_oacc
 from .mock_oacc import OaccMixin
 from .mock_oset import OsetMixin
+from .mock_omem import OmemMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -61,7 +62,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -75,6 +76,9 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._omem_func(key, args)
+        if r is not NotImplemented:
+            return r
         r = self._oacc_func(key, named)
         if r is not NotImplemented:
             return r
@@ -146,6 +150,9 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._omem_proc(key, args)
+        if r is not NotImplemented:
+            return r
         r = self._oacc_proc(key, named)
         if r is not NotImplemented:
             return r
@@ -176,6 +183,9 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._omem_query(sql, b)  # Packages/out_memorial
+        if r is not NotImplemented:
+            return r
         r = self._oset_query(sql, b)  # off-balance settings screens (mock_oset)
         if r is not NotImplemented:
             return r
@@ -230,6 +240,8 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._omem_execute(sql, binds or {}):
+            return
         if self._oset_execute(sql, binds or {}):
             return
         if self._bal_execute(sql, binds or {}):
@@ -258,7 +270,9 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
         return r
 
     def plsql_out(self, sql, binds=None):
-        r = self._bal_plsql_out(sql, binds or {})
+        r = self._omem_plsql_out(sql, binds or {})
+        if r is NotImplemented:
+            r = self._bal_plsql_out(sql, binds or {})
         if r is NotImplemented:
             raise DBError("ORA-06550: mock: block not emulated")
         return r

@@ -91,6 +91,7 @@ The screenshots are in `docs/screenshots/`.
 - **Off-balance Chart of Accounts** (`Packages/Out_balancerefeditx/Ocx`, CLSID `{8E39E7D2-FC9F-4EB8-8645-9F04944FBD92}`): plan 1–4 picker, grid, navigator, edit panel, BAL_CN search. API `api/app/out_balrefedit.py`, UI `web/public/modules/out_balrefedit.js`. Parity: `docs/PARITY_OUT_SETTINGS.md`.
 - **Off-balance Account Types** (`Packages/Out_Tuningacctypes`, CLSID `{4FD88BAF-D08A-474A-AADA-335E883BBB85}`): editable OUT_ACCOUNT_FLAGS grid. API `api/app/out_tuningacctypes.py`, UI `web/public/modules/out_tuningacctypes.js`. Parity: `docs/PARITY_OUT_SETTINGS.md`.
 - **Off-balance Currencies** (`Packages/out_Avalute`, CLSID `{83FA9280-CF34-4704-A329-5FB25414F0F5}`): OUT_AVALUTE grid via P_AVALUTE, exchange-difference accounts (ValuteSettings). API `api/app/out_avalute.py`, UI `web/public/modules/out_avalute.js`. Parity: `docs/PARITY_OUT_SETTINGS.md`.
+- **Off-balance Memorial Orders** (`Packages/out_memorial`, CLSID `{AE49F109-D3B9-4334-B841-77B4C90F2A16}`): OUT_SB_MEMORIAL.MEMORIAL → Memorial_<user> grid, filter dialog, memorial order reports (PDF/Excel), balance-account settings. API `api/app/out_memorial.py`, UI `web/public/modules/out_memorial.js`. Parity: `docs/PARITY_OUT_OPS.md`.
 
 ## Known limits / to verify on the real DB
 See `docs/PILOT_NOTES.md`.
