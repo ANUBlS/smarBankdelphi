@@ -251,6 +251,43 @@ local does. `k1` is never assigned in Delphi (WorldCheck is commented out) and i
 sw_prow column names are checked as plain Oracle identifiers before they are concatenated into the SQL. A bad value returns
 `azips.prow_bad` instead of running. Unverified: what `add_transaction` does (the mock moves the row to status 5).
 
+## 4b-2. Incoming postings, UFX card credit, account checks (done)
+API `POST /api/azips/in-commit` + `/in-commit/answer`, `/in-checkacc`, `GET|POST /api/azips/tranzit`, `/tranzit/delete`
+(`api/app/azips_in.py`, UFX client `api/app/ufx.py`), UI buttons on the IN tab (Təsdiq et, Hesabi yoxla - also right click on a
+row like the Rdk popup -, Transit hesablar), tests `api/tests/test_azips_in.py`, E2E `e2e/azips_in_screens.py`, screenshots 122-126.
+
+| Delphi | Right | Call |
+|---|---|---|
+| comitClick :3906 | - | MT102/MT103 → cesking.Click :5330 `sw_main.check_account(id, ACOUNT)`, RefreshRecord, Commit |
+| | SW_IN_COMMIT (only when status = 2 after the check) | Intesdiq `select * from sw_in where id =:vid` (Unit2.dfm:6199, unused), settings.SHOWR = 0 and MT102/MT103 → AddINTransNew + Commit; Commit |
+| AddINTransNewExecute :7118 | - | IDs: no SelectedRows → current ID (no filter); else rows matching `(status=2 and MT='MT103') or MT in (102,205,900,910,950,298,999)` (Delphi precedence kept). MessageDlg `%d sayda əməliyyatlar günün sənədlərinə əlavə edilsin ?` [Yes, Cancel]. SW_IN_FORAddIn (Unit2.dfm:4846, `:IDs` otSubst) |
+| per row, sw_settings.ENABLEDUFX = 1 | - | `cardufx.CardCheck(id,2)` > 0 and `cardufx.UfxCheck(id)` = 0 → `cardufx.Ufx_send(id,2, OUT cardtype, cardnumber, valyuta, amount, descript)`, cardfindcredit `accid(:card_accid)` with **sw_in.ACOUNT of the current grid row** (not the loop row, as Delphi), `ufxcredit`, UFX `fundstransfer`, `cardufx.UfxResponse(id,2,RespText,amount,resp)`; success → `sw_main.add_in_transactions2`; failure → ShowMessage + Exit (later rows skipped; comitClick still commits) |
+| ufxcredit :6931 | - | get_cr_acc / get_ufx_check / get_creditid / get_debtamount (Unit2.dfm:7198-7254); first time today: Result = max(0, amount-debt), Insufx insert with VCODE = Encrypting, Commit; later: ufxcode → Decrypt/hex check, ShowMessage 'yeah' (left in Delphi), get_restufxcheck < 0 → updufx + Commit |
+| Hesabiyoxla1Click :4323 → Checkacc.pas Button1Click | - | acc_check `select * from account where acc_no=:acc`, Edit2 := NAME, `sw_main.upd_none(Edit3.Text)` (no commit), empty name closes the form |
+| ToolButton7Click :5391 → Tranzit_account.pas | SW_TRANZIT | `select a.rowid,a.* from sw_transit_acc a`; Əlavə et: two InputQuery → `sw_main.sw_tranzit_insert(v1, v2)` (no commit) + 'Tranzit hesab əlavə olundu'; Sil: confirm → DOA delete by ROWID + CommitOnPost |
+
+UFX (user decision): `UFX_MODE=real` posts the SOAP 1.1 document/literal envelope Delphi builds (namespace `http://webser/`,
+unqualified parts rbsnumber, MsgCode, LocalDt, Description, Currency, Amount; SOAPAction "") to `UFX_URL` (default = UFX71.pas defURL)
+with `UFX_TIMEOUT` and optional `UFX_CA_FILE` / `UFX_CLIENT_CERT` / `UFX_CLIENT_KEY`; the `return` element is the response, a SOAP
+Fault raises an error like ERemotableException. `UFX_MODE=mock` (default with DB_MODE=mock, always in tests) returns canned responses:
+card number ending 0002 → `...#Insufficient funds`, 0003 → `...#Card not found`, 0009 → SOAP fault, else `RRN#Successfully processed`.
+
+Not ported (unreachable): AddTransExecute :3629 and AddInTransExecute :4015. Their TActions (SWIFT_MAINImpl1.dfm:2867, :2879) are
+linked to no control and the only call (:3703) is commented out. ceskingClick's button is Visible=False (reached via comitClick only).
+
+Deliberate differences / unverified:
+- The MessageDlg sits in the middle of comitClick: the first request runs up to it (check_account already committed, as in Delphi) and
+  keeps the IDs in the user's session; the answer request runs the rest.
+- dgMultiSelect: a plain click only moves the current row in Delphi; the web sends a selection only when rows were Ctrl-selected
+  (a single plain-clicked row = Count 0).
+- `ufxcode.dat.AsString` hour (characters 12-13) assumes the Windows format `dd.mm.yyyy hh:nn:ss`; with an unpadded hour (`H:mm:ss`)
+  Delphi itself would fail in StrToInt before 10:00. Check the client locale.
+- Encrypting raises like StrToInt when the microsecond part is shorter than 6 digits (Delphi bug kept; shown as an error).
+- 'Kode Standarta uygun deyil' exits ufxcredit with an unassigned Result (undefined in Delphi); the web returns 0 (nothing goes to the card).
+- Ufx_send IN OUT parameters: Delphi passes uninitialised locals; the web passes NULL. Null OUT values become ''/0.
+- On a UFX/Oracle error the request stops without the final Commit (earlier work stays uncommitted in the session, as in Delphi; ufxcredit's own commits stay).
+- `cardufx`, `accid`, `sw_main.add_in_transactions2`, `upd_none`, `sw_tranzit_insert` bodies are not in the repo (mock is illustrative).
+
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
 forced to **one worker**: Dockerfile `--workers 1` (with a comment), `app/main.py` refuses to start when `WEB_CONCURRENCY` > 1, and the
@@ -264,8 +301,7 @@ between processes.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Parts 4a and 4b-1 (row actions, multi-select / Yes to all, Modifikator, see §4a) are done. Next: incoming postings (`comitClick` :3906 → `AddINTransNewExecute`
-:7118, `AddInTransExecute` :4015, `AddTransExecute` :3629), account checks (`ceskingClick` :5330, Checkacc, acc_check, Tranzit_account,
-`Hesabiyoxla1Click` :4323), IN edit (`ToolButton5Click` → Unit4), settings (ToolButton10/12 → insett / AzipsSett, MTsett, Unit3), prints
-(`ToolButton8Click` :6179, printClick :3984, cap, qrp1, qr5, qrp5), UFX credit (UFX71, `ufxcredit` :6931), template load
-(Şablondan yüklə / Ttemplate). After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.
+Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Remaining AZIPS: IN edit
+(`ToolButton5Click` / `Redaktet1Click` → Unit4 IN_edit), settings (ToolButton10/12 → insett / AzipsSett, MTsett, Unit3), prints
+(`ToolButton8Click` :6179, printClick :3984, ToolButton17Click :7106, cap, qrp1, qr5, qrp5), template load (Şablondan yüklə / Ttemplate).
+After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.

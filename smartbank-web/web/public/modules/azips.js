@@ -72,6 +72,9 @@
           <button class="btn secondary" id="z_arxin">${esc(K('archive'))}</button>
           <button class="btn" id="z_konv" title="${esc(K('konv_hint'))}">${esc(K('konvert'))}</button>
           <button class="btn danger" id="z_indel">${esc(K('delete'))}</button>
+          <button class="btn" id="z_incommit">${esc(K('in_commit'))}</button>
+          <button class="btn secondary" id="z_checkacc">${esc(K('checkacc'))}</button>
+          <button class="btn secondary" id="z_tranzit">${esc(K('tranzit'))}</button>
           <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
         v('g_in').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => load({ in_sort: h.dataset.s }));
@@ -80,6 +83,12 @@
         v('z_konv').onclick = () => v('z_konvf').click();
         multi(v('g_in'), d.sw_in, st, 'sel_in');
         v('z_indel').onclick = () => act('in_delete', 'sel_in', 'q_delete', 'qa_delete');      // ToolButton6Click -> DeleteExecute
+        v('z_incommit').onclick = () => inCommit();                                     // comitClick :3906 -> AddINTransNewExecute :7118
+        v('z_checkacc').onclick = () => checkAcc();                                      // popup Rdk 'Hesabi yoxla' (Hesabiyoxla1Click :4323)
+        v('g_in').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('contextmenu', (e) => {
+          e.preventDefault(); st.sel_in = d.sw_in[+tr.dataset.i].id; checkAcc();
+        }));
+        v('z_tranzit').onclick = () => tranzit();                                        // ToolButton7Click :5391 -> Tranzit_account.pas
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
@@ -175,6 +184,78 @@
       }
       if (!answers.includes('yes')) return;
       act('out_commit', 'sel_out2', null, null, null, forms, answers);
+    }
+    // part 4b-2 (api/app/azips_in.py). comitClick on the current GridIN row; SelectedRows = Ctrl-selected rows (a plain
+    // click only moves the current row in a dgMultiSelect grid, so [current] alone is sent as "no selection").
+    async function inCommit() {
+      const cur = st.sel_in;
+      if (cur == null) return toast(K('pick_row'), 'error');
+      const m = (st.sel_in_m || []).filter(x => !(st.sel_in_m.length === 1 && x === cur));
+      let r;
+      try {
+        r = await api(P + '/in-commit', { method: 'POST', body: { current: cur, selected: m } });
+        if (r.ask) {
+          const a = await dlg(r.ask, false, true);                                     // MessageDlg [mbYes, mbCancel]
+          r = await api(P + '/in-commit/answer', { method: 'POST', body: { answer: a === 'yes' ? 'yes' : 'cancel' } });
+        } else if (r.status != null) toast(K('in_status_not2'));
+      } catch (e) { toast(errT(e), 'error'); load({}); return; }
+      if (r.messages && r.messages.length) {                                          // ShowMessage calls, in order
+        modal(`${r.messages.map(x => `<p>${esc(x)}</p>`).join('')}<div class="actions"><button class="btn" id="mx">OK</button></div>`,
+          (mm, close) => { mm.querySelector('#mx').onclick = close; });
+      } else if (r.done) toast(K('done'));
+      st.sel_in_m = [];
+      load({});
+    }
+    // Checkacc.pas TCheckinacc: Edit1 = ACOUNT (editable), Edit3 = id, 'Yoxla' -> acc_check + upd_none; empty name closes
+    function checkAcc() {
+      const r0 = (st.d.sw_in || []).find(x => x.id === st.sel_in);
+      if (!r0) return toast(K('pick_row'), 'error');
+      modal(`<h3>Checking_acc</h3><div class="toolbar" style="gap:8px;flex-wrap:wrap">
+        <label class="field"><span>${esc(K('account'))}</span><input class="input" id="ca1" value="${esc(r0.acount || '')}"></label>
+        <label class="field"><span>${esc(K('acc_name'))}</span><input class="input" id="ca2" readonly></label>
+        <input class="input" id="ca3" readonly value="${esc(r0.id)}" style="width:90px"></div>
+        <div class="actions"><button class="btn" id="cab">${esc(K('checkacc_btn'))}</button><button class="btn secondary" id="cax">${esc(K('close'))}</button></div>`, (m, close) => {
+        m.querySelector('#cax').onclick = () => { close(); load({}); };
+        m.querySelector('#cab').onclick = async () => {
+          try {
+            const r = await api(P + '/in-checkacc', { method: 'POST', body: { id: r0.id, acc: m.querySelector('#ca1').value } });
+            m.querySelector('#ca2').value = r.name;
+            if (r.closed) { close(); load({}); }
+          } catch (e) { toast(errT(e), 'error'); }
+        };
+      });
+    }
+    // Tranzit_account.pas: grid of sw_transit_acc, 'Əlavə et' (two InputQuery) and 'Sil'
+    function tranzit() {
+      modal(`<h3>Tranzit accounts</h3><div class="tablewrap" style="max-height:50vh" id="trg"></div>
+        <div class="actions"><button class="btn" id="tra">${esc(K('tranzit_add'))}</button><button class="btn danger" id="trd">${esc(K('tranzit_del'))}</button>
+        <button class="btn secondary" id="trx">${esc(K('close'))}</button></div>`, async (m, close) => {
+        let rows = [], cur = null;
+        m.style.width = "min(900px, 95vw)"; m.style.maxWidth = "95vw";
+        const q = (id) => m.querySelector('#' + id);
+        async function fill() {
+          try { rows = await api(P + '/tranzit'); } catch (e) { toast(errT(e), 'error'); close(); return; }
+          q('trg').innerHTML = table('g_tr', ['ID', 'MAIN_ACC', 'TRANZIT_ACC', 'TRANSIT_ACC_NAME'], rows);
+          q('trg').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.onclick = () => {
+            cur = rows[+tr.dataset.i]; q('trg').querySelectorAll('tr').forEach(x => x.classList.toggle('sel', x === tr));
+          });
+          cur = rows[0] || null;
+          const f = q('trg').querySelector('tbody tr[data-i]'); if (f) f.classList.add('sel');
+        }
+        q('trx').onclick = close;
+        q('tra').onclick = async () => {
+          const v1 = prompt(`Tranzit Hesablar\n${K('tranzit_main')}`) ?? '';             // InputQuery: Cancel keeps ''
+          const v2 = prompt(`Tranzit Hesablar\n${K('tranzit_acc')}`) ?? '';
+          try { toast((await api(P + '/tranzit', { method: 'POST', body: { main_acc: v1, tranzit_acc: v2 } })).message); } catch (e) { toast(errT(e), 'error'); }
+          fill();
+        };
+        q('trd').onclick = async () => {
+          if (!cur || !confirm(K('tranzit_q_del'))) return;
+          try { await api(P + '/tranzit/delete', { method: 'POST', body: { rowid: cur.rowid } }); } catch (e) { toast(errT(e), 'error'); }
+          fill();
+        };
+        fill();
+      }, true);
     }
     async function load(extra) {
       try {
