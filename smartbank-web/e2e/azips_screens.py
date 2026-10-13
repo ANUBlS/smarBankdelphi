@@ -12,7 +12,7 @@ with sync_playwright() as p:
     pg.fill("#u", "ADMIN"); pg.fill("#p", "Admin#2026"); pg.click("#loginBtn"); pg.wait_for_selector("#tree .node")
     pg.fill("#treeSearch", "AZIPS"); pg.wait_for_timeout(300)
     pg.locator("#tree .node[data-path='9.0']").click(); pg.wait_for_selector("#g_out3 tr[data-i='1']")
-    assert "4200.25 AZN" in pg.input_value("#z_s1")
+    assert "254951.5 AZN" in pg.input_value("#z_s1")      # status-1 rows of the mock (incl. parts 2b/3 rows)
     shot(pg, "101-azips-out.png")
     pg.click(".tabs button[data-tab=in]"); pg.wait_for_selector("#g_in tr[data-i='1']")
     pg.click("#g_in th[data-s=VALU]"); pg.wait_for_timeout(400)
