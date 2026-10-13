@@ -17,6 +17,7 @@ from .mock_cs import CsMixin
 from . import mock_cr
 from .mock_cr import CrMixin
 from . import mock_bal
+from .mock_oct import OctMixin
 from .mock_bal import BalMixin
 from . import mock_out
 from .mock_out import OutMixin
@@ -52,7 +53,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -154,6 +155,9 @@ class MockConnection(OutMixin, BalMixin, CsMixin, CrMixin):
         b = binds or {}
         r = self._out_query(sql, binds)  # OutMixin matches on original SQL text
         if r is not NotImplemented:
+            return r
+        r = self._oct_query(s, b)
+        if r is not None:
             return r
         r = self._bal_query(s, b)
         if r is not None:

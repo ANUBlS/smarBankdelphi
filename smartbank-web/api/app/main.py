@@ -293,3 +293,5 @@ async def _reaper():
 from . import balance  # noqa: E402
 for _r in balance.make_routers(current, require_module, err):
     app.include_router(_r)
+from . import out_control_tape  # noqa: E402
+app.include_router(out_control_tape.make_router(current, require_module, err))

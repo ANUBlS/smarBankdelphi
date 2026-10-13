@@ -82,7 +82,7 @@ class BalMixin:
 
     # ------------------------------------------------------------------ packages
     def _bal_func(self, key, args, named):
-        if key in ("SB_BALANCEFILIDS.GETBANKDAY", "SB_BALANCE.GETBANKDAY", "OUT_SB_BALANCEFILIDS.GETBANKDAY"):
+        if key in ("SB_BALANCEFILIDS.GETBANKDAY", "SB_BALANCE.GETBANKDAY", "OUT_SB_BALANCEFILIDS.GETBANKDAY", "OUT_SB_BALANCE.GETBANKDAY"):
             return _d(self.bal["tek_dat"])
         return NotImplemented
 
