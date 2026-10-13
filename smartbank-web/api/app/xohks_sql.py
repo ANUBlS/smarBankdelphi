@@ -121,3 +121,9 @@ LINES_IN_VALUTE = ["Select valute from avalute where val_name=:b0"]             
 LINES_IN_BANKM = ["Select id from BankM where bankcode=:b0"]                                       # :1597 / :1616
 LINES_IN_BANKINFO_T = ["Select Kod_Fil from BankInfo_T where Kod_B=:b0"]                           # :1729
 LINES_IN_ACCOUNT = ["Select ID from Account where Acc_no=:b0 and close_dat is null"]               # :1745-1747
+# Data_Unit.dfm:6-34 DataAccount (RecMessDet_Form SearchEdit1/2, Account_Source)
+LINES_DATAACCOUNT = ['  SELECT   a.id,', '           a.kli_id,', '           a.acc_no,', '           UPPER(SUBSTR(REPLACE (REPLACE (a.name, \'\'\'\', \'\'), \'"\', \'\'),0,35)) name,', '           a.val_acc,', '           a.filial,', '           c.inn', '    FROM   account a, customers c', '   WHERE       (a.kli_id = c.id)', '           AND (a.close_dat IS NULL)', '           AND (a.val_acc=0)', '           AND a.bal_cn1>=2000 and a.bal_cn1<4600', '           ', 'ORDER BY   a.acc_no']
+# Witch.dfm:353-379 OracleDataSet1 (ToolButton6 Baxmaq)
+LINES_WITCH1 = ['select', '  x.*, x.rowid,', '  a.acc_no,', '  a.name,', '  v.val_name', 'from', '  XS_BATCHS x ,', '  account a, ', '  avalute v', 'where', '  x.acc_id = a.id and', '  v.valute=a.val_acc and', '  (x.transdate>=:BeginDate and x.transdate<=:EndDate)', '']
+# Witch.dfm:380-406 OracleDataSet2 (Master OracleDataSet1, MasterFields ID)
+LINES_WITCH2 = ['select', '    x.rowid,', '    x.*,', '    v.val_name,', '    b.name as BankName', 'from', '    XS_BENEFICIARY X,', '    avalute v,', '    BankM b', 'where', '   (x.batchID=:id)and', '   (x.val_cod=v.valute)', '  and (x.rec_bank_id=b.id)']

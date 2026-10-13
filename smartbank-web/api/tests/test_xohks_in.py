@@ -72,3 +72,33 @@ def test_accept_and_delete():
     assert d["deleted"] == [rid] and d["error"].startswith("List index")
     d = P("/in/delete", {"ids": [rows[1]["id"]], "answer": "all", "confirm_all": True})
     assert d["deleted"] == [rows[1]["id"]]
+
+
+def test_edit_form():
+    login()
+    rows = P("/in/list", {"caption": "x"})["rows"]
+    o = P("/in/edit/open", {"current": 71})
+    assert o["open"] and o["id"] == 71 and o["SearchEdit1"] == "" and o["DBEdit3"] == ""
+    f = {x["caption"]: x["value"] for x in o["fields"]}
+    assert f["Alan müştərinin adı"] == "Aliyev Vali" and f[" Qeydiyyat №"] == "IN2610120001"
+    s = P("/in/edit/search", {"field": "SearchEdit1", "text": "az65"})
+    assert not s["red"] and s["completed"] == "AZ65TURA38010019440000000002" and s["DBEdit3"] == s["completed"]
+    assert P("/in/edit/search", {"field": "SearchEdit2", "text": "99"})["red"] is True
+    assert P("/in/edit/save", {"search1": "AZ65", "confirmed": False}) == {"done": False}     # SearchEdit2 still red
+    assert P("/in/edit/exit", {"field": "SearchEdit2", "text": "99"})["text"] == "1700123451"
+    assert P("/in/edit/save", {"search1": ""}) == {"done": False}
+    # row 71 has trans_date 2026-10-12 = mock operation date
+    q = P("/in/edit/save", {"search1": "AZ65", "confirmed": False})
+    assert q["confirm"] == "Əməliyyat #71 dəyişdirilsinmi ?"
+    d = P("/in/edit/save", {"search1": "AZ65", "confirmed": True})
+    r = next(x for x in d["rows"] if x["id"] == 71)
+    assert d["done"] and r["rec_client_acc"] == "AZ65TURA38010019440000000002" and r["status"] == 0
+    assert rows
+
+
+def test_witch():
+    login()
+    w = P("/in/witch", {"beg": "2026-01-01", "end": "2026-12-31"})
+    assert w["batchs"] and "acc_no" in w["batchs"][0]
+    b = P("/in/witch/benef", {"id": w["batchs"][0]["id"]})
+    assert isinstance(b["rows"], list)

@@ -27,3 +27,24 @@ with sync_playwright() as p:
     pg.click("button:has-text('Yoxla')"); pg.wait_for_timeout(600)
     assert not errs, errs
     b.close()
+
+# step 4b: Redaktə (RecMessDet_Form) and Baxmaq (FormWitch) - screenshots 158-159
+with sync_playwright() as p:
+    b = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else None, args=["--no-sandbox"])
+    pg = b.new_page(viewport={"width": 1440, "height": 1000})
+    errs = []
+    pg.on("pageerror", lambda e: errs.append(str(e)))
+    pg.goto(BASE); pg.wait_for_selector("#loginForm")
+    pg.fill("#u", "ADMIN"); pg.fill("#p", "Admin#2026"); pg.click("#loginBtn"); pg.wait_for_selector("#tree .node")
+    pg.fill("#treeSearch", "XÖHKS"); pg.wait_for_timeout(300)
+    pg.locator("#tree .node", has_text="XÖHKS").last.click(); pg.wait_for_selector("#g_b tr[data-i='0']")
+    pg.click("#x_witch"); pg.wait_for_selector("#g_w1"); pg.wait_for_timeout(500)
+    shot(pg, "158-xohks-baxmaq.png")
+    pg.click("#w_x")
+    pg.click(".tabs button[data-tab='in']"); pg.wait_for_selector("#g_i tr[data-i='0']")
+    pg.click("#x_iedit"); pg.wait_for_selector("#e_s1")
+    pg.type("#e_s1", "AZ65", delay=60); pg.wait_for_timeout(500)
+    shot(pg, "159-xohks-in-edit.png")
+    pg.click("#e_x")
+    assert not errs, errs
+    b.close()

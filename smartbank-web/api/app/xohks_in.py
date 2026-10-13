@@ -217,6 +217,119 @@ def delete(ws, ids: list[int], answer: str, confirm_all: bool = False) -> dict:
     return {**out, "rows": X.incoming(ws)}
 
 
+# ------------------------------------------------------------------------------------------------ Redaktə (RecMessDet_Form)
+REC_FIELDS = [("Alan müştərinin adı", "REC_CLIENT_NAME"), ("Alan müştərinin vöeni", "REC_CLIENT_INN"),
+              ("Alanın müxbir hesabı", "REC_CLIENT_ACC"), ("Göndərən iştrakçının adı", "NAME"),
+              ("Göndərən iştrakçının Müxbir subhesabı", "SEN_BANK_SUBACC"), ("Göndərən müştərinin hesabı", "SEN_ACC"),
+              ("Göndərən müştərinin vöeni", "SEN_INN"), (" Qeydiyyat №", "REFERENCE"), ("Tarix:", "TRANS_DATE"),
+              ("Ödəniş kodu", "TYPECODE"), ("Əlavə məlumat", "ADD_INF"), ("Ödəyicidən vəsaiti alana məlumat", "REMIT_INF")]
+#   ReceiveMessDetals_Unit.dfm DB-aware controls on DataMod.DS_XS_IncomingView (read-only, clSilver)
+
+
+def _raw_in(ws):
+    return ws.conn.query(subst(Q.text(Q.LINES_XS_INCOMINGVIEW), "title", X._st(ws).get("in_title", Q.TITLE_DEFAULT)))
+
+
+def _accounts(ws):
+    return ws.conn.query(Q.text(Q.LINES_DATAACCOUNT))
+
+
+def edit_open(ws, current: int | None) -> dict:
+    """MessagesInEditExecute :2570: exit when XS_IncomingView is empty; DataAccount opened when inactive (first record
+    current); RecMessDet_form.ShowModal. FormShow clears SearchEdit1/2, DBEdit3, DBEdit8 (DBEdit.Clear only empties the
+    control text)."""
+    raw = _raw_in(ws)
+    if not raw:
+        return {"open": False}
+    cur = next((x for x in raw if x.get("ID") == current), raw[0])
+    st = _st(ws)
+    accs = _accounts(ws)
+    if "in_edit_acc" not in st:
+        st["in_edit_acc"] = accs[0].get("ID") if accs else None
+    st["in_edit"] = {"id": cur.get("ID"), "red2": False}
+    return {"open": True, "id": cur.get("ID"),
+            "fields": [{"caption": c, "value": "" if cur.get(k) is None else str(X.row({k: cur.get(k)})[k.lower()])} for c, k in REC_FIELDS],
+            "SearchEdit1": "", "SearchEdit2": "", "DBEdit3": "", "DBEdit8": ""}
+
+
+def edit_search(ws, field: str, text: str, deleting: bool = False) -> dict:
+    """TSearchEdit (SBCM_ComponentsStorage/SearchEdit.pas). KeyDown :119: Delete / Backspace -> Tag := 1, any other key ->
+    Tag := 0. Change :87: when Tag = 0 and Text <> '' -> DataSet.Locate(SearchField, Text, [loCaseInsensitive, loPartialKey]);
+    found -> clWhite and SetSelectedText(field value) (the typed text is completed, the rest selected; DataAccount moves,
+    so DBEdit3 / DBEdit8 show ACC_NO / NAME), not found -> clRed, Tag := 1, Beep."""
+    st = _st(ws)
+    e = st.setdefault("in_edit", {"id": None, "red2": False})
+    col = {"SearchEdit1": "ACC_NO", "SearchEdit2": "INN"}[field]
+    accs = _accounts(ws)
+    found, red = None, False
+    if not deleting and text != "":
+        found = next((a for a in accs if str(a.get(col) or "").upper().startswith(text.upper())), None)
+        if found:
+            st["in_edit_acc"] = found.get("ID")
+        else:
+            red = True
+    if field == "SearchEdit2" and not deleting and text != "":
+        e["red2"] = red
+    a = next((x for x in accs if x.get("ID") == st.get("in_edit_acc")), {})
+    return {"red": red, "DBEdit3": str(a.get("ACC_NO") or ""), "DBEdit8": str(a.get("NAME") or ""),
+            "completed": str(found.get(col)) if found else None}
+
+
+def edit_exit(ws, field: str, text: str) -> dict:
+    """TSearchEdit.DoExit :104: Color := clWhite; Text <> '' -> Text := DataAccount field value. (Clicking 'Yadda saxla'
+    leaves the edit first, so Button1Click's SearchEdit2.Color = clRed test can only see clWhite - kept.)"""
+    st = _st(ws)
+    e = st.setdefault("in_edit", {"id": None, "red2": False})
+    if field == "SearchEdit2":
+        e["red2"] = False
+    if text == "":
+        return {"text": ""}
+    col = {"SearchEdit1": "ACC_NO", "SearchEdit2": "INN"}[field]
+    a = next((x for x in _accounts(ws) if x.get("ID") == st.get("in_edit_acc")), {})
+    return {"text": "" if a.get(col) is None else str(a.get(col))}
+
+
+def edit_save(ws, search1: str, confirmed: bool) -> dict:
+    """Button1Click 'Yadda saxla': exit when Trim(SearchEdit1) = '' or SearchEdit2 is red; trans_date <> GetUseDate and
+    <> SBOP.Get_Date -> 'Əməliyyat #%d deyişdirilə bilməz!'; 'Əməliyyat #<id> dəyişdirilsinmi ?' Yes ->
+    XS_CONTROL.xs_Incoming_update(id, DataAccount.id, DataAccount.acc_no), xs_incoming_ChangeStatus(id, 0), Refresh,
+    Close. No commit."""
+    conn = ws.conn
+    st = _st(ws)
+    e = st.get("in_edit") or {}
+    if P.d_trim(search1) == "" or e.get("red2"):
+        return {"done": False}
+    cur = next((x for x in _raw_in(ws) if x.get("ID") == e.get("id")), None)
+    if cur is None:
+        return {"done": False}
+    use = X.get_use_date(conn)
+    sysd = conn.call_func(Q.PKG_SBOP, "Get_Date", [], datetime.datetime)
+    td = cur.get("TRANS_DATE")
+    if td != datetime.datetime(use.year, use.month, use.day) and td != sysd:
+        raise X.XsError("xohks.in_not_changeable2", id=cur.get("ID"))
+    if not confirmed:
+        return {"confirm": "Əməliyyat #" + str(cur.get("ID")) + " dəyişdirilsinmi ?"}
+    a = next((x for x in _accounts(ws) if x.get("ID") == st.get("in_edit_acc")), {})
+    conn.call_proc("XS_CONTROL", "xs_Incoming_update", [cur.get("ID"), int(a.get("ID") or 0), str(a.get("ACC_NO") or "")],
+                   commit=False)
+    conn.call_proc("XS_CONTROL", "xs_incoming_ChangeStatus", [cur.get("ID"), 0], commit=False)
+    return {"done": True, "rows": X.incoming(ws)}
+
+
+# ------------------------------------------------------------------------------------------------ Baxmaq (FormWitch)
+def witch(ws, beg: datetime.date, end: datetime.date) -> dict:
+    """ToolButton6Click :3907: Bas / Son = Trunc(StDate / EndDate pickers); FormWitch.OracleDataSet1 (XS_BATCHS of the
+    period, any status) and its detail OracleDataSet2 (beneficiaries, Master ID); ShowModal. Read-only grids."""
+    from .customers import row
+    b = {"BeginDate": datetime.datetime(beg.year, beg.month, beg.day), "EndDate": datetime.datetime(end.year, end.month, end.day)}
+    return {"batchs": [row(x) for x in ws.conn.query(Q.text(Q.LINES_WITCH1), b)]}
+
+
+def witch_benef(ws, batch_id: int) -> dict:
+    from .customers import row
+    return {"rows": [row(x) for x in ws.conn.query(Q.text(Q.LINES_WITCH2), {"id": batch_id})]}
+
+
 # ------------------------------------------------------------------------------------------------ router
 class SelIn(BaseModel):
     current: int | None = None
@@ -232,6 +345,29 @@ class DelIn(BaseModel):
 class LoadIn(BaseModel):
     name: str = Field(min_length=1, max_length=255)
     b64: str = Field(max_length=14_000_000)       # one file per request (~10 MB)
+
+
+class SearchIn(BaseModel):
+    field: str = Field(pattern="^SearchEdit[12]$")
+    text: str = Field(max_length=60)
+
+
+class SearchKeyIn(SearchIn):
+    deleting: bool = False
+
+
+class SaveIn(BaseModel):
+    search1: str = Field(max_length=60)
+    confirmed: bool = False
+
+
+class WitchIn(BaseModel):
+    beg: datetime.date
+    end: datetime.date
+
+
+class IdIn(BaseModel):
+    id: int
 
 
 class ConvIn(BaseModel):
@@ -286,5 +422,29 @@ def make_router(current, require_module, err):
         if b.answer not in ("yes", "no", "cancel", "all"):
             err(400, "error.bad_request")
         return delete(ws, b.ids, b.answer, b.confirm_all)
+
+    @r.post("/edit/open")
+    def _eo(b: SelIn, ws=Depends(g)):
+        return edit_open(ws, b.current)
+
+    @r.post("/edit/search")
+    def _es(b: SearchKeyIn, ws=Depends(g)):
+        return edit_search(ws, b.field, b.text, b.deleting)
+
+    @r.post("/edit/exit")
+    def _ex(b: SearchIn, ws=Depends(g)):
+        return edit_exit(ws, b.field, b.text)
+
+    @r.post("/edit/save")
+    def _esv(b: SaveIn, ws=Depends(g)):
+        return guard(edit_save, ws, b.search1, b.confirmed)
+
+    @r.post("/witch")
+    def _w(b: WitchIn, ws=Depends(g)):
+        return witch(ws, b.beg, b.end)
+
+    @r.post("/witch/benef")
+    def _wb(b: IdIn, ws=Depends(g)):
+        return witch_benef(ws, b.id)
 
     return r

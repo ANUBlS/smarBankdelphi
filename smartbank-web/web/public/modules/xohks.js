@@ -80,7 +80,8 @@
           <button class="btn secondary" id="x_avt">Avtorizator</button><button class="btn secondary" id="x_ret">${esc(K('b_return'))}</button>
           <button class="btn secondary" id="x_arch">${esc(K('b_archive'))}</button>
           <span style="width:16px"></span><button class="btn secondary" id="x_pf"><img src="/img/xohks/status_5.png" width="16" height="16" alt=""> Faylı Hazırla</button>
-          <button class="btn secondary" id="x_sent"><img src="/img/xohks/status_11.png" width="16" height="16" alt=""> Gedən fayl</button></div>
+          <button class="btn secondary" id="x_sent"><img src="/img/xohks/status_11.png" width="16" height="16" alt=""> Gedən fayl</button>
+          <button class="btn secondary" id="x_witch">Baxmaq</button></div>
         ${box(K('box_batchs'), table('g_b', C.batchs, d.batchs, true))}
         ${st.benef_visible ? box(K('box_benef'), '<div id="xb"></div>') : ''}`;
       v('x_ref').onclick = async () => { st.beg = v('x_beg').value; st.end = v('x_end').value;
@@ -103,7 +104,8 @@
       v('x_ret').onclick = async () => { if (st.cur) after(await call('/batch/return', { id: st.cur.id, benef_id: st.curb ? st.curb.id : null })); };
       v('x_arch').onclick = async () => { const r = await call('/archive/send'); if (r) toast(K('msg_archived')); };
       v('x_pf').onclick = async () => { const r = await call('/pf/open'); if (r) pfForm(r); };            // ToolButton11Click
-      v('x_sent').onclick = () => sentForm();                                                             // ToolButton5Click
+      v('x_sent').onclick = () => sentForm();
+      v('x_witch').onclick = () => witchForm(v('x_beg').value, v('x_end').value);                          // ToolButton6Click :3907                                                             // ToolButton5Click
       if (st.benef_visible) v('x_macc').onclick = async () => {   // MessagesOutAccept: SelectedRows + current
         if (!st.cur || !st.curb) return;
         const g = v('g_xb'); const ids = [...g.querySelectorAll('tbody tr.msel')].map(tr => (st.brows[+tr.dataset.i] || {}).id).filter(x => x != null);
@@ -353,6 +355,58 @@
       }
       load();
     }
+    async function witchForm(beg, end) {   // Witch.pas TFormWitch: OracleDataSet1 (batches of StDate..EndDate) + detail OracleDataSet2
+      const r = await call('/in/witch', { beg, end }); if (!r) return;
+      const cols = [['ID', '№'], ['FILIAL', 'F'], ['STATUS', ''], ['TRANSDATE', 'Tarix'], ['ACC_NO', 'Debet'], ['VAL_NAME', '$'], ['AMOUNT', 'Debet Məbləğ'],
+        ['TRANS_REF', 'Qeydiyyat №'], ['USERNAME', 'Modifikator'], ['FUSERID', 'F.Verifikator'], ['VUSERID', 'Verifikator'], ['AUSERID', 'Avtorizator']];
+      const w = layer(`<h3>FormWitch</h3>${box(K('box_batchs'), table('g_w1', cols, r.batchs), 35)}${box(K('box_benef'), '<div id="g_w2w"></div>', 30)}
+        <div class="actions"><button class="btn secondary" id="w_x">${esc(K('close'))}</button></div>`, 4);
+      const q = (id) => w.querySelector('#' + id);
+      q('w_x').onclick = () => w.remove();
+      selectable(q('g_w1'), r.batchs, async (b) => {
+        const d = b ? await call('/in/witch/benef', { id: b.id }) : { rows: [] };
+        if (d) q('g_w2w').innerHTML = table('g_w2', C.benef, d.rows);
+      });
+    }
+    async function editForm(cur) {   // ReceiveMessDetals_Unit.pas TRecMessDet_Form 'Receive Message Detals'
+      const o = await call('/in/edit/open', { current: cur ? cur.id : null }); if (!o || !o.open) return null;
+      return new Promise(res => {
+        const w = layer(`<h3>Receive Message Detals</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px">
+          ${o.fields.map(f => `<label>${esc(f.caption)}<input class="input" readonly style="background:#c0c0c0;width:100%" value="${esc(f.value)}"></label>`).join('')}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:10px">
+          <label>acc_no<input class="input" id="e_s1" autocomplete="off" style="width:100%"></label><label>inn<input class="input" id="e_s2" autocomplete="off" style="width:100%"></label>
+          <input class="input" readonly id="e_d3" style="background:#c0c0c0"><input class="input" readonly id="e_d8" style="background:#c0c0c0"></div>
+          <div class="actions"><button class="btn" id="e_ok">Yaddaşa yaz</button><button class="btn secondary" id="e_x">Çıxış</button></div>`, 4);
+        const q = (id) => w.querySelector('#' + id);
+        const done = (r) => { w.remove(); res(r); };
+        q('e_x').onclick = () => done(null);
+        w.addEventListener('keyup', (e) => { if (e.key === 'Escape') done(null); });          // FormKeyUp VK_ESCAPE
+        q('e_s1').focus();
+        [['e_s1', 'SearchEdit1'], ['e_s2', 'SearchEdit2']].forEach(([id, field]) => {
+          const el = q(id); let del = false;
+          el.addEventListener('keydown', (e) => { del = e.key === 'Delete' || e.key === 'Backspace'; });   // TSearchEdit.KeyDown Tag
+          el.addEventListener('input', async () => {
+            const typed = el.value;
+            const r = await call('/in/edit/search', { field, text: typed, deleting: del }); if (!r) return;
+            el.style.background = r.red ? '#f44' : '';
+            if (r.completed && el.value === typed) { el.value = r.completed; el.setSelectionRange(typed.length, r.completed.length); }   // SetSelectedText
+            q('e_d3').value = r.DBEdit3; q('e_d8').value = r.DBEdit8;
+          });
+          el.addEventListener('blur', async () => {                                             // DoExit
+            const r = await call('/in/edit/exit', { field, text: el.value }); if (r) { el.value = r.text; el.style.background = ''; }
+          });
+        });
+        q('e_ok').onclick = async () => {
+          await new Promise(r => setTimeout(r, 50));
+          const r = await call('/in/edit/save', { search1: q('e_s1').value, confirmed: false }); if (!r) return;
+          if (r.confirm) {
+            if (await ask(r.confirm, ['yes', 'no']) !== 'yes') return;
+            const d = await call('/in/edit/save', { search1: q('e_s1').value, confirmed: true });
+            if (d && d.done) done(d);
+          }
+        };
+      });
+    }
     function drawIn() {
       // Step 4 (api/app/xohks_in.py): Faylı yüklə (one uploaded file = the only FileListIncoming item), Convert / Convert All
       // (popup of the file list), Konvert, Konvert+təsdiq, Yoxlanıb (Form20 'Verification' first), Ləğv et.
@@ -360,7 +414,7 @@
       v('xbody').innerHTML = `<div class="toolbar" style="gap:8px;flex-wrap:wrap">
         <label class="btn secondary" style="cursor:pointer">${esc(K('in_load'))}<input type="file" id="x_ifile" style="display:none"></label>
         <button class="btn" id="x_iconv">${esc(K('in_convert'))}</button><button class="btn secondary" id="x_iconvacc">${esc(K('in_convert_accept'))}</button>
-        <button class="btn secondary" id="x_iacc">${esc(K('in_accept'))}</button><button class="btn secondary" id="x_idel">${esc(K('in_delete'))}</button>
+        <button class="btn secondary" id="x_iacc">${esc(K('in_accept'))}</button><button class="btn secondary" id="x_iedit">${esc(K('in_edit'))}</button><button class="btn secondary" id="x_idel">${esc(K('in_delete'))}</button>
         <button class="btn secondary" id="x_iref">${esc(K('refresh'))}</button></div>
         <div style="display:flex;gap:12px;align-items:flex-start">
         <fieldset class="card" style="margin:8px 0;padding:8px 12px;min-width:220px"><legend>${esc(K('in_files'))}</legend>
@@ -403,6 +457,9 @@
       v('x_call').onclick = v('x_iconv').onclick = () => conv(true);
       v('x_iconvacc').onclick = async () => { if (await conv(true)) { cur = st.d.incoming[0] || null; await accept(true); } };  // ConvertConfirmeClick: MessageInSelAll + Accept
       v('x_iacc').onclick = () => accept(false);
+      const edit = async () => set(await editForm(cur));                                     // MessagesInEditExecute / GridIncomingDblClick
+      v('x_iedit').onclick = edit;
+      v('g_i').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('dblclick', edit));
       v('x_idel').onclick = async () => {
         const pl = await call('/in/delete/plan', { current: cur ? cur.id : null, selected: selIds() }); if (!pl || !pl.ids.length) return;
         const a = await ask(K('q_in_del').replace('{id}', pl.ids[0]), ['yes', 'no', 'cancel', 'all']);

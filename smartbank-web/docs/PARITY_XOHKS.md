@@ -161,7 +161,7 @@ from the ImageList / ImageListFilial bitmaps of LVPCSSImpl.dfm:4299 / :4718 (16x
 | Button_fileClick :798 → CreateFile :152 | `/pf/create` | exit when sending empty; 'Qeydiyyat №-si verilməyib !'; XML as Delphi (header lines CRLF in XOHKS_FILE_CODEPAGE, MessageBody UTF8String raw UTF-8 with #10, :32A: date from the last beneficiary - 991230 when none, MT205 branch by the first sending batch's FORMAT); `xs_SentInfo_insert('S',sender,receiver,Edit1,'N','N','C099',date,ref,0)` (no commit); edits cleared, RefreshDataBatchs. File returned for download + copy in XOHKS_OUT_DIR when set (Delphi: out_dir\<ref>.xml) |
 | ToolButton5Click / TSendFileForm RefDate, BitBtn1Click, DBGrid1DblClick | `/sent/list`, `/sent/open` | XS_SENTINFO by Trunc dates; DblClick looks for out_dir\ddmmyy(today)\[Batches\]<ref>.xml (under XOHKS_OUT_DIR); 'File %s not found !'. CreateFile writes without the date folder, so as in Delphi such files are normally not found |
 | cryptounit SetSign / SignCheck | `xohks_crypto.Signer` (XOHKS_SIGNER=none / mock) | never called by the Delphi build (SetSign lines in CreateFile are commented out); interface kept for a later signed format |
-Not ported: CreateBatchFile / but_batchClick (button Visible = False). ToolButton6 'Baxmaq' :3907 → step 4.
+Not ported: CreateBatchFile / but_batchClick (button Visible = False). ToolButton6 'Baxmaq' :3907 → step 4b-1.
 Unverified: XS_CONTROL BatchToReadyBatchs / BatchToSendingBatchs / GetBatchAmount / GetNewFileReference / xs_SentInfo_insert bodies and
 the xs_ReadyBatchs / xs_SendingBatchs views (mock: status 6 with send 0 / 1; file → status 3), CreateFile's `xs_batchs.Refresh` on the
 never-opened local dataset (:239 - in TDataSet that raises 'closed dataset'; the web assumes DOA re-executes it), the file code page
@@ -187,8 +187,17 @@ left in remit_inf. Both only work with RichEdit 1.0's CR LF. `XOHKS_RICHEDIT_BRE
 Also unverified: the bodies of xs_incoming_insert / SetIncomingTransaction / xs_incoming_delete (the mock only emulates them), the layout of a real
 incoming file (tests/data/xohks_in_sample.xml is built from the parser's offsets), and the exact EArgumentOutOfRange message text.
 
+## Step 4b-1: Redaktə (RecMessDet_Form) and Baxmaq (FormWitch)
+
+| Delphi | Web | Notes |
+|---|---|---|
+| MessagesInEditExecute :2570 / GridIncomingDblClick | 'Edit' / double-click → `/in/edit/open` | Exits when XS_IncomingView is empty. DataAccount (Data_Unit.dfm:6, LINES_DATAACCOUNT) opens on first use. FormShow clears SearchEdit1/2, DBEdit3, DBEdit8. The read-only DB fields come from ReceiveMessDetals_Unit.dfm |
+| TSearchEdit (SBCM_ComponentsStorage/SearchEdit.pas) SearchEdit1 acc_no / SearchEdit2 inn | `/in/edit/search`, `/in/edit/exit` | KeyDown: Delete/Backspace → Tag 1 (no search). Change: Locate case-insensitive partial key; found → text completed with the rest selected, and DBEdit3/DBEdit8 follow DataAccount; not found → red. DoExit: white, text := field of the current account |
+| Button1Click 'Yaddaşa yaz' | `/in/edit/save` {search1, confirmed} | Exits when SearchEdit1 is empty or SearchEdit2 is red. Clicking the button leaves the edit first, so the red test only sees white (kept as in Delphi). Date check ('deyişdirilə bilməz'); 'Əməliyyat #id dəyişdirilsinmi ?'; xs_Incoming_update(id, DataAccount.id, acc_no) and xs_incoming_ChangeStatus(id, 0); no commit |
+| ToolButton6Click 'Baxmaq' :3907 | OUT tab 'Baxmaq' → `/in/witch`, `/in/witch/benef` | Uses the current StDate/EndDate picker values. OracleDataSet1 and detail OracleDataSet2 come from Witch.dfm (LINES_WITCH1/2); grid columns as in Witch.dfm |
+
 ## Resume point
-Step 4b: MessagesInEditExecute :2570 (RecMessDet_Form + DataAccount SearchEdit), ToolButton6 'Baxmaq' :3907 (FormWitch), reports as PDF (EnterClick, N25Click ReportinX, Unit_Report*), settings forms (Unit_setting, Admin_Setting).
+Step 4c: reports as PDF (EnterClick, N25Click ReportinX, Unit_Report*), settings forms (Unit_setting, Admin_Setting).
 Entry points: MessageInFileLoadExecute :2849 (OpenDialogIn → FileListIncoming; web = one uploaded file), MessagesInConvertExecute
 :2523 / Convert1Click :2177 / ConvertAll1Click :2664 / ConvertConfirmeClick :2948 → ConvertToBase :1412-1848 (437 lines parsing a
 TRichEdit with FindText / CaretPos.y / Lines[] - port with a small RichEdit text model, or run it through api/app/pascal.py as

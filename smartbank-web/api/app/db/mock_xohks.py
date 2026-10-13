@@ -269,10 +269,13 @@ class XohksMixin:
             c.execute(f"insert into xs_incoming (ID, STATUS, {', '.join(cols)}) values (?, 0, {', '.join('?' * len(cols))})", [i] + a)
             r = dict(zip(cols, a))
             vn = c.execute("select val_name from avalute where valute=?", (r["VAL_COD"],)).fetchone()
+            bn = c.execute("select name from bankm where id=?", (r["SEN_BANK_ID"],)).fetchone()
             c.execute("insert into xs_incomingview (ID, TRANS_DATE, REFERENCE, SEN_ACC, VAL_NAME, REC_CLIENT_ACC, REC_CLIENT_INN, AMOUNT, "
-                      "LAMOUNT, FILIAL, TYPECODE, STATUS, DESCRPTIONCORRECT) values (?,?,?,?,?,?,?,?,?,?,?,0,'')",
+                      "LAMOUNT, FILIAL, TYPECODE, STATUS, DESCRPTIONCORRECT, REC_CLIENT_NAME, NAME, SEN_BANK_SUBACC, SEN_INN, "
+                      "ADD_INF, REMIT_INF) values (?,?,?,?,?,?,?,?,?,?,?,0,'',?,?,?,?,?,?)",
                       (i, r["TRANS_DATE"], r["REFERENCE"], r["SEN_ACC"], vn[0] if vn else None, r["REC_CLIENT_ACC"],
-                       r["REC_CLIENT_INN"], r["AMOUNT"], r["AMOUNT"], r["FILIAL"], r["TYPECODE"]))
+                       r["REC_CLIENT_INN"], r["AMOUNT"], r["AMOUNT"], r["FILIAL"], r["TYPECODE"], r["REC_CLIENT_NAME"],
+                       bn[0] if bn else None, r["SEN_BANK_SUBACC"], r["SEN_INN"], r["ADD_INF"], r["REMIT_INF"]))
             return {}
         if key == "XS_CONTROL.XS_INCOMING_DELETE":
             c.execute("delete from xs_incoming where id=?", (args[0],))
