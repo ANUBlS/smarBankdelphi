@@ -39,7 +39,7 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Əməliyyat ▸ Möhkəməndirmə | N14Click :1295 → LoadPlugin('FileReport.bpl','REZ') | – | separate BPL (Packages/Cards_New/FileReprt) | **on hold by user** (report) |
 | Əməliyyat ▸ Limitlər | Limitlr1Click :1152 | – | Tlim (limittur.pas) | planned |
 | Əməliyyat ▸ Commission Our POS-ONUS | PostCommisiononus1Click :1279 | card_cfile | TPostCommisionOnus | planned |
-| Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | planned |
+| Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | **list + 4 of 14 forms done (3g)** |
 | Hesabatlar | ToolButton7Click :1075 | card_hesabat | THesabatlar (rezform.pas) | **on hold by user** |
 | F3 (form KeyUp) | ActiveFormKeyUp :670 | – | TFormSearch: shared unit, to check | to check |
 
@@ -225,6 +225,28 @@ API `api/app/cards_online.py`, Tclients2 mode ONLINE in `api/app/cards.py`, test
 Unverified (3f): card_main.card_ufx_proc body (mock no-op); card_uxfarxiv DAT1/DAT2 variable types (sent as dates); the dates Tclients2 Button1Click sets
 (ONLINE skips FormActivate's NEW branch; the web keeps the NEW defaults for the date pickers).
 
+## Step 3g: Sazlama (setac.pas TForm10) + balhs / comp / datclose / paymentsett – partly done
+
+API `api/app/cards_sett.py` (`/api/cards/sett`), tests `api/tests/test_cards_sett.py`, E2E `e2e/cards_sett.py`, screenshots 187-189.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| ToolButton3Click :1089 (card_setting); FormCreate sazlamalar Close / Open | `/sett/open` | card_settingsform, Filtered = True |
+| Edit1Change / Edit2Change | `/sett/filter {edit, text}` | Filter `id = 'x*'` / `SAZLAMALAR = 'x*'` through tdataset_filter |
+| DBGrid1TitleClick | `/sett/sort` | the SQL already ends with 'order by id', so the added ORDER BY gives ORA-00933 in Delphi too; the web shows the error |
+| Button1Click 'Aç' (ids 1-14) / DBGrid1DblClick (ids 1-10) | opens the sub form | forms not yet ported show 'not ported' |
+| 1 TForm11 balhs.pas | `/sett/balhs/*` | Insert card_balcn (BALANS = DBLookupComboBox1.Text, HES = StrToInt(SearchEdit1) when not empty), Post, Commit, Refresh; Sil: confirm, Delete, Commit (also after No) |
+| 2 TForm13 comp.pas | `/sett/comp/*` | Edit1KeyPress (UpCase, Ord > 126 and '?' dropped); Insert CARD_COMPANY, Post, Commit, reopen; Sil as balhs |
+| 4 Tdateclose datclose.pas | `/sett/datclose/*` | settings.Edit; 'Yadda saxlanılsın?' Yes → Post (CommitOnPost); FormClose Cancel |
+| 12 TPaymentset paymentsett.pas | `/sett/paymentsett/*` | Card_vidop editable DBGrid (dgEditing): insert / update / delete by ROWID, CommitOnPost |
+
+Not yet ported: 3 TForm14 crdtype.pas, 5 Tfilial_accounts filialaccounts.pas, 6 Tdomestic_bank domesticbank.pas, 7 TBank_Settings banksettings.pas,
+8 Tatmpos atmendpos.pas, 9 TPOS_COMMISION poscomission.pas, 10 TPROVS Unit155.pas, 11 Tcard_branch cardbranch.pas, 13 TExchangesettings excsett.pas,
+14 TRbsTaxFileAccsett Taxfilessettings.pas.
+
+Unverified (3g): CommitOnPost on settings / Card_vidop (DOA default True assumed); the column lists DOA generates in its DML (the web writes only the edited fields);
+the TFilterExpr result for the numeric ID against 'x*'; the mock has no transactions for these tables.
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya. (done)
@@ -234,4 +256,4 @@ Unverified (3f): card_main.card_ufx_proc body (mock no-op); card_uxfarxiv DAT1/D
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Plan step 3: the Sazlama forms (ToolButton3Click :1089, right card_setting → TForm10 setac.pas, and its sub-forms banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett), then step 4 (file operations). Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.
+Plan step 3: the Sazlama sub forms not yet ported (step 3g list: crdtype, filialaccounts, domesticbank, banksettings, atmendpos, poscomission, Unit155, cardbranch, excsett, Taxfilessettings), then step 4 (file operations), then the rest of step 5. Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.
