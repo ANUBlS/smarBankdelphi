@@ -297,3 +297,5 @@ from . import out_control_tape  # noqa: E402
 app.include_router(out_control_tape.make_router(current, require_module, err))
 from . import out_turnovers  # noqa: E402
 app.include_router(out_turnovers.make_router(current, require_module, err))
+from . import out_statement  # noqa: E402
+app.include_router(out_statement.make_router(current, require_module, err))

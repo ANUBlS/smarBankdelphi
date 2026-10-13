@@ -19,6 +19,8 @@ from .mock_cr import CrMixin
 from . import mock_bal
 from .mock_oct import OctMixin
 from .mock_otp import OtpMixin
+from .mock_ost import OstMixin
+from . import mock_ost
 from .mock_bal import BalMixin
 from . import mock_out
 from .mock_out import OutMixin
@@ -48,13 +50,14 @@ def reset():
     mock_cr.reset()
     mock_bal.reset()
     mock_out.reset()
+    mock_ost._fix = None
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -68,6 +71,9 @@ class MockConnection(OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._ost_func(key, args)
+        if r is not NotImplemented:
+            return r
         r = self._out_func(key, args, named)
         if r is not NotImplemented:
             return r
@@ -154,6 +160,9 @@ class MockConnection(OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._ost_query(sql, b)  # OUT_SB_STATEMENT generated SQL (matches on original text)
+        if r is not None:
+            return r
         r = self._out_query(sql, binds)  # OutMixin matches on original SQL text
         if r is not NotImplemented:
             return r
