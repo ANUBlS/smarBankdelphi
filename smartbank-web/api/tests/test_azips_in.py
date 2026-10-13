@@ -164,3 +164,20 @@ def test_in_print_text_and_xml():
     pdf = I.text_pdf(r["text"])
     assert pdf[:4] == b"%PDF" and b"A.Z.I.P.S" in pdf
     assert I.in_print(c, Q.LINES_SW_IN, 1, "ALL_TEXT") is None
+
+
+def test_out_print_built_and_stored():
+    from app.azips_in import out_print, out_print_text
+    x = {"MF20": ":20:", "MF20_REFERENCE": "R1", "M21": ":21:", "MF21": "X", "M50": ":50K:", "FINCOPY": "USD",
+         "MF50_NAME$ADRESS": "/AZ1\r\nNAME", "M52": ":52D:", "MF52_ACCOUNT": "A", "MF52_NAME$ADRESS": "N", "M53": ":53B:",
+         "MF53_ACCOUNT": "C", "M58": ":58A:", "MF58_ACCOUNT": "B", "MF58_BIC": "BIC", "MF58_NAME$LOCATION": "L",
+         "M70": ":70:", "MF70": "PAY", "M72": "", "M77B": ":77B:", "MF77B": "R", "HESABAT": None}
+    t = out_print_text(x)
+    assert t.startswith(":20: R1\r\n:21: X")
+    assert "\r\r:50K:/AZ1\rNAME" in t                       # CR LF -> CR (copy/pos logic)
+    assert "\r\r:52D: /A\rN" in t and "\r\r:53B: /C" in t and "\r\r:58A: /B\rBIC\rL" in t
+    assert ":72:" not in t and t.endswith("\r\r:77B: R")
+    assert out_print(x)["text"] == t
+    assert out_print({"HESABAT": "<xml/>"}) == {"text": "<xml/>", "html": True}
+    assert "53" not in out_print_text({"FINCOPY": "AZN", "M53": ":53B:"})
+

@@ -241,6 +241,11 @@ class SettDelIn(BaseModel):
     id: int
 
 
+class OutPrintIn(BaseModel):
+    c: int = Field(ge=1, le=3)
+    id: int
+
+
 class PrintIn(BaseModel):
     id: int
     field: Literal["ALL_TEXT2", "ALL_TEXT"]
@@ -428,6 +433,20 @@ def make_router(current, require_module, err):
         res = I.in_print(ws.conn, _in_lines(ws.conn), b.id, b.field)
         if res is None:
             err(400, "azips.pick_row")
+        res["pdf_b64"] = base64.b64encode(I.text_pdf(res["text"])).decode()
+        return res
+
+    @r.post("/out-print")
+    def _outprint(b: OutPrintIn, ws=Depends(g)):
+        """Popups Capet1Click (grid_out, Edit1=1) / N3Click (GRIDOUT2, 2) / CapEt2Click (Gridout3, 3) -> ToolButton8Click :6179;
+        each popup checks RecordCount>0 first. No right check (as Delphi)."""
+        from .azips_edit import out_row, AzEditError
+        lines = {1: Q.LINES_SW_OUT, 2: Q.LINES_SW_OUT_2, 3: Q.LINES_SW_OUT3}[b.c]
+        try:
+            x = out_row(ws.conn, b.id, lines)
+        except AzEditError:
+            err(400, "azips.pick_row")
+        res = I.out_print(x)
         res["pdf_b64"] = base64.b64encode(I.text_pdf(res["text"])).decode()
         return res
 

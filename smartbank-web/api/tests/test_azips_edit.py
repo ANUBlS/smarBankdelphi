@@ -169,3 +169,15 @@ def test_show_committed():
     login()
     r = client.get(B + "/out2/9103/show").json()
     assert r["form"] == "MT103Show" and r["rec"]["MESSAGETYPE"] == "MT103"
+
+
+def test_out_print_endpoint():
+    login()
+    r = client.post(B + "/out-print", json={"c": 1, "id": 9104})
+    assert r.status_code == 200, r.text
+    j = r.json()
+    assert j["text"].startswith(":20: ") and j["pdf_b64"] and not j["html"]
+    r = client.post(B + "/out-print", json={"c": 2, "id": 9103})
+    assert r.json()["text"].startswith("{1:F01SMRTAZ22}")
+    assert client.post(B + "/out-print", json={"c": 3, "id": 9104}).status_code == 400   # 9104 is not in SW_OUT3
+    assert client.post(B + "/out-print", json={"c": 4, "id": 9104}).status_code == 422

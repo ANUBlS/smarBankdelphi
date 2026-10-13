@@ -130,6 +130,13 @@
           st.cur3 = id; mark3();
         });
         mark3();
+        // right click = the grid's PopupMenu; RecordCount>0 is implied by a row existing
+        [['g_out', d.sw_out, 1, 'Cap et!', 'sel_out'], ['g_out2', d.sw_out_2, 2, 'Cap Et!', 'sel_out2'], ['g_out3', d.sw_out3, 3, 'Cap Et!', null]].forEach(([g, rows, c, cap, key]) =>
+          v(g).querySelectorAll('tbody tr[data-i]').forEach(tr => tr.addEventListener('contextmenu', (e) => {
+            const id = rows[+tr.dataset.i].id;
+            if (key) st[key] = id; else st.cur3 = id;
+            outMenu(e, c, id, cap);
+          })));
         v('z_file').onclick = () => createFiles(d);
         v('z_odel').onclick = () => act('out_delete', 'sel_out', 'q_delete', 'qa_delete');
         v('z_modif').onclick = () => act('modifikator', 'sel_out', 'q_modif', 'qa_modif');        // ToolButton11Click -> addtrans2Execute          // ToolButton9Click -> out_deleteExecute
@@ -243,10 +250,30 @@
       if (st.sel_in == null) return toast(K('pick_row'), 'error');
       let r;
       try { r = await api(P + '/in-print', { method: 'POST', body: { id: st.sel_in, field } }); } catch (e) { return toast(errT(e), 'error'); }
+      showCap(r, st.sel_in);
+    }
+    // OUT popups 'Cap et!' (Capet1 / N3 / CapEt2) -> Edit1 := c -> ToolButton8Click :6179 -> cap.pas TPrintform
+    async function outPrint(c, id) {
+      let r;
+      try { r = await api(P + '/out-print', { method: 'POST', body: { c, id } }); } catch (e) { return toast(errT(e), 'error'); }
+      showCap(r, id);
+    }
+    function outMenu(e, c, id, caption) {
+      e.preventDefault();
+      document.querySelectorAll('.az_pop').forEach(x => x.remove());
+      const m = document.createElement('div');
+      m.className = 'az_pop card'; m.id = 'az_pop' + c;
+      m.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:1000;padding:4px;min-width:120px`;
+      m.innerHTML = `<button class="btn secondary" style="width:100%" data-print="${c}">${esc(caption)}</button>`;
+      document.body.appendChild(m);
+      m.querySelector('button').onclick = () => { m.remove(); outPrint(c, id); };
+      setTimeout(() => document.addEventListener('click', () => m.remove(), { once: true }), 0);
+    }
+    function showCap(r, rid) {
       const url = URL.createObjectURL(new Blob([Uint8Array.from(atob(r.pdf_b64), c => c.charCodeAt(0))], { type: 'application/pdf' }));
       const view = r.html ? `<iframe sandbox="" id="cap_v" style="width:100%;height:60vh;border:1px solid #ccc;background:#fff"></iframe>`
         : `<pre id="cap_v" style="max-height:60vh;overflow:auto;font-size:14px;white-space:pre-wrap">${esc(r.text)}</pre>`;
-      modal(`<h3>Cap</h3>${view}<div class="actions"><a class="btn" id="cap_p" href="${url}" target="_blank" download="AZIPS-${esc(st.sel_in)}.pdf">Print (PDF)</a>
+      modal(`<h3>Cap</h3>${view}<div class="actions"><a class="btn" id="cap_p" href="${url}" target="_blank" download="AZIPS-${esc(rid)}.pdf">Print (PDF)</a>
         <button class="btn secondary" id="cap_x">Bagla</button></div>`, (m, close) => {
         m.style.width = 'min(1000px, 95vw)'; m.style.maxWidth = '95vw';
         if (r.html) m.querySelector('#cap_v').srcdoc = r.text;

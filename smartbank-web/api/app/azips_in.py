@@ -345,3 +345,77 @@ def text_pdf(text: str, title: str = "A.Z.I.P.S") -> bytes:
                 break
     c.save()
     return buf.getvalue()
+
+
+# ------------------------------------------------------------------ OUT print: ToolButton8Click :6179-6476 (cap.pas TPrintform)
+def _pf(x, k):
+    v = x.get(k.upper())
+    if v is None:
+        return ""
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    return str(v)
+
+
+def out_print_text(x: dict) -> str:
+    """ToolButton8Click :6179-6447: the MT text built from the grid record (no right check in Delphi).
+    #13 is CR as in Delphi; the TRichEdit shows CR as a line break."""
+    f = lambda k: _pf(x, k)  # noqa: E731
+    CR = "\r"
+    mf20 = f("MF20") + " " + f("MF20_REFERENCE")
+    mf21 = f("M21") + " " + f("mf21")
+    mf23 = CR + CR + f("M23B") + " " + f("mf23b")
+    mf32 = CR + CR + f("M32A") + " " + f("MF32A_DATE") + " " + f("MF32A_CURR") + f("MF32A_AMOUNT")
+    if f("M50") == ":50A:":
+        mf50 = CR + CR + f("M50") + " /" + f("MF50_NAME$ADRESS")
+    elif f("M50") == ":50K:" and f("FINCOPY") != "AZN":
+        na = f("MF50_NAME$ADRESS")
+        p = na.find(CR) + 1                                   # Delphi pos (1-based, 0 = not found)
+        # copy(na,0,p-1) + #13 + copy(na,p+2,length(na)-p)
+        na = na[:max(p - 1, 0)] + CR + na[p + 1:p + 1 + len(na) - p]
+        mf50 = CR + CR + f("M50") + na
+    else:
+        mf50 = CR + CR + f("M50") + f("MF50_NAME$ADRESS")
+    if f("M52") == ":52A:":
+        mf52 = CR + CR + f("M52") + " /" + f("MF52_ACCOUNT") + CR + f("MF52_BIC") + CR + f("MF52_NAME$ADRESS")
+    elif f("M52") == ":52D:":
+        mf52 = CR + CR + f("M52") + " /" + f("MF52_ACCOUNT") + CR + f("MF52_NAME$ADRESS")
+    else:
+        mf52 = ""
+    mf53 = "" if f("FINCOPY") == "AZN" else CR + CR + f("M53") + " /" + f("MF53_ACCOUNT")
+
+    def abd(tag, a, bd, extra_c=False):
+        t = f(tag)
+        n = tag.replace("M", "MF", 1)
+        if t == a:
+            return CR + CR + t + " /" + f(n + "_ACCOUNT") + CR + f(n + "_BIC") + CR + f(n + "_NAME$LOCATION")
+        if t in bd:
+            return CR + CR + t + " /" + f(n + "_ACCOUNT") + CR + f(n + "_NAME$LOCATION")
+        return ""
+    mf54 = abd("M54", ":54A:", (":54B:", ":54D:"))
+    mf55 = abd("M55", ":55A:", (":55B:", ":55D:"))
+    if f("M56") == ":56C:":
+        mf56 = CR + CR + f("M56") + " /" + f("MF56_ACCOUNT")
+    else:
+        mf56 = abd("M56", ":56A:", (":56D:",))
+    # 'M57' block reads M58 fields; the ':57C:' test on M58 never matches a 58 tag (Delphi as written)
+    m58 = f("M58")
+    if m58 == ":57C:":
+        mf57 = CR + CR + m58 + " /" + f("MF58_ACCOUNT")
+    else:
+        mf57 = abd("M58", ":58A:", (":58D:",))
+    mf59 = CR + CR + f("M59") + f("MF59_NAME$ADRESS")
+    mf70 = CR + CR + f("M70") + " " + f("MF70") if f("M70") == ":70:" else ""
+    mf71 = CR + CR + f("M71A") + " " + f("MF71A")
+    mf72 = CR + CR + f("M72") + " " + f("MF72") if f("M72") == ":72:" else ""
+    mf77 = CR + CR + f("M77B") + " " + f("MF77B") if f("M77B") == ":77B:" else ""
+    return (mf20 + "\r\n" + mf21 + mf23 + mf32 + mf50 + mf52 + mf53 + mf54 + mf55 + mf56 + mf57 + mf59 + mf70 + mf71
+            + mf72 + mf77)
+
+
+def out_print(x: dict):
+    """:6439-6476: hesabat empty -> built MT text, else the stored 'hesabat' text; both go to cap.pas TPrintform.
+    Oracle stores '' as NULL: NULL is treated like '' here (see PARITY_AZIPS.md 4e, unverified)."""
+    h = x.get("HESABAT")
+    a = out_print_text(x) if h is None or h == "" else str(h)
+    return {"text": a, "html": a[:1] == "<"}
