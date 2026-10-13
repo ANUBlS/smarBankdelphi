@@ -14,6 +14,8 @@ import threading
 from .base import DBError
 from . import mock_cs
 from .mock_cs import CsMixin
+from . import mock_cr
+from .mock_cr import CrMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -37,13 +39,14 @@ def reset():
     global _state
     _state = None
     mock_cs.reset()
+    mock_cr.reset()
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(CsMixin):
+class MockConnection(CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -57,6 +60,9 @@ class MockConnection(CsMixin):
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
         r = self._cs_func(key, args, named)
+        if r is not NotImplemented:
+            return r
+        r = self._cr_func(key, args, named)
         if r is not NotImplemented:
             return r
         if key.startswith(("SBOP.ADD_ACCOUNT", "SB_ACA.GETUSERFILIALID")):
@@ -81,6 +87,9 @@ class MockConnection(CsMixin):
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._cr_bool(key, args, named)
+        if r is not NotImplemented:
+            return r
         if key == "SBUTIL.FLAGEXSIST":
             # real: SBUTIL.FlagExsist(AccountType, FlagChar); emulated as "flag char present in the type string"
             return (named or {}).get("FlagChar", "?") in ((named or {}).get("AccountType") or "").split(",")
@@ -106,6 +115,9 @@ class MockConnection(CsMixin):
         r = self._cs_proc(key, args, named)
         if r is not NotImplemented:
             return r
+        r = self._cr_proc(key, args, named)
+        if r is not NotImplemented:
+            return r
         if key in ("SBOP.UPD_ACCOUNT", "SBOP.CLOSE_ACCOUNT"):
             return self._acc_proc(key, named or {})
         if key == "SBLOGIN.CHANGEUSERPSW":
@@ -119,6 +131,9 @@ class MockConnection(CsMixin):
         s = " ".join(sql.lower().split())
         b = binds or {}
         r = self._cs_query(s, b)
+        if r is not None:
+            return r
+        r = self._cr_query(s, b)
         if r is not None:
             return r
         r = self._acc_query(s, b)
@@ -150,6 +165,8 @@ class MockConnection(CsMixin):
     def execute(self, sql, binds=None):
         if self._cs_execute(sql, binds or {}):
             return
+        if self._cr_execute(sql, binds or {}):
+            return
         m = re.fullmatch(r'ALTER USER "([A-Z][A-Z0-9_$#]*)" ACCOUNT UNLOCK', sql.strip())
         if m:
             if not self.user.get("is_adm"):
@@ -164,6 +181,8 @@ class MockConnection(CsMixin):
     def plsql(self, sql, binds=None, ret=None):
         r = self._cs_plsql(sql, binds or {})
         if r is NotImplemented:
+            r = self._cr_plsql(sql, binds or {})
+        if r is NotImplemented:
             raise DBError("ORA-06550: mock: block not emulated")
         return r
 
@@ -171,10 +190,10 @@ class MockConnection(CsMixin):
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
-        pass
+        self._cr_commit()
 
     def rollback(self):
-        pass
+        self._cr_rollback()
 
     # ------------------------------------------------------------------ accounts emulation
     def _check_access(self, module, action):
