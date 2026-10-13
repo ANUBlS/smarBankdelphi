@@ -309,3 +309,5 @@ from . import out_avalute  # noqa: E402
 app.include_router(out_avalute.make_router(current, require_module, err))
 from . import out_memorial  # noqa: E402
 app.include_router(out_memorial.make_router(current, require_module, err))
+from . import out_repair  # noqa: E402
+app.include_router(out_repair.make_router(current, require_module, err))

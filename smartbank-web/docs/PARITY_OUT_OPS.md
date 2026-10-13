@@ -43,14 +43,30 @@ API `api/app/out_memorial.py`, SQL `api/app/out_mem_sql.py`, UI `web/public/modu
 **To verify on the real DB:** `OUT_SB_MEMORIAL` parameter order/types (package source not in the repo), that the user table
 `Memorial_<user>` exists for every user, and the column list of that table (VAL_ACC/CURRENCYID_C are strings in the persistent fields).
 
-## 2. Off-balance Repair (`Packages/out_repair`) – not ported yet
+## 2. Off-balance Repair (`Packages/out_repair`) – ported
 
-CLSID `{86E3CBB4-1C62-4BD8-BC35-C5E16FACED54}` (`OutRepair_TLB.pas:56`). `OutRepair.dpr` compiles `Out_RepairImpl1.pas`, `RepairNewEdit.pas`,
-`RepairNewDataModule.pas`, `OutRepdelete.pas`. Survey so far: list `TransactionData` (RepairNewDataModule.dfm:6-…, `:DAT`/`:DAT2`/`:Title` variables),
-client filters built in `ReInitializeFilters` (Out_RepairImpl1.pas:854-935: operator, currency/operation check lists, debit/credit branch),
-edit dialog `TOutRepairEdit` with `CheckTransaction` (RepairNewDataModule.pas:194-227) and saving through
-`Out_Correct.Main(Flag, CorMode, TransactionID, TransactionDate, DebitID, CreditID, DebitAmount, CreditAmount, LAmount, DebitRate,
-CreditRate, TrName, InBalanceChar, OutBalanceChar)` (named, :269-302; Flag 0 delete / 1 insert / 2 update). Next run starts here.
+CLSID `{86E3CBB4-1C62-4BD8-BC35-C5E16FACED54}` (`OutRepair_TLB.pas:56`), tree `Item8\Item12`, plugin `Item29`, route `/m/out-repair`.
+`OutRepair.dpr` compiles `Out_RepairImpl1.pas`, `RepairNewEdit.pas`, `RepairNewDataModule.pas`, `OutRepdelete.pas` – only these are ported
+(`__history`, `.~pas` ignored). API `api/app/out_repair.py`, SQL `api/app/out_rep_sql.py` (generated verbatim from `RepairNewDataModule.dfm`),
+web `web/public/modules/out_repair.js`, mock `api/app/db/mock_orep.py`, tests `api/tests/test_out_repair.py`, screenshots 96–98.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| `TransactionData` (dfm:7-55) `p.dat between :DAT and :DAT2 … ORDER BY :Title` | `POST /list` | verbatim, all bound. `:Title` is a **bind** (`Out_dbMainTitleClick` .pas:629-638) so Oracle orders by a constant – clicking a header reloads but does not re-sort, same as Delphi. Only grid field names are passed. |
+| `CheckDates` (DataModule.pas:249-258) | 400 `out_repair.err_dates` | start > end. |
+| `ReInitializeFilters` (Impl1.pas:854-935) | `build_filter` / `apply_filter`, filter panel | Exact filter string (returned as `filter`). Kept quirks: currency box loops `Count-2` so the "Yox" item filters `((DebitCurrencyID<>CreditCurrencyID) or (CreditCurrencyID<>CreditCurrencyID))`; unchecking a currency hides only rows where **both** sides have it; operation box has no "Yox" item (`VidOpThreadFinished` :407-416 adds it to `clbValute` by mistake), so its last row is outside the `<>` loop and unchecking it adds `(OperationType=<last id>)`; combo `ItemIndex` 0 is ignored for operator/branches. "Instant filter refresh" = `cbFiltrOptions`. Refresh (`RefreshTransExecute`) reloads without the filter (`Filter.Execute` commented out :702); Full refresh re-applies it. |
+| Search panel (`CreateSearchPanel`/`FastSearch`) | client search row ▲●▼ | partial, case-insensitive, forward/backward/from beginning. |
+| `TOutRepairEdit` | edit modal | currency → rate from `OperKurs` at the editor date (`DebetRateData`), clears amounts and account (`ValuteChange`/`SetFilter`); accounts `val_acc=:val_acc`; `ChangeAmounts` with RoundNew ≥0.5, precision 100 (`POST /amounts`); `PrepareInBalance` KASSA_B `MedioCrity` filter (0 debit-cash AZN, 1 credit-cash AZN, -1); descriptions from `out_trdestination`. chRate/chProfit unchecked by default → CorMode 2. |
+| `CheckTransaction` (:194-227) | `POST /save` | erDebt/erCred/erDescr/erKassa in this order; then erConvert question when currencies differ, neither account is cash (1,2) and OutBalanceChar = 0. **Yes = keep editing, İmtina = save** (Delphi logic). OutBalanceChar NULL does not ask (Variant Null = 0 is False). |
+| `SaveTransaction` (:269-302) | `Out_Correct.Main` named: Flag 1 insert (ID NULL) / 2 update, CorMode = `mode_of(chRate, chProfit)` | amounts/rates as Currency. |
+| `TOutRep_delete` + `DeleteTrans` (OutRepdelete.pas) | delete dialog, `POST /delete` | Flag 0, both boxes checked by default (CorMode 0); NULL cash/convert chars sent as 0 (`AsInteger`). |
+| Keys Enter/Delete/Insert (`Out_dbMainKeyDown`) | same on the page | |
+
+**Unverified (needs real DB):** `Out_Correct.Main` body/return value not in the repo; the unit never commits (host session) – the web
+commits right after `Main` and rolls back on error; `TransactionData` joins `avalute` (not an `out_` table) as in the DFM;
+whether the SearchCombo `ItemIndex 0` is an "all" entry or the first user/branch (treated as "none"); `KASSA_B.SYMBOL` is a string in
+the DFM but bound as integer `InBalanceChar`, as Delphi does.
+Not ported: the AVI animations; `ShowAdvancedOptions` drag/dock behaviour.
 
 ## 3. `Packages/OutExcelImport` – belongs to the off-balance family
 

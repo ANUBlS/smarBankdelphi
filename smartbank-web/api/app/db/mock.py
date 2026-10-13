@@ -28,6 +28,7 @@ from . import mock_oacc
 from .mock_oacc import OaccMixin
 from .mock_oset import OsetMixin
 from .mock_omem import OmemMixin
+from .mock_orep import OrepMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -62,7 +63,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -76,6 +77,9 @@ class MockConnection(OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMix
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._orep_func(key, named)
+        if r is not NotImplemented:
+            return r
         r = self._omem_func(key, args)
         if r is not NotImplemented:
             return r
@@ -183,6 +187,9 @@ class MockConnection(OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMix
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._orep_query(sql, b)  # Packages/out_repair
+        if r is not NotImplemented:
+            return r
         r = self._omem_query(sql, b)  # Packages/out_memorial
         if r is not NotImplemented:
             return r
