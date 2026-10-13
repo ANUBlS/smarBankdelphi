@@ -130,6 +130,55 @@ class Parser:
         if not (t[0] == "id" and t[1] == v):
             raise PascalUnsupported(f"expected {v} at line {t[2]}, got {t[1]!r}")
 
+    def routine(self):
+        """'procedure|function [Class.]Name[(params)][: T]; [var/const ...] begin .. end;' -> dict."""
+        kind = self.next()[1]
+        name = self.next()[1]
+        if self.isop("."):
+            self.next(); name = name + "." + self.next()[1]
+        params = []
+        if self.isop("("):
+            self.next()
+            while not self.isop(")"):
+                mode = None
+                if self.iskw("var") or self.iskw("const") or (self.peek()[0] == "id" and self.peek()[1] == "out"):
+                    mode = self.next()[1]
+                names = [self.next()[1]]
+                while self.isop(","):
+                    self.next(); names.append(self.next()[1])
+                typ = None
+                if self.isop(":"):
+                    self.next(); typ = self.next()[1]
+                for n in names:
+                    params.append((n, mode == "var" or mode == "out", typ))
+                if self.isop(";"):
+                    self.next()
+            self.next()
+        rtype = None
+        if self.isop(":"):
+            self.next(); rtype = self.next()[1]
+        self.expect_op(";")
+        self.vars = {}
+        while self.iskw("var") or self.iskw("const"):
+            sect = self.next()[1]
+            while not (self.iskw("begin") or self.iskw("var") or self.iskw("const")):
+                if sect == "const":
+                    n = self.next()[1]; self.expect_op("="); v = self.expr(); self.expect_op(";")
+                    self.vars[n] = ("const", v); continue
+                names = [self.next()[1]]
+                while self.isop(","):
+                    self.next(); names.append(self.next()[1])
+                self.expect_op(":")
+                typ = self.next()[1]
+                while not self.isop(";"):
+                    self.next()
+                self.expect_op(";")
+                for n in names:
+                    self.vars[n] = typ
+        body = self.compound()
+        self.expect_op(";")
+        return {"kind": kind, "name": name, "params": params, "rtype": rtype, "vars": self.vars, "body": body}
+
     # procedure: header, var section, begin..end;
     def procedure(self):
         self.expect_kw("procedure")
@@ -242,9 +291,9 @@ class Parser:
                 while not self.iskw("end"):
                     if self.iskw("else"):
                         self.next(); other = ("block", self.stmts(("end",))); break
-                    labels = [self.expr()]
+                    labels = [self.range_or_expr()]
                     while self.isop(","):
-                        self.next(); labels.append(self.expr())
+                        self.next(); labels.append(self.range_or_expr())
                     self.expect_op(":")
                     arms.append((labels, self.stmt_or_empty()))
                     if self.isop(";"):
@@ -265,6 +314,12 @@ class Parser:
         if self.isop(";") or self.iskw("else") or self.iskw("end"):
             return ("nop",)
         return self.stmt()
+
+    def range_or_expr(self):
+        a = self.expr()
+        if self.isop(".."):
+            self.next(); return ("range", a, self.expr())
+        return a
 
     # expressions
     def expr(self):
@@ -306,7 +361,7 @@ class Parser:
         if self.isop("["):
             self.next(); items = []
             while not self.isop("]"):
-                items.append(self.expr())
+                items.append(self.range_or_expr())
                 if self.isop(","):
                     self.next()
             self.next()
@@ -391,6 +446,99 @@ class Sink(PObj):
 class Var:
     def __init__(self, v):
         self.v = v
+
+
+class Range:
+    """'A'..'H' / 36..38 in a set constructor or case label."""
+
+    def __init__(self, a, b):
+        self.a, self.b = a, b
+
+    def __contains__(self, v):
+        if isinstance(v, str) != isinstance(self.a, str):
+            return False
+        return self.a <= v <= self.b
+
+
+class PArray(PObj):
+    """'array [lo..hi] of String' local: elements start as '' (managed type)."""
+
+    def __init__(self):
+        self.d = {}
+
+    def index(self, i):
+        return self.d.get(int(i), "")
+
+    def setindex(self, i, v):
+        self.d[int(i)] = v
+
+
+TYPECASTS = {}
+
+
+class Routine:
+    """A procedure / function of a whole unit (parse_unit), callable from the interpreter with Delphi parameter passing:
+    value parameters are copied, var parameters are written back to the caller's variable when the routine returns."""
+    pascal_byref = True
+
+    def __init__(self, unit, name, selfobj, builtins):
+        self.unit, self.name, self.selfobj, self.builtins = unit, name, selfobj, builtins
+
+    def __call__(self, interp, argnodes):
+        vals = [interp.ev(a) for a in argnodes]
+        return self.invoke(vals, interp, argnodes)
+
+    def invoke(self, vals, interp=None, argnodes=None):
+        r = self.unit.get(self.name)
+        if len(vals) != len(r["params"]):
+            raise PascalUnsupported(f"{self.name}: {len(vals)} arguments for {len(r['params'])} parameters")
+        loc = {}
+        for (pn, _byref, _t), v in zip(r["params"], vals):
+            loc[pn] = v
+        consts = {k: v for k, v in r["vars"].items() if isinstance(v, tuple)}
+        loc.update(init_locals({k: v for k, v in r["vars"].items() if not isinstance(v, tuple)}, {"array": PArray}))
+        if r["rtype"]:
+            loc["result"] = init_locals({"result": r["rtype"]}, {})["result"]
+        it = Interp(self.selfobj, self.builtins() if callable(self.builtins) else self.builtins, loc)
+        for k, v in consts.items():
+            it.locals[k] = it.ev(v[1])
+        if r["rtype"]:
+            it.locals[r["name"].split(".")[-1]] = None       # assignment to the function name = Result (not used here)
+        it.execute(r["body"])
+        if interp is not None and argnodes is not None:
+            for (pn, byref, _t), node in zip(r["params"], argnodes):
+                if byref:
+                    interp.assign(node, it.locals[pn])
+        return it.locals.get("result") if r["rtype"] else None
+
+
+class Unit:
+    """All routines of one unit's implementation section, parsed on first use (lazy: an unsupported construct only stops
+    the routine that contains it, when that routine actually runs)."""
+
+    def __init__(self, src: str, line0: int = 1):
+        self.toks = tokenize(src, line0)
+        self.starts = {}
+        for i, t in enumerate(self.toks):
+            if t[0] == "id" and t[1] in ("procedure", "function") and (i == 0 or self.toks[i - 1][:2] == ("op", ";")):
+                j = i + 1
+                name = self.toks[j][1]
+                if self.toks[j + 1][:2] == ("op", "."):
+                    name = name + "." + self.toks[j + 2][1]
+                self.starts[name] = i
+        self.cache = {}
+
+    def has(self, name):
+        return name in self.starts
+
+    def get(self, name):
+        if name not in self.cache:
+            p = Parser(self.toks); p.i = self.starts[name]
+            self.cache[name] = p.routine()
+        return self.cache[name]
+
+    def line(self, name):
+        return self.toks[self.starts[name]][2]
 
 
 # Delphi string helpers (1-based, never raise like the RTL)
@@ -510,8 +658,12 @@ class Interp:
             return self.ev(n[1])
         if k == "set":
             return [self.ev(x) for x in n[1]]
+        if k == "range":
+            return Range(self.ev(n[1]), self.ev(n[2]))
         if k == "name":
             v = self.lookup(n[1], n[2])
+            if getattr(v, "pascal_byref", False):
+                return v(self, [])
             return v() if isinstance(v, Bound) or (callable(v) and not isinstance(v, PObj)) else v
         if k == "attr":
             o = self.ev(n[1])
@@ -521,16 +673,20 @@ class Interp:
             return v() if isinstance(v, Bound) else v
         if k == "callx":
             f = n[1]
-            if f[0] == "name" and getattr(self.builtins.get(f[1]), "pascal_byref", False):
-                return self.builtins[f[1]](self, n[2])      # var parameters (Readln(f, s)): gets the argument nodes
-            args = [self.ev(a) for a in n[2]]
             if f[0] == "name":
                 fn = self.lookup(f[1], f[2])
             elif f[0] == "attr":
                 o = self.ev(f[1])
+                if not isinstance(o, PObj):
+                    raise PascalUnsupported(f".{f[2]} on {type(o).__name__}")
                 fn = o.get(f[2])
             else:
                 raise PascalUnsupported("call target")
+            if getattr(fn, "pascal_byref", False):
+                return fn(self, n[2])                       # var parameters (Readln(f, s), Edit6KeyPress(edit6, ke)): argument nodes
+            if f[0] == "name" and isinstance(fn, str) and len(n[2]) == 1 and fn in TYPECASTS:
+                return TYPECASTS[fn](self.ev(n[2][0]))
+            args = [self.ev(a) for a in n[2]]
             return self.callv(fn, args)
         if k == "index":
             o = self.ev(n[1])
@@ -566,7 +722,7 @@ class Interp:
             if op == "and": return int(a) & int(b)
             if op == "or": return int(a) | int(b)
             if op == "xor": return a ^ b
-            if op == "in": return a in b
+            if op == "in": return any((a in x) if isinstance(x, Range) else a == x for x in b)
             if isinstance(a, str) != isinstance(b, str):
                 _type_err(a, b)
             return {"=": a == b, "<>": a != b, "<": a < b, ">": a > b, "<=": a <= b, ">=": a >= b}[op]
@@ -589,6 +745,8 @@ class Interp:
                     f = self.lookup(n[1], n[2])
                 else:
                     f = self.ev(n[1]).get(n[2])
+                if getattr(f, "pascal_byref", False):
+                    f(self, []); return
                 if isinstance(f, Bound) or (callable(f) and not isinstance(f, PObj)):
                     f()
                 return
@@ -667,7 +825,7 @@ class Interp:
         if k == "case":
             v = self.ev(s[1])
             for labels, body in s[2]:
-                if any(self.ev(x) == v for x in labels):
+                if any((v in L) if isinstance(L, Range) else L == v for L in (self.ev(x) for x in labels)):
                     self.run(body); return
             if s[3]:
                 self.run(s[3])

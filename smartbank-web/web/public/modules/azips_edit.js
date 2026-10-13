@@ -264,7 +264,7 @@
       const d = await api(P + '/out/' + id + '/edit');
       if (d.form === 'MT103') editForm(id, d, false, onDone);
       else if (d.form === 'MT103AZN') aznForm(id, d, onDone);
-      else if (d.form === 'plugin') toast(K('plugin_na'), 'error');
+      else if (d.form === 'plugin') window.SB.azipsNew.open(d.id, 'grid_out', onDone);   // SENDERLT<>'103' -> filereport.bpl 'Azipsnew' id (right SW_OUT_EDIT already checked)
     } catch (e) { toast(errT(e), 'error'); }
   }
   async function view(id) {                                                   // Redakteet1Click

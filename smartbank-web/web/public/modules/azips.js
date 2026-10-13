@@ -47,7 +47,7 @@
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
           <button class="btn secondary" id="z_arxout">${esc(K('archive'))}</button><button class="btn" id="z_now">${esc(K('archive_now'))}</button>
-          <button class="btn" id="z_new" title="Ctrl+N">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
+          <button class="btn" id="z_new">${esc(K('new_msg'))}</button><button class="btn secondary" id="z_edit">${esc(K('edit_msg'))}</button>
           <button class="btn secondary" id="z_view">${esc(K('view_msg'))}</button>
           <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button></div>
           <input class="input" readonly id="z_s1" style="width:100%;margin-top:6px" value="${esc(d.sum_send_text != null ? 'Bu gün göndəriləcək ümumi məbləğ = ' + d.sum_send_text + ' AZN' : '')}">
@@ -72,7 +72,12 @@
         mark3();
         v('z_file').onclick = () => createFiles(d);
         const AE = window.SB.azipsEdit;
-        v('z_new').onclick = () => AE.newForm(() => load({}));                    // Yeni action (YeniExecute)
+        const AN = window.SB.azipsNew;
+        v('z_new').onclick = () => AN.open('1', 'toolbutton1', () => load({}));   // toolbar 'Yeni' = ToolButton1Click -> filereport.bpl 'Azipsnew' '1'
+        // grid double clicks (SWIFT_MAINImpl1.pas): grid_outDblClick -> Azipsnew id (edit), GRIDOUT2/gridout3DblClick -> '-'+id (view)
+        v('g_out').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.ondblclick = () => AN.open(String(d.sw_out[+tr.dataset.i].id), 'grid_out', () => load({})));
+        v('g_out2').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.ondblclick = () => AN.open('-' + d.sw_out_2[+tr.dataset.i].id, 'gridout2', () => load({})));
+        v('g_out3').querySelectorAll('tbody tr[data-i]').forEach(tr => tr.ondblclick = () => AN.open('-' + d.sw_out3[+tr.dataset.i].id, 'gridout3', () => load({})));
         v('z_edit').onclick = () => st.sel_out ? AE.edit(st.sel_out, () => load({})) : toast(K('pick_row'), 'error');   // ToolButton2Click
         v('z_view').onclick = () => st.sel_out2 ? AE.view(st.sel_out2) : toast(K('pick_row'), 'error');                // Redakteet1Click
         v('z_now').onclick = async () => {

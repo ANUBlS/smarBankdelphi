@@ -18,7 +18,7 @@ in the part that uses them (UFX credit, `ufxcredit` :6931), copied from the Delp
 
 ## Plan (clean pushed commits)
 1. **Lists, totals, archives** (done) – see §1.
-2. **Outgoing message editor / creation** (done) – see §2. Open follow-up 2b: `filereport.bpl` `Azipsnew` (`Packages/Cards_New/FileReprt/Unitazips.pas`, 4 707 lines), which is what the visible "Yeni" button and "Redaktə et" for non-103 rows open.
+2. **Outgoing message editor / creation** (done) – see §2. 2b (done): `filereport.bpl` `Azipsnew` – see §2b.
 3. Conversion / export files. **3a done** (outgoing files: `CreateFileClick` → `PACS0008Execute`) – see §3.
    **3b done** (incoming import, see §3b); the hidden list print `ToolButton8Click` moves to part 4 prints. Was: incoming import `ToolButton4Click` (button "Konvert", also `Timer1Timer`) → `KonvertexExecute` (:538) / `konvert3Execute` (:6480)
    and `Konver102Execute` (:2112, called from Konvertex); `ToolButton8Click` (:6179, QuickRep list – button Visible=False).
@@ -65,7 +65,7 @@ E2E `e2e/azips_edit_screens.py`, screenshots 105-109. New verbatim SQL in `azips
 | `Redakteet1Click` :3578 (action `konvert`) | Committed grid: FINCOPY='AZN' → `Form7` (Unit7, not this step), else `TMT103Show` (Editmt103Show, read-only) | "View committed" |
 | `Edit_outExecute` :3205-3528 | **not connected**: action `Edit_out` has `OnExecute = Capet1Click` (SWIFT_MAINImpl1.dfm:2871-2874) | not in UI; mapping ported as `edit_out_prefill()` for reference |
 | `createmess.pas` (`TForm5`) | never created (no CreateForm in SWIFT_MANAGER.dpr, no `TForm5.Create`) | not ported |
-| ToolButton1 "Yeni" (the visible button) :2337 | `sw_settings.EXpire_t` time check, right `SW_OUT_NEW`, then `Pluginloader('filereport.bpl','Azipsnew','1')` | **not ported yet** (other package, see plan 2b) |
+| ToolButton1 "Yeni" (the visible button) :2337 | `sw_settings.EXpire_t` time check, right `SW_OUT_NEW`, then `Pluginloader('filereport.bpl','Azipsnew','1')` | ported (§2b) |
 
 ### OUT_FORM (CreateMessageBeginExecute OUT_MT.pas:771-1266)
 - Defaults (FormActivate :1298): sender = `bankinfo.SWIFT`, 'Institution', FIN, priority/monitoring N, date = today, FIN-copy = **AZN**,
@@ -111,6 +111,25 @@ Same layout as MT103 on `sw_out_2` (Committed), everything read-only, no save.
 - TRichEdit line separators in `OF70_RichEdit.Text` (CR vs CRLF) – web sends CRLF.
 - `Edit3_MF50` in MT103 is filled from MF36 (FormActivate), so a 50K message with empty MF36 fails the account check until the account is retyped – kept.
 
+## 2b. filereport.bpl `Azipsnew` (Unitazips.pas, done)
+Approach: the whole `Unitazips.pas` is executed verbatim by the Pascal interpreter (`api/app/pascal.py`) on a virtual VCL form built from the verbatim `Unitazips.dfm` and data module `Unitdatamod.dfm` (`api/app/vcl.py`, `api/app/azips_new.py`; sources in `api/app/delphi_src/filereport/`). Every SQL/package call is therefore the Delphi text itself (unit:line visible in the source copies). Form state is server-side per form id; modal forms (Tform17) via snapshot/replay.
+
+Callers (SWIFT_MAINImpl1.pas): ToolButton1Click :2337 (`k='1'`, EXPIRE_T check + `SW_OUT_NEW`), ToolButton2Click :3530 / grid_outDblClick :3057 (id, `SW_OUT_EDIT`, non-103), GRIDOUT2DblClick / gridout3DblClick (`'-'+id`, view). Ctrl+N action still opens OUT_FORM (as in Delphi's action list).
+
+VCL semantics reproduced: OnChange only on real text change; radio Checked:=True unchecks siblings + OnClick; Memo Lines (read past end '', write past end ignored, Count ignores trailing CRLF); ItemIndex sets Text; OnKeyPress replayed per typed char; StrToFloat with ',' decimal separator.
+
+Not ported / unverified (needs real DB or Delphi):
+- Ttemplate (Button2 "Şablondan yüklə") – reports "not ported yet". TFormat102 unreachable (commented out).
+- TSearchEdit (third party, no source) assumed partial case-insensitive Locate.
+- Memo word-wrap: browser line break treated as line end.
+- ComboBox OnChange vs OnCloseUp order; typing into combos not supported.
+- Unitazips never commits after sw_main saves (calls run with commit=False) whereas OUT_FORM (§2) commits – verify session/commit behaviour on Oracle.
+- Client time / decimal format of the Delphi workstation; convertpack/sw_main bodies not in repo.
+- MT102 edit: uninitialised k/ids (garbage in Delphi, 0 here); names205 SQL `//select` would raise ORA-00900 as in Delphi.
+- Form state is in memory – single API worker assumed.
+
+Screenshots: 114–118.
+
 ## 3. Outgoing files – Avtorizator (3a, done)
 API `api/app/azips_files.py` (`POST /api/azips/create-files`), UI button "Authorize (create file)" on the OUT tab (Delphi ToolButton
 `CreateFile`, caption 'Avtorizator'), tests `api/tests/test_azips_files.py`, golden files `api/tests/golden/azips/`, E2E
@@ -129,7 +148,7 @@ dataset order), `TOraclePackage.CallProcedure/CallIntegerFunction`, `AssignFile/
 | CreateFileClick :3117-3121 right by `SW_OUT3.mf32a_amount` of the current row: ≤10 000 `SW_OUT10`, ≤100 000 `SW_OUT100`, ≤1 500 000 `SW_OUT15`, ≤2 500 000 `SW_OUT25`, else `SW_OUT250` | same (SB_ACA.CheckAdvancedObjectAccess) |
 | :3126-3132 `MT102data` / `mt102sum` opened with `:refer` (Unit2.dfm:6079, :6638 verbatim) – results unused | same |
 | :3134 `sw_main.updout(id)` when the grid has rows; else `Heç bir format yoxdur!` | same |
-| MT102/MT103/MT205: `Pluginloader('filereport.bpl','Azipsnew','-'+id)` then PACS0008; MT999/MT298: PACS0008 only | Azipsnew not ported yet (plan 2b) – the result says so; PACS0008 runs |
+| MT102/MT103/MT205: `Pluginloader('filereport.bpl','Azipsnew','-'+id)` then PACS0008; MT999/MT298: PACS0008 only | Azipsnew view (`'-'+id`) is ported (§2b) for the grid double-clicks; inside CreateFileClick the plugin call is still reported, PACS0008 runs |
 | PACS0008 :709-736 loop over `Gridout3.SelectedRows` (none selected → current row), MessageDlg per row with Yes-to-all | one browser confirm = Yes to all + Yes; the two Delphi dialog texts are returned in `confirms` |
 | :738 `sw_out_fileafter(id, GRIDOUT2.MF32A_DATE)` = 6 → file; else `sw_out_CreateFile(GRIDOUT2.id, 'Təsdiq olunmamış əməliyyat var!', 0)` | same; the UI sends the current row of the Committed grid (first row if none clicked), as GRIDOUT2's cursor |
 | :749-773 status 1 only; `path_out\pacs`+id left-padded with 0 to 5+`.xml` | file name the same; content returned for download; copy into `AZIPS_OUT_DIR` when set |
@@ -205,5 +224,4 @@ Deliberate differences / unverified:
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Next: 2b (`filereport.bpl`
-Azipsnew = `Packages/Cards_New/FileReprt/Unitazips.pas`) and part 4.
+Next: part 4 – commit/verify/authorise, back/delete, incoming postings, account checks, settings forms, prints incl. ToolButton8Click, UFX71/ufxcredit.

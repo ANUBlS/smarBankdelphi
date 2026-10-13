@@ -13,7 +13,7 @@ import re
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from . import azips_edit
+from . import azips_edit, azips_new
 from . import azips_files
 from . import azips_import
 from . import azips_sql as Q
@@ -251,4 +251,5 @@ def make_router(current, require_module, err):
         return azips_import.import_file(ws.conn, name, data, lines)
 
     azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
+    azips_new.add_routes(r, g, err)         # part 2b: filereport.bpl 'Azipsnew' (Unitazips.pas)
     return r
