@@ -12,3 +12,15 @@ SQL_CLOSE_TYPES = "\r\n".join(["select ID, DisplayName from CLOSE_ACC_TYPE", "wh
 
 # Packages/Out_Tuningacctypes/TuningAccTypesImpl.dfm:149-154 Account_Types
 SQL_ACCOUNT_TYPES = "\r\n".join(["select", "  AT.* ,", "  AT.RowID", "from", "  Out_Account_Flags AT  "])
+
+# Packages/out_Avalute/out_AvaluteImpl1.dfm:1234-1236 OrDS_Avalute_T (the visible grid DBGridAvalute_T)
+SQL_AVALUTE_T = "\r\n".join(["select a.rowID, a.* from out_avalute a", "order by a.valute"])
+# out_AvaluteImpl1.dfm:1275-1277 OrDS_ValuteSettings (reopened with :Val in OrDS_Avalute_TAfterScroll .pas:514-521)
+SQL_VALUTE_SETTINGS = "\r\n".join(["select VS.rowID, VS.* from ValuteSettings VS", "where VS.Valute=:Val"])
+# out_AvaluteImpl1.dfm:1184-1203 Accounts (ListSource of CBoxKREDIT / CBoxDebet)
+SQL_AVALUTE_ACCOUNTS = "\r\n".join(["Select", "  0 as status, ", "  0 as ID,", "  'YOX' as acc_no", "from", "  Dual     ", "",
+                                    "Union   ", "", "Select", "   1 as status, ", "   ID,", "   acc_no ", "From ", "   out_Account",
+                                    "", "Order by", "   status,acc_no", ""])
+# out_AvaluteImpl1.dfm:986-989 AvaluteDataSet - only bound to Panel2/DBGrid1/DBNavigator1, which are all Visible = False
+# (dfm:40, 56, 158). Kept for reference, not executed by the web.
+SQL_AVALUTE_HIDDEN = "\r\n".join(["select a.rowid,a.*  from out_AVALUTE a", "", ""])

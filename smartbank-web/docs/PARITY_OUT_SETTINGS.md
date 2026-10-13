@@ -52,3 +52,31 @@ E2E `e2e/out_tuningacctypes_screens.py` (screenshots 89–90).
 | 7 | – | No SB_ACA object check in this form | Only the module right (`require_module`) | ✅ |
 
 Changes made here are seen at once by Off-balance Accounts (filter "Account type" and the symbols dialog read the same table).
+
+## 3. Off-balance Currencies (`Packages/out_Avalute`)
+
+CLSID `{83FA9280-CF34-4704-A329-5FB25414F0F5}` (`out_Avalute_TLB.pas:56`) → route `/m/out-avalute`, tree
+**Off-balance → Off-balance Currencies** (`Tree\Sections\Item8\Item10`, plugin `PluginManager\Packages\Item27`).
+API `api/app/out_avalute.py`, SQL `api/app/out_set_sql.py`, UI `web/public/modules/out_avalute.js`, mock `api/app/db/mock_oset.py`
+(`out_avalute`, `valutesettings` in `oacc.json`), tests `api/tests/test_out_avalute.py`, E2E `e2e/out_avalute_screens.py` (screenshots 91–92).
+
+**Source used:** `out_Avalute.dpr` compiles only `out_AvaluteImpl1.pas` (+ TLB).
+
+| # | Delphi (unit:line) | Behaviour | Web | Status |
+|---|---|---|---|---|
+| 1 | dfm:1234-1236 `OrDS_Avalute_T` | `select a.rowID, a.* from out_avalute a order by a.valute`; grid columns VALUTE, VAL_NAME, VALU_NAME, VALU_SHORT, VALU_BALA, COUNTRY, USING (dfm:698-800) | `SQL_AVALUTE_T`, same columns | ✅ |
+| 2 | OrDS_Avalute_TAfterScroll .pas:514-521; dfm:1275-1277 | On row change ValuteSettings is reopened with `:Val` = VALUTE | `SQL_VALUTE_SETTINGS`, loaded on row change | ✅ |
+| 3 | dfm:1184-1203 `Accounts`; GroupBox1 dfm:823-872 | KREDIT / DEBET lookups (KeyField ID, ListField ACC_NO) over 'YOX' (ID 0) + OUT_ACCOUNT; KREDIT sits next to label GƏLİR, DEBET next to XƏRC | `SQL_AVALUTE_ACCOUNTS`, verbatim; same two lookups | ✅ |
+| 4 | OrDS_Avalute_TApplyRecord .pas:523-599 | 'I' → `P_AVALUTE.add_avalute`, 'U' → `P_AVALUTE.upd_avalute`, 23 named `v_*` params, each `FieldByName(..).AsString` | Same calls, named params, values as strings (NULL → '') | ✅ |
+| 5 | same, `else Applied := False` | Delete ('D') falls to DOA: `delete from out_avalute where rowid = …`, after the grid's "Delete record?" | `SQL_DELETE` (DOA-generated text), confirm first | ❓ |
+| 6 | same, 'L','R','C' → Applied := True | No lock, no refresh by DOA | No lock | ✅ |
+| 7 | BtnOKClick .pas:601-606 | `try OrDS_Avalute_T.Post; except end;` then `OrDS_ValuteSettings.Edit; Post` | Pending grid edit posted, its error **not** blocking; settings saved after it | 🟡 the web shows the swallowed grid error as a toast (Delphi shows nothing) |
+| 8 | ValuteSettings Edit/Post | No OnApplyRecord → DOA UPDATE of changed fields by ROWID. If the currency has no settings row, `Edit` on an empty dataset becomes `Insert`: the new row gets only DEBET/KREDIT, **VALUTE stays NULL** | Same (kept as Delphi does it) | ❓ – likely an old bug; confirm whether to keep |
+| 9 | BtnCancelClick :608-612 / BtnRefreshClick :614-618 | Cancel both datasets / Refresh both | Discard edits / reload | ✅ |
+| 10 | Field sizes dfm:1017-1095 | VALUTE required integer; numeric fields float; string sizes (COUNTRY 20 by default) | Validated before the call (`out_avalute.err_value`) | ✅ |
+| 11 | dfm:40, 56, 158, 886, 937 | DBNavigator1, DBGrid1, Panel2 (AvaluteDataSet editors), GroupBox2 (Gəlir-xərc hesabları, F5501P/V) and GroupBox3 (Konvertasiya, SDEBET/SCREDIT) are `Visible = False` | Not shown; AvaluteDataSet (dfm:986-989) not executed | ✅ |
+| 12 | AvaluteDataSetApplyRecord .pas:439-512 | Only for the hidden AvaluteDataSet ('U' calls add_avalute – never reachable from the UI) | Not ported | ✅ |
+
+**To verify on the real DB:** `P_AVALUTE` body is not in the repo (assumed insert / update keyed by v_VALUTE). Delphi `AsString`
+writes floats with the Windows decimal separator; on an Azerbaijani/Russian locale that is a comma, and the web always sends a
+dot – check how `P_AVALUTE` converts its VARCHAR2 inputs (NLS_NUMERIC_CHARACTERS) and whether editing VALUTE in the grid is meant to be possible.

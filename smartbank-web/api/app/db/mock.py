@@ -149,6 +149,9 @@ class MockConnection(OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixi
         r = self._oacc_proc(key, named)
         if r is not NotImplemented:
             return r
+        r = self._oset_proc(key, named)
+        if r is not NotImplemented:
+            return r
         r = self._out_proc(key, args, named)
         if r is not NotImplemented:
             return r

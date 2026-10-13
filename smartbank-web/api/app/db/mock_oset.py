@@ -46,6 +46,13 @@ class OsetMixin:
         m = re.fullmatch(r"select b\.\*, b\.rowid from (out_bal_spr[1-4]) b where rowid = :doa_rowid for update nowait", s)
         if m:
             return [dict(r) for r in self._tab(m.group(1)) if r["ROWID"] == b.get("doa_rowid")]
+        if s == "select a.rowid, a.* from out_avalute a order by a.valute":
+            return sorted((dict(r) for r in self._tab("out_avalute")), key=lambda r: r["VALUTE"])
+        if s == "select vs.rowid, vs.* from valutesettings vs where vs.valute=:val":
+            return [dict(r) for r in self._tab("valutesettings") if r.get("VALUTE") == b.get("Val")]
+        if s.startswith("select 0 as status, 0 as id, 'yox' as acc_no from dual union select 1 as status, id, acc_no from out_account"):
+            return [{"STATUS": 0, "ID": 0, "ACC_NO": "YOX"}] + sorted(
+                ({"STATUS": 1, "ID": a["ID"], "ACC_NO": a["ACC_NO"]} for a in self._os["out_account"]), key=lambda r: r["ACC_NO"])
         if s == "select at.* , at.rowid from out_account_flags at":
             return [dict(r) for r in self._tab("out_account_flags")]
         return NotImplemented
@@ -73,7 +80,8 @@ class OsetMixin:
             return True
         return False
 
-    _oset_tables = ("out_bal_spr1", "out_bal_spr2", "out_bal_spr3", "out_bal_spr4", "out_account_flags")
+    _oset_tables = ("out_bal_spr1", "out_bal_spr2", "out_bal_spr3", "out_bal_spr4", "out_account_flags",
+                    "out_avalute", "valutesettings")
     _oset_keys = {"out_bal_spr1": "BAL_CN", "out_bal_spr2": "BAL_CN", "out_bal_spr3": "BAL_CN", "out_bal_spr4": "BAL_CN",
                  "out_account_flags": "SYMBOL"}
 
@@ -85,3 +93,34 @@ class OsetMixin:
                 raise DBError('ORA-01400: cannot insert NULL into ("SMART"."%s"."%s")' % (table.upper(), k), 1400)
             if any(r.get(k) == vals[k] and r["ROWID"] != rid for r in self._tab(table)):
                 raise DBError("ORA-00001: unique constraint (SMART.PK_%s) violated" % table.upper(), 1)
+
+    # P_AVALUTE.add_avalute / upd_avalute (package body not in the repo: assumed insert / update by VALUTE). All values are strings.
+    _AV_NUM = {"VALUTE", "USING", "USTORG", "USTPOK", "PRISTAVKA", "UST_POK1", "LIMIT", "DEBET", "KREDIT", "F5501P", "F5501V",
+               "SDEBET", "SCREDIT"}
+
+    def _oset_proc(self, key, named):
+        if key not in ("P_AVALUTE.ADD_AVALUTE", "P_AVALUTE.UPD_AVALUTE"):
+            return NotImplemented
+        rec = {}
+        for k, v in (named or {}).items():
+            f = k[2:].upper()
+            if v == "":
+                rec[f] = None
+            elif f in self._AV_NUM:
+                try:
+                    x = float(v)
+                except ValueError:
+                    raise DBError("ORA-06502: PL/SQL: numeric or value error: character to number conversion error", 6502)
+                rec[f] = int(x) if x == int(x) else x
+            else:
+                rec[f] = v
+        t = self._tab("out_avalute")
+        hit = [r for r in t if r["VALUTE"] == rec["VALUTE"]]
+        if key.endswith("ADD_AVALUTE"):
+            if hit:
+                raise DBError("ORA-00001: unique constraint (SMART.PK_OUT_AVALUTE) violated", 1)
+            t.append({**rec, "ROWID": self._rid()})
+        else:
+            for r in hit:
+                r.update(rec)
+        return None
