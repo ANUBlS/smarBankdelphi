@@ -1,6 +1,6 @@
 # XÖHKS parity (Packages/LVPCSSManager_Turan)
 
-Status: **steps 1-2 done** (4 tabs read-only; OUT add / edit / delete of batches and beneficiaries, templates). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
+Status: **steps 1-2 done, step 3a done** (accept actions + status chain) (4 tabs read-only; OUT add / edit / delete of batches and beneficiaries, templates). Exact port, same conventions as PARITY_AZIPS.md / PILOT_NOTES.md.
 
 ## Identity
 - ActiveX: `LVPCSSManager.ocx`, CoClass `LVPCSS` = `{E0D210EC-D799-46D2-A172-789782B5F96C}` (LVPCSSManager_TLB.pas:56), form
@@ -119,8 +119,29 @@ what `xs_batchs205` does, `GetNewBatchRefrence` / `GetNewBeneficiaryReference` f
 order, `filialinfo` / `xs_institution` / `xs_budgetlevel` / `xs_destination` columns, and the effect of the Delphi Rollback after
 ButtonPost's ChangeStatus on the real DB.
 
+## Step 3a. Accept actions + status chain (done)
+API `api/app/xohks_status.py`, mock status emulation in `mock_xohks.py` (step-3 block), tests `tests/test_xohks_status.py`, web buttons /
+dialogs in `xohks.js`, E2E `e2e/xohks_status_screens.py`, screenshots 147-149.
+
+| Delphi | Web | Calls / notes |
+|---|---|---|
+| Mt102AcceptExecute :2343 (AcceptButton 'Modifikator', popup N4) | `/batch/accept` | XOHKS_COMMIT; exit unless status 0 / 3; status 3 → TFormAcceptTransaction first; `xs_Batchs_ChangeStatus(id,1)` = 1 → `SetBatchsTransaction(id)` + **Commit**, else warning 'Batch-də olan bütün messajların düzgünlüyü təsdiq olunmalıdır !' |
+| AcceptTransUnit SpeedButton1/2/3, Edit_ReferensKeyPress | `/batch/accept-form`, `/batch/accept-form/ref` | CheckBox2: ref ≠ current, not empty → `PackTemp.UpdateBatchReference(id, ref)`; CheckBox1 unchecked → `xs_Batchs_ChangeStatus(id,1)` and Mt102Accept exits; '...' → `GetNewBatchRefrence(0)`; only a-z A-Z 0-9 accepted |
+| MessagesOutAcceptExecute :2496 ('Düzgündür', MenuItem4) | `/benef/accept` | exit when no rows / current benef status ≠ 0 / batch status 2; `xs_beneficiary_ChangeStatus(id,1)` per selected row + current; no right check, no commit |
+| ToolButton39Click :3623 + Verifying.pas TVerify | `/batch/verify`, `/batch/verify/confirm` | VERIFIKATOR; status 1 or 8; typed amount = FormCreate text (Frac≠0 → text without ',', else FloatToStr(Int)) → `xs_Batchs_VerifStatus` + `xs_beneficiary_VerifStatus` (dbedit4.Text, a string), else `xs_batchs_error`; no commit |
+| ToolButton38Click :3677 'Avtorizator' | `/batch/authorize` | AVTORIZATOR; bankinfo SWIFT = TURAAZ22 → amount band rights XOHKS_CREATEFILE1000/10000/40000/100000 (100000 exactly needs 40000 **and** 100000, kept); status 4 → (filial>0 `setbatchsAVTOtransaction`) `xs_Batchs_AvtStatus`, `xs_beneficiary_AvtStatus`; no commit |
+| ToolButton23Click :3720 'Geri qaytar' | `/batch/return` | RETURNBACK; batch/current benef 4/4 (AVTORIZATOR in try) → 7; 8/8 → deletetrans + 0; 7/7 and 1/1 (VERIFIKATOR in try) → deletetrans + 0; `xs_Batchs_ReturnChangeStatus` + `xs_beneficiary_ReturnStatus`; failed try → 'Bu statuslu əməliyyatı geri qaytarmaq hüququnuz yoxdur!...'. The second, commented-out block is not ported |
+| ToolButton20Click :3603 'F.Verifikator' | `/batch/fverify` (API only) | button Visible = False (dfm :845) → no web button |
+| BtnSendToArchiveClick :2942 | `/archive/send` | `PackTemp.SendToArchive`, 'Messajlar arxivə göndərildi', no refresh |
+| XS_BATCHSAfterScroll / XS_BENEFICIARYAfterScroll / PopupMT102Popup | `xohks_status.enable()` + `en()` in xohks.js | Modifikator / Delete batch / Add / Delete / Correct only when status = msDefault; popup N4 overwritten to status in [0,3] |
+
+Mock (bodies unknown): ChangeStatus(id,1) returns 1 only when the batch has beneficiaries and none in status 0; Verif/FVerif/Avt set
+4/5/6 (+ vuserid/sdate, fuserid, auserid = user); xs_batchs_error sets 8; Return* set the given status; SetBatchsTransaction,
+setbatchsAVTOtransaction, xs_batchs_deletetrans, SendToArchive are recorded only. Sums (summodifikator etc.) come from the static
+xs_batchs_today fixture, so they do not change in mock mode.
+Unverified: all of the above bodies; whether XS_CONTROL commits internally (Delphi issues no Commit after Verif/Avt/Return/benef accept -
+on the web, as in Delphi, those stay pending in the user's session until the next Commit / Rollback); the DBEdit1 display format.
+
 ## Resume point
-Step 3: toolbar / popup actions on OUT (Mt102AcceptExecute :2343, MessagesOutAcceptExecute :2496, PopupMT102Popup :2784 n4, BtnSendToArchive,
-verifikator / fverifikator / avtorizator status chain, xs_*_ReturnStatus / ReturnChangeStatus), AfterScroll button enabling
-(XS_BATCHSAfterScroll), status images + GridBatchsDrawColumnCell colours, TTransCodeForm tree, then PrepareFile / FileSend + crypto,
+Step 3b: status images + GridBatchsDrawColumnCell colours, TTransCodeForm tree, then PrepareFile / FileSend + crypto,
 step 4 IN file load / convert / accept, reports as PDF, settings forms.

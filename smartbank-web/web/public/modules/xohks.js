@@ -44,7 +44,7 @@
       if (!res) return;
       v(target).innerHTML = table('g_' + target, C.benef, res.rows);
       if (archive) v('x_fil').value = res.filial_name || '';
-      else { st.brows = res.rows; selectable(v('g_' + target), res.rows, (b) => { st.curb = b; }); }
+      else { st.brows = res.rows; selectable(v('g_' + target), res.rows, (b) => { st.curb = b; if (st.en) st.en(); }); }
     }
     function drawOut() {
       const d = st.d;
@@ -59,14 +59,37 @@
           <button class="btn secondary" id="x_bdel">${esc(K('b_del'))}</button>
           ${st.benef_visible ? `<span style="width:16px"></span><button class="btn secondary" id="x_mnew">${esc(K('m_new'))}</button>
           <button class="btn secondary" id="x_medit">${esc(K('m_edit'))}</button><button class="btn secondary" id="x_mdel">${esc(K('m_del'))}</button>` : ''}
+          ${st.benef_visible ? `<button class="btn secondary" id="x_macc">${esc(K('m_accept'))}</button>` : ''}
           <span class="muted">${esc(K('multi_hint'))}</span></div>
+        <div class="toolbar" style="gap:6px">
+          <button class="btn" id="x_bacc">Modifikator</button><button class="btn secondary" id="x_ver">Verifikator</button>
+          <button class="btn secondary" id="x_avt">Avtorizator</button><button class="btn secondary" id="x_ret">${esc(K('b_return'))}</button>
+          <button class="btn secondary" id="x_arch">${esc(K('b_archive'))}</button></div>
         ${box(K('box_batchs'), table('g_b', C.batchs, d.batchs, true))}
         ${st.benef_visible ? box(K('box_benef'), '<div id="xb"></div>') : ''}`;
       v('x_ref').onclick = async () => { st.beg = v('x_beg').value; st.end = v('x_end').value;
         const r = await call('/out/refresh', { beg: st.beg, end: st.end }); if (r) { Object.assign(st.d, r); draw(); } };
       v('g_b').querySelectorAll('th').forEach(h => h.onclick = async () => {
         const r = await call('/out/sort', { caption: h.dataset.c }); if (r) { Object.assign(st.d, r); draw(); } });
-      selectable(v('g_b'), d.batchs, (r) => { st.cur = r; st.curb = null; if (st.benef_visible) benef('xb', r, false); });
+      // XS_BATCHSAfterScroll / XS_BENEFICIARYAfterScroll (Data_Unit.pas:299/326): enabled only for status msDefault
+      const en = () => { const bs = st.cur ? +st.cur.status : -1, ns = st.curb ? +st.curb.status : -1;
+        v('x_bacc').disabled = bs !== 0; v('x_bdel').disabled = bs !== 0; v('x_bedit').disabled = !st.cur;
+        if (st.benef_visible) { v('x_mdel').disabled = ns !== 0; v('x_macc').disabled = !(st.curb && bs === 0); v('x_mnew').disabled = bs !== 0; } };
+      st.en = en;
+      selectable(v('g_b'), d.batchs, (r) => { st.cur = r; st.curb = null; en(); if (st.benef_visible) benef('xb', r, false); });
+      const after = (r) => { if (!r) return; if (r.warning) toast(K(r.warning.replace('xohks.', '')), 'error');
+        Object.assign(st.d, r); draw(); };
+      v('x_bacc').onclick = async () => { if (!st.cur) return; const r = await call('/batch/accept', { id: st.cur.id });
+        if (r && r.accept_form) acceptForm(r.accept_form); else after(r); };
+      v('x_ver').onclick = async () => { if (!st.cur) return; const r = await call('/batch/verify', { id: st.cur.id });
+        if (r && r.verify) verifyForm(r.verify); else after(r); };
+      v('x_avt').onclick = async () => { if (st.cur) after(await call('/batch/authorize', { id: st.cur.id })); };
+      v('x_ret').onclick = async () => { if (st.cur) after(await call('/batch/return', { id: st.cur.id, benef_id: st.curb ? st.curb.id : null })); };
+      v('x_arch').onclick = async () => { const r = await call('/archive/send'); if (r) toast(K('msg_archived')); };
+      if (st.benef_visible) v('x_macc').onclick = async () => {   // MessagesOutAccept: SelectedRows + current
+        if (!st.cur || !st.curb) return;
+        const g = v('g_xb'); const ids = [...g.querySelectorAll('tbody tr.msel')].map(tr => (st.brows[+tr.dataset.i] || {}).id).filter(x => x != null);
+        after(await call('/benef/accept', { batch_id: st.cur.id, ids: [...ids.filter(i => i !== st.curb.id), st.curb.id] })); };
       v('x_bnew').onclick = async () => { const r = await call('/tx/new'); if (r) transForm(r); };
       v('x_bedit').onclick = async () => { if (!st.cur) return; const r = await call('/tx/edit', { id: st.cur.id }); if (r) transForm(r); };
       v('x_bdel').onclick = () => delLoop('g_b', d.batchs, st.cur, 'q_del_batch', (ids) => call('/batch/delete', { ids }));
@@ -99,6 +122,27 @@
         if (a === 'all') { if (await ask(K('q_del_all').replace('{n}', uniq.length), ['yes', 'no']) === 'yes') changed = await send(uniq.map(x => x.id)) || changed; break; }
       }
       if (changed) { Object.assign(st.d, changed); draw(); }
+    }
+    function acceptForm(f) {   // AcceptTransUnit.pas TFormAcceptTransaction 'ReAccept'
+      const w = layer(`<h3>ReAccept</h3><label><input type="checkbox" id="a_c1" ${f.CheckBox1 ? 'checked' : ''}> Əməliyyat aparılsın</label><br>
+        <label><input type="checkbox" id="a_c2" ${f.CheckBox2 ? 'checked' : ''}> Qeydiyyat № : (dəyişdirilsin)</label>
+        <div class="toolbar" style="gap:6px"><input class="input" id="a_ref" value="${esc(f.Edit_Referens)}"><button class="btn secondary" id="a_new">...</button></div>
+        <div class="actions"><button class="btn" id="a_ok">Qəbul</button><button class="btn secondary" id="a_no">Imtina</button></div>`, 5);
+      const q = (id) => w.querySelector('#' + id);
+      q('a_ref').oninput = () => { q('a_ref').value = q('a_ref').value.replace(/[^a-zA-Z0-9]/g, ''); };
+      const grp = () => { q('a_ref').disabled = q('a_new').disabled = !q('a_c2').checked; }; q('a_c2').onchange = grp; grp();
+      q('a_new').onclick = async () => { const r = await call('/batch/accept-form/ref'); if (r) q('a_ref').value = r.Edit_Referens; };
+      q('a_no').onclick = async () => { w.remove(); const r = await call('/batch/accept-form', { ok: false }); if (r) { Object.assign(st.d, r); draw(); } };
+      q('a_ok').onclick = async () => { const r = await call('/batch/accept-form', { ok: true, CheckBox1: q('a_c1').checked, CheckBox2: q('a_c2').checked, Edit_Referens: q('a_ref').value });
+        if (!r) return; w.remove(); if (r.warning) toast(K(r.warning.replace('xohks.', '')), 'error'); Object.assign(st.d, r); draw(); };
+    }
+    function verifyForm(f) {   // Verifying.pas Tverify 'Verification'
+      const w = layer(`<h3>Verification</h3><p>№ <b>${esc(f.DBEdit4)}</b></p><label>${esc(K('ver_amount'))} <input class="input" id="vf_e1"></label>
+        <div class="actions"><button class="btn" id="vf_ok">Təsdiq et</button><button class="btn secondary" id="vf_x">Çıx</button></div>`, 5);
+      const q = (id) => w.querySelector('#' + id);
+      const fin = async (edit1) => { const r = await call('/batch/verify/confirm', { edit1 }); w.remove();
+        if (r) { if (r.verified === false) toast(K('ver_mismatch'), 'error'); Object.assign(st.d, r); draw(); } };
+      q('vf_ok').onclick = () => fin(q('vf_e1').value); q('vf_x').onclick = () => fin(null);
     }
     const fld = (id, label, val, ro, w) => `<label style="display:flex;flex-direction:column;font-size:12px;min-width:${w || 140}px">${esc(label)}<input class="input" id="${id}" value="${esc(val ?? '')}" ${ro ? 'readonly' : ''}></label>`;
     function transForm(t0) {
