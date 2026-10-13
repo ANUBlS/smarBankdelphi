@@ -19,6 +19,7 @@ from . import azips_files
 from . import azips_import
 from . import azips_actions as A
 from . import azips_in as I
+from . import azips_sett as S
 from . import ufx
 from . import azips_sql as Q
 from .customers import row
@@ -221,6 +222,24 @@ class RedakteIn(BaseModel):
     voin2: str = Field(default="", max_length=64)
 
 
+class SettLookupIn(BaseModel):
+    kind: Literal["mb_comm", "main", "alter", "banks"]
+    fil: int | None = None
+    val: int | None = None
+    val_text: str = Field(default="", max_length=10)
+    bal: str = Field(default="", max_length=20)
+
+
+class SettSaveIn(BaseModel):
+    tab: Literal["mt103", "mt205", "bproc", "names"]
+    values: dict[str, str | int | float | None] = Field(default_factory=dict, max_length=20)
+
+
+class SettDelIn(BaseModel):
+    tab: Literal["mt103", "mt205", "bproc", "names"]
+    id: int
+
+
 class TranzitIn(BaseModel):
     main_acc: str = Field(default="", max_length=64)
     tranzit_acc: str = Field(default="", max_length=64)
@@ -361,6 +380,38 @@ def make_router(current, require_module, err):
     @r.post("/in-redakte")
     def _inred(b: RedakteIn, ws=Depends(g)):
         res = I.in_redakte(ws.conn, _in_lines(ws.conn), b.id, b.acount, b.voin2)
+        if res is None:
+            err(400, "azips.pick_row")
+        return res
+
+    # part 4c: settings forms (azips_sett.py) - form 'in' = insett.pas, 'out' = MTsett.pas
+    @r.get("/settings/{form}")
+    def _sett(form: Literal["in", "out"], ws=Depends(g)):
+        d = S.open_form(ws.conn, form)
+        d["grids"] = {k: [row(x) for x in v] for k, v in d["grids"].items()}
+        for k in ("filial", "avalute", "bproc"):
+            d[k] = [row(x) for x in d[k]]
+        return d
+
+    @r.post("/settings/{form}/lookup")
+    def _sett_lk(form: Literal["in", "out"], b: SettLookupIn, ws=Depends(g)):
+        c = ws.conn
+        if b.kind == "mb_comm":
+            return {k: [row(x) for x in v] for k, v in S.mb_comm(c, b.fil, b.val, b.val_text).items()}
+        if b.kind == "banks":
+            return [row(x) for x in S.all_banks(c, b.val_text)]
+        return _run_in(lambda: [row(x) for x in S.bal_accounts(c, b.kind, b.val, b.bal)])
+
+    @r.post("/settings/{form}/save")
+    def _sett_save(form: Literal["in", "out"], b: SettSaveIn, ws=Depends(g)):
+        res = S.save(ws.conn, form, b.tab, b.values)
+        if res is None:
+            err(400, "azips.pick_row")
+        return res
+
+    @r.post("/settings/{form}/delete")
+    def _sett_del(form: Literal["in", "out"], b: SettDelIn, ws=Depends(g)):
+        res = S.delete(ws.conn, form, b.tab, b.id)
         if res is None:
             err(400, "azips.pick_row")
         return res

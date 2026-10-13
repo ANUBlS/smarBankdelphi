@@ -76,6 +76,7 @@
           <button class="btn secondary" id="z_checkacc">${esc(K('checkacc'))}</button>
           <button class="btn secondary" id="z_inred">${esc(K('in_redakte'))}</button>
           <button class="btn secondary" id="z_tranzit">${esc(K('tranzit'))}</button>
+          <button class="btn secondary" id="z_settin">${esc(K('settings'))}</button>
           <input type="file" id="z_konvf" style="display:none"></div>
           ${box(K('box_in'), table('g_in', C.in, d.sw_in, true))}${box(K('box_in2'), table('g_in2', C.in2, d.sw_in2, true))}`;
         v('g_in').querySelectorAll('th[data-s]').forEach(h => h.onclick = () => load({ in_sort: h.dataset.s }));
@@ -90,7 +91,8 @@
           e.preventDefault(); st.sel_in = d.sw_in[+tr.dataset.i].id; checkAcc();
         }));
         v('z_inred').onclick = () => inRedakte();                                       // popup Rdk 'Redaktə et' (Redaktet1Click :3595 -> Unit16)
-        v('z_tranzit').onclick = () => tranzit();                                        // ToolButton7Click :5391 -> Tranzit_account.pas
+        v('z_tranzit').onclick = () => tranzit();
+        v('z_settin').onclick = () => window.SB.azipsSett.open('in', () => load({}));      // ToolButton10Click -> insett.pas                                        // ToolButton7Click :5391 -> Tranzit_account.pas
         v('z_konvf').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) konvert(f); };
       } else {
         v('zbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="z_ref">${esc(K('refresh'))}</button>
@@ -100,12 +102,14 @@
           <button class="btn" id="z_file" title="${esc(K('file_hint'))}">${esc(K('create_file'))}</button>
           <button class="btn danger" id="z_odel">${esc(K('delete'))}</button><button class="btn" id="z_modif">${esc(K('modif'))}</button><button class="btn" id="z_verify">${esc(K('verify'))}</button>
           <button class="btn secondary" id="z_back">${esc(K('back'))}</button><button class="btn secondary" id="z_sback">${esc(K('sending_back'))}</button>
-          <button class="btn secondary" id="z_tsend">${esc(K('transend'))}</button></div>
+          <button class="btn secondary" id="z_tsend">${esc(K('transend'))}</button>
+          <button class="btn secondary" id="z_settout">${esc(K('settings'))}</button></div>
           <input class="input" readonly id="z_memo2" style="width:100%;margin-top:6px" value="${esc(st.memo2 || '')}">
           <input class="input" readonly id="z_s1" style="width:100%;margin-top:6px" value="${esc(d.sum_send_text != null ? 'Bu gün göndəriləcək ümumi məbləğ = ' + d.sum_send_text + ' AZN' : '')}">
           <input class="input" readonly id="z_s2" style="width:100%;margin-top:4px" value="${esc(d.sum_verify_text != null ? 'Bu gün verifikasiya olunacaq ümumi məbləğ = ' + d.sum_verify_text + ' AZN' : '')}">
           ${box(K('box_out'), table('g_out', C.out, d.sw_out))}${box(K('box_out2'), table('g_out2', C.out2, d.sw_out_2))}${box(K('box_out3'), table('g_out3', C.out3, d.sw_out3))}`;
         v('z_arxout').onclick = () => arch('out');
+        v('z_settout').onclick = () => window.SB.azipsSett.open('out', () => load({}));   // ToolButton12Click -> MTsett.pas
         multi(v('g_out'), d.sw_out, st, 'sel_out'); multi(v('g_out2'), d.sw_out_2, st, 'sel_out2');
         // Gridout3 (dgMultiSelect): click = current row, Ctrl+click toggles a selected row (TBookmarkList)
         st.sel3 = (st.sel3 || []).filter(id => d.sw_out3.some(r => r.id === id));

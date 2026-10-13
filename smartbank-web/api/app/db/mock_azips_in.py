@@ -16,6 +16,9 @@ def _call(D, key, args):
 class AzipsInMixin:
     def _azi_query(self, sql, b):
         D = _load()
+        r = _sett_query(D, sql, b)
+        if r is not NotImplemented:
+            return r
         if sql.startswith(Q.LINES_SW_IN_FORADDIN[0] + "\r\n" + Q.LINES_SW_IN_FORADDIN[1][:60]):
             body = sql.split("\r\n")[1]
             ids = body[body.index("in (") + 4:body.rindex(")")]
@@ -86,6 +89,13 @@ class AzipsInMixin:
             _call(D, key, args)
             D.setdefault("ufx_sent", []).append(args[0])
             return {}
+        if key in _SETT_PROCS:
+            _call(D, key, args)
+            if key.endswith(("_DEL", "_DEL_IN")) or key == "SW_MAIN.AZP900_DEL":
+                for t in ("azips_bp_procces_acc_in", "azp205_sett_in", "sw_busproc_sett_in", "sw_names", "azips_bp_procces_acc",
+                          "azp205_sett", "sw_busproc_sett_out"):
+                    D["sett"][t] = [x for x in D["sett"][t] if x["ID"] != args[0]]
+            return {}
         if key == "SW_MAIN.UPDIN":
             _call(D, key, args)
             for r in D["sw_in"]:
@@ -109,3 +119,30 @@ class AzipsInMixin:
         if c is None:
             raise DBError("ORA-01403: no data found", 1403)
         return {"p2": c["CARDTYPE"], "p3": c["CARDNUMBER"], "p4": c["VALYUTA"], "p5": c["AMOUNT"], "p6": c["DESCRIPT"]}
+
+
+_SETT_PROCS = {"SW_MAIN." + n.upper() for n in ("azpsettings_in", "Azp205_in", "bproc_in", "Azp900", "azpsettings", "Azp205",
+               "bproc_out", "azpsettings_del_in", "Azp205_del_in", "bproc_in_del", "azp900_del", "azpsettings_del", "Azp205_del")}
+
+
+def _sett_query(D, sql, b):
+    S = D.get("sett", {})
+    for lines, t in ((Q.LINES_AZPSETTINGS_IN, "azips_bp_procces_acc_in"), (Q.LINES_AZPSETT_IN, "azp205_sett_in"),
+                     (Q.LINES_B_PROC_IN, "sw_busproc_sett_in"), (Q.LINES_SW_NAMES, "sw_names"),
+                     (Q.LINES_AZPSETTINGS, "azips_bp_procces_acc"), (Q.LINES_AZPSETT, "azp205_sett"),
+                     (Q.LINES_B_PROC, "sw_busproc_sett_out"), (Q.LINES_AZPFILIAL, "filial"),
+                     (Q.LINES_BPROC, "sb_business_processes"), (Q.LINES_AZPVAL, "avalute")):
+        if sql == Q.text(lines):
+            return [dict(x) for x in S.get(t, [])]
+    acc = S.get("accounts", [])
+    if sql == Q.text(Q.LINES_MBACC):
+        return [dict(x) for x in acc if x["BAL_CN1"] == b["bal1"]]
+    if sql == Q.text(Q.LINES_COMM_ACC):
+        return [dict(x) for x in acc if x["BAL_CN1"] == b["BAL2"] and x["FILIAL"] == b["fil"] and x["VAL_ACC"] == b["val"]]
+    if sql == Q.text(Q.LINES_MAIN_ACC):
+        return [{"ACC_NO": x["ACC_NO"], "ID": x["ID"]} for x in acc if x["BAL_CN1"] == b["bal1"] and x["VAL_ACC"] == b["valcode"]]
+    if sql == Q.text(Q.LINES_ALTER_ACC):
+        return [{"ACC_NO": x["ACC_NO"], "ID": x["ID"]} for x in acc if x["BAL_CN1"] == b["bal2"] and x["VAL_ACC"] == b["valcode"]]
+    if sql == Q.text(Q.LINES_ALL_BANKS):
+        return [dict(x) for x in S.get("bankm_t", []) if x["VAL_CODE"] == b["valute"]]
+    return NotImplemented

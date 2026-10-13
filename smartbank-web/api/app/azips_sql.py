@@ -107,3 +107,20 @@ PKG_CARD = 'cardufx'          # Unit2.dfm:7180-7182 card TOraclePackage PackageN
 def sql(lines):
     """TStrings.Text of an unmodified dataset."""
     return text(lines)
+
+# part 4c: settings forms insett.pas (TIn_sett, ToolButton10) / MTsett.pas (TAzpSettings, ToolButton12) - Unit2.dfm SQL.Strings
+LINES_AZPSETTINGS_IN = ['select * from azips_bp_procces_acc_in', '', '']                 # Unit2.dfm:6887-6890
+LINES_AZPSETT_IN = ['select * from azp205_sett_in']                                      # :6816-6817
+LINES_B_PROC_IN = ['SELECT *', '  FROM sw_busproc_sett_in a order by id ']               # :6974-6976
+LINES_SW_NAMES = ['select * from sw_names']                                              # :7048-7049
+LINES_MBACC = ['select * from account where bal_cn1=:bal1', '']                          # :6517-6519
+LINES_COMM_ACC = ['select * from account where bal_cn1=:BAL2', 'and filial=:fil and val_acc=:val']   # :6551-6553
+LINES_AZPFILIAL = ['select * from filial']                                               # :6505-6506
+LINES_AZPVAL = ['select * from avalute']                                                 # :6601-6602
+LINES_MAIN_ACC = ['', 'select acc_no,id from account where bal_cn1=:bal1 and val_acc=:valcode']     # :6723-6726
+LINES_ALTER_ACC = ['', 'select acc_no,id from account where bal_cn1=:bal2 and val_acc=:valcode']    # :6740-6743
+LINES_ALL_BANKS = ['select * from bankm_t where val_code=:valute']                       # :6772-6773
+LINES_BPROC = ['select id ,name from sb_business_processes']                             # :6958-6959
+LINES_AZPSETTINGS = ['select * from azips_bp_procces_acc', '', '']                       # :6485-6488
+LINES_AZPSETT = ['select * from azp205_sett']                                            # :6657-6658
+LINES_B_PROC = ['SELECT *', '  FROM sw_busproc_sett_out a order by id ']                 # :6920-6922

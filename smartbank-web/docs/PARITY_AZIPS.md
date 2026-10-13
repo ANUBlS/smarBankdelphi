@@ -288,6 +288,33 @@ Deliberate differences / unverified:
 - On a UFX/Oracle error the request stops without the final Commit (earlier work stays uncommitted in the session, as in Delphi; ufxcredit's own commits stay).
 - `cardufx`, `accid`, `sw_main.add_in_transactions2`, `upd_none`, `sw_tranzit_insert` bodies are not in the repo (mock is illustrative).
 
+## 4c. IN edit and settings forms (done)
+- **IN edit**: the reachable editor is the GridIN popup 'Redaktə et' → `Redaktet1Click` :3595 → Unit16.pas `TrdkİN`
+  (Hesab № = ACOUNT, Vöen = VOIN2, hidden ID) → 'Yadda saxla' `sw_main.UPDIN(Edit1, Edit2, Edit3)` (strings, no right, no commit).
+  API `POST /api/azips/in-redakte`. **Unit4 `IN_edit` is not ported**: it is only opened by ToolButton5Click :4068, and that button is
+  Visible=False (SWIFT_MAINImpl1.dfm:83-88).
+- **Settings**: 'Sazlama' on the IN tab (ToolButton10Click :3088 → insett.pas `TIn_sett`) and on the OUT tab (ToolButton12Click :3016 →
+  MTsett.pas `TAzpSettings`), both with the SW_SETTINGS right. API `GET /api/azips/settings/{in|out}`, `POST .../lookup|save|delete`
+  (`api/app/azips_sett.py`, UI `web/public/modules/azips_sett.js`), tests `api/tests/test_azips_sett.py`, E2E `e2e/azips_sett_screens.py`,
+  screenshots 127-130. **AzipsSett.pas and Unit3.pas are not ported**: they are compiled but never created.
+
+| Tab | Grid (Unit2.dfm) | Save (`sw_main`, no commit) | 'Sil' (commit) |
+|---|---|---|---|
+| MT 103 | IN `azips_bp_procces_acc_in` :6887 / OUT `azips_bp_procces_acc` :6485 | `azpsettings_in` / `azpsettings`(muxbir, komissiya, filial, valute) | `azpsettings_del_in` / `azpsettings_del` |
+| MT 205 | `azp205_sett_in` :6816 / `azp205_sett` :6657 | `Azp205_in` / `Azp205`(ComboBox3.ItemIndex, debet, kredit, valute, filial, Edit3 bank code, bank name text) | `Azp205_del_in` / `Azp205_del` |
+| Biznes process | `sw_busproc_sett_in` :6974 / `sw_busproc_sett_out` :6920 | `bproc_in` / `bproc_out`(id, name, ComboBox1, ComboBox2, fil) | `bproc_in_del` (**OUT uses the IN procedure too**, as Delphi) |
+| IN 'Bizness prosess' | `sw_names` :7048 | `Azp900`(ComboBox5, debet, kredit, valute, Edit5, Edit4, debet) | `azp900_del` |
+| OUT 'MT205 Names' | `sw_rbname` :7012, never opened by FormShow → empty grid | - | - |
+
+Lookups: filial / avalute / sb_business_processes; DBLookupComboBox3/4CloseUp → mbacc (1052 AZN / 1062 other) and comm_acc
+(6404 / 6414, filial, valute); Dt/Kt Balans edits on Enter → Main_acc / alter_acc with `strtoint` (non-numbers raise like Delphi);
+the MT 205 currency → all_banks(:valute = currency text). Messages as Delphi ('Hesablar Əlavə edildi.', 'Birinci Valyuta Secilməlidir!!',
+'Ilk öncə Filial seçilməlidir ', 'Silinsin').
+Delphi quirks kept: Button4Click takes `fil` from the **MT 205 tab's ComboBox3** ('Filial' → 1), not from the Filial combo of the
+Biznes process tab; save errors are shown as messages (try/except ShowMessage), not as failures.
+Unverified: label ↔ edit mapping of the IN 'Bizness prosess' tab (Edit4 = 'Adı', Edit5 = 'Təyinatı' assumed from positions);
+the `sw_main` setting procedure bodies are not in the repo.
+
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
 forced to **one worker**: Dockerfile `--workers 1` (with a comment), `app/main.py` refuses to start when `WEB_CONCURRENCY` > 1, and the
@@ -301,7 +328,6 @@ between processes.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
 ## Resume point
-Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Remaining AZIPS: IN edit
-(`ToolButton5Click` / `Redaktet1Click` → Unit4 IN_edit), settings (ToolButton10/12 → insett / AzipsSett, MTsett, Unit3), prints
+Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Part 4c (IN edit, settings) is done. Remaining AZIPS: prints
 (`ToolButton8Click` :6179, printClick :3984, ToolButton17Click :7106, cap, qrp1, qr5, qrp5), template load (Şablondan yüklə / Ttemplate).
 After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.
