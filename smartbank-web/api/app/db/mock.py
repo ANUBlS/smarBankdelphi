@@ -16,6 +16,8 @@ from . import mock_cs
 from .mock_cs import CsMixin
 from . import mock_cr
 from .mock_cr import CrMixin
+from . import mock_bal
+from .mock_bal import BalMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -40,13 +42,14 @@ def reset():
     _state = None
     mock_cs.reset()
     mock_cr.reset()
+    mock_bal.reset()
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(CsMixin, CrMixin):
+class MockConnection(BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -59,6 +62,9 @@ class MockConnection(CsMixin, CrMixin):
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._bal_func(key, args, named)
+        if r is not NotImplemented:
+            return r
         r = self._cs_func(key, args, named)
         if r is not NotImplemented:
             return r
@@ -87,6 +93,9 @@ class MockConnection(CsMixin, CrMixin):
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._bal_bool(key, args, named)
+        if r is not NotImplemented:
+            return r
         r = self._cr_bool(key, args, named)
         if r is not NotImplemented:
             return r
@@ -111,7 +120,10 @@ class MockConnection(CsMixin, CrMixin):
         raise DBError(f"ORA-06550: mock: {key} not emulated")
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
-        key = f"{pkg}.{name}".upper()
+        key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._bal_proc(key, args, named)
+        if r is not NotImplemented:
+            return r
         r = self._cs_proc(key, args, named)
         if r is not NotImplemented:
             return r
@@ -130,6 +142,9 @@ class MockConnection(CsMixin, CrMixin):
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._bal_query(s, b)
+        if r is not None:
+            return r
         r = self._cs_query(s, b)
         if r is not None:
             return r
@@ -163,6 +178,8 @@ class MockConnection(CsMixin, CrMixin):
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._bal_execute(sql, binds or {}):
+            return
         if self._cs_execute(sql, binds or {}):
             return
         if self._cr_execute(sql, binds or {}):
@@ -186,7 +203,16 @@ class MockConnection(CsMixin, CrMixin):
             raise DBError("ORA-06550: mock: block not emulated")
         return r
 
+    def plsql_out(self, sql, binds=None):
+        r = self._bal_plsql_out(sql, binds or {})
+        if r is NotImplemented:
+            raise DBError("ORA-06550: mock: block not emulated")
+        return r
+
     def cursor_block(self, sql, cursor_bind, binds=None):
+        r = self._bal_cursor(sql, cursor_bind, binds or {})
+        if r is not NotImplemented:
+            return r
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):

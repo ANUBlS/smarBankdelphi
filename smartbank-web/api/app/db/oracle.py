@@ -76,7 +76,7 @@ class OracleConnection:
                 else:
                     kw[k] = v
             try:
-                cur.callproc(_ident(pkg, name), list(args), keyword_parameters=kw or None)
+                cur.callproc(_ident(*[x for x in (pkg, name) if x]), list(args), keyword_parameters=kw or None)
                 if commit:
                     self._c.commit()
             except oracledb.Error as e:
@@ -100,6 +100,22 @@ class OracleConnection:
                 return None
             v = r.getvalue()
             return int(v) if ret is int and v is not None else v
+
+    def plsql_out(self, sql, binds=None):
+        """Anonymous block with OUT binds (values given as Out(type)); returns {name: value} of the OUT binds.
+        Used for TOracleQuery blocks such as 'begin Pkg.Proc(:a, :Param1, :Param2); end;' (DOA GetVariable)."""
+        with self.lock, self._c.cursor() as cur:
+            b, outs = {}, {}
+            for k, v in (binds or {}).items():
+                if isinstance(v, Out):
+                    outs[k] = b[k] = cur.var(_TYPES[v.typ], 32767) if v.typ is str else cur.var(_TYPES[v.typ])
+                else:
+                    b[k] = v
+            try:
+                cur.execute(sql, b)
+            except oracledb.Error as e:
+                raise _wrap(e)
+            return {k: v.getvalue() for k, v in outs.items()}
 
     def query(self, sql, binds=None):
         with self.lock, self._c.cursor() as cur:

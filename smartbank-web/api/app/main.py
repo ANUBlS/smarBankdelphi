@@ -288,3 +288,6 @@ async def _reaper():
             await asyncio.sleep(30)
             store.reap()  # idle sessions: Oracle session closed server-side
     asyncio.create_task(loop())
+from . import balance  # noqa: E402
+for _r in balance.make_routers(current, require_module, err):
+    app.include_router(_r)
