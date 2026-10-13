@@ -773,3 +773,101 @@ class DataModule(P.PObj):
             if isinstance(ds, DataSet) and n in ds.pf_objs:
                 return ds.pfield(n)
         raise P.PascalUnsupported(f"DataModbpl.{n}")
+
+
+# ------------------------------------------------------------------------------------------------ TRichEdit (XÖHKS step 4)
+class RichEditLines(P.PObj):
+    """TRichEditStrings: Lines[i] = EM_GETLINE of display line i (WordWrap=False -> one line per paragraph), '' outside."""
+
+    def __init__(self, re_):
+        self.re = re_
+
+    def index(self, i):
+        i = int(i)
+        L = self.re.text.split(self.re.br)
+        return L[i] if 0 <= i < len(L) else ""
+
+    @property
+    def p_count(self):
+        return len(self.re.text.split(self.re.br)) if self.re.text else 0
+
+    def m_loadfromfile(self, name, encoding=None):
+        """Lines.LoadFromFile(FileName, TEncoding.UTF8): preamble skipped, invalid bytes replaced; the RichEdit stores every
+        line break (CR LF, LF or CR) as one CR (paragraph mark)."""
+        if name not in self.re.files:
+            raise P.PascalError(f"Cannot open file \"{name}\".")
+        s = self.re.files[name]
+        if s[:3] == b"\xef\xbb\xbf":
+            s = s[3:]
+        t = s.decode("utf-8", errors="replace")
+        lines = re.split(r"\r\n|\r|\n", t)
+        if lines and lines[-1] == "":
+            lines.pop()                       # TStrings.SetTextStr: no empty line after a trailing break
+        self.re.text = self.re.br.join(lines) + (self.re.br if lines else "")
+        self.re.sel = (0, 0)
+
+
+class RichEdit(P.PObj):
+    """Minimal text model of a hidden TRichEdit (WordWrap=False) for the verbatim code that parses it (ConvertToBase):
+    character positions count a line break as ONE character (RichEdit CR), FindText = EM_FINDTEXTEX searching down in
+    [StartPos, StartPos+Length) (the whole match must lie in the range, -1 when not found), SelStart / SelLength =
+    EM_EXSETSEL, SelText = EM_GETSELTEXT (line breaks come back as CR), CaretPos.y = EM_LINEFROMCHAR of the selection end,
+    GetTextLen = WM_GETTEXTLENGTH (a break counts as CR LF = 2)."""
+
+    def __init__(self, files=None, br="\r"):
+        self.files = files or {}
+        self.br = br                          # "\r" = RichEdit 2.0+ (RICHEDIT20W, Delphi 2009+); "\r\n" = RichEdit 1.0
+        self.text = ""
+        self.sel = (0, 0)
+        self.p_lines = RichEditLines(self)
+
+    def m_clear(self):
+        self.text, self.sel = "", (0, 0)
+
+    def m_gettextlen(self):
+        return len(self.text) + (self.text.count("\r") if self.br == "\r" else 0)
+
+    def m_findtext(self, s, start, length, opts=None):
+        n = len(self.text)
+        a = int(start)
+        b = a + int(length)
+        if a < 0:
+            a = 0
+        if b > n or int(length) < 0:
+            b = n
+        i = self.text.find(str(s), a)
+        return i if i != -1 and i + len(s) <= b else -1
+
+    @property
+    def p_selstart(self):
+        return self.sel[0]
+
+    @p_selstart.setter
+    def p_selstart(self, v):
+        v = int(v)
+        if v < 0 or v > len(self.text):
+            v = len(self.text)                # EM_EXSETSEL cpMin -1 / past the end: caret at the end, nothing selected
+        self.sel = (v, v)
+
+    @property
+    def p_sellength(self):
+        return self.sel[1] - self.sel[0]
+
+    @p_sellength.setter
+    def p_sellength(self, v):
+        a = self.sel[0]
+        b = a + int(v)
+        b = max(0, min(b, len(self.text)))
+        self.sel = (min(a, b), max(a, b)) if b >= a else (b, a)
+
+    @property
+    def p_seltext(self):
+        return self.text[self.sel[0]:self.sel[1]]
+
+    @property
+    def p_caretpos(self):
+        y = self.text.count(self.br, 0, self.sel[1])
+        o = P.Sink("CaretPos")
+        o.props["y"] = y
+        o.props["x"] = self.sel[1] - (self.text.rfind(self.br, 0, self.sel[1]) + len(self.br))
+        return o

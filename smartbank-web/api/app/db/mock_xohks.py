@@ -96,6 +96,8 @@ class XohksMixin:
         for k in ("acc_id", "batch_id", "kod_fil", "id"):          # Oracle implicit text -> number (step 3b quoted values)
             if isinstance(params.get(k), str) and params[k].lstrip("-").isdigit():
                 params[k] = int(params[k])
+        if re.search(r"(bankcode|Kod_B)=:b0", s) and isinstance(params.get("b0"), str) and params["b0"].isdigit():
+            params["b0"] = int(params["b0"])           # step 4: numeric column vs quoted value (Oracle converts implicitly)
         if ":uid__" in s:
             params["uid__"] = self.user.get("user_id", 0)
         cur = _db().execute(s, params)
@@ -254,6 +256,38 @@ class XohksMixin:
             return {}
         if key == "XS_CONTROL.XS_BENEFICIARY_SHABLON_DELETE":
             c.execute("delete from xs_beneficiary_shablon where shablonun_adi=?", (args[0],))
+            return {}
+        # ---- step 4 IN messages (bodies unknown; argument order from LVPCSSImpl.pas ConvertToBase :1806-1833, MessInDelete
+        # :2219, MessagesInAccept :2632, ReceiveMessDetals_Unit Button1Click)
+        if key == "XS_CONTROL.XS_INCOMING_INSERT":
+            cols = ["TRANS_DATE", "REFERENCE", "F_20", "F_21", "VAL_COD", "AMOUNT", "SEN_ACC", "SEN_NAME", "SEN_INN", "SEN_CODE",
+                    "SEN_BANK_ID", "SEN_BANK_SUBACC", "SEN_BANK_BIK", "SEN_BANK_CODE", "SEN_BANK_KRNO", "SEN_BANK_INN",
+                    "REC_BANK_SUBACC", "REC_BANK_BIK", "REC_CLIENT_ACC", "FILIAL", "REC_CLIENT_NAME", "REC_CLIENT_INN",
+                    "REC_CLIENT_CODE", "REC_CLIENT_ACC_ID", "REMIT_INF", "TYPECODE", "ADD_INF"]
+            a = [_v(x) for x in args]
+            i = int(c.execute("select max(id) from (select id from xs_incoming union select id from xs_incomingview)").fetchone()[0]) + 1
+            c.execute(f"insert into xs_incoming (ID, STATUS, {', '.join(cols)}) values (?, 0, {', '.join('?' * len(cols))})", [i] + a)
+            r = dict(zip(cols, a))
+            vn = c.execute("select val_name from avalute where valute=?", (r["VAL_COD"],)).fetchone()
+            c.execute("insert into xs_incomingview (ID, TRANS_DATE, REFERENCE, SEN_ACC, VAL_NAME, REC_CLIENT_ACC, REC_CLIENT_INN, AMOUNT, "
+                      "LAMOUNT, FILIAL, TYPECODE, STATUS, DESCRPTIONCORRECT) values (?,?,?,?,?,?,?,?,?,?,?,0,'')",
+                      (i, r["TRANS_DATE"], r["REFERENCE"], r["SEN_ACC"], vn[0] if vn else None, r["REC_CLIENT_ACC"],
+                       r["REC_CLIENT_INN"], r["AMOUNT"], r["AMOUNT"], r["FILIAL"], r["TYPECODE"]))
+            return {}
+        if key == "XS_CONTROL.XS_INCOMING_DELETE":
+            c.execute("delete from xs_incoming where id=?", (args[0],))
+            c.execute("delete from xs_incomingview where id=?", (args[0],))
+            return {}
+        if key == "XS_CONTROL.SETINCOMINGTRANSACTION":           # emulated: posted -> status 1 (msCommit)
+            c.execute("update xs_incomingview set status=1 where id=?", (args[0],))
+            c.execute("update xs_incoming set status=1 where id=?", (args[0],))
+            return {}
+        if key == "XS_CONTROL.XS_INCOMING_UPDATE":
+            c.execute("update xs_incomingview set rec_client_acc=? where id=?", (args[2], args[0]))
+            c.execute("update xs_incoming set rec_client_acc_id=?, rec_client_acc=? where id=?", (args[1], args[2], args[0]))
+            return {}
+        if key == "XS_CONTROL.XS_INCOMING_CHANGESTATUS":
+            c.execute("update xs_incomingview set status=? where id=?", (args[1], args[0]))
             return {}
         return NotImplemented
 

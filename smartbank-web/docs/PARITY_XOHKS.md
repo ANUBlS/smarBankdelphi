@@ -167,8 +167,28 @@ the xs_ReadyBatchs / xs_SendingBatchs views (mock: status 6 with send 0 / 1; fil
 never-opened local dataset (:239 - in TDataSet that raises 'closed dataset'; the web assumes DOA re-executes it), the file code page
 (cp1254 assumed), XS_SENTINFO columns, bankinfo_t columns.
 
+## Step 4a: IN file load, Konvert, Yoxlanıb, Ləğv et (api/app/xohks_in.py, delphi_src/LVPCSS_ConvertToBase.pas)
+
+| Delphi | Web | Notes |
+|---|---|---|
+| MessageInFileLoadExecute :2849 (OpenDialogIn → FileListIncoming) | 'Load file' → `/in/load` {name, b64} | User decision: ONE uploaded file at a time, which is the list's only item. in_dir is not read, and the folder part of LoadFileNames / MessagesInRefresh is not ported |
+| ClearSelected1Click / Clear List | `/in/clear` | |
+| LoadToRich :1394 + ConvertToBase :1412-1848 | run verbatim by pascal.py | `pascal.py` now has nested routines (FindMyText / FindLines / Replace see the outer locals) and `{$R-}` string index 0 / len+1 = #0 (Replace reads s[0] after it deletes a leading '/'). `vcl.RichEdit`: WordWrap=False lines; FindText = EM_FINDTEXTEX down in [start, start+len) with the whole match inside; SelStart/SelLength/SelText; CaretPos.y of the selection end; GetTextLen counts a break as 2 |
+| DataCheck / DataTemp SQL.Add with quoted values | same text, with the quoted literals sent as binds | texts in xohks_sql.py LINES_IN_* |
+| Ins.CallProcedure('xs_incoming_insert', 27 values) | XS_CONTROL.xs_incoming_insert | no commit (Delphi has none) |
+| Convert1Click :2177 / MessagesInConvertExecute :2523 / ConvertAll1Click | 'Convert' / 'Convert All' / toolbar 'Konvert' → `/in/convert` | An already converted file shows 'Warning:  <f>   Artıq konvert olunub !' in Panel_info. An exception stops the run and is shown; inserts made before it stay uncommitted in the session (as in Delphi) |
+| ConvertConfirmeClick :2948 | 'Konvert+təsdiq' | convert all, select all, accept |
+| MessagesInAcceptExecute :2586 | `/in/accept/prepare` (Form20 'Verification', Yoxla = Close), then `/in/accept` | Date check of the current row against GetUseDate and SBOP.Get_Date; CheckAdvancedObjectAccess('XOHKS_IN'). The status=1 skip tests the dataset's current row BEFORE GotoBookmark (kept as in Delphi). SetIncomingTransaction(ID); no commit |
+| MessInDeleteExecute :2204 | `/in/delete/plan`, `/in/delete` | Yes deletes the first selected row and clears the selection. With more rows selected, Delphi's next step then reads Items[1] of the empty list and raises (reported as 'List index out of bounds (1)'). No = exit, Cancel = break, All + Yes = delete all. xs_incoming_delete, no commit |
+
+Unverified: how wide a line break is inside the RichEdit. Delphi XE's TRichEdit (RICHEDIT20W) counts a break as one CR. With that, ConvertToBase's
+`:77B:` test (`TempPos = FnEndPos+10`) never matches after a 3-digit `:26T:`, and the chr(10) replacement in `:70:` finds nothing, so a CR is
+left in remit_inf. Both only work with RichEdit 1.0's CR LF. `XOHKS_RICHEDIT_BREAK=crlf` switches the model, so check this with a real file.
+Also unverified: the bodies of xs_incoming_insert / SetIncomingTransaction / xs_incoming_delete (the mock only emulates them), the layout of a real
+incoming file (tests/data/xohks_in_sample.xml is built from the parser's offsets), and the exact EArgumentOutOfRange message text.
+
 ## Resume point
-Step 4: IN file load (manual upload, one file), convert, accept; ToolButton6 'Baxmaq'; reports as PDF; settings forms.
+Step 4b: MessagesInEditExecute :2570 (RecMessDet_Form + DataAccount SearchEdit), ToolButton6 'Baxmaq' :3907 (FormWitch), reports as PDF (EnterClick, N25Click ReportinX, Unit_Report*), settings forms (Unit_setting, Admin_Setting).
 Entry points: MessageInFileLoadExecute :2849 (OpenDialogIn → FileListIncoming; web = one uploaded file), MessagesInConvertExecute
 :2523 / Convert1Click :2177 / ConvertAll1Click :2664 / ConvertConfirmeClick :2948 → ConvertToBase :1412-1848 (437 lines parsing a
 TRichEdit with FindText / CaretPos.y / Lines[] - port with a small RichEdit text model, or run it through api/app/pascal.py as

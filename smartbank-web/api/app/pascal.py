@@ -159,9 +159,19 @@ class Parser:
             self.next(); rtype = self.next()[1]
         self.expect_op(";")
         self.vars = {}
-        while self.iskw("var") or self.iskw("const"):
+        nested = {}
+        while self.iskw("var") or self.iskw("const") or self.iskw("procedure") or self.iskw("function"):
+            if self.iskw("procedure") or self.iskw("function"):
+                # nested routine (ConvertToBase's FindMyText / FindLines / Replace): parsed with its own var section,
+                # run with access to the enclosing routine's locals (Delphi static scoping)
+                outer = self.vars
+                r = self.routine()
+                self.vars = outer
+                nested[r["name"]] = r
+                continue
             sect = self.next()[1]
-            while not (self.iskw("begin") or self.iskw("var") or self.iskw("const")):
+            while not (self.iskw("begin") or self.iskw("var") or self.iskw("const") or self.iskw("procedure")
+                       or self.iskw("function")):
                 if sect == "const":
                     n = self.next()[1]; self.expect_op("="); v = self.expr(); self.expect_op(";")
                     self.vars[n] = ("const", v); continue
@@ -177,7 +187,8 @@ class Parser:
                     self.vars[n] = typ
         body = self.compound()
         self.expect_op(";")
-        return {"kind": kind, "name": name, "params": params, "rtype": rtype, "vars": self.vars, "body": body}
+        return {"kind": kind, "name": name, "params": params, "rtype": rtype, "vars": self.vars, "body": body,
+                "nested": nested}
 
     # procedure: header, var section, begin..end;
     def procedure(self):
@@ -504,12 +515,68 @@ class Routine:
             it.locals[k] = it.ev(v[1])
         if r["rtype"]:
             it.locals[r["name"].split(".")[-1]] = None       # assignment to the function name = Result (not used here)
+        for nn, nr in r.get("nested", {}).items():
+            it.locals[nn] = Nested(nr, it)
         it.execute(r["body"])
         if interp is not None and argnodes is not None:
             for (pn, byref, _t), node in zip(r["params"], argnodes):
                 if byref:
                     interp.assign(node, it.locals[pn])
         return it.locals.get("result") if r["rtype"] else None
+
+
+class ChainLocals(dict):
+    """Locals of a nested routine: own names first, then the enclosing routine's (writes go where the name lives)."""
+
+    def __init__(self, own, outer):
+        super().__init__(own)
+        self.outer = outer
+
+    def __contains__(self, k):
+        return dict.__contains__(self, k) or k in self.outer
+
+    def __getitem__(self, k):
+        return dict.__getitem__(self, k) if dict.__contains__(self, k) else self.outer[k]
+
+    def __setitem__(self, k, v):
+        if not dict.__contains__(self, k) and k in self.outer:
+            self.outer[k] = v
+        else:
+            dict.__setitem__(self, k, v)
+
+    def get(self, k, d=None):
+        return self[k] if k in self else d
+
+
+class Nested:
+    """A routine declared inside another one; value parameters only (all ConvertToBase needs)."""
+    pascal_byref = True
+
+    def __init__(self, r, outer_it):
+        self.r, self.outer = r, outer_it
+
+    def __call__(self, interp, argnodes):
+        r = self.r
+        vals = [interp.ev(a) for a in argnodes]
+        if len(vals) != len(r["params"]) or any(b for _n, b, _t in r["params"]):
+            raise PascalUnsupported(f"nested {r['name']}: arguments")
+        own = {pn: v for (pn, _b, _t), v in zip(r["params"], vals)}
+        own.update(init_locals(r["vars"], {"array": PArray}))
+        if r["rtype"]:
+            own["result"] = init_locals({"result": r["rtype"]}, {})["result"]
+            own[r["name"]] = None
+        it = Interp(self.outer.selfobj, self.outer.builtins)
+        it.locals = ChainLocals(own, self.outer.locals)
+        for nn, nr in r.get("nested", {}).items():
+            dict.__setitem__(it.locals, nn, Nested(nr, it))
+        rn = r["name"]
+        it.execute(r["body"])
+        if r["rtype"]:
+            # 'Replace := s' assigns the function name = Result
+            if dict.__contains__(it.locals, rn) and dict.__getitem__(it.locals, rn) is not None:
+                return dict.__getitem__(it.locals, rn)
+            return dict.__getitem__(it.locals, "result")
+        return None
 
 
 class Unit:
@@ -693,6 +760,8 @@ class Interp:
             idx = [self.ev(x) for x in n[2]]
             if isinstance(o, str):
                 i = int(idx[0])
+                if i == 0 or i == len(o) + 1:
+                    return "\x00"      # {$R-} (Delphi default): the length word before the text / the #0 terminator
                 if i < 1 or i > len(o):
                     raise PascalError("Range check error")
                 return o[i - 1]

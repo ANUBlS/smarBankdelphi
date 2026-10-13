@@ -113,3 +113,11 @@ LINES_PF_BANKM_KRNO = ['Select krno,inn,bankcode from bankm where id=:id']      
 # FileSend_Unit.dfm:253-262 SentInfo / :278-280 ForCheck
 LINES_SENTINFO = ['select ', '    *', ' from ', '    XS_SENTINFO', 'where', '    create_date>=:BeginDate  and create_date<=:EndDate', '', 'order by id']
 LINES_FORCHECK = ['select out_dir from xs_config']
+
+# ---- step 4: DataCheck / DataTemp SQL built in LVPCSSImpl.pas LoadToRich / ConvertToBase (SQL.Add with quoted values).
+# azips_files.DataSet sends the same text with each quoted literal turned into a bind (:b0); these are those texts (mock patterns).
+LINES_IN_CHECKREF = ["Select reference from xs_incoming where reference=:b0"]                     # :1405-1407 (also :1408 LoadToRich)
+LINES_IN_VALUTE = ["Select valute from avalute where val_name=:b0"]                                # :1528
+LINES_IN_BANKM = ["Select id from BankM where bankcode=:b0"]                                       # :1597 / :1616
+LINES_IN_BANKINFO_T = ["Select Kod_Fil from BankInfo_T where Kod_B=:b0"]                           # :1729
+LINES_IN_ACCOUNT = ["Select ID from Account where Acc_no=:b0 and close_dat is null"]               # :1745-1747

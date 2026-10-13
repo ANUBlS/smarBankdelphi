@@ -354,12 +354,64 @@
       load();
     }
     function drawIn() {
-      v('xbody').innerHTML = `<div class="toolbar" style="gap:8px"><button class="btn secondary" id="x_iref">${esc(K('refresh'))}</button>
-        <span class="muted">${esc(K('in_hint'))}</span></div>${box(K('box_in'), table('g_i', C.inc, st.d.incoming, true), 60)}`;
-      const go = async (body) => { const r = await call('/in/list', body); if (r) { st.d.incoming = r.rows; draw(); } };
+      // Step 4 (api/app/xohks_in.py): Faylı yüklə (one uploaded file = the only FileListIncoming item), Convert / Convert All
+      // (popup of the file list), Konvert, Konvert+təsdiq, Yoxlanıb (Form20 'Verification' first), Ləğv et.
+      const files = st.inFiles || [];
+      v('xbody').innerHTML = `<div class="toolbar" style="gap:8px;flex-wrap:wrap">
+        <label class="btn secondary" style="cursor:pointer">${esc(K('in_load'))}<input type="file" id="x_ifile" style="display:none"></label>
+        <button class="btn" id="x_iconv">${esc(K('in_convert'))}</button><button class="btn secondary" id="x_iconvacc">${esc(K('in_convert_accept'))}</button>
+        <button class="btn secondary" id="x_iacc">${esc(K('in_accept'))}</button><button class="btn secondary" id="x_idel">${esc(K('in_delete'))}</button>
+        <button class="btn secondary" id="x_iref">${esc(K('refresh'))}</button></div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+        <fieldset class="card" style="margin:8px 0;padding:8px 12px;min-width:220px"><legend>${esc(K('in_files'))}</legend>
+          <div id="x_flist">${files.map(f => `<div class="sel" data-f="${esc(f)}">${esc(f)}</div>`).join('') || `<span class="muted">${esc(K('empty'))}</span>`}</div>
+          <div class="toolbar" style="gap:6px;margin-top:6px"><button class="btn secondary" id="x_c1" ${files.length ? '' : 'disabled'}>Convert</button>
+          <button class="btn secondary" id="x_call" ${files.length ? '' : 'disabled'}>Convert All</button>
+          <button class="btn secondary" id="x_fclr" ${files.length ? '' : 'disabled'}>${esc(K('in_clear'))}</button></div></fieldset>
+        <div style="flex:1;min-width:0">${st.inInfo ? `<div class="card" id="x_info" style="padding:6px 10px">${st.inInfo.map(x => `<div>${esc(x)}</div>`).join('')}</div>` : ''}
+        ${box(K('box_in'), table('g_i', C.inc, st.d.incoming, true), 60)}</div></div>`;
+      const set = (r) => { if (r) { st.d.incoming = r.rows; draw(); } return r; };
+      const go = async (body) => set(await call('/in/list', body || { caption: '\u0000' }));
       v('x_iref').onclick = () => go(null);
       v('g_i').querySelectorAll('th').forEach(h => h.onclick = () => go({ caption: h.dataset.c }));
-      selectable(v('g_i'), st.d.incoming, () => {});
+      let cur = null;
+      selectable(v('g_i'), st.d.incoming, (r) => { cur = r; });
+      const selIds = () => [...v('g_i').querySelectorAll('tbody tr.msel')].map(tr => st.d.incoming[+tr.dataset.i]).filter(Boolean).map(r => r.id);
+      v('x_ifile').onchange = async (ev) => {
+        const f = ev.target.files[0]; if (!f) return;
+        const b64 = await new Promise(res => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.readAsDataURL(f); });
+        const r = await call('/in/load', { name: f.name, b64 }); if (r) { st.inFiles = r.files; st.inInfo = null; draw(); }
+      };
+      v('x_fclr').onclick = async () => { const r = await call('/in/clear', {}); if (r) { st.inFiles = r.files; draw(); } };
+      const conv = async (all) => {
+        const r = await call('/in/convert', { all }); if (!r) return null;
+        st.inInfo = r.warnings.length ? r.warnings : null;            // Panel_info / Info_ListBox
+        if (r.error) toast(r.error, 'error');
+        set(r); return r;
+      };
+      const accept = async (all) => {
+        const p = await call('/in/accept/prepare', { current: cur ? cur.id : null }); if (!p) return;
+        await new Promise(res => {                                     // Unit20.pas TForm20 'Verification' (Yoxla = Close)
+          const w = layer(`<h3>Verification</h3><input class="input" readonly value="${esc(p.edit1)}"><br><input class="input" readonly value="${esc(p.edit2)}">
+            <div class="actions"><button class="btn" data-b>Yoxla</button></div>`, 5);
+          w.querySelector('[data-b]').onclick = () => { w.remove(); res(); };
+        });
+        const sel = all ? st.d.incoming.map(r => r.id) : selIds();
+        set(await call('/in/accept', { current: cur ? cur.id : (st.d.incoming[0] || {}).id, selected: sel }));
+      };
+      v('x_c1').onclick = () => conv(false);
+      v('x_call').onclick = v('x_iconv').onclick = () => conv(true);
+      v('x_iconvacc').onclick = async () => { if (await conv(true)) { cur = st.d.incoming[0] || null; await accept(true); } };  // ConvertConfirmeClick: MessageInSelAll + Accept
+      v('x_iacc').onclick = () => accept(false);
+      v('x_idel').onclick = async () => {
+        const pl = await call('/in/delete/plan', { current: cur ? cur.id : null, selected: selIds() }); if (!pl || !pl.ids.length) return;
+        const a = await ask(K('q_in_del').replace('{id}', pl.ids[0]), ['yes', 'no', 'cancel', 'all']);
+        let conf = false;
+        if (a === 'all') conf = await ask(K('q_del_all').replace('{n}', pl.ids.length), ['yes', 'no']) === 'yes';
+        const r = await call('/in/delete', { ids: pl.ids, answer: a, confirm_all: conf });
+        if (r && r.error) toast(r.error, 'error');
+        set(r);
+      };
     }
     function drawOarch() {
       const a = st.oa || { batchs: [], sum_text: '' };
