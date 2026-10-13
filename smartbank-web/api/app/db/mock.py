@@ -35,6 +35,8 @@ from .mock_oexi import OexiMixin
 from . import mock_azips
 from .mock_azips import AzipsMixin, AzipsEditMixin
 from .mock_azips_in import AzipsInMixin
+from .mock_xohks import XohksMixin
+from . import mock_xohks
 from ..config import settings
 
 _lock = threading.Lock()
@@ -58,6 +60,7 @@ def reset():
     global _state
     _state = None
     mock_azips.reset()
+    mock_xohks.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -71,7 +74,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -214,7 +217,9 @@ class MockConnection(AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, Oe
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._azi_query(sql, b)  # AZIPS part 4b-2
+        r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
+        if r is NotImplemented:
+            r = self._azi_query(sql, b)  # AZIPS part 4b-2
         if r is NotImplemented:
             r = self._azn_query(sql, b)  # AZIPS part 2b (filereport.bpl Unitdatamod.dfm)
         if r is NotImplemented:
