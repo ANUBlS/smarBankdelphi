@@ -119,10 +119,50 @@ def test_template_form17_modal_replay():
     assert key == "SW_MAIN.SAVETEMPLATE" and a[10:] == ["MT103", "Kapital icare", "AZN"] and a[8] == "Muqavile 12 odenis"
 
 
-def test_template_load_not_ported():
+def sub(ws, r, kind, **kw):
+    return N.form_action(ws, r["fid"], {"sub": "template", "kind": kind, **kw}, None)
+
+
+def G(res):
+    return next(c for c in res["sub"]["controls"] if c["name"] == "DBGrid1")
+
+
+def test_template_load_mt103():
+    """Button2Click :518-522 -> Ttemplate.ShowModal: FormActivate opens DataModbpl.templ; DBGrid1DblClick (MT103 branch)
+    fills Tazips from the template row and the customer account; the form closes."""
     ws, r = opened("1")
-    r = act(ws, r, "Button2", "click")
-    assert r["error"]["key"] == "azips.n_not_ported" and "Ttemplate" in r["error"]["what"]
+    r1 = act(ws, r, "Button2", "click")
+    assert r1["error"] is None and r1["sub"]["caption"] == "Şablonlar" and len(G(r1)["rows"]) == 2
+    r2 = sub(ws, r, "dblclick")
+    assert r2["error"] is None and "sub" not in r2
+    assert C(r2, "MT103")["checked"] and C(r2, "amount")["text"] == "1500,00" and C(r2, "Edit2")["text"] == "AZ12AIIB00000000000000000123"
+    assert C(r2, "Edit6")["text"] == "1944" and C(r2, "SearchEdit2")["text"] == "AIIBAZ2X" and C(r2, "OF70_RichEdit")["text"] == "Oktyabr ayi uzre icare haqqi"
+
+
+def test_template_load_mt205_and_filters():
+    ws, r = opened("1")
+    act(ws, r, "Button2", "click")
+    assert len(G(sub(ws, r, "type", name="edit1", value="MT2"))["rows"]) == 1          # Filter "mt = 'MT2*'"
+    assert len(G(sub(ws, r, "type", name="edit2", value="Ic"))["rows"]) == 1           # replaces: "tempname = 'Ic*'"
+    assert G(sub(ws, r, "type", name="edit2", value=""))["rows"].__len__() == 2
+    r1 = sub(ws, r, "title", value="TEMPNAME")
+    assert [x[3] for x in G(r1)["rows"]] == ["Icare haqqi", "MB nagd"]
+    assert sub(ws, r, "title", value="1;drop")["error"] == {"key": "azips.n_bad_action"}
+    assert act(ws, r, "Button1", "click")["error"] == {"key": "azips.n_bad_action"}   # modal: the main form is blocked
+    sub(ws, r, "select", value=1)
+    r2 = sub(ws, r, "dblclick")
+    assert C(r2, "MT205")["checked"] and C(r2, "Edit8")["text"] == "250000" and C(r2, "reciverbic")["text"] == "501004"
+    assert C(r2, "RadioButton13")["checked"] and C(r2, "SearchEdit2")["text"] == "CBARAZ2X"
+    assert C(r2, "Memo3")["text"].startswith("/") and C(r2, "OF72_RichEdit")["text"] == "/BNF/Nagdpul"
+
+
+def test_template_delete_and_close():
+    ws, r = opened("1")
+    act(ws, r, "Button2", "click")
+    r1 = sub(ws, r, "delete")
+    assert r1["messages"] == ["Seçilmiş Şablon silindi"] and len(G(r1)["rows"]) == 2      # no refresh in Delphi
+    assert [x["ID"] for x in mock_azips_new._load()["sw_templates"]] == [2]
+    assert "sub" not in sub(ws, r, "close")
 
 
 def test_view_mode_hides_buttons():

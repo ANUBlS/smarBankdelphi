@@ -46,9 +46,14 @@ def _row(r):
 class AzipsNewMixin:
     def _azn_query(self, sql, b):
         name = _sql().get(sql)
-        if name is None:
-            return NotImplemented
         D, A = _load(), mock_azips._load()
+        if name is None:
+            # Unittemplate.DBGrid1TitleClick: templ with sql[6] := 'order by <column>'
+            L = sql.split("\r\n")
+            if L and L[0] == "select a.rowid,a.* from sw_templates a" and len(L) == 13 and L[6].startswith("order by "):
+                col = L[6][9:].upper()
+                return sorted([_row(x) for x in D["sw_templates"]], key=lambda x: (x.get(col) is None, str(x.get(col) or "")))
+            return NotImplemented
         if name == "oracledataset2":
             return [{"TIME": D.get("now_time") or dt.datetime.now().strftime("%H:%M:%S")}]
         if name == "sw_settings":
@@ -85,7 +90,7 @@ class AzipsNewMixin:
         if name == "out":
             return [_row(r) for r in A["sw_out_new"] if r["STATUS"] == 20]
         if name in ("templ", "templates"):
-            return [dict(x) for x in D["sw_templates"]]
+            return [_row(x) for x in D["sw_templates"]]
         if name == "bankm":
             return [dict(D.get("xs_config", {}))]
         if name == "names205":
@@ -94,6 +99,10 @@ class AzipsNewMixin:
         return NotImplemented
 
     def _azn_proc(self, key, args):
+        if key == "SW_MAIN.TEMPL_DEL":                    # Unittemplate.ablonusil1Click (body not in the repo: mock deletes by id)
+            T = _load()["sw_templates"]
+            T[:] = [x for x in T if x["ID"] != _int(args[0])]
+            return {}
         if key in RECORD_ONLY:
             A = mock_azips._load()
             A.setdefault("azn_calls", []).append([key, [a.isoformat() if isinstance(a, dt.datetime) else a for a in args]])
@@ -104,7 +113,11 @@ class AzipsNewMixin:
         A = mock_azips._load()
         A.setdefault("azn_calls", []).append([key, [a.isoformat() if isinstance(a, dt.datetime) else a for a in args]])
         if key == "SW_MAIN.SAVETEMPLATE":
-            _load()["sw_templates"].append({"ID": len(_load()["sw_templates"]) + 1, "TEMPNAME": args[11], "MT": args[10]})
+            # argument order of Unitazips.pas Button3Click :552-563 / :571-582 (the sw_main body is not in the repo)
+            T = _load()["sw_templates"]
+            T.append({"ID": max([x["ID"] for x in T] or [0]) + 1, "USERNAME": self.user.get("username", ""), "DAT": args[0].isoformat(),
+                      "AMOUNT": args[1], "GHESAB": args[2], "BANKKOD": args[3], "BANKNAME": args[4], "AHESAB": args[5], "AADI": args[6],
+                      "AVOEN": args[7], "TEYINAT": str(args[8]), "TEYINAT2": args[9], "MT": args[10], "TEMPNAME": args[11], "VALUTE": args[12]})
             return {}
         nid = max(r["ID"] for r in A["sw_out_new"]) + 1
         if key == "SW_MAIN.SAVING205":

@@ -18,7 +18,7 @@
   function msgBox(lines, title) {                         // ShowMessage is modal in Delphi: one box per message, in order
     return new Promise((res) => {
       if (!lines.length) return res();
-      const o = overlay();
+      const o = overlay(); o.style.zIndex = 90;
       o.innerHTML = `<div class="modal" role="alertdialog" style="max-width:520px"><h3>${esc(title || K('n_message'))}</h3>
         ${lines.map(m => `<p>${esc(m)}</p>`).join('')}<div class="actions"><button class="btn" id="mok">OK</button></div></div>`;
       const b = o.querySelector('#mok'); b.focus();
@@ -62,7 +62,48 @@
       err.style.display = res.error ? '' : 'none';
       err.textContent = res.error ? (res.error.text || t(res.error.key, res.error)) : '';
       await msgBox(res.messages || []);
+      drawSub(res.sub);
       if (res.closed) done();
+    }
+    // Ttemplate (Unittemplate.pas 'Şablonlar'): DBGrid1 on DataModbpl.templ, Edit1 'MT' / Edit2 'Template Name' filters
+    // (OnChange per keystroke), title click = sort, double click = load into the form, popup 'Şablonu sil'
+    function drawSub(spec) {
+      if (!spec || spec.closed) { if (S.sub) { S.sub.remove(); S.sub = null; } return; }
+      if (!S.sub) {
+        S.sub = overlay(); S.sub.style.zIndex = 70;
+        S.sub.innerHTML = `<div class="modal" role="dialog" id="tpl" style="width:min(1100px,96vw);max-width:96vw">
+          <div class="toolbar" style="justify-content:space-between"><h3 style="margin:0" id="tplc"></h3>
+          <button class="btn secondary" id="tplx" aria-label="${esc(K('close'))}">✕</button></div>
+          <div class="tablewrap" id="tplg" style="max-height:55vh"></div>
+          <div class="toolbar" style="gap:16px;margin-top:8px">
+          <label class="field"><span id="tpll1">MT</span><input class="input" id="tple1"></label>
+          <label class="field"><span id="tpll2">Template Name</span><input class="input" id="tple2"></label></div></div>`;
+        const q = (id) => S.sub.querySelector('#' + id);
+        q('tplx').onclick = () => act({ sub: 'template', kind: 'close' });
+        q('tple1').oninput = (e) => act({ sub: 'template', kind: 'type', name: 'edit1', value: e.target.value });
+        q('tple2').oninput = (e) => act({ sub: 'template', kind: 'type', name: 'edit2', value: e.target.value });
+      }
+      const by = Object.fromEntries(spec.controls.map(c => [c.name.toLowerCase(), c]));
+      const g = by.dbgrid1;
+      S.sub.querySelector('#tplc').textContent = spec.caption;
+      S.sub.querySelector('#tpll1').textContent = by.label1.caption; S.sub.querySelector('#tpll2').textContent = by.label2.caption;
+      const box = S.sub.querySelector('#tplg');
+      box.innerHTML = `<table class="grid" id="tpl_g"><thead><tr>${g.columns.map(x => `<th data-c="${esc(x)}" style="cursor:pointer">${esc(x)}</th>`).join('')}</tr></thead><tbody>${g.rows.map((rw, i) => `<tr data-i="${i}" class="${g.pos === i ? 'sel' : ''}">${rw.map(x => `<td style="white-space:pre-line">${esc(x)}</td>`).join('')}</tr>`).join('') || `<tr><td class="muted" colspan="${g.columns.length}">${esc(K('empty'))}</td></tr>`}</tbody></table>`;
+      box.querySelectorAll('th[data-c]').forEach(h => h.onclick = () => act({ sub: 'template', kind: 'title', value: h.dataset.c }));
+      box.querySelectorAll('tbody tr[data-i]').forEach(tr => {
+        const sel = () => act({ sub: 'template', kind: 'select', value: +tr.dataset.i });
+        tr.onclick = sel;
+        tr.ondblclick = async () => { await sel(); await act({ sub: 'template', kind: 'dblclick' }); };
+        tr.oncontextmenu = (e) => {                          // PopupMenu1: 'Şablonu sil'
+          e.preventDefault(); sel();
+          S.sub.querySelectorAll('.tplpop').forEach(x => x.remove());
+          const m = document.createElement('div'); m.className = 'tplpop card'; m.id = 'tpl_pop';
+          m.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:80;padding:4px`;
+          m.innerHTML = `<button class="btn danger" id="tpl_del">Şablonu sil</button>`;
+          S.sub.appendChild(m);
+          m.querySelector('button').onclick = () => { m.remove(); act({ sub: 'template', kind: 'delete' }); };
+        };
+      });
     }
     function act(action) {                       // actions run one after another, in the order the user made them
       S.q = S.q.catch((e) => console.error(e)).then(() => act1(action));

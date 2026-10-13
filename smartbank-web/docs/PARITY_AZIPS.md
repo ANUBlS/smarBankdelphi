@@ -320,8 +320,41 @@ the `sw_main` setting procedure bodies are not in the repo.
 GridIN row (`all_text2` / `all_text`) → cap.pas `TPrintform`. Text starting with '<' is shown like the TWebBrowser (sandboxed iframe,
 no scripts); otherwise like the RichEdit, and 'Print' gives a PDF (prt.Print('A.Z.I.P.S'): PDF title A.Z.I.P.S, DejaVu 12 pt instead of
 MS Sans Serif 16 px). API `POST /api/azips/in-print`, screenshots 131-132. The QuickReport1 code in printClick is commented out in Delphi.
-Not done yet: the OUT print ToolButton8Click :6179 (QuickReport, reached from the OUT popups Capet1Click / N3Click / CapEt2Click) with
-qrp1 / qr5 / qrp5.
+The OUT print is in 4e.
+
+## 4e. OUT print (done)
+Right click on an OUT grid = its PopupMenu: grid_out PopupMenu2 'Cap et!' (Capet1Click :6748, Edit1 := '1'), GRIDOUT2 swPopupMenu1
+'Cap Et!' (N3Click :2950, '2'), Gridout3 PopupMenu1 'Cap Et!' (CapEt2Click :6791, '3'); each checks RecordCount>0 and clicks
+ToolButton8 → `ToolButton8Click` :6179-6476. **No right check** (as Delphi). The record is the grid's current row (the web makes the
+right-clicked row current; in a TDBGrid a right click does not move the cursor - the user clicks the row first). If the row's
+`hesabat` is empty, the MT text is built field by field exactly as :6197-6311 (20, 21, 23B, 32A, 50A/50K(non-AZN: first CR LF → CR)/other,
+52A/52D, 53 unless FINCOPY = 'AZN', 54A/54B/54D, 55A/55B/55D, 56A/56C/56D, the "57" block that reads M58 (58A, 58D, the never-matching
+':57C:' test kept), 59, 70, 71A, 72, 77B); otherwise `hesabat` itself. Both go to cap.pas `TPrintform` like the IN prints (text starting
+with '<' → browser view, else RichEdit + PDF). API `POST /api/azips/out-print {c: 1|2|3, id}` (`azips_in.out_print`), screenshots 133-135.
+**qrp1 / qr5 / qrp5 are not ported**: every QuickReport call (`QuickReport1...Preview`) is commented out (:2527, :3994, :6452, :6469);
+qr5 (TQRMDForm, the QuickReport wizard template on TTable) and qrp5 (TQuickReport5) are compiled but never created.
+Unverified: Oracle has no '' (empty string = NULL). `hesabat.AsVariant = ''` is False for NULL in Delphi and `f := Null` would then
+raise a variant conversion error; the web treats NULL like '' and builds the text. Check with a real row with hesabat NULL.
+The mock date format (`MF32A_DATE` AsString) is ISO; Delphi shows the Windows short date.
+
+## 4f. 'Şablondan yüklə' (done)
+Unitazips Button2Click :518-522 = `template := Ttemplate.Create(nil); template.ShowModal`. `Unittemplate.pas` / `.dfm` are copied
+verbatim into `api/app/delphi_src/filereport/` and run by the interpreter like Unitazips. Because Button2Click does nothing before or after
+ShowModal, the Ttemplate form stays open as a live sub-form (no snapshot/replay): ShowModal fires FormActivate (templ Close/Open), and the
+browser sends sub-form actions (`{"sub": "template", kind: type|title|select|dblclick|delete|close}` on `/api/azips/new-form/act`).
+While it is open the main form gets no input (modal). Handlers: Edit1Change / Edit2Change (`Filter := "mt|tempname = 'text*'"`,
+Filtered := True - the last edited filter replaces the other, case-sensitive prefix, NULL never matches); DBGrid1TitleClick (`sql[6] :=
+'order by '+FieldName`; only the grid's own column names are accepted); DBGrid1DblClick (MT205 branch: radio captions from rbnames vid
+0,1,2,3,5,6,7, Bank by currency 0/48/1/45, /BNF/ handling of teyinat2, StrToInt(teyinat) radio; MT103 branch: currency OnChange, memo1/memo2,
+account → KLi_id → Edit6KeyPress #13, …) then Close; popup 'Şablonu sil' → `sw_main.Templ_del(id)` + 'Seçilmiş Şablon silindi'
+(no refresh, no commit - as Delphi). Screen.Cursor is ignored. VCL additions in `vcl.py`: TDataSet.SQL (TStrings on the dataset lines),
+Filter/Filtered. Delphi quirks kept: the templ Filter lives on the data module dataset, so it is still active the next time the template
+form is opened in the same Azipsnew form (Edit1/Edit2 start empty); the "else" after the /BNF/ test has its statement commented out,
+so the `codex := strtoint(teyinat)` line becomes the else branch (with a /BNF/ teyinat2 Unittemplate.codex is not set; the radio
+`case` after it still runs) - the interpreter follows the source. OF72_RichEditChange adds '/BNF/' back after the load (Unitazips :3646). Tests `test_azips_new.py`
+(template_*), E2E `e2e/azips_template_screens.py`, screenshots 136-137.
+Unverified: `sw_main.Templ_del` / `savetemplate` bodies and the `sw_templates` columns (from the grid FieldNames); Button1Click
+(templ.Refresh) has no Button1 in the .dfm (unreachable). Unit15 TFormat102 (MT102 radio) is still not ported.
 
 ## Single worker
 Each user's Oracle session (with uncommitted work) and the Azipsnew interpreter form state live in the API process. The API is
@@ -335,7 +368,10 @@ between processes.
 - Column names of `sw_in`, `sw_out_new`, `SW_ARCHIVE`, `sw_out_sba` come from grid FieldNames; the mock tables are illustrative.
 - The function columns come back from Oracle named like `SW_MAIN.FIND_USERNAME_OUT(S.ID)`; the web reads them by that name.
 
+## Status: AZIPS COMPLETE (exact port)
+Parts 1-4f are done: lists/archives, OUT_FORM and editors, Azipsnew (interpreter) with Tform17 and Ttemplate, file creation (PACS.008),
+incoming file load, row actions, Modifikator, incoming postings with UFX, Checkacc / Tranzit, IN edit, settings forms, IN and OUT prints.
+Known open item inside the port: Unit15 TFormat102 (MT102 radio in Azipsnew) stops with a "not ported" message.
+
 ## Resume point
-Parts 4a, 4b-1 (Modifikator) and 4b-2 (incoming postings + UFX, Checkacc, Tranzit) are done. Parts 4c (IN edit, settings) and 4d (IN prints, cap.pas) are done. Remaining AZIPS: OUT print
-(`ToolButton8Click` :6179 via Capet1Click / N3Click / CapEt2Click, qrp1, qr5, qrp5), template load (Şablondan yüklə / Ttemplate).
-After AZIPS: XÖHKS = `Packages/LVPCSSManager_Turan`.
+Next module: XÖHKS = `Packages/LVPCSSManager_Turan` (docs/PARITY_XOHKS.md).

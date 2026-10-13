@@ -11,8 +11,11 @@ The whole unit runs from its verbatim source (delphi_src/filereport/Unitazips.pa
 on the virtual VCL form of vcl.py. The browser keeps nothing but the control state it is shown; every user action is
 sent here and executed by the Delphi event handlers. Modal sub-forms: Tform17 (template name, Unit17.pas) is ported -
 when a handler reaches form17.ShowModal and the browser has not answered it yet, the action is undone (state snapshot)
-and the browser is asked for the form17 input, then the same action is replayed with the answer. Ttemplate (Unittemplate,
-Button2 'Şablondan yüklə') and TFormat102 (Unit15, MT102 radio) are not ported yet: they stop with a clear message.
+and the browser is asked for the form17 input, then the same action is replayed with the answer. Ttemplate (Unittemplate.pas,
+Button2 'Şablondan yüklə' :518-522, which only does Create + ShowModal) runs as a live sub-form: ShowModal fires FormActivate
+and returns to the browser without undoing anything; the grid, filters, title sort, 'Şablonu sil' and the double click are
+then sent as sub-form actions (template_act) and run the verbatim Unittemplate handlers on the same form state.
+TFormat102 (Unit15, MT102 radio) is not ported yet: it stops with a clear message.
 """
 from __future__ import annotations
 import copy
@@ -27,7 +30,7 @@ from . import vcl
 SRC = os.path.join(os.path.dirname(__file__), "delphi_src", "filereport")
 DECIMAL_SEPARATOR = os.getenv("AZIPS_DECIMAL_SEPARATOR", ",")
 MAX_FORMS = 5
-NOT_PORTED = {"ttemplate": "Ttemplate (Unittemplate.pas, 'Şablondan yüklə')", "tformat102": "TFormat102 (Unit15.pas, MT102)"}
+NOT_PORTED = {"tformat102": "TFormat102 (Unit15.pas, MT102)"}
 
 
 class NeedModal(Exception):
@@ -38,6 +41,13 @@ class NeedModal(Exception):
 
 class NotPorted(Exception):
     pass
+
+
+class SubForm(Exception):
+    """A modal form that stays open across requests (Ttemplate): nothing is undone."""
+    def __init__(self, spec):
+        super().__init__("subform")
+        self.spec = spec
 
 
 @functools.lru_cache(None)
@@ -90,7 +100,12 @@ class Form(P.PObj):
             return self.app.dm.items.get(parts[1])
         return self.controls.get(parts[0])
 
+    def _g(self, n):
+        """Unit-level variable of this form's unit; Unittemplate has its own 'codex' (interface var, :38-40)."""
+        return "template.codex" if (self.unit_name == "Unittemplate" and n == "codex") else n
+
     def has(self, n):
+        n = self._g(n)
         return (n in self.controls or self.unit.has(self.cls_name + "." + n) or self.unit.has(n)
                 or n in self.app.globals or n in ("caption", "close", "self", "visible", "modalresult", "showmodal", "free"))
 
@@ -101,8 +116,8 @@ class Form(P.PObj):
             return self.routine(self.cls_name + "." + n)
         if self.unit.has(n):
             return self.routine(n)
-        if n in self.app.globals:
-            return self.app.globals[n]
+        if self._g(n) in self.app.globals:
+            return self.app.globals[self._g(n)]
         if n == "self":
             return self
         if n == "caption":
@@ -116,8 +131,8 @@ class Form(P.PObj):
         raise P.PascalUnsupported(f"{self.cls_name}.{n}")
 
     def set(self, n, v):
-        if n in self.app.globals:
-            self.app.globals[n] = v; return
+        if self._g(n) in self.app.globals:
+            self.app.globals[self._g(n)] = v; return
         if n == "caption":
             self.caption = v; return
         if n == "modalresult":
@@ -141,6 +156,8 @@ class FormClass(P.PObj):
             raise NotPorted(NOT_PORTED[self.key])
         if self.key == "tform17":
             return Form(self.app, "Unit17", "TForm17")
+        if self.key == "ttemplate":
+            return Form(self.app, "Unittemplate", "Ttemplate")
         if self.key == "tdatamodbpl":
             return self.app.dm.create()
         raise P.PascalUnsupported(self.key)
@@ -162,7 +179,9 @@ class App:
             "v_deyx": "", "x": "", "v_dey": 0, "v_dey2": 0,
             # Unit17.pas / Unitdatamod.pas / Unittemplate / Unit15 form variables
             "form17": None, "datamodbpl": None, "template": None, "format102": None,
+            "template.codex": 0,
         }
+        self.sub = None
         self.k = k
         self.form = None
 
@@ -203,6 +222,7 @@ class App:
             "showmessage": lambda m: app.messages.append(str(m)), "true": True, "false": False, "nil": None,
             "em_linefromchar": "EM_LINEFROMCHAR", "em_lineindex": "EM_LINEINDEX", "vk_back": 8, "vk_delete": 46,
             "cafree": "caFree", "exception": "exception",
+            "screen": P.Sink("Screen"), "crsqlwait": "crSQLWait", "crdefault": "crDefault",   # Screen.Cursor (Unittemplate :279)
             "tform17": FormClass(app, "tform17"), "ttemplate": FormClass(app, "ttemplate"),
             "tformat102": FormClass(app, "tformat102"), "tdatamodbpl": FormClass(app, "tdatamodbpl"),
         }
@@ -223,6 +243,11 @@ class App:
             f.unit_method(h).invoke([f])
 
     def show_modal(self, f):
+        if f.cls_name == "ttemplate":
+            # TCustomForm.ShowModal -> Show -> OnActivate (FormActivate: DBGrid1.DataSource := sourcetempl, Close, Open)
+            self._run_form_event(f, "OnActivate")
+            self.sub = f
+            raise SubForm(sub_state(f))
         """form17.ShowModal (Unit17): the browser answers with {'edit1': text, 'ok': bool}; 'ok' = Button1 'Yadda saxla'."""
         if self.asked < len(self.answers):
             ans = self.answers[self.asked]; self.asked += 1
@@ -363,6 +388,78 @@ def act(app: App, a: dict):
         raise ValueError("action")
 
 
+class _Column(P.PObj):
+    """TColumn passed to OnTitleClick: Column.FieldName, Column.Field.Calculated (no calculated fields on templ)."""
+    def __init__(self, fieldname):
+        self.p_fieldname = fieldname
+        self.p_field = self
+
+    p_calculated = False
+
+
+TEMPLATE_KINDS = ("type", "title", "select", "dblclick", "delete", "close")
+
+
+def sub_state(f) -> dict:
+    return {"form": f.dfm.name, "caption": f.caption, "closed": f.closed, "controls": [c.state() for c in f.controls.values()]}
+
+
+def template_act(app: App, a: dict):
+    """One action on the open Ttemplate (Unittemplate.pas): Edit1/Edit2 typed (OnChange -> Filter), title click
+    (DBGrid1TitleClick, column must be a grid column), row select, double click (DBGrid1DblClick fills azips and closes),
+    popup 'Şablonu sil' (ablonusil1Click), close (the form's X)."""
+    f = app.sub
+    kind = a.get("kind")
+    if f is None or kind not in TEMPLATE_KINDS:
+        raise ValueError("action")
+    g = f.controls["dbgrid1"]
+    if kind == "close":
+        f.close()
+    elif kind == "type":
+        name = str(a.get("name", "")).lower()
+        if name not in ("edit1", "edit2"):
+            raise ValueError("control")
+        type_text(f.controls[name], str(a.get("value", ""))[:200])
+    elif kind == "title":
+        cols = [c.get("FieldName") for c in g.d.props.get("Columns", []) if c.get("FieldName")]
+        col = str(a.get("value", ""))
+        if col not in cols:                          # only the grid's own column names reach "order by" (sql[6])
+            raise ValueError("action")
+        f.unit_method(g.d.props["OnTitleClick"]).invoke([_Column(col)])
+    else:
+        ds = g.lookup_ds2()
+        if kind == "select":
+            i = int(a.get("value"))
+            if ds is None or not ds.active or not 0 <= i < len(ds.rows):
+                raise ValueError("row")
+            ds.pos = i
+        elif kind == "dblclick":
+            g.fire("OnDblClick")
+        elif kind == "delete":
+            f.unit_method("ablonusil1Click").invoke([f])
+    if f.closed:
+        app.sub = None
+
+
+def run_sub_action(app: App, a: dict) -> dict:
+    app.messages = []
+    error = None
+    try:
+        template_act(app, a)
+    except NeedModal:
+        error = {"key": "azips.n_unsupported", "what": "modal from Ttemplate"}
+    except P.PascalUnsupported as e:
+        error = {"key": "azips.n_unsupported", "what": str(e)}
+    except ValueError as e:
+        error = {"key": "azips.n_bad_action"} if str(e) in ("control", "item", "row", "action") else {"text": str(e)}
+    except Exception as e:      # noqa: BLE001 - Application.HandleException
+        error = {"text": str(e)}
+    r = {"messages": app.messages, "error": error}
+    if app.sub is not None:
+        r["sub"] = sub_state(app.sub)
+    return r
+
+
 def snapshot(app):
     conn = app.conn
     app.conn = None
@@ -385,6 +482,8 @@ def run_action(app: App, a: dict | None, answers: list | None = None) -> dict:
             act(app, a)
     except NeedModal as e:
         modal = e.spec
+    except SubForm as e:
+        return {"messages": app.messages, "error": None, "sub": e.spec}
     except NotPorted as e:
         error = {"key": "azips.n_not_ported", "what": str(e)}
     except P.PascalUnsupported as e:
@@ -436,6 +535,13 @@ def form_action(ws, fid: str, a: dict, answers: list | None) -> dict:
         return {"gone": True}
     app.conn = ws.conn
     n0 = len(app.dm.log)
+    if a.get("sub") == "template":
+        r = run_sub_action(app, a)
+        if app.form.closed:
+            st.pop(fid, None)
+        return {"fid": fid, **r, **state(app), "log": app.dm.log[n0:]}
+    if app.sub is not None:                 # the modal Ttemplate is open: the main form gets no input
+        return {"fid": fid, "messages": [], "error": {"key": "azips.n_bad_action"}, "sub": sub_state(app.sub), **state(app)}
     r = run_action(app, a, answers)
     if "_restore" in r:
         st[fid] = app = r.pop("_restore")

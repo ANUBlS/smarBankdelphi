@@ -547,9 +547,62 @@ class DataSet(P.PObj):
         self.mod.log.append(["open", self.name, {k: _j(v) for k, v in b.items()}])
         self.rows = [dict(x) for x in self.mod.conn.query(sql, b)]
         self.pos, self.active = 0, True
+        self._all = []
+        if self._filtered and self._filter:
+            self._apply_filter()
 
     def m_close(self):
         self.active, self.rows, self.pos = False, [], 0
+        self._all = []
+
+    # TDataSet.SQL (TStrings; sql[6] := 'order by ...' in Unittemplate.DBGrid1TitleClick) - edits the dataset's own lines
+    @property
+    def p_sql(self):
+        it = Items(self, [])
+        it.L = self.lines
+        return it
+
+    # TDataSet.Filter / Filtered (Unittemplate.Edit1Change / Edit2Change: "field = 'text*'")
+    _filter, _filtered, _all = "", False, []
+
+    @property
+    def p_filter(self):
+        return self._filter
+
+    @p_filter.setter
+    def p_filter(self, v):
+        self._filter = str(v); self._apply_filter()
+
+    @property
+    def p_filtered(self):
+        return self._filtered
+
+    @p_filtered.setter
+    def p_filtered(self, v):
+        self._filtered = bool(v); self._apply_filter()
+
+    def _apply_filter(self):
+        """Only the simple form used here: <field> = '<text>' where a trailing * is a partial (prefix) compare;
+        case-sensitive (FilterOptions = []); a NULL field never matches (TDataSet filter null semantics)."""
+        if not self.active:
+            return
+        if not self._all:
+            self._all = self.rows
+        m = re.fullmatch(r"\s*(\w[\w$#]*)\s*=\s*'((?:[^']|'')*)'\s*", self._filter or "")
+        if not self._filtered or not self._filter:
+            self.rows = self._all
+        elif m is None:
+            raise P.PascalError(f"{self.name}: unsupported filter {self._filter!r}")
+        else:
+            f, t = m.group(1), m.group(2).replace("''", "'")
+            def ok(r):
+                c = _cell(r, f)
+                if c is None:
+                    return False
+                c = P.float_to_str(c) if isinstance(c, float) else str(c)
+                return c.startswith(t[:-1]) if t.endswith("*") else c == t
+            self.rows = [r for r in self._all if ok(r)]
+        self.pos = 0; self._eof = False
 
     m_closeall = m_close
 
@@ -662,6 +715,11 @@ class DataSource(P.PObj):
     @property
     def p_dataset(self):
         return self.dataset
+
+    @p_dataset.setter
+    def p_dataset(self, v):
+        if v is not self.dataset:
+            raise P.PascalUnsupported("DataSource.DataSet := other dataset")
 
 
 class Package(P.PObj):
