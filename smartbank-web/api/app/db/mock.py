@@ -88,7 +88,9 @@ class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsE
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._azi_func(key, args)
+        r = self._xs_func(key, args)
+        if r is NotImplemented:
+            r = self._azi_func(key, args)
         if r is NotImplemented:
             r = self._azn_func(key, args)
         if r is NotImplemented:
@@ -172,7 +174,9 @@ class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsE
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._azi_proc(key, args)      # AZIPS part 4b-2
+        r = self._xs_proc(key, args)       # XÖHKS step 2 (XS_CONTROL)
+        if r is NotImplemented:
+            r = self._azi_proc(key, args)      # AZIPS part 4b-2
         if r is NotImplemented:
             r = self._azn_proc(key, args)      # AZIPS part 2b (Unitazips.pas)
         if r is NotImplemented:
@@ -347,9 +351,11 @@ class MockConnection(XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsE
 
     def commit(self):
         self._cr_commit()
+        self._xs_commit()
 
     def rollback(self):
         self._cr_rollback()
+        self._xs_rollback()
 
     # ------------------------------------------------------------------ accounts emulation
     def _check_access(self, module, action):

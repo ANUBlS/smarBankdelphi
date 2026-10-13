@@ -322,3 +322,5 @@ from . import azips  # noqa: E402
 app.include_router(azips.make_router(current, require_module, err))
 from . import xohks  # noqa: E402
 app.include_router(xohks.make_router(current, require_module, err))
+from . import xohks_edit  # noqa: E402
+app.include_router(xohks_edit.make_router(current, require_module, err))

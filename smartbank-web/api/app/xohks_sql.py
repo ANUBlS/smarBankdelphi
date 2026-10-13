@@ -53,3 +53,41 @@ PKG_SBOP = "SBOP"            # Data_Unit.dfm:874-879 GetSysDate TOraclePackage P
 # otSubst defaults (Variables.Data): XS_BATCHS :TITLE = x.ID; XS_IncomingView / XS_IncomingViewSum / XS_BatchsArchive :TITLE = x.id
 TITLE_BATCHS_DEFAULT = "x.ID"
 TITLE_DEFAULT = "x.id"
+
+# ---------------------------------------------------------------- step 2 (OUT add / edit / delete, templates)
+# Data_Unit.dfm:1597-1630 DataAccountIban (Delphi rewrites SQL[11]: PrepareTrans LVPCSSImpl.pas:1213 'AND (a.id=:custid)',
+# Transaction_Unit.pas EditidKeyPress :148 'AND (a.kli_id=:custid)')
+LINES_DATAACCOUNTIBAN = ['  SELECT   a.id,', '           a.kli_id,',
+                         "           substr(a.acc_no,0,8)||'  '||substr(a.acc_no,9,length(a.acc_no)) acc_no,",
+                         "           UPPER(SUBSTR(REPLACE (REPLACE (a.name, '''', ''), '\"', ''),0,35)) name,",
+                         '           a.val_acc,', '           a.filial,', '           c.inn', '    FROM   account a, customers c',
+                         '   WHERE       (a.kli_id = c.id)', '           AND (a.close_dat IS NULL)', '           AND (a.val_acc=0)',
+                         '           AND (a.kli_id=:custid)', 'ORDER BY   a.acc_no']
+IBAN_LINE11_ID = 'AND (a.id=:custid)'          # LVPCSSImpl.pas:1213
+IBAN_LINE11_KLI = 'AND (a.kli_id=:custid)'     # Transaction_Unit.pas:148
+# PrepareTrans LVPCSSImpl.pas:1178 DataBankInfo.SQL.Add
+LINES_BANKINFO = ['Select * from BankInfo']
+# PrepareTrans :1181 AddtoCOMBO(... DataBankM, ...) / ShowDetals :1288 (no order by)
+LINES_BANKM_COMBO = ['Select * from BankM order by name']
+LINES_BANKM_DETALS = ['Select * from BankM']
+# PrepareTrans :1183 / :1185 AddtoCOMBO(... DataValute, ...) ; ShowDetals :1290
+LINES_VALUTE_COMBO = ['Select valute,val_name,valu_name from Avalute order by valute']
+LINES_VALUTE_DETALS = ['Select * from Avalute']
+# Transaction_Unit.pas:11 CheckField - Delphi concatenates the account text; here it is a bind (same result)
+LINES_DATACHECK_ACC = ['Select * from account where acc_no = :acc']
+# LVPCSSImpl.pas:1147 ViewBankInfo - Delphi: kod_fil='''+IntToStr(AFilialID)+''' ; bind here (integer)
+LINES_FILIALINFO = ['Select * from filialinfo where kod_fil=:kod']
+# Data_Unit.dfm:1264-1281 ODS_shablon
+LINES_ODS_SHABLON = ['SELECT mebleg, odenish_kod, bankin_kodu, hesab_no, adi, kodu, voen,',
+                     '       od_tey1, od_tey2, od_tey3, od_tey4, elave_mel1, elave_mel2,',
+                     '       elave_mel3, shablonun_adi, bankin_adi, odenish', '  FROM xs_beneficiary_shablon', 'order by odenish']
+# Get_to_shablon_unit.pas GridReadyBatchsTitleClick: '... order by '+Column.FieldName (only grid field names reach it)
+LINES_ODS_SHABLON_SORT = ['SELECT mebleg, odenish_kod, bankin_kodu, hesab_no, adi, kodu, voen, ',
+                          ' od_tey1, od_tey2, od_tey3, od_tey4, elave_mel1, elave_mel2, ',
+                          ' elave_mel3, shablonun_adi, bankin_adi, odenish ', ' FROM xs_beneficiary_shablon order by :Field ']
+SHABLON_FIELDS = ['MEBLEG', 'ODENISH_KOD', 'BANKIN_KODU', 'HESAB_NO', 'ADI', 'KODU', 'VOEN', 'OD_TEY1', 'OD_TEY2', 'OD_TEY3',
+                  'OD_TEY4', 'ELAVE_MEL1', 'ELAVE_MEL2', 'ELAVE_MEL3', 'SHABLONUN_ADI', 'BANKIN_ADI', 'ODENISH']
+# Data_Unit.dfm:1303 / 1315 / 1331 (MT102 T lookups)
+LINES_ODS_INSTITUTION = ['SELECT a.rowid,a.*', '  FROM xs_institution a', 'order by a.description']
+LINES_ODS_BUDGETLEVEL = ['SELECT b.rowid,b.*', '  FROM xs_budgetlevel b', 'order by b.description']
+LINES_ODS_DESTINATION = ['SELECT c.rowid,c.*', '  FROM xs_destination c', 'order by c.description']
