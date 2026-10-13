@@ -34,6 +34,7 @@ from .mock_orep import OrepMixin
 from .mock_oexi import OexiMixin
 from . import mock_azips
 from .mock_azips import AzipsMixin, AzipsEditMixin
+from .mock_azips_in import AzipsInMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -70,7 +71,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -84,7 +85,9 @@ class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepM
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._azn_func(key, args)
+        r = self._azi_func(key, args)
+        if r is NotImplemented:
+            r = self._azn_func(key, args)
         if r is NotImplemented:
             r = self._az_func(key, args)
         if r is not NotImplemented:
@@ -166,7 +169,9 @@ class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepM
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._azn_proc(key, args)      # AZIPS part 2b (Unitazips.pas)
+        r = self._azi_proc(key, args)      # AZIPS part 4b-2
+        if r is NotImplemented:
+            r = self._azn_proc(key, args)      # AZIPS part 2b (Unitazips.pas)
         if r is NotImplemented:
             r = self._az_proc(key, args)
         if r is NotImplemented:
@@ -209,7 +214,9 @@ class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepM
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._azn_query(sql, b)  # AZIPS part 2b (filereport.bpl Unitdatamod.dfm)
+        r = self._azi_query(sql, b)  # AZIPS part 4b-2
+        if r is NotImplemented:
+            r = self._azn_query(sql, b)  # AZIPS part 2b (filereport.bpl Unitdatamod.dfm)
         if r is NotImplemented:
             r = self._az_query(sql, b)  # Packages/SWIFT_MANAGER_IBAN_NEW (AZIPS)
         if r is NotImplemented:
@@ -279,6 +286,8 @@ class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepM
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._azi_execute(sql, binds or {}):
+            return
         if self._aze_execute(sql, binds or {}):
             return
         if self._oexi_exec(sql, binds or {}):
@@ -313,7 +322,9 @@ class MockConnection(AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepM
         return r
 
     def plsql_out(self, sql, binds=None):
-        r = self._omem_plsql_out(sql, binds or {})
+        r = self._azi_plsql_out(sql, binds or {})
+        if r is NotImplemented:
+            r = self._omem_plsql_out(sql, binds or {})
         if r is NotImplemented:
             r = self._bal_plsql_out(sql, binds or {})
         if r is NotImplemented:

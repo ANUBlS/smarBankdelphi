@@ -85,3 +85,25 @@ def transac_sql0(kredit, debet, summa):
     return ('select a.' + kredit + ' as kredit, a.' + debet + ' as debet, a.' + summa + ' as summa, '
             + 'a.mf70'
             + ' as destination, id ' + ' from sw_out_new a where a.id=:ids1 ')
+
+# part 4b-2: incoming postings / UFX / account checks (Unit2.dfm SQL.Strings, verbatim line lists)
+LINES_INTESDIQ = ['select * from sw_in where id =:vid']                                               # Unit2.dfm:6199-6200
+LINES_SW_IN_FORADDIN = ['', 'select s.*,sw_main.Find_UserName2_in(s.id) from sw_in_syn s  where s.status<>10 and s.id in (:IDs)',
+                        '', '', '', ' ', ' ']                       # Unit2.dfm:4846-4854 (:IDs otSubst)
+LINES_GET_CR_ACC = ['', 'select count(*) ncount from cm_accounts where booroweraccid=:vaccid']       # Unit2.dfm:7198-7201
+LINES_GET_UFX_CHECK = ['', '  select nvl(count(*),0) v_cnt from card_ufx_check where acc_id=:vaccid and trunc(Dat)=trunc(sysdate)']                                          # Unit2.dfm:7215-7218
+LINES_GET_CREDITID = ['', 'select  creditid vcreditid from cm_accounts where booroweraccid=:vaccid']  # Unit2.dfm:7232-7235
+LINES_GET_DEBTAMOUNT = ['', 'select debtint vdueinterestrest from cm_report_job where creditid=:vcreditid and trunc(hdate)=trunc(sysdate)']                                  # Unit2.dfm:7251-7254
+LINES_INSUFX = ['', ' insert into card_ufx_check (id,dat,status,acc_id,amount,rest_amount,code) values (:vcreditid,:datdate,1,:vaccid,:vdueinterestrest,:v_rest,:vcode)']  # Unit2.dfm:7264-7268
+LINES_UFXCODE = ['', '  select code,dat from card_ufx_check where acc_id=:vaccid and trunc(Dat)=trunc(sysdate)']  # :7310-7313
+LINES_GET_RESTUFXCHECK = ['', 'select rest_amount v_rstamount from card_ufx_check where acc_id=:vaccid and trunc(Dat)=trunc(sysdate)']                                       # Unit2.dfm:7283-7286
+LINES_UPDUFX = ['', ' update card_ufx_check set  rest_amount =:transamount  where acc_id=:vaccid and trunc(Dat)=trunc(sysdate)']                                            # Unit2.dfm:7296-7299
+LINES_CARDFINDCREDIT = ['select accid(:card_accid) as crdt from dual']                               # Unit2.dfm:7187-7188
+LINES_ACC_CHECK = ['select * from account where acc_no=:acc']                                        # Unit2.dfm:6286-6287
+LINES_TRANZIT = ['select a.rowid,a.* from sw_transit_acc a', '']                                     # Unit2.dfm:6441-6443
+PKG_CARD = 'cardufx'          # Unit2.dfm:7180-7182 card TOraclePackage PackageName
+
+
+def sql(lines):
+    """TStrings.Text of an unmodified dataset."""
+    return text(lines)

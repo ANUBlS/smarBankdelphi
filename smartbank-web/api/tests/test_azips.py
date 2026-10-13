@@ -44,13 +44,13 @@ def test_lists_admin_all_branches():
     r = client.post(B + "/list", json={}).json()
     assert [x["id"] for x in r["sw_out3"]] == [9111, 9110, 9109, 9108, 9107, 9102, 9101]                   # status 1, order by id desc
     assert [x["id"] for x in r["sw_out"]] == [9106, 9105, 9104] and [x["id"] for x in r["sw_out_2"]] == [9103]
-    assert [x["id"] for x in r["sw_in"]] == [5001, 5002] and [x["id"] for x in r["sw_in2"]] == [5003]
+    assert [x["id"] for x in r["sw_in"]] == [5001, 5002, 5005, 5006, 5007] and [x["id"] for x in r["sw_in2"]] == [5003]
     assert r["sum_send_text"] == "254951.5" and r["sum_verify_text"] == "9800"
     assert r["sw_out3"][0]["sw_main.find_username_out(s.id)"] == "Teller One"
     r = client.post(B + "/list", json={"in_sort": "VALU"}).json()
-    assert r["in_order"] == "order by VALU desc" and [x["id"] for x in r["sw_in"]] == [5002, 5001]
+    assert r["in_order"] == "order by VALU desc" and [x["id"] for x in r["sw_in"]] == [5007, 5005, 5002, 5001, 5006]  # mock sorts as text
     r = client.post(B + "/list", json={"in_order": r["in_order"], "in_sort": "VALU"}).json()
-    assert r["in_order"] == "order by VALU asc" and [x["id"] for x in r["sw_in"]] == [5001, 5002]
+    assert r["in_order"] == "order by VALU asc" and [x["id"] for x in r["sw_in"]] == [5006, 5001, 5002, 5005, 5007]
     assert client.post(B + "/list", json={"in_sort": "ID desc,1"}).status_code == 400
     r = client.post(B + "/list", json={"in_order": "order by ID desc; drop"}).json()
     assert r["in_order"] == ""

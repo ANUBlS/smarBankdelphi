@@ -66,7 +66,8 @@ def test_swf_mode_does_nothing_and_mask():
     r = run(conn(INN_FILETYPE=0), name="a.swf")       # KonvertexExecute body is fully commented out
     assert r["listed"] and r["calls"] == [] and r["error"] is None and not r["committed"]
     r = run(conn(), name="a.txt")                     # not *.fin -> not in the list -> nothing read; konvert3 still runs
-    assert not r["listed"] and r["read"] == [] and [c[1] for c in r["calls"]] == ["CheckAdvancedObjectAccess"]
+    assert not r["listed"] and r["read"] == [] and [c[1] for c in r["calls"]][0] == "CheckAdvancedObjectAccess"
+    assert {c[1] for c in r["calls"][1:]} <= {"check_account"}   # only the status-2 MT103 rows (cheskaccount)
     assert r["committed"]                             # cheskaccount commits even with no file (status-2 MT103 rows rechecked)
 
 

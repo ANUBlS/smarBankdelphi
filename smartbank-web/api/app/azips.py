@@ -18,6 +18,8 @@ from . import azips_edit, azips_new
 from . import azips_files
 from . import azips_import
 from . import azips_actions as A
+from . import azips_in as I
+from . import ufx
 from . import azips_sql as Q
 from .customers import row
 from .delphi import date_only
@@ -199,6 +201,29 @@ class ActionIn(BaseModel):
     form12: list[Form12In] = Field(default_factory=list, max_length=1000)
 
 
+class InCommitIn(BaseModel):
+    current: int
+    selected: list[int] = Field(default_factory=list, max_length=1000)
+
+
+class AnswerIn(BaseModel):
+    answer: Literal["yes", "cancel"]
+
+
+class CheckAccIn(BaseModel):
+    id: int
+    acc: str = Field(default="", max_length=64)
+
+
+class TranzitIn(BaseModel):
+    main_acc: str = Field(default="", max_length=64)
+    tranzit_acc: str = Field(default="", max_length=64)
+
+
+class RowidIn(BaseModel):
+    rowid: str = Field(min_length=1, max_length=64)
+
+
 def make_router(current, require_module, err):
     r = APIRouter(prefix="/api/azips")
     g = require_module(CLSID)
@@ -293,6 +318,51 @@ def make_router(current, require_module, err):
     @r.get("/commit-currencies")
     def _ccur(ws=Depends(g)):
         return A.commit_currencies(ws.conn)
+
+    # part 4b-2: incoming postings (comitClick -> AddINTransNewExecute, UFX), Checkacc, Tranzit_account (azips_in.py)
+    def _in_lines(c):
+        lines = list(Q.LINES_SW_IN)
+        if branch_restricted(c):
+            lines[10] = Q.BRANCH_LINE
+        return lines
+
+    def _pending(ws):
+        if not hasattr(ws, "azips_in_pending"):
+            ws.azips_in_pending = {}
+        return ws.azips_in_pending
+
+    def _run_in(fn, *a):
+        try:
+            return fn(*a)
+        except (I.DelphiConvertError, ufx.UfxError) as e:
+            err(400, "azips.runtime", ora=str(e))
+
+    @r.post("/in-commit")
+    def _incommit(b: InCommitIn, ws=Depends(g)):
+        return _run_in(I.comit_start, ws.conn, _in_lines(ws.conn), b.current, b.selected, _pending(ws))
+
+    @r.post("/in-commit/answer")
+    def _incommit2(b: AnswerIn, ws=Depends(g)):
+        return _run_in(I.comit_answer, ws.conn, b.answer, _pending(ws), ufx.client())
+
+    @r.post("/in-checkacc")
+    def _checkacc(b: CheckAccIn, ws=Depends(g)):
+        res = I.checkinacc(ws.conn, _in_lines(ws.conn), b.id, b.acc)
+        if res is None:
+            err(400, "azips.pick_row")
+        return res
+
+    @r.get("/tranzit")
+    def _tr(ws=Depends(g)):
+        return [{**row(x), "rowid": str(x.get("ROWID"))} for x in I.tranzit_list(ws.conn)]
+
+    @r.post("/tranzit")
+    def _tradd(b: TranzitIn, ws=Depends(g)):
+        return I.tranzit_add(ws.conn, b.main_acc, b.tranzit_acc)
+
+    @r.post("/tranzit/delete")
+    def _trdel(b: RowidIn, ws=Depends(g)):
+        return {"done": I.tranzit_delete(ws.conn, b.rowid)}
 
     azips_edit.add_routes(r, g, guard)      # part 2: editor / creation
     azips_new.add_routes(r, g, err)         # part 2b: filereport.bpl 'Azipsnew' (Unitazips.pas)
