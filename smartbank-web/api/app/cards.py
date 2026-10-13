@@ -1,7 +1,8 @@
-"""Cards - port of Delphi Packages/Cards_New/cards_azericard_turan_version (CARDS.dpr, TMAINFORM, CoClass MAINFORM).
+"""Cards - port of Delphi Packages/Cards_New/cards_azericard (the production build, confirmed by the user; CARDS.dpr, TMAINFORM,
+CoClass MAINFORM).
 Step 1: the main menu (MAINFORMImpl1.pas) and the card-holder list 'Müştərilər' (customers.pas Tclients over DataMod_CARDS.Clients).
 
-The Delphi data module (Unit18.dfm) is shared by all forms of the OCX; the per-session state Delphi keeps on it (Clients SQL[25],
+The Delphi data module (Unit18.dfm) is shared by all forms of the OCX; the per-session state Delphi keeps on it (Clients
 Filter, the TitleClick order line, the 'num' toggle) lives in ws.module_state['cards']. SQL: cards_sql.py (verbatim line lists).
 Nothing the user types reaches SQL text: the edit boxes and the Filter panel only build a client-side TDataSet.Filter (as in Delphi),
 and the TitleClick field name is checked against the grid's column FieldNames."""
@@ -17,23 +18,21 @@ from .customers import row
 
 CLSID = "{D5432094-E84C-4EAE-80FC-D02224B17B93}"     # CARDS_TLB.pas CLASS_MAINFORM
 
-# customers.pas FormActivate :272-326 - SQL[25] for users without CARD_FIL_VIEW
-FIL_LINE = "and b.filial  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))"
-
-# dbGrid2 (customers.dfm:599, TabOrder 3, on top of DBGrid1 in Panel2 - the grid the user sees and the one SearchRecord uses)
-GRID2_COLS = ["CARDNUMBER", "MULTIACC", "RBSNUMBER", "OLD_ACC_NO", "FNAME", "LNAME", "CARDHOLDER", "CREDIT_LIM", "CARDTYPE", "COMPANY",
+# dbGrid2 (customers.dfm:615, TabOrder 3, on top of DBGrid1 in Panel2 - the grid the user sees and the one SearchRecord uses).
+# cards_azericard: MULTIACC is visible (3rd column), there is no VERI column (the Turan copy hides MULTIACC and shows VERI).
+GRID2_COLS = ["CARDNUMBER", "RBSNUMBER", "MULTIACC", "OLD_ACC_NO", "FNAME", "LNAME", "CARDHOLDER", "CREDIT_LIM", "CARDTYPE", "COMPANY",
               "FIL", "CURRENCY", "CARDSTATUS", "DATEOPEN", "EXPIRY", "EMBOSSNAME", "PASSPORT", "BIRTHDAY", "HOMEPHONE", "WORKPHONE",
-              "ADDRESS", "RESIDENT", "ID", "CREAT", "MODI", "VERI", "DAT", "CRDAT"]
-GRID2_HIDDEN = {"MULTIACC"}                                   # Visible = False
-# persistent TFields of Clients (Unit18.dfm:4051-4300) - FieldByName in a Filter fails for others
+              "ADDRESS", "RESIDENT", "ID", "CREAT", "MODI", "DAT", "CRDAT"]
+GRID2_HIDDEN: set[str] = set()
+# persistent TFields of Clients (Unit18.dfm:3247 Clients, cards_azericard) - FieldByName in a Filter fails for others
 CLIENT_FIELDS = {"ID", "ACCID", "CARDHOLDER", "FNAME", "LNAME", "PASSPORT", "BIRTHDAY", "HOMEPHONE", "WORKPHONE", "COUNTRY", "CITY",
                  "ADDRESS", "RESIDENT", "CARDNUMBER", "RBSNUMBER", "MAINCARD", "CURRENCY", "CARDTYPE", "CARDSTATUS", "CREDIT_LIM",
                  "DATEOPEN", "EXPIRY", "REFERENCE", "EMBOSSNAME", "COMPANY", "DATECLOSE", "SECURITY", "SEND", "CREATDATE", "FILE_NUM",
                  "MESSTYPE", "WITHP", "URG", "OTHTYPE", "OTHMEMBER", "OTHASSCOD", "OTHIDEN", "OTHEXPRY", "FILENAME", "CON_BALAN",
                  "BALAN_SIGN", "CARDREST", "RBSNUMBER2", "ACCID2", "REFINTEGER", "LANG_CODE", "FILIAL", "ISSUED_BY", "DOC_SINCE",
                  "CONTRACT_NUM", "KREDIT", "KLI_ID", "OP_ID", "TYPES", "TITUL", "STATUS", "DAT", "NMOD_OPID", "CRDAT", "RBSCLOSE",
-                 "RBSCLOSEID", "TRANDATE", "FIL", "OLD_ACC_NO", "CREAT", "MODI", "MULTI_ACC", "MULTIACC", "VERI"}
-# Panel4 edits: OnChange -> Filter := '<FIELD> = '''+Edit.Text+'*''' (customers.pas :342, :387, :987, :996, :1048, :1093, :1138)
+                 "RBSCLOSEID", "TRANDATE", "FIL", "OLD_ACC_NO", "CREAT", "MODI", "MULTI_ACC", "MULTIACC", "MULTIVAL"}
+# Panel4 edits: OnChange -> Filter := '<FIELD> = '''+Edit.Text+'*''' (customers.pas :293, :338, :876, :885, :937, :982, :1027)
 EDIT_FIELDS = ("CARDNUMBER", "RBSNUMBER", "FNAME", "LNAME", "CARDHOLDER", "CREDIT_LIM", "OLD_ACC_NO")
 
 
@@ -50,7 +49,7 @@ def edit_filter(field: str, text: str) -> str:
 
 
 def panel5_filter(c, d1: str, d2: str, fil: str, val: str, ktype: str, kstat: str, comp: str) -> str:
-    """Button1Click customers.pas:1249-1376, verbatim (c = CheckBox1..6). Delphi's combination table is incomplete for some
+    """Button1Click customers.pas:1138-1273, verbatim (c = CheckBox1..6). Delphi's combination table is incomplete for some
     check box sets (e.g. 1+3+5: f3 stays empty, so the status condition is dropped) - kept as written."""
     c1, c2, c3, c4, c5, c6 = c
     tax = fax = vax = knax = ksax = cax = ""
@@ -113,10 +112,9 @@ def _dts(d: datetime.date) -> str:
 
 
 def _fetch(ws) -> list[dict]:
-    """Clients open / Refresh with the session's SQL[25] and the TitleClick order line (SQL.Add after the last line)."""
+    """Clients open / Refresh as designed (Unit18.dfm:3247) plus the TitleClick order line (SQL.Add after the last line)."""
     s = _st(ws)
     lines = list(Q.LINES_CLIENTS)
-    lines[25] = s.get("sql25", "")
     if s.get("order"):
         lines.append(s["order"])
     return ws.conn.query(Q.text(lines), {})
@@ -135,15 +133,14 @@ def _view(ws, rows=None) -> dict:
 
 
 def open_clients(ws) -> dict:
-    """MAINFORM N11Click :998 (right card_clients) -> Tclients.FormActivate customers.pas:272: CARD_FIL_VIEW = 1 -> Clients open as
-    designed; otherwise SQL[25] := FIL_LINE and reopen (DOA closes the dataset when SQL changes). CARDSTYPE, CARDTYPES, statuscard,
-    apptype open; num := 1. Clients is Filtered = True with an empty Filter. settings is Active in the dfm (dateclose for the colours)."""
+    """MAINFORM N11Click :1007 (right card_clients) -> Tclients.FormActivate customers.pas:271: Clients, CARDSTYPE, CARDTYPES,
+    statuscard, apptype open; num := 1. cards_azericard has no CARD_FIL_VIEW branch (that is Turan-only): every user sees all
+    filials. Clients is Filtered = True with an empty Filter. settings is Active in the dfm (dateclose for the colours)."""
     conn = ws.conn
     conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_clients"], commit=False)
-    fil = conn.call_func("SB_ACA", "checkadvancedobjectaccess_func", ["CARD_FIL_VIEW"], int)
     s = _st(ws)
     s.clear()
-    s.update(sql25="" if int(fil or 0) == 1 else FIL_LINE, order=None, num=1, filter="")
+    s.update(opened=True, order=None, num=1, filter="", xfilter="")
     s["rows"] = _fetch(ws)
     st = _q(conn, Q.LINES_SETTINGS)
     look = {
@@ -153,14 +150,15 @@ def open_clients(ws) -> dict:
         "cardstatus": [r["CARDSTATUS"] for r in _q(conn, Q.LINES_STATUSCARD)],   # DBLookupComboBox4 statuscardsource
         "company": [r["COMPANY_NAME"] for r in _q(conn, Q.LINES_COMPANY)],       # DBLookupComboBox5 companysource -> COMPANY
     }
-    return {"cols": GRID2_COLS, "hidden": sorted(GRID2_HIDDEN), "fil_view": int(fil or 0) == 1,
+    return {"cols": GRID2_COLS, "hidden": sorted(GRID2_HIDDEN),
             "dateclose": int((st[0].get("DATECLOSE") if st else 0) or 0),
-            "dord": int((st[0].get("DORD") if st else 0) or 0),          # MAINFORM PopupMenu1Popup: N13 'Verifikasiya' Visible = dord = 1 "today": datetime.date.today().isoformat(),
+            "dord": int((st[0].get("DORD") if st else 0) or 0),          # MAINFORM PopupMenu1Popup :1273: N13 'Verifikasiya' Visible = dord = 1
+            "today": datetime.date.today().isoformat(),
             "lookups": look, **_view(ws)}
 
 
 def _need(ws):
-    if not _st(ws).get("rows") and "sql25" not in _st(ws):
+    if not _st(ws).get("opened"):
         open_clients(ws)
 
 
@@ -174,14 +172,17 @@ def set_edit_filter(ws, field: str, text: str) -> dict:
 
 
 def set_panel_filter(ws, c, d1, d2, fil, val, ktype, kstat, comp) -> dict:
-    """Button1Click: Filter := f1..f6; Filtered := true (Memo1 shows the text)."""
+    """Button1Click :1138: Filter := f1..f6; Filtered := true (Memo1 shows the text); cards_azericard also sets
+    cliexcel.Filter to the same text (:1263), which the Excel export uses."""
     _need(ws)
-    _st(ws)["filter"] = panel5_filter(c, _dts(d1), _dts(d2), fil or "", val or "", ktype or "", kstat or "", comp or "")
+    f = panel5_filter(c, _dts(d1), _dts(d2), fil or "", val or "", ktype or "", kstat or "", comp or "")
+    _st(ws)["filter"] = f
+    _st(ws)["xfilter"] = f
     return _view(ws)
 
 
 def refresh(ws) -> dict:
-    """ToolButton14Click 'Yenilə' :737: Filter := 'RBSNUMBER = ''*''' (NULL RBSNUMBER rows are hidden by it), Close; Open.
+    """ToolButton14Click 'Yenilə' :624: Filter := 'RBSNUMBER = ''*''' (NULL RBSNUMBER rows are hidden by it), Close; Open.
     The TitleClick order line was already blanked after its Refresh, so the reopen has no ORDER BY."""
     _need(ws)
     s = _st(ws)
@@ -192,7 +193,7 @@ def refresh(ws) -> dict:
 
 
 def sort(ws, field: str) -> dict:
-    """dbGrid2TitleClick :702: exit when empty or no FieldName; num = 1 -> 'ORDER BY f', num := 2, else '... desc', num := 1;
+    """dbGrid2TitleClick :589: exit when empty or no FieldName; num = 1 -> 'ORDER BY f', num := 2, else '... desc', num := 1;
     Refresh; then SQL[pos] := '' (the next reopen has no order). Rows keep that order until the next Refresh / reopen."""
     _need(ws)
     s = _st(ws)
@@ -210,7 +211,7 @@ def sort(ws, field: str) -> dict:
 
 
 def delete(ws, rid: int, confirmed: bool) -> dict:
-    """ToolButton1Click 'Silmək' :1385: right card_mdelete; 'Silmək istəyirsiniz?' Yes -> card_main.delnew(id); Refresh in both
+    """ToolButton1Click 'Silmək' :1275: right card_mdelete; 'Silmək istəyirsiniz?' Yes -> mainpacket (card_main, Unit18.dfm:1141).delnew(id); Refresh in both
     cases (outside the if). No commit (Delphi has none)."""
     _need(ws)
     conn = ws.conn
@@ -220,6 +221,66 @@ def delete(ws, rid: int, confirmed: bool) -> dict:
     s = _st(ws)
     s["rows"] = _fetch(ws)
     return _view(ws)
+
+
+# toexcelExecute customers.pas:672-776 header row (Cells[1, 1..28]) and the cliexcel field per column
+EXCEL_COLS = [(" #", None), ("RBSNUMBER", "RBSNUMBER"), ("CARDHOLDER", "CARDHOLDER"), ("CARDNUMBER", "CARDNUMBER"), ("FIRST NAME", "FNAME"),
+              ("LAST NAME", "LNAME"), ("CURRENCY", "CURRENCY"), ("CARDTYPE", "CARDTYPE"), ("CARDSTATUS", "CARDSTATUS"),
+              ("PASSPORT", "PASSPORT"), ("ISSUED_BY", "ISSUED_BY"), ("DOC_SINCE", "DOC_SINCE"), ("BIRTHDAY", "BIRTHDAY"),
+              ("HOMEPHONE", "HOMEPHONE"), ("WORKPHONE", "WORKPHONE"), ("CREDIT_LIM", "CREDIT_LIM"), ("RESIDENT", "RESIDENT"),
+              ("COUNTRY", "COUNTRY"), ("CITY", "CITY"), ("ADDRESS", "ADDRESS"), ("DATEOPEN", "DATEOPEN"), ("EXPIRY", "EXPIRY"),
+              ("REFERENCE", "REFERENCE"), ("EMBOSSNAME", "EMBOSSNAME"), ("COMPANY", "COMPANY"), ("CONTRACT_NUM", "CONTRACT_NUM"),
+              ("TYPES", "TYPES"), ("OLD_ACCOUNT", "OLD_ACC_NO")]
+EXCEL_TEXT_COLS = {2, 4, 5, 28}           # NUMBERFORMAT := '@'
+EXCEL_WIDTH20 = {2, 3, 4, 8}              # ColumnWidth := 20
+
+
+def _asstr(v) -> str:
+    if v is None:
+        return ""
+    if isinstance(v, datetime.datetime):
+        return _dts(v.date()) + ("" if v.time() == datetime.time() else " " + v.strftime("%H:%M:%S"))
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    return str(v)
+
+
+def excel(ws) -> bytes:
+    """ToolButton7Click :778 (no right check - the card_mexcel line is commented out): Clients.QueryAllRecords := true; Refresh;
+    toexcel.Execute; QueryAllRecords := False; Refresh. toexcelExecute :672: cliexcel Close/Open - its own dataset
+    (Unit18.dfm:4935, WHERE s.multiacc is null ORDER BY s.rbsnumber), Filtered = True with the Filter Button1Click last set
+    (the Panel4 edit boxes and 'Yenilə' do not touch it). Delphi fills a live Excel instance; the web returns the same sheet as .xlsx."""
+    import io
+    from openpyxl import Workbook
+    from openpyxl.styles import Font
+    from openpyxl.utils import get_column_letter
+    _need(ws)
+    s = _st(ws)
+    s["rows"] = _fetch(ws)                       # the two Clients.Refresh calls (no ORDER BY - the TitleClick line is blank)
+    xrows = _q(ws.conn, Q.LINES_CLIEXCEL)
+    fields = {k.upper() for r in xrows for k in r} or {c for _, c in EXCEL_COLS if c}
+    xrows = TF.apply(xrows, s.get("xfilter", ""), fields)
+    wb = Workbook()
+    sh = wb.active
+    for ci, (h, _) in enumerate(EXCEL_COLS, 1):
+        c = sh.cell(1, ci, h)
+        c.font = Font(bold=True, color="FF0000")              # Selection.Font.BOLD := TRUE; COLOR := clRed
+    for ri, r in enumerate(xrows, 2):
+        sh.cell(ri, 1, ri - 1)
+        for ci, (_, f) in enumerate(EXCEL_COLS[1:], 2):
+            v = r.get(f)
+            if f in ("DATEOPEN", "EXPIRY"):                    # .AsDateTime (NULL -> 0 = 30.12.1899)
+                cell = sh.cell(ri, ci, v if isinstance(v, datetime.datetime) else datetime.datetime(1899, 12, 30))
+                cell.number_format = "dd.mm.yyyy"
+            else:
+                cell = sh.cell(ri, ci, _asstr(v))
+            if ci in EXCEL_TEXT_COLS:
+                cell.number_format = "@"
+    for ci in EXCEL_WIDTH20:
+        sh.column_dimensions[get_column_letter(ci)].width = 20
+    bio = io.BytesIO()
+    wb.save(bio)
+    return bio.getvalue()
 
 
 # ------------------------------------------------------------------------------------------------ router
@@ -275,6 +336,12 @@ def make_router(current, require_module, err):
     @r.post("/clients/sort")
     def _so(b: SortIn, ws=Depends(g)):
         return sort(ws, b.field)
+
+    @r.post("/clients/excel")
+    def _xl(ws=Depends(g)):
+        from fastapi import Response
+        return Response(excel(ws), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        headers={"Content-Disposition": 'attachment; filename="CARDS.xlsx"'})
 
     @r.post("/clients/delete")
     def _de(b: DeleteIn, ws=Depends(g)):

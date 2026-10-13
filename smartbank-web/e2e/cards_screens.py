@@ -1,4 +1,4 @@
-"""Cards step 1 E2E + screenshots: Packages/Cards_New/cards_azericard_turan_version main menu + 'Müştərilər' list."""
+"""Cards step 1 E2E + screenshots: Packages/Cards_New/cards_azericard main menu + 'Müştərilər' list."""
 import os, sys
 from playwright.sync_api import sync_playwright
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3000"
@@ -26,4 +26,14 @@ with sync_playwright() as p:
     pg.click("#c_srch"); pg.fill("#c_p4 [data-e='FNAME']", "R"); pg.wait_for_timeout(500)
     assert pg.inner_text("#c_cnt") == "1"
     shot(pg, "164-cards-clients-search.png")
+    with pg.expect_download() as dl:
+        pg.click("#c_xls")
+    path = dl.value.path()
+    from openpyxl import load_workbook
+    import io
+    sh = load_workbook(io.BytesIO(open(path, "rb").read())).active
+    assert sh.max_column == 28 and sh.cell(1, 2).value == "RBSNUMBER", sh.max_column
+    print("excel rows", sh.max_row - 1)
+    pg.wait_for_timeout(300)
+    shot(pg, "165-cards-clients-excel.png")
     b.close()

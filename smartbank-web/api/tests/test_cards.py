@@ -26,8 +26,9 @@ def P(path, body=None, code=200):
 
 
 def test_sql_verbatim_lines():
-    assert Q.LINES_CLIENTS[0] == "SELECT   s.ROWID," and Q.LINES_CLIENTS[20] == "where s.accid=b.id"
-    assert len(Q.LINES_CLIENTS) == 29 and Q.LINES_CLIENTS[25] == ""            # FormActivate writes SQL[25]
+    assert Q.LINES_CLIENTS[0] == "SELECT   s.ROWID," and Q.LINES_CLIENTS[19] == "where s.accid=b.id"
+    assert len(Q.LINES_CLIENTS) == 21                                           # cards_azericard: no SQL[25] line
+    assert Q.LINES_CLIEXCEL[19] == "and s.multiacc is null order by s.rbsnumber"
     assert Q.LINES_SETTINGS == ["select s.rowid, s.* from card_settings s"]
     assert Q.SOURCES["ClientListSource"] == "Clients"
 
@@ -35,19 +36,37 @@ def test_sql_verbatim_lines():
 def test_open_admin_all_filials():
     login()
     r = P("/clients/open")
-    assert r["fil_view"] and r["count"] == 5 and r["dateclose"] == 30
+    assert r["count"] == 5 and r["dateclose"] == 30
     a = {x["id"]: x for x in r["rows"]}
     assert a[1]["fil"] == "Baş ofis" and a[3]["fil"] == "Nərimanov filialı" and a[1]["creat"] == "ADMIN" and a[2]["modi"] == "TELLER"
     assert a[1]["cardnumber"] == "4169730000001111" and a[1]["old_acc_no"] == "38110000000001"
     assert r["lookups"]["cardstatus"] == ["ACTIVE", "BLOCKED", "NEW"] and r["lookups"]["company"] == ["TURANBANK", "AZERSUN"]
-    assert "MULTIACC" in r["hidden"]
+    assert r["hidden"] == [] and "VERI" not in r["cols"] and r["cols"][2] == "MULTIACC"
 
 
-def test_open_teller_own_filial_only():
-    """No CARD_FIL_VIEW -> SQL[25] = filial of the Oracle user (sba_objinf TELLER -> 102)."""
+def test_open_teller_sees_all_filials():
+    """cards_azericard FormActivate has no CARD_FIL_VIEW branch (Turan-only): every user gets all rows."""
     login("TELLER", "Teller#2026")
     r = P("/clients/open")
-    assert not r["fil_view"] and sorted(x["id"] for x in r["rows"]) == [3, 4]
+    assert sorted(x["id"] for x in r["rows"]) == [1, 2, 3, 4, 5]
+
+
+def test_excel_export_cliexcel():
+    import io
+    from openpyxl import load_workbook
+    login(); P("/clients/open")
+    P("/clients/edit-filter", {"field": "FNAME", "text": "R"})               # Panel4 filter does not reach cliexcel
+    r = client.post(B + "/clients/excel")
+    assert r.status_code == 200
+    sh = load_workbook(io.BytesIO(r.content)).active
+    assert [c.value for c in sh[1]][:4] == [" #", "RBSNUMBER", "CARDHOLDER", "CARDNUMBER"] and sh.max_column == 28
+    assert sh["A1"].font.bold
+    rbs = [sh.cell(i, 2).value for i in range(2, sh.max_row + 1)]
+    # multiacc row (id 2) left out; Oracle puts the NULL RBSNUMBER last, the SQLite mock first - compare without it
+    assert [x for x in rbs if x] == ["38110019440000000001", "38110019440000000004", "38110019840000000003"] and len(rbs) == 4
+    P("/clients/filter", {"checks": [False, False, True, False, False, False], "d1": "2023-01-01", "d2": "2027-12-31", "valuta": "USD"})
+    sh = load_workbook(io.BytesIO(client.post(B + "/clients/excel").content)).active
+    assert all(sh.cell(i, 7).value == "USD" for i in range(2, sh.max_row + 1))
 
 
 def test_open_needs_card_clients():

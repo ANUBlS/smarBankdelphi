@@ -1,16 +1,17 @@
-/* Cards – port of Packages/Cards_New/cards_azericard_turan_version (CARDS.dpr, TMAINFORM). Step 1: the main menu
+/* Cards – port of Packages/Cards_New/cards_azericard (production build) (CARDS.dpr, TMAINFORM). Step 1: the main menu
    (MAINFORMImpl1.dfm toolbar + PopupMenu1 / PopupMenu2) and the card-holder list 'Müştərilər' (customers.pas Tclients,
    api/app/cards.py). Screens not yet ported show a notice; the Delphi right check runs on the server when they are. */
 (function () {
   const { api, t, esc, toast } = window.SB;
   const P = '/api/cards', K = (k) => t('cards.' + k);
   const errT = (e) => t(e.key || 'error.generic', e) + (e.ora ? ' ' + e.ora : '');
-  // isertbtn.DropdownMenu = PopupMenu1 (MAINFORMImpl1.dfm:6096), ToolButton1.DropdownMenu = PopupMenu2 (:6699; Dilling1 Visible = False)
+  // isertbtn.DropdownMenu = PopupMenu1, ToolButton1.DropdownMenu = PopupMenu2 (cards_azericard MAINFORMImpl1.dfm; Dilling1 Visible = False).
+  // cards_azericard adds 'Exchange file' (E1) and 'RbsTax' (T1) and captions R1 'RbsDoFile' (Turan: 'RBS DO').
   const MENU1 = ['clients', 'balance', 'payment', 'application', 'newcards', 'verif', 'online', 'k1'];
-  const MENU2 = ['cfile', 'dxxx', 'sms', 'intretail', 'rvisa', 'dfile', 'rbsdo', 'kliring', 'excel', 'cardnumber', 'rez', 'limits', 'poscomm'];
+  const MENU2 = ['cfile', 'dxxx', 'sms', 'intretail', 'rvisa', 'dfile', 'exchange', 'rbsdo', 'rbstax', 'kliring', 'excel', 'cardnumber', 'rez', 'limits', 'poscomm'];
   const DATECOLS = new Set(['DATEOPEN', 'EXPIRY', 'DAT', 'CRDAT']);
   const fmtD = (v) => v ? String(v).slice(0, 10).split('-').reverse().join('.') : '';
-  const EDITS = ['CARDNUMBER', 'RBSNUMBER', 'FNAME', 'LNAME', 'CARDHOLDER', 'CREDIT_LIM', 'OLD_ACC_NO'];   // Panel4 (customers.dfm:528-596)
+  const EDITS = ['CARDNUMBER', 'RBSNUMBER', 'FNAME', 'LNAME', 'CARDHOLDER', 'CREDIT_LIM', 'OLD_ACC_NO'];   // Panel4 (customers.dfm:534-602)
   async function page(el) {
     el.innerHTML = `<div class="card"><div class="toolbar" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${esc(K('title'))}</h2>
       ${dd('m1', K('m_proc'), MENU1)}${dd('m2', K('m_oper'), MENU2)}
@@ -60,7 +61,7 @@
       <p class="muted" id="c_ftxt"></p>`;
     const v = (id) => box.querySelector('#' + id);
     const cols = d.cols.filter(c => !d.hidden.includes(c));
-    function colour(r) {   // dbGrid2DrawColumnCell :655 - expiry - settings.dateclose < Date -> clAqua, expiry < Date -> clFuchsia
+    function colour(r) {   // dbGrid2DrawColumnCell :542 - expiry - settings.dateclose < Date -> clAqua, expiry < Date -> clFuchsia
       if (!r.expiry) return (new Date(1899, 11, 30) < today) ? '#ff00ff' : '';
       const e = new Date(String(r.expiry).slice(0, 10) + 'T00:00:00');
       if (e < today) return '#ff00ff';
@@ -86,7 +87,13 @@
     v('c_flt').onclick = () => toggle('c_p5');           // ToolButton13Click: Panel5.Visible toggle
     v('c_srch').onclick = () => toggle('c_p4');          // ToolButton21Click: Panel4.Visible toggle
     v('c_ref').onclick = async () => { const r = await call('/clients/refresh'); if (r) { box.querySelectorAll('[data-e]').forEach(i => i.value = ''); draw(r); } };
-    v('c_add').onclick = v('c_edit').onclick = v('c_xls').onclick = () => toast(K('not_ported'));
+    v('c_add').onclick = v('c_edit').onclick = () => toast(K('not_ported'));
+    v('c_xls').onclick = async () => {   // ToolButton7Click :778 -> toexcelExecute :672 (cliexcel) - .xlsx download instead of live Excel
+      const res = await fetch(P + '/clients/excel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: '{}' });
+      if (!res.ok) { const j = await res.json().catch(() => ({})); toast(errT(j.detail || {}), 'error'); return; }
+      const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = 'CARDS.xlsx'; a.click();
+      toast(K('excel_done'));
+    };
     v('c_del').onclick = async () => {
       const r = st.d.rows[st.cur]; if (!r) return;
       const ok = confirm(K('confirm_delete'));

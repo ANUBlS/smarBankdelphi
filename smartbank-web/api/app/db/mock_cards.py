@@ -1,5 +1,5 @@
-"""Mock for Packages/Cards_New/cards_azericard_turan_version (DataMod_CARDS, Unit18.dfm). The verbatim SQL of cards_sql.py is
-recognised (Clients SQL[25] filial line and the TitleClick 'ORDER BY <field> [desc]' line appended by SQL.Add may vary) and executed
+"""Mock for Packages/Cards_New/cards_azericard (DataMod_CARDS, Unit18.dfm). The verbatim SQL of cards_sql.py is
+recognised (the TitleClick 'ORDER BY <field> [desc]' line appended by SQL.Add may vary) and executed
 in an in-memory SQLite database built from fixtures/cards.json. Dialect shims only: the 'smart.' schema prefix is dropped,
 card_main.findfilial / sb_aca.getuserbyid / to_char are SQLite functions, (SELECT USER FROM DUAL) -> the mock user name.
 The card_* DDL and the card_main package body are not in the repo: columns come from the persistent TFields."""
@@ -59,9 +59,7 @@ def _pats():
         for n in dir(Q):
             if n.startswith("LINES_"):
                 L = list(getattr(Q, n))
-                if n == "LINES_CLIENTS":
-                    L[25] = "\x00"
-                t = re.escape(Q.text(L)).replace("\x00", ".*")
+                t = re.escape(Q.text(L))
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 _PATS.append(re.compile(t + r"\Z", re.S))
