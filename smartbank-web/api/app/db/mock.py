@@ -18,6 +18,8 @@ from . import mock_cr
 from .mock_cr import CrMixin
 from . import mock_bal
 from .mock_bal import BalMixin
+from . import mock_out
+from .mock_out import OutMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -43,13 +45,14 @@ def reset():
     mock_cs.reset()
     mock_cr.reset()
     mock_bal.reset()
+    mock_out.reset()
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(BalMixin, CsMixin, CrMixin):
+class MockConnection(OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -58,10 +61,14 @@ class MockConnection(BalMixin, CsMixin, CrMixin):
         self.context: dict = {}
         self.ini_open = False
         self.cs = mock_cs.load(settings.mock_fixtures)
+        self.out = mock_out.load(settings.mock_fixtures)
 
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._out_func(key, args, named)
+        if r is not NotImplemented:
+            return r
         r = self._bal_func(key, args, named)
         if r is not NotImplemented:
             return r
@@ -121,6 +128,9 @@ class MockConnection(BalMixin, CsMixin, CrMixin):
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
+        r = self._out_proc(key, args, named)
+        if r is not NotImplemented:
+            return r
         r = self._bal_proc(key, args, named)
         if r is not NotImplemented:
             return r
@@ -142,6 +152,9 @@ class MockConnection(BalMixin, CsMixin, CrMixin):
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._out_query(sql, binds)  # OutMixin matches on original SQL text
+        if r is not NotImplemented:
+            return r
         r = self._bal_query(s, b)
         if r is not None:
             return r

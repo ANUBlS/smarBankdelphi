@@ -277,6 +277,8 @@ from . import customers  # noqa: E402
 app.include_router(customers.make_router(current, require_module, err))
 from . import transactions  # noqa: E402
 app.include_router(transactions.make_router(current, require_module, err))
+from . import out_transactions  # noqa: E402
+app.include_router(out_transactions.make_router(current, require_module, err))
 from . import credits  # noqa: E402
 app.include_router(credits.make_router(current, require_module, err))
 
