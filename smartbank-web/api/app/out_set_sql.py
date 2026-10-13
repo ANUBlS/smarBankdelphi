@@ -9,3 +9,6 @@ BALANCE_PLAN_TABLES = ["out_bal_spr1", "out_bal_spr2", "out_bal_spr3", "out_bal_
 
 # BalanceRefEditImpl1.dfm:516-520 CloseTypesData (declared, never opened by the form - not executed by the web either)
 SQL_CLOSE_TYPES = "\r\n".join(["select ID, DisplayName from CLOSE_ACC_TYPE", "where Visible = 1", "order by ID"])
+
+# Packages/Out_Tuningacctypes/TuningAccTypesImpl.dfm:149-154 Account_Types
+SQL_ACCOUNT_TYPES = "\r\n".join(["select", "  AT.* ,", "  AT.RowID", "from", "  Out_Account_Flags AT  "])

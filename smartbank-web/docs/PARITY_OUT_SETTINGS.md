@@ -30,3 +30,25 @@ API `api/app/out_balrefedit.py`, SQL `api/app/out_set_sql.py`, UI `web/public/mo
 
 **To verify on the real DB:** the primary key of `OUT_BAL_SPR1..4` (the mock assumes BAL_CN is unique), and that DOA's update of all changed
 columns matches what the web sends (the web always writes all nine editable columns).
+
+## 2. Off-balance Account Types (`Packages/Out_Tuningacctypes`)
+
+CLSID `{4FD88BAF-D08A-474A-AADA-335E883BBB85}` (`Out_TuningAcctypes_TLB.pas:56`) → route `/m/out-tuningacctypes`, tree
+**Off-balance → Off-balance Account Types** (`Tree\Sections\Item8\Item9`, plugin `PluginManager\Packages\Item26`).
+API `api/app/out_tuningacctypes.py`, SQL `api/app/out_set_sql.py`, UI `web/public/modules/out_tuningacctypes.js`, mock `api/app/db/mock_oset.py`
+(`out_account_flags` in `oacc.json`, shared with Off-balance Accounts), tests `api/tests/test_out_tuningacctypes.py`,
+E2E `e2e/out_tuningacctypes_screens.py` (screenshots 89–90).
+
+**Source used:** `Out_TuningAcctypes.dpr` compiles only `TuningAccTypesImpl.pas` (+ TLB).
+
+| # | Delphi (unit:line) | Behaviour | Web | Status |
+|---|---|---|---|---|
+| 1 | TuningAccTypesImpl.dfm:149-154 `Account_Types` | `select AT.* , AT.RowID from Out_Account_Flags AT`, opened in ActiveFormCreate (.pas:354-357) | `SQL_ACCOUNT_TYPES`, verbatim | ✅ |
+| 2 | DBGrid1 dfm:70-147 | Editable grid SYMBOL / NAME / DESCRIPTION (Simvol / Adı / Təyinatı) | Same columns; click a row to edit, Post/Cancel per row, Insert button | 🟡 (UI only) |
+| 3 | Fields dfm:161-173 | SYMBOL required, size 1; NAME 32; DESCRIPTION 128 | Same limits (422 on violation, message for empty SYMBOL) | ✅ |
+| 4 | No OnApplyRecord | DOA INSERT/UPDATE/DELETE on OUT_ACCOUNT_FLAGS by ROWID, CommitOnPost; grid Ctrl+Del asks for confirmation | `SQL_INSERT/UPDATE/DELETE` (values bound), commit after each post, confirm before delete | ❓ (DOA-generated text) |
+| 5 | Account_TypesAfterPost .pas:341-352 | Refresh, return to the same row | List reloaded after save | ✅ |
+| 6 | Account_TypesAfterOpen .pas:329-339 | Adds A..Z to `Columns[0].PickList` of the grid named `FlagsEditor`, which has no DataSource and lies under DBGrid1 – so the visible grid gets no pick list | No pick list (free 1-character symbol) | ✅ |
+| 7 | – | No SB_ACA object check in this form | Only the module right (`require_module`) | ✅ |
+
+Changes made here are seen at once by Off-balance Accounts (filter "Account type" and the symbols dialog read the same table).

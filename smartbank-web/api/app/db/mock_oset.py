@@ -46,6 +46,8 @@ class OsetMixin:
         m = re.fullmatch(r"select b\.\*, b\.rowid from (out_bal_spr[1-4]) b where rowid = :doa_rowid for update nowait", s)
         if m:
             return [dict(r) for r in self._tab(m.group(1)) if r["ROWID"] == b.get("doa_rowid")]
+        if s == "select at.* , at.rowid from out_account_flags at":
+            return [dict(r) for r in self._tab("out_account_flags")]
         return NotImplemented
 
     def _oset_execute(self, sql, b):
@@ -71,8 +73,9 @@ class OsetMixin:
             return True
         return False
 
-    _oset_tables = ("out_bal_spr1", "out_bal_spr2", "out_bal_spr3", "out_bal_spr4")
-    _oset_keys = {"out_bal_spr1": "BAL_CN", "out_bal_spr2": "BAL_CN", "out_bal_spr3": "BAL_CN", "out_bal_spr4": "BAL_CN"}
+    _oset_tables = ("out_bal_spr1", "out_bal_spr2", "out_bal_spr3", "out_bal_spr4", "out_account_flags")
+    _oset_keys = {"out_bal_spr1": "BAL_CN", "out_bal_spr2": "BAL_CN", "out_bal_spr3": "BAL_CN", "out_bal_spr4": "BAL_CN",
+                 "out_account_flags": "SYMBOL"}
 
     def _oset_check(self, table, vals, rid):
         """Assumed PK on the key column (ORA-00001), like the real tables most likely have."""

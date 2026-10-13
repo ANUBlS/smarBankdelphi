@@ -67,7 +67,7 @@ class OaccMixin:
         if s == _N["SQL_CURRENCY"]:
             return copy.deepcopy(D["out_avalute"])
         if s == _N["SQL_ACC_FLAGS"]:
-            return [{"SYMBOL": r["SYMBOL"], "NAME": r["SYMBOL"] + "     " + r["DESCRIPTION"]} for r in D["out_account_flags"]]
+            return [{"SYMBOL": r["SYMBOL"], "NAME": r["SYMBOL"] + "     " + (r["DESCRIPTION"] or "")} for r in D["out_account_flags"]]
         if s in (_N["SQL_BAL_ACC"], _N["SQL_BAL_ACC_NEW"]):
             src = D["out_bal_spr1"] if s == _N["SQL_BAL_ACC"] else D["out_bal_spr2"]
             return [{"BAL_CN": str(r["BAL_CN"]), "BALNAME": r["BALNAME"]} for r in sorted(src, key=lambda r: r["BAL_CN"])]

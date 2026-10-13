@@ -303,3 +303,5 @@ from . import out_account  # noqa: E402
 app.include_router(out_account.make_router(current, require_module, err))
 from . import out_balrefedit  # noqa: E402
 app.include_router(out_balrefedit.make_router(current, require_module, err))
+from . import out_tuningacctypes  # noqa: E402
+app.include_router(out_tuningacctypes.make_router(current, require_module, err))
