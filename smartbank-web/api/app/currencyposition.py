@@ -7,7 +7,7 @@ Units: CurrencyPositionImpl.pas/.dfm (ActiveForm), DataModCurrPositin.pas/.dfm (
 Not ported:
   * UntCPReport (TCPReport QuickReport) and TFrmTuning 'Hesabat' / 'Excel-ə at' (InitialReport / To_Excel, OLE
     automation of VALYUTA_MOVQE.xlsx) - reports, on hold by the user (the buttons show the "on hold" notice).
-  * UntCapital (TfrmCapital, toolbar 'Kapital') - capital set-up editor, not ported yet (the button says so).
+UntCapital (TfrmCapital, toolbar 'Kapital') is in cp_capital.py / web/public/modules/cp_capital.js.
 
 sb_currencyposition (Packages/PACKAGES/SB_CURRENCYPOSITION.sql): Get_CurrencyPosition and DataChecking drop/create
 the per-user tables and COMMIT inside; Delphi never commits after them, so every call runs with commit=False.

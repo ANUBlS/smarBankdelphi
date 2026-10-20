@@ -4,7 +4,13 @@ Packages/PACKAGES/SB_CURRENCYPOSITION.sql: Get_CurrencyPosition (re)creates USER
 DataChecking (re)creates USER.CPSUM_USER with the package's own INSERT ... SELECT (run here as written, the
 Oracle-only 'USER.' prefix dropped and the LIMIT column quoted for SQLite) and commits. ASSUMED: the
 Account/Archost/BAL_SPRn aggregation with SB_BALANCE.SALDOTOACTIVE/PASSIVE (and the OUT_* copy) is replaced by
-fixture rows (cp_source); SB_CAPITAL.calculate_capumhes = fixture 'capital' (0 when the date is missing)."""
+fixture rows (cp_source); SB_CAPITAL.calculate_capumhes = fixture 'capumhes' (0 when the date is missing).
+
+TfrmCapital ('Kapital', cp_capital.py): the ds_capital / ds_capital_out texts run as written except the Oracle '(+)'
+outer join, rewritten to LEFT JOIN for SQLite (and 'order by id' qualified); SB_CAPITAL.cap_insert / cap_delete follow the package bodies
+(sm_p.sql:38368-38381: insert ... values (0, ..., decode(x,0,null,x) ...) / delete where id; both commit). ASSUMED:
+the ID trigger behind 'values (0,' (mock: max(ID)+1) and the calculate_* results (fixture 'cap_calc', 0 when missing;
+calculate_capumhes keeps 'capumhes')."""
 from __future__ import annotations
 import datetime as dt
 import json
@@ -16,7 +22,7 @@ from .. import cp_sql as Q
 from .base import DBError
 
 _DB = None
-DATE_COLS = {"PRESENTDATE", "DAT"}
+DATE_COLS = {"PRESENTDATE", "DAT", "OPEN_DAT", "CLOSE_DAT"}
 
 
 def reset():
@@ -70,7 +76,18 @@ def _run(sql, binds=None):
     return out
 
 
-_OWN = {Q.SQL_CP_ODSCURRENCY, Q.SQL_CP_BANKINFO, Q.SQL_CP_ODSFILLFILE, Q.SQL_CP_ODSSVM, Q.SQL_CP_TUNING_BANKINFO}
+_OWN = {Q.SQL_CP_ODSCURRENCY, Q.SQL_CP_BANKINFO, Q.SQL_CP_ODSFILLFILE, Q.SQL_CP_ODSSVM, Q.SQL_CP_TUNING_BANKINFO,
+        Q.SQL_CAP_ACCOUNT, Q.SQL_CAP_ACCOUNT_OUT, Q.SQL_CAP_ADI_DFM, Q.SQL_CAP_ADI_4, Q.SQL_CAP_ADI_5, Q.SQL_CAP_ODS1_DFM,
+        Q.SQL_CAP_ODS1_6, Q.SQL_CAP_ODS2, Q.SQL_CAP_ODS3, Q.SQL_CAP_ODS4}
+_OUTER = ("\n  where cap.acc=ac.id (+)", " left join {t} ac on cap.acc=ac.id")
+
+
+def _outer_join(sql):
+    """ds_capital / ds_capital_out: 'FROM capital cap,<T> ac where cap.acc=ac.id (+)' -> LEFT JOIN (SQLite)."""
+    for t in ("account", "CAPITAL_ACC_OUT"):
+        sql = sql.replace("FROM capital cap," + t + " ac" + _OUTER[0], "FROM capital cap" + _OUTER[1].format(t=t))
+    # Oracle resolves ORDER BY id to the select-list column; SQLite calls it ambiguous (cap.id / ac.id)
+    return sql.replace("\n order by id", "\n order by cap.id")
 _DYN = re.compile(r"\bFrom\s+(CurrencyPosition_|CPSUM_)", re.I)
 _UPD = re.compile(r"^update BankInfo set ((?:\w+ = :\w+(?:, )?)+) where rowid = :ROWID_$")
 
@@ -82,6 +99,8 @@ class CpMixin:
     def _cp_query(self, sql, b):
         if sql in _OWN or _DYN.search(sql):
             return _run(sql, b)
+        if sql.startswith(Q.CAP_LINES[0] + "\n"):
+            return _run(_outer_join(sql), b)
         return NotImplemented
 
     def _cp_func(self, key, args):
@@ -90,7 +109,12 @@ class CpMixin:
         if key == "SB_CURRENCYPOSITION.GETBANKDAY":
             return dt.datetime.fromisoformat(_db().execute("select TEK_DAT from sysdat").fetchone()[0])
         if key == "SB_CAPITAL.CALCULATE_CAPUMHES":
-            r = _db().execute("select CAPITAL from capital where DAT = ?", [_bind(args[0])]).fetchone()
+            r = _db().execute("select CAPITAL from capumhes where DAT = ?", [_bind(args[0])]).fetchone()
+            return float(r[0]) if r else 0.0
+        if key == "SB_CAPITAL.GETDATE":                                     # select tek_dat into Dum from sysdat
+            return dt.datetime.fromisoformat(_db().execute("select TEK_DAT from sysdat").fetchone()[0])
+        if key.startswith("SB_CAPITAL.CALCULATE_"):
+            r = _db().execute("select VALUE from cap_calc where FN = ? and DAT = ?", [key[11:], _bind(args[0])]).fetchone()
             return float(r[0]) if r else 0.0
         return NotImplemented
 
@@ -122,6 +146,18 @@ class CpMixin:
             db.execute(f"Delete From {t} Where Active=0 And Passive=0")
             db.commit()
             return {}
+        if key == "SB_CAPITAL.CAP_INSERT":
+            a = list(args) + [1] * (8 - len(args))                          # in_bal_type default 1
+            z = lambda v: None if v == 0 else v                              # decode(x,0,null,x)
+            nid = (db.execute("select max(ID) from capital").fetchone()[0] or 0) + 1
+            db.execute('insert into capital (ID, TYPE, BAL, ACC, SUM, PERCENT, FORMULA, OP_TYPE, BAL_TYPE) '
+                       'values (?,?,?,?,?,?,?,?,?)', [nid, a[0], z(a[1]), z(a[2]), z(a[3]), z(a[4]), a[5] or None, a[6], a[7]])
+            db.commit()
+            return {}
+        if key == "SB_CAPITAL.CAP_DELETE":
+            db.execute("delete from capital where id=?", [args[0]])
+            db.commit()
+            return {}
         if key == "SB_CURRENCYPOSITION.DATACHECKING":
             adate = _bind(args[0])
             r = db.execute("select OSTAT from operkurs where DAT = ? and VAL_KOD = 1", [adate]).fetchone()
@@ -143,6 +179,9 @@ class CpMixin:
         return NotImplemented
 
     def _cp_execute(self, sql, b):
+        if sql == Q.SQL_CAP_FORMULA_UPDATE:
+            _db().execute("update capital set FORMULA = ? where rowid = ?", [b["FORMULA"], int(b["ROWID_"])])
+            return True
         m = _UPD.match(sql)
         if not m:
             return False

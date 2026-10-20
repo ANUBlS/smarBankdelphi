@@ -53,7 +53,7 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 10 | CurrencyPosition / TFrmCurrencyPosition | `Packages/CurrencyPosition` | 6 | 6 | 20 | 2999 |  | SB_CAPITAL, SB_CURRENCYPOSITION | **partly ported** (route `/m/currencyposition`, see PARITY_CURRENCYPOSITION.md): main form, Yoxlamalar, Hesabatlar data; CPReport / Hesabat / Excel-ə at on hold; **UntCapital (Kapital) not ported yet**. Production confirmed by the user 2026-10-20; Packages/CurrPos/* ignored |
+| 10 | CurrencyPosition / TFrmCurrencyPosition | `Packages/CurrencyPosition` | 6 | 6 | 20 | 2999 |  | SB_CAPITAL, SB_CURRENCYPOSITION | **ported** (route `/m/currencyposition`, see PARITY_CURRENCYPOSITION.md): main form, Yoxlamalar, Hesabatlar data, Kapital (UntCapital); CPReport / Hesabat / Excel-ə at on hold. Production confirmed by the user 2026-10-20; Packages/CurrPos/* ignored |
 | 11 | Exchange / TFrmExchange | `Packages/Exchange` | 10 | 10 | 16 | 2044 |  | SB_EXCHANGE, SB_MTOUTVIEW, SB_ACA | **ported** (route `/m/exchange`, see PARITY_EXCHANGE.md; QuickReport prints on hold) |
 | 12 | ExchangeMGR / TExchangeMGR_X | `Packages/ExchangeMGR-NBC` | 28 | 27 | 1 | 9656 |  |  | production `Packages/ExchangeMGR-NBC` confirmed by the user 2026-10-20; ExchangeMGR-Turan / ExchangeMGR_IBAN / DepositTeze / Teymur copies are ignored |
 | 13 | OldRatesProj / TOldRatesFormX | `Packages/LastRates` | 1 | 1 | 3 | 453 |  | SBOP |  |

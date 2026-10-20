@@ -3,7 +3,7 @@
    (Tarix aralığı, Balans planı, file name, toolbar), Panel3 'Seçmələr' (Tarix / Valyuta), DBGrid1, Panel4 'Cəmi :'.
    TFrmChecking ('Yoxlamalar...') keeps its CachedUpdates what-if editing on the client, as in Delphi (never posted to
    the DB; CancelUpdates on close). TFrmTuning 'Hesabat' / 'Excel-ə at' (CPReport, VALYUTA_MOVQE.xlsx) are on hold;
-   TfrmCapital ('Kapital') is not ported yet. */
+   TfrmCapital ('Kapital') is in cp_capital.js. */
 (function () {
   const { api, t, esc, toast, modal } = window.SB;
   const P = '/api/currencyposition', T = (k, p) => t('cp.' + k, p);
@@ -98,7 +98,7 @@
     };
     v('bTuning').onclick = () => tuning(st);
     v('bCheck').onclick = () => checking(st);
-    v('bCapital').onclick = () => toast(T('capital_not_ported'), 'info');
+    v('bCapital').onclick = () => window.SB.cpCapital(st);                       // tb_CapitalClick: frmCapital.ShowModal (cp_capital.js)
   }
 
   function inputBox(caption, prompt, def) {                     // Dialogs.InputBox: Cancel returns the default
