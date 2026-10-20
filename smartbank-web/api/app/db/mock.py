@@ -39,6 +39,8 @@ from .mock_xohks import XohksMixin
 from .mock_cards import CardsMixin
 from . import mock_dep
 from .mock_dep import DepMixin
+from . import mock_cd
+from .mock_cd import CdMixin
 from . import mock_cards
 from . import mock_xohks
 from ..config import settings
@@ -67,6 +69,7 @@ def reset():
     mock_xohks.reset()
     mock_cards.reset()
     mock_dep.reset()
+    mock_cd.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -80,7 +83,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -94,7 +97,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._dep_func(key, named, args)      # DepositsManager_New plugins
+        r = self._cd_func(key, args)              # Packages/CashDeskLast (SB_CASHREPORT)
+        if r is NotImplemented:
+            r = self._dep_func(key, named, args)  # DepositsManager_New plugins
         if r is NotImplemented:
             r = self._xs_func(key, args)
         if r is NotImplemented:
@@ -185,7 +190,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._dep_proc(key, named, args)     # DepositsManager_New (sbcm_stored_programs_new)
+        r = self._cd_proc(key, args)             # Packages/CashDeskLast + CashSymbols (SB_CASHREPORT)
+        if r is NotImplemented:
+            r = self._dep_proc(key, named, args)  # DepositsManager_New (sbcm_stored_programs_new)
         if r is NotImplemented:
             r = self._cards_proc(key, args)    # Cards (card_main)
         if r is NotImplemented:
@@ -236,7 +243,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._dep_query(sql, b)  # DepositsManager_New (exact verbatim SQL text only)
+        r = self._cd_query(sql, b)  # Packages/CashDeskLast + CashSymbols (exact verbatim SQL text only)
+        if r is NotImplemented:
+            r = self._dep_query(sql, b)  # DepositsManager_New (exact verbatim SQL text only)
         if r is NotImplemented:
             r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
         if r is NotImplemented:
@@ -315,6 +324,8 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._cd_execute(sql, binds or {}):
+            return
         if self._dep_execute(sql, binds or {}):
             return
         if self._azi_execute(sql, binds or {}):
@@ -347,7 +358,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
-        r = self._dep_plsql(sql, binds or {})         # DepositsManager_New plugins
+        r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
+        if r is NotImplemented:
+            r = self._dep_plsql(sql, binds or {})     # DepositsManager_New plugins
         if r is NotImplemented:
             r = self._cs_plsql(sql, binds or {})
         if r is NotImplemented:
@@ -367,6 +380,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         return r
 
     def cursor_block(self, sql, cursor_bind, binds=None):
+        r = self._cd_cursor(sql, cursor_bind, binds or {})
+        if r is not NotImplemented:
+            return r
         r = self._oacc_cursor(sql, cursor_bind, binds or {})
         if r is not NotImplemented:
             return r
@@ -376,6 +392,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._cd_commit()
         self._dep_commit()
         self._cr_commit()
         self._xs_commit()

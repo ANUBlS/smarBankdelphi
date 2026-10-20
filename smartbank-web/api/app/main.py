@@ -379,3 +379,7 @@ from . import dep_settings  # noqa: E402
 app.include_router(dep_settings.make_router(current, require_module, err))
 from . import dep_pct  # noqa: E402
 app.include_router(dep_pct.make_router(current, require_module, err))
+from . import cashdesk  # noqa: E402
+app.include_router(cashdesk.make_router(current, require_module, err))
+from . import cashsymbols  # noqa: E402
+app.include_router(cashsymbols.make_router(current, require_module, err))
