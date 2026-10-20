@@ -39,7 +39,7 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Əməliyyat ▸ Möhkəməndirmə | N14Click :1295 → LoadPlugin('FileReport.bpl','REZ') | – | separate BPL (Packages/Cards_New/FileReprt) | **on hold by user** (report) |
 | Əməliyyat ▸ Limitlər | Limitlr1Click :1152 | – | Tlim (limittur.pas) | planned |
 | Əməliyyat ▸ Commission Our POS-ONUS | PostCommisiononus1Click :1279 | card_cfile | TPostCommisionOnus | planned |
-| Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | **list + 4 of 14 forms done (3g)** |
+| Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | **done: list + all 14 forms (3g, 3h)** |
 | Hesabatlar | ToolButton7Click :1075 | card_hesabat | THesabatlar (rezform.pas) | **on hold by user** |
 | F3 (form KeyUp) | ActiveFormKeyUp :670 | – | TFormSearch: shared unit, to check | to check |
 
@@ -225,7 +225,7 @@ API `api/app/cards_online.py`, Tclients2 mode ONLINE in `api/app/cards.py`, test
 Unverified (3f): card_main.card_ufx_proc body (mock no-op); card_uxfarxiv DAT1/DAT2 variable types (sent as dates); the dates Tclients2 Button1Click sets
 (ONLINE skips FormActivate's NEW branch; the web keeps the NEW defaults for the date pickers).
 
-## Step 3g: Sazlama (setac.pas TForm10) + balhs / comp / datclose / paymentsett – partly done
+## Step 3g: Sazlama (setac.pas TForm10) + balhs / comp / datclose / paymentsett – done
 
 API `api/app/cards_sett.py` (`/api/cards/sett`), tests `api/tests/test_cards_sett.py`, E2E `e2e/cards_sett.py`, screenshots 187-189.
 
@@ -240,20 +240,47 @@ API `api/app/cards_sett.py` (`/api/cards/sett`), tests `api/tests/test_cards_set
 | 4 Tdateclose datclose.pas | `/sett/datclose/*` | settings.Edit; 'Yadda saxlanılsın?' Yes → Post (CommitOnPost); FormClose Cancel |
 | 12 TPaymentset paymentsett.pas | `/sett/paymentsett/*` | Card_vidop editable DBGrid (dgEditing): insert / update / delete by ROWID, CommitOnPost |
 
-Not yet ported: 3 TForm14 crdtype.pas, 5 Tfilial_accounts filialaccounts.pas, 6 Tdomestic_bank domesticbank.pas, 7 TBank_Settings banksettings.pas,
-8 Tatmpos atmendpos.pas, 9 TPOS_COMMISION poscomission.pas, 10 TPROVS Unit155.pas, 11 Tcard_branch cardbranch.pas, 13 TExchangesettings excsett.pas,
-14 TRbsTaxFileAccsett Taxfilessettings.pas.
+The other ten forms: step 3h.
 
 Unverified (3g): CommitOnPost on settings / Card_vidop (DOA default True assumed); the column lists DOA generates in its DML (the web writes only the edited fields);
 the TFilterExpr result for the numeric ID against 'x*'; the mock has no transactions for these tables.
 
+## Step 3h: Sazlama forms 3, 5-11, 13, 14 – done
+
+API `api/app/cards_sett2.py` (`/api/cards/sett/<form>/*`), UI `web/public/modules/cards_sett2.js`, tests `api/tests/test_cards_sett2.py`,
+E2E `e2e/cards_sett2.py`, screenshots 214-223. Datasets are the verbatim Unit18.dfm lists (cards_sql); `card_main` calls go through
+mainpacket.CallProcedure (no commit); Session.Commit only where the handler has it. TitleClick (crdtype :33, filialaccounts :38,
+domesticbank :28, atmendpos :39, poscomission :49): IsEmpty or no FieldName → Exit, else SQL.Add('ORDER BY F'), Refresh, line blanked.
+
+| Delphi | Web | Notes |
+|---|---|---|
+| 3 TForm14 crdtype.pas: Button1 'Enter' :14 / Button2 'Delete' :27 | `/crdtype/add`, `/delete`, `/sort` | five boxes non-empty → card_main.new_carttype(Edit1, Edit2, combo Text (VAL_NAME), Edit5, Edit3, Edit4); CARDTYPES Close/Open; else 'Xanalar tam doldurulmalıdır!'. Delete: Yes → CARDTYPES.Delete; Commit after Yes and No |
+| 5 TFilial_Accounts: Button1 'Yadda saxla' :9 / Button2 'Sil' :26 | `/filialaccounts/*` | the confirm is commented out; card_main.filialacount(filial NAME, VAL_NAME, SearchEdit1-5, Edit1, SearchEdit6-7); Delete + Commit + reopen only after Yes |
+| 6 Tdomestic_bank: Button1 :9 / Button2 :22 | `/domesticbank/*` | 'Dəyişikliklər yadda saxlanılsın?' Yes → insert_domestic(Edit1, Edit2, VAL_NAME, SearchEdit1-3); reopen after Yes and No. Grid ACC_NO / ACC_NO_1 / ACC_NO_2 = the DOA names of the three acc_no columns (TitleClick on them: ORA-00918 / ORA-00904 as Delphi) |
+| 7 TBank_Settings: FormActivate settings.Edit; Button1 'Yadda saxla' | `/banksettings/check`, `/save` | CheckAdvancedObjectAccess('cardsettingssave') before 'Dəyişiklik yadda saxlanılsın?'; Yes → rez (RadioGroup1), dord (CheckBox2), kliring_25/45 (SearchEdit3/4), DBEdits BANKID / ACCOUNTCLOSECODE, Post (CommitOnPost). Hidden CheckBox1 only re-writes ARAHESAB = 1 when it already is 1 (not written) |
+| 8 Tatmpos atmendpos.pas: Button1 :9 / Button2 :27 / Button3 'Excel' :57 | `/atmendpos/check`, `/add`, `/delcheck`, `/delete`, `/excel` | rights cardatmpossave / cardatmposdelete / cardatmposexcel; ComboBox1 ATM / POS / CASH; required boxes then 'Yadda saxlanılsın?' → new_BANKOMAT(…, SearchEdit3 əsas, SearchEdit2 ara, SearchEdit1 gəlir, Edit3); grid reopened always. 'Secilmiş sətir silinsin?' → atm_delete(id); Refresh |
+| 9 TPOS_COMMISION poscomission.pas: Button1 :17 / Button2 :9 / Button3 :43 | `/poscomission/*` | Insert, AsString assignments, Post, Commit, reopen; any exception swallowed (reopen, no message). Delete: Commit after Yes and No. Excel sheet 'POS' (no right) |
+| 10 TPROVS Unit155.pas: Button1 'Əlavə et' :8 / Button2 'Sil' :13 | `/unit155/*` | insert_noprovs(Edit1), Refresh. Sil: Delete with no confirmation, Commit, Refresh (empty dataset → 'Cannot perform this operation on an empty dataset') |
+| 11 Tcard_branch cardbranch.pas: Button1 :8, S1 'Sil' :160, Button2 'XML Al' :17 | `/cardbranch/*` | addbranchescode(KeyValue (ID), Text, Edit1) + 'Filialın Plastik kart kodu əlavə olundu..'. Popup Sil: 'Əməliyyat Kodu silinsin ?' → del_branchescode(branchid). F11 on the grid shows XML Al, F10 hides it: cardbr_upd → CARDFILUPD.xml (download; CARDS_OUT_DIR copy), 'Xml Yaradildi'; a second click writes the header only (Open no-op, cursor at Eof) |
+| 13 TExchangesettings excsett.pas | `/excsett/filial`, `/add` | filialcomboCloseUp: exchange_acc :fil; BitBtn1 addexchangeacc(8 search boxes, filial KeyValue, contract_num, nameofatm), Refresh. BitBtn2 'Sil' has no OnClick |
+| 14 TRbsTaxFileAccsett Taxfilessettings.pas | `/taxfilessettings/valute`, `/add`, `/delete`, `/apply` | valutecomboCloseUp: rbs_tax_accounts :fil / :valu; BitBtn1 rbs_tax_acc_settings(filial, valute, tax1, tax10, tax18), reopen. BitBtn2 deletes rbs_tax_accounts (the account lookup, not the grid): error, nothing deleted. DBGrid1 has default Options (dgEditing) on a ROWID dataset: cell edit → update, 'New row' → insert, Ctrl+Del → delete, CommitOnPost |
+
+Unverified (3h): the card_main bodies new_carttype / filialacount / insert_domestic / new_BANKOMAT / atm_delete / insert_noprovs / addbranchescode /
+del_branchescode / addexchangeacc / rbs_tax_acc_settings (not in the repo; the mock writes / deletes one row on the grid's table, no commit);
+card_poscommission / rbstax_acc_settings DDL (POSID and TAX* assumed text, the rest numeric); DOA delete on rbs_tax_accounts without ROWID (the web
+shows an error; Delphi's exact message unknown); banksettings after one save: settings is browse-mode until FormActivate fires again (the web
+re-reads and allows every save); CARDFILUPD.xml encoding (Writeln of UTF8String to a TextFile → ANSI code page; web: CARDS_FILE_CODEPAGE);
+TO_CHAR(SYSDATE, 'HH:MM:SS') gives hour:month:second (kept); datasets with Active = True at module creation show their state at that moment in
+Delphi (the web always reads fresh). Duplicate select-list names now become NAME, NAME_1, … in the Oracle adapter (DOA / TDataSet field naming;
+FieldByName finds the first) – this applies to every module's queries.
+
 ## Plan (next steps, in order)
 1. Tclients2 add / edit (cards_azericard Unitclient2.pas) with the cliencards / CARDOPERATION details. (Excel export: done.)
 2. Applications (applicationpas.pas) and Yeni kartlar (U9), Verifikasiya. (done)
-3. Balans, Payment (done), Hesabatlar (rezform: **on hold by user**), Sazlama (setac, banksettings, filialaccounts, crdtype, comp, poscomission, paymentsett).
+3. Balans, Payment, Sazlama (all 14 forms): done. Hesabatlar (rezform): **on hold by user**.
 4. File operations: C File, Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file (+ excsett), RbsDoFile (+ rbsstate, card_states), RbsTax (+ Taxfilessettings), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission; card_ufx / arxivufx (no UFX71 in this build).
 5. Online Cards, Karta Mədaxil. (FileReport.bpl 'REZ' and every other report screen: **on hold by user**.)
 Then the later logic-update phase for cards, once the user shares the new rules.
 
 ## Resume point
-Plan step 3: the Sazlama sub forms not yet ported (step 3g list: crdtype, filialaccounts, domesticbank, banksettings, atmendpos, poscomission, Unit155, cardbranch, excsett, Taxfilessettings), then step 4 (file operations), then the rest of step 5. Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.
+Plan step 4 (file operations), in order: C File (cfilepas + cfile_addi), Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file, RbsDoFile (+ rbsstate, card_states), RbsTax (Taxrbs), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission. Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.

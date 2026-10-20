@@ -6,7 +6,7 @@ import threading
 
 import oracledb
 
-from .base import DBError, Out
+from .base import DBError, Out, dedupe
 
 _IDENT = re.compile(r"^[A-Za-z][A-Za-z0-9_$#]{0,127}$")
 
@@ -30,7 +30,7 @@ _TYPES = {str: oracledb.DB_TYPE_VARCHAR, int: oracledb.DB_TYPE_NUMBER, float: or
 
 
 def _rows(cur) -> list[dict]:
-    cols = [d[0].upper() for d in cur.description or []]
+    cols = dedupe([d[0].upper() for d in cur.description or []])
     return [dict(zip(cols, r)) for r in cur.fetchall()]
 
 

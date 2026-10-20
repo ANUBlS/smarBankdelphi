@@ -11,7 +11,7 @@ import re
 import sqlite3
 
 from .. import cards_sql as Q
-from .base import DBError
+from .base import DBError, dedupe
 
 _DB = None
 _PATS = None
@@ -96,7 +96,8 @@ def _pats():
                 t = re.escape(Q.text(L))
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
-                if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
+                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
@@ -119,6 +120,16 @@ class CardsMixin:
             raise DBError("ORA-00933: SQL command not properly ended", 933)
         if not any(p.match(sql) for p in _pats()):
             return NotImplemented
+        if sql.startswith(Q.text(Q.LINES_DOMESTIC)):
+            # domesticbank.pas TitleClick on the three acc_no columns: 'ORDER BY ACC_NO' is ambiguous, ACC_NO_1 / _2 are only DOA field names
+            m = re.search(r"ORDER BY (ACC_NO(?:_\d)?)\r\n", sql[len(Q.text(Q.LINES_DOMESTIC)):])
+            if m:
+                raise DBError("ORA-00918: column ambiguously defined" if m.group(1) == "ACC_NO" else
+                              f'ORA-00904: "{m.group(1)}": invalid identifier', 918 if m.group(1) == "ACC_NO" else 904)
+        if "SYSDATE" in sql:                                                   # cardbr_upd: TO_CHAR(SYSDATE, fmt) with Oracle format codes
+            now = dt.datetime.now()
+            sql = sql.replace("TO_CHAR(SYSDATE, 'HH:MM:SS')", "'" + now.strftime("%I:%m:%S") + "'")   # HH = 12-hour, MM = month (as written)
+            sql = sql.replace("TO_CHAR(SYSDATE, 'YYYY-mm-dd')", "'" + now.strftime("%Y-%m-%d") + "'")
         s = re.sub(r"\bsmart\.", "", sql)
         s = re.sub(r"card_main\.findfilial", "card_main_findfilial", s, flags=re.I)
         s = re.sub(r"sb_aca\.getuserbyid", "sb_aca_getuserbyid", s, flags=re.I)
@@ -135,7 +146,7 @@ class CardsMixin:
             params["user__"] = self.username
         s = re.sub(r"--[^\r\n]*", "", s)
         cur = _db().execute(s, params)
-        names = [d[0].upper() for d in cur.description]
+        names = dedupe([d[0].upper() for d in cur.description])
         out = []
         for r in cur.fetchall():
             o = {}
@@ -199,16 +210,59 @@ class CardsMixin:
             _db().execute("update card_client_app set STATUS = 1 where id = ?", [int(args[0])])
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
+        r = self._sett_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
         if key == "CARD_MAIN.DELETE_APPLICATION":
             # card_main body not in the repo: emulated as a delete of the card_client_app row (no commit, as the Delphi caller)
             _db().execute("delete from card_client_app where id = ?", [int(args[0])])
             return {}
         return NotImplemented
 
+    def _sett_proc(self, key, a):
+        """Sazlama sub forms (cards_sett2): the card_main bodies are not in the repo; emulated as one insert / delete on the table the
+        form's grid shows (names / ids resolved from the lookup texts). No commit, as the Delphi callers."""
+        db = _db()
+        one = lambda q, p: (db.execute(q, p).fetchone() or [None])[0]  # noqa: E731
+        acc = lambda n: one("select id from account where acc_no = ?", [n]) if n else None  # noqa: E731
+        val = lambda n: one("select valute from avalute_t where val_name = ?", [n])  # noqa: E731
+        fil = lambda n: one("select id from filial_t where name = ?", [n])  # noqa: E731
+        nid = lambda t: (one(f"select max(id) from {t}", []) or 0) + 1  # noqa: E731
+        ins = lambda t, r: db.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))  # noqa: E731
+        if key == "CARD_MAIN.NEW_CARTTYPE":
+            ins("CARD_CARDTYPE", dict(ID=nid("CARD_CARDTYPE"), NAME=a[0], CODE=a[1], CURRENCY=a[2], SERVICE=a[3], SCHEME=a[4], BIN=a[5]))
+        elif key == "CARD_MAIN.FILIALACOUNT":
+            ins("filialaccounts", dict(ID=nid("filialaccounts"), FILIALID=fil(a[0]), VALID=val(a[1]), ACCID28=acc(a[2]), ACCID48=acc(a[3]),
+                                       ACCID64=acc(a[4]), DILING_GELIR=a[5], DILING_XERC=a[6], KOD=a[7], REZ28=a[8], REZ48=a[9]))
+        elif key == "CARD_MAIN.INSERT_DOMESTIC":
+            ins("card_domestic", dict(ID=nid("card_domestic"), BANKID=a[0], BANKNAME=a[1], VALID=val(a[2]), H25ID=acc(a[3]), H45ID=acc(a[4]),
+                                      H64ID=acc(a[5])))
+        elif key == "CARD_MAIN.NEW_BANKOMAT":
+            ins("card_bankomats", dict(ID=nid("card_bankomats"), ATMPOS=a[0], ATMID=a[1], ATMNAME=a[2], FILIAL=fil(a[3]), VAL=val(a[4]),
+                                       MAINACOUNT=acc(a[5]), INTERACCOUNT=acc(a[6]), PROFITACOUNT=acc(a[7]), CONTRACTNUMBER=a[8]))
+        elif key == "CARD_MAIN.ATM_DELETE":
+            db.execute("delete from card_bankomats where id = ?", [a[0]])
+        elif key == "CARD_MAIN.INSERT_NOPROVS":
+            ins("card_noprov", dict(STR=a[0]))
+        elif key == "CARD_MAIN.ADDBRANCHESCODE":
+            ins("card_branch_codes", dict(ID=nid("card_branch_codes"), BRANCHID=a[0], BRANCH_NAME=a[1], BRANCH_CODE=a[2]))
+        elif key == "CARD_MAIN.DEL_BRANCHESCODE":
+            db.execute("delete from card_branch_codes where branchid = ?", [a[0]])
+        elif key == "CARD_MAIN.ADDEXCHANGEACC":
+            ins("card_exchange_sett", dict(ID=nid("card_exchange_sett"), ATMAZN=a[0], VDMAZN=a[1], ATMUSD=a[2], VDMUSD=a[3], ATMEUR=a[4],
+                                           VDMEUR=a[5], BRANCH=a[6], MIDDLEACC=a[7], AZNINCOME=a[8], CONTRACTNUM=a[9], ATMNAME=a[10]))
+        elif key == "CARD_MAIN.RBS_TAX_ACC_SETTINGS":
+            ins("rbstax_acc_settings", dict(ID=nid("rbstax_acc_settings"), BRANCH=a[0], VALUTE=a[1], TAX1=a[2], TAX10=a[3], TAX18=a[4]))
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
+
     def _cards_execute(self, sql, b):
-        """DOA DML of the Sazlama forms (cards_sett.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
+        """DOA DML of the Sazlama forms (cards_sett.SQL / cards_sett2.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
         from .. import cards_sett as S
-        if sql not in S.SQL.values():
+        from .. import cards_sett2 as S2
+        if sql not in S.SQL.values() and sql not in S2.SQL.values():
             return False
         p = {k.lower(): v for k, v in b.items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
