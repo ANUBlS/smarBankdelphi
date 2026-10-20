@@ -117,3 +117,45 @@ fieldset.trside{border:1px solid var(--border);border-radius:10px;padding:8px 12
 .radios label { margin-right: 10px; white-space: nowrap; }
 .grid tr.active td { background: #E0F2F1; }
 .acc-grid tr.msel td{background:var(--teal-50,#e6f6f4)!important;box-shadow:inset 3px 0 0 var(--teal-600,#0d9488)}
+/* ---- reusable left filter sidebar layout (ui/filterlayout.js) ---- */
+.flt-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:14px;align-items:start}
+.flt-layout.collapsed{grid-template-columns:40px minmax(0,1fr)}
+.flt-side{background:#fff;border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;max-height:calc(100vh - 150px);position:sticky;top:8px;min-width:0}
+.flt-head{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--navy-800);color:#fff;border-radius:var(--radius) var(--radius) 0 0}
+.flt-title{font-weight:700;font-size:13px;letter-spacing:.03em}
+.flt-toggle{background:transparent;border:0;color:#fff;font-size:15px;padding:2px 6px;border-radius:6px} .flt-toggle:hover{background:var(--navy-600)}
+.flt-body{padding:10px;overflow:auto;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0}
+.flt-foot{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border)} .flt-foot .btn{flex:1;padding:8px 10px}
+.flt-layout.collapsed .flt-body,.flt-layout.collapsed .flt-foot,.flt-layout.collapsed .flt-title{display:none}
+.flt-layout.collapsed .flt-head{writing-mode:vertical-rl;justify-content:flex-start;padding:10px 6px;border-radius:var(--radius);height:100%}
+.flt-layout.collapsed .flt-toggle{transform:rotate(180deg)}
+.flt-main{min-width:0}
+.flt-group{border:1px solid var(--border);border-radius:8px;padding:8px 9px;display:flex;flex-direction:column;gap:6px}
+.flt-group>legend,.flt-group>.flt-gt{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:0 3px}
+.flt-group label{display:flex;align-items:center;gap:6px;font-size:13px}
+.flt-group select,.flt-group input[type=text],.flt-group input[type=date],.flt-group input:not([type]){width:100%;border:1px solid var(--border);border-radius:6px;padding:6px 8px;background:#fff;font-size:13px}
+.flt-group .hint{font-size:12px;color:var(--muted);min-height:15px}
+.flt-group .row{display:flex;gap:6px;align-items:center} .flt-group .row>input{flex:1;min-width:0}
+.flt-group .clb{max-height:150px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.flt-group.toggle-apply{background:var(--teal-100);border-color:#99e9dc}
+@media (max-width:900px){
+  .flt-layout,.flt-layout.collapsed{grid-template-columns:1fr}
+  .flt-side{position:static;max-height:none}
+  .flt-layout.collapsed .flt-head{writing-mode:horizontal-tb;height:auto}
+  .flt-layout.collapsed .flt-title{display:inline}
+  .flt-layout .flt-toggle{transform:rotate(90deg)} .flt-layout.collapsed .flt-toggle{transform:rotate(-90deg)}
+}
+/* context menu (Delphi TPopupMenu) */
+.ctx-menu{position:fixed;z-index:3000;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:4px;min-width:230px}
+.ctx-item{display:flex;width:100%;align-items:center;gap:6px;background:transparent;border:0;padding:6px 8px;border-radius:6px;text-align:left;position:relative}
+.ctx-item:hover:not(:disabled){background:var(--navy-100)} .ctx-item:disabled{opacity:.45;cursor:default}
+.ctx-item.default .ctx-label{font-weight:700}
+.ctx-check{width:14px;color:var(--teal-600)} .ctx-label{flex:1} .ctx-sc{color:var(--muted);font-size:11px}
+.ctx-sep{height:1px;background:var(--border);margin:4px 2px}
+.ctx-submenu{display:none;position:absolute;left:100%;top:-4px}
+.ctx-item.sub:hover>.ctx-submenu{display:block}
+/* Delphi grid look details */
+td.silver{background:#eef1f5} tr.sel td.silver{background:inherit}
+.sysdate{display:flex;flex-direction:column;align-items:center;border:1px solid var(--border);border-radius:8px;padding:3px 10px;background:#fff}
+.sysdate small{font-size:10px;color:var(--muted);text-transform:uppercase}
+.trside{min-width:0} .trside .field input,.trside .field select{min-width:0;width:100%}

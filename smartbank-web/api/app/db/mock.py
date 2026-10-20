@@ -428,6 +428,8 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
             return A["account_flags"]
         if "from account acc order by acc.acc_no" in s:
             rows = sorted(A["accounts"], key=lambda a: a["ACC_NO"])
+            if "pair_id" in b:
+                return [{"ACCID": a["ID"], "ACCNO": a["ACC_NO"]} for a in rows if a["ID"] == b["pair_id"]]
             rows = [{"ACCID": a["ID"], "ACCNO": a["ACC_NO"]} for a in rows if a["ACC_NO"].startswith(b.get("q", "%").rstrip("%"))]
             return page(rows)
         if "from archost arc where arc.acc_id = :accid" in s:
