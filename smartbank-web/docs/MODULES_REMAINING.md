@@ -25,22 +25,22 @@ Columns: **units** = .pas files (without *_TLB), **forms** = .dfm, **SQL** = TOr
 
 Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin and settings. Tier 3 = niche lines of business, reports and integrations. Within a tier, groups are in the suggested order.
 
-### Tier 1 – Deposits
+### Tier 1 – Deposits (production = DepositsManager_New, user decision 2026-10-20)
 
-| # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
+| # | module (CLSID name / class) | production folder | units | forms | SQL | lines | built | main Oracle packages | status / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | NewDepositsManager / TNewDepositsManager_, TNewDepositsManagerImpl | `NewDepositsManager/NewDepositsManager` | 2 | 2 | 10 | 1231 | 2013-12-05 | DM_STORED_PROGRAMS, SB_ACA | **newest deposit build (OCX 2013-12-05, archive OCX 2018-05-12); 28 BPLs in DMWorldNew.groupproj loaded via LoadPlugin** |
-| 2 | NewDepositsManagerArchive / TNewDepositsManagerArchiveFormImpl | `NewDepositsManager/NewDepositsArchive` | 2 | 2 | 9 | 953 | 2018-05-12 |  |  |
+| 1 | DepositsManager_New / TDepositsManager_new | `Packages/DepositsManager_New` | 2 | 2 | 10 | 1282 | 2012-08-02 | SBCM_STORED_PROGRAMS_NEW, SB_ACA | **main form ported** (route `/m/depositsmanager-new`); plugins `Packages/SBDM_*_new` in progress – see PARITY_DEPOSITS.md. SBDM_PercentConverting_new and SBDM_Filter_new sources are missing from the repo. Contract prints and reports on hold by the user. |
 
-### Tier 1 – Deposits (other lineages – confirm which is live)
+### Deposits – skip candidates (not used by DepositsManager_New)
 
-| # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
-|---|---|---|---|---|---|---|---|---|---|
-| 3 | DepositCorrection / TFrmDepositCorrection | `DepozitAqroinvest_neftfondu/SBDM_DepositCorrection` | 1 | 1 | 1 | 409 |  |  | copies: DepositsManager/SBDM_DepositCorrection |
-| 4 | DepositManager / TFrmDepositManager | `DepozitAqroinvest_neftfondu/DepositManager__` | 4 | 4 | 3 | 1370 |  | SBCM_PERCENT_CONVERTING |  |
-| 5 | DepositsArchive / TFrmDepositsArchive | `Packages/SBDM_DepositsArchive` | 4 | 4 | 10 | 948 |  |  | copies: DepositsManager/SBDM_DepositsArchive; DepozitAqroinvest_neftfondu/SBDM_DepositsArchive |
-| 6 | DepositsManager / TfrmDepositsManager | `Packages/DepositsManager` | 2 | 2 | 9 | 1081 |  | SBCM_STORED_PROGRAMS, SB_ACA | copies: DepositTeze/DepositsManagerTeze; DepozitAqroinvest_neftfondu/DepositsManager; Packages/DepositsManagerTeze |
-| 7 | DepositsManager_New / TDepositsManager_new | `Packages/DepositsManager_New` | 2 | 2 | 10 | 1282 | 2012-08-02 | SBCM_STORED_PROGRAMS_NEW, SB_ACA |  |
+| # | module (CLSID name / class) | folder | reason |
+|---|---|---|---|
+| 2 | NewDepositsManager / TNewDepositsManager_, TNewDepositsManagerImpl | `NewDepositsManager/NewDepositsManager` | other lineage (dm_* tables, DM_STORED_PROGRAMS); its earlier web port was removed |
+| 3 | NewDepositsManagerArchive / TNewDepositsManagerArchiveFormImpl | `NewDepositsManager/NewDepositsArchive` | belongs to NewDepositsManager only |
+| 4 | DepositsArchive / TFrmDepositsArchive | `Packages/SBDM_DepositsArchive` (+ copies) | classic sbcm_* tables (not _new); no menu item in DepositsManager_New |
+| 5 | DepositsManager / TfrmDepositsManager | `Packages/DepositsManager` (+ DepositTeze, DepozitAqroinvest copies) | classic lineage, SBCM_STORED_PROGRAMS |
+| 6 | DepositManager / TFrmDepositManager | `DepozitAqroinvest_neftfondu/DepositManager__` | bank-specific lineage |
+| 7 | DepositCorrection / TFrmDepositCorrection | `DepozitAqroinvest_neftfondu/SBDM_DepositCorrection` | bank-specific lineage |
 
 ### Tier 1 – Cash desk
 
@@ -328,15 +328,15 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 | 202 | SimCorp / TSimCorp | `Packages/SimCorp` | 2 | 2 | 2 | 956 |  | PG_SIMCORP |  |
 | 203 | Toksik / TToksik | `Packages/Toksik` | 2 | 2 | 0 | 531 | 2023-12-04 |  |  |
 
-## Deposits – lineages in the repo (needs your confirmation)
+## Deposits – lineages in the repo
 
-| lineage | entry OCX (CLSID name) | sub-BPLs | units | forms | SQL | lines | notes |
-|---|---|---|---|---|---|---|---|
-| `NewDepositsManager/` (DMWorldNew.groupproj) | NewDepositsManager, NewDepositsManagerArchive | 28 NewDeposits*.bpl | 110 | 104 | 210 | 19,929 | newest real builds (2013-12-05, archive 2018-05-12), package DM_STORED_PROGRAMS. **Chosen to start.** |
-| `DepositsManager/` (DMWorld.groupproj) | DepositsManager | SBDM_*.bpl | 65 | 62 | 142 | 11,000 | classic, SBCM_STORED_PROGRAMS |
-| `DepositTeze/` + `Packages/DepositsManagerTeze` | DepositsManager (same CLSID) | SBDM_* | 80 | 76 | 165 | 15,645 | "teze" (new) copy of the classic one |
-| `DepozitAqroinvest_neftfondu/` | DepositsManager, DepositManager | SBDM_*, CRA_* | 124 | 117 | 229 | 19,952 | bank-specific (Aqroinvest / oil fund) |
-| `Packages/DepositsManager_New` + `Packages/SBDM_*_new` | DepositsManager_New | SBDM_*_new | – | – | – | – | OCX 2012-08-02, SBCM_STORED_PROGRAMS_NEW |
+| lineage | entry OCX (CLSID name) | sub-BPLs | notes |
+|---|---|---|---|
+| `Packages/DepositsManager_New` + `Packages/SBDM_*_new` (SBWorld_Tale.groupproj) | DepositsManager_New | SBDM_*_new | **production (user decision)**, SBCM_STORED_PROGRAMS_NEW |
+| `NewDepositsManager/` (DMWorldNew.groupproj) | NewDepositsManager, NewDepositsManagerArchive | 28 NewDeposits*.bpl | skip candidate, DM_STORED_PROGRAMS |
+| `DepositsManager/` (DMWorld.groupproj) | DepositsManager | SBDM_*.bpl | skip candidate, classic SBCM_STORED_PROGRAMS |
+| `DepositTeze/` + `Packages/DepositsManagerTeze` | DepositsManager (same CLSID) | SBDM_* | skip candidate |
+| `DepozitAqroinvest_neftfondu/` | DepositsManager, DepositManager | SBDM_*, CRA_* | skip candidate (bank-specific) |
 
 ## Skip candidates
 
@@ -359,7 +359,6 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 
 - Every module: `SB_ACA` rights (CHECKMODRIGHT / CheckAdvancedObjectAccess), `SBOP.GET_DATE` – already in the web shell.
 - Deposits / Cash desk / Express / Exchange post through `SB_TRANSACTION` / `SB_COMPLEX_TRANSACTIONS` – the same calls already used by TransactionManager and AZIPS.
-- NewDeposits statement button opens `Sb_General.bpl` (`depozit_stetment`) – the SBGeneral package (Packages/SBGeneral), shared with customer screens.
 - Insurance modules all share `INS_COMMON` and the InsCustomers screen; port InsCustomers first inside that group.
 - CC_* and CreditManagerConstructions share `CC_GENERAL`.
 - Cable* share `CABLE_MANAGER` / `CABLE_SETTINGS`.

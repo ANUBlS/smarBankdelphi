@@ -361,7 +361,3 @@ app.include_router(cards_cardnum.make_router(current, require_module, err))
 app.include_router(cards_posonus.make_router(current, require_module, err))
 from . import deposits  # noqa: E402
 app.include_router(deposits.make_router(current, require_module, err))
-from . import dep_contract  # noqa: E402
-app.include_router(dep_contract.make_router(current, require_module, err))
-from . import dep_money  # noqa: E402
-app.include_router(dep_money.make_router(current, require_module, err))

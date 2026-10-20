@@ -1,12 +1,12 @@
-"""Deposits manager - port of Delphi NewDepositsManager (DMWorldNew.groupproj, OCX NewDepositsManager.ocx).
+"""Deposits manager - port of the production Delphi module DepositsManager_New (SBWorld_Tale.groupproj,
+Packages/DepositsManager_New/DepositsManagernew.dproj, ActiveX DepositsManagernew.ocx).
 
-Main form: NewDepositsManager/NewDepositsManager/NewDepositsManagerForm.pas (TNewDepositsManagerImpl, CLSID below)
-Data module: NewDepositDataModule.pas/.dfm (TNewDepsitDataModule). SQL verbatim in dep_sql.py.
-The menu items open 20 separate BPLs (NewDeposits*.bpl, Sb_General.bpl) through LoadPlugin (NewCommonDeclsImpl.pas:31-41).
-This step ports the main form: list, Filter panel (TDataSet.Filter), Axtarış Paneli (SearchRecord, in the browser),
-title-click sort (:OrderField), Excel export, Bağlamaq (CloseDeposit), Hesablamanı dayandırmaq / davam etdirmək,
-Yeniləmək and the advanced-access checks done before a plugin is loaded. The plugin forms are listed in PLUGINS and
-answer 'not migrated yet' (see docs/PARITY_DEPOSITS.md).
+Main form: DepositsManagerImpl_new.pas/.dfm (TDepositsManager_new, CLSID below).
+Data module: DMDepositManagerImpl_new.pas/.dfm (TDMDepositsManager_new). SQL verbatim in dep_sql.py.
+The menu items open the SBDM_*_new.bpl plugins through LoadPlugin (Packages/SBDM_Common_new/CommonDeclsImpl_new.pas:30-40),
+most of them after sb_aca.checkadvancedobjectaccess. This module ports the main form: list, FilterPanel (TDataSet.Filter),
+Axtarış Paneli (SearchRecord, in the browser), Excel export, Bağlamaq (CloseDeposit over SelectedRows), Hesablamanı
+dayandırmaq / davam etdirmək and Yeniləmək. The plugin forms are listed in PLUGINS (see docs/PARITY_DEPOSITS.md).
 """
 from __future__ import annotations
 import datetime
@@ -22,60 +22,60 @@ from .customers import row
 from .db import DBError
 from .delphi import subst
 
-CLSID = "{9ABE87C4-2DB3-41CE-BF01-6B6EED2677C5}"        # NewDepositsManager_TLB.pas:55 CLASS_NewDepositsManagerImpl
-PKG = "dm_stored_programs"                               # NewDepositDataModule.dfm:155-162 (ParameterMode = pmNamed)
+CLSID = "{FC4F6C2E-FDCA-40AF-AE35-8F57F648EE56}"        # DepositsManager_New_TLB.pas:52 CLASS_DepositsManager_new
+PKG = "sbcm_stored_programs_new"                         # DMDepositManagerImpl_new.dfm:160-166 Stored_Programs (pmNamed)
 
-# MainGrid.Columns (NewDepositsManagerForm.dfm MainGrid) - the only values accepted for :OrderField
-GRID = ["ID", "CONTRACTNO", "CUSTOMERID", "CUSTOMERNAME", "OPENDATE", "CLOSEDATE", "PROLONGATIONDATE", "STOPCALCDATE",
-        "VAL_NAME", "AMOUNT", "INTEREST", "FACTICALDEBT", "FACTICALINTERESTDEBT", "OSTAT", "AGENTID", "FILIAL"]
-DEFAULT_ORDER = "cont.id"                                # DataModuleCreate: SetVariable('OrderField','cont.id')
+# MainGrid.Columns (DepositsManagerImpl_new.dfm:855-1113). The grid has dgTitleButtons but no OnTitleClick handler and
+# :OrderField is only set in DataModuleCreate (DMDepositManagerImpl_new.pas:91), so the order is always 'cont.id'.
+GRID = ["CONTRACTNO", "CONTRACTACCNO", "VAL_NAME", "CUSTOMERNAME", "OPENDATE", "CLOSEDATE", "AMOUNT", "INTEREST",
+        "FACTICALDEBT", "FACTICALINTERESTDEBT", "STOPCALCULATIONDATE"]
+ORDER = "cont.id"
 
-# DmDataSet persistent TFields in definition order (dfm:274-380): (field, DisplayLabel or None, Visible, kind)
-FIELDS = [("ID", "DepozitinİD-si", False, "f"), ("CONTRACTNO", "Müqavilənin №", True, "s"), ("VAL_NAME", "$", True, "s"),
-          ("CUSTOMERNAME", "Müştərinin adı", True, "s"), ("OPENDATE", "Açılma tarixi", True, "d"),
-          ("CLOSEDATE", "Bağlanma tarixi", True, "d"), ("AMOUNT", "Məbləğ", True, "f"), ("INTEREST", "İllik %", True, "f"),
-          ("FACTICALDEBT", "Cari Məbləğ", True, "f"), ("FACTICALINTERESTDEBT", "Cari Məbləğ üzrə %", True, "f"),
-          ("OSTAT", "Cari hesabın qalığı", True, "f"), ("CURRENCY", None, False, "f"), ("PERSONALTYPE", None, False, "f"),
-          ("CLIENTTYPE", None, False, "f"), ("BRANCHID", None, False, "f"), ("CONTRACTTYPE", "Depozitin tipi", False, "i"),
-          ("CUSTOMERID", "Depozit Müştəri id-si", True, "f"), ("USID", None, False, "f"),
-          ("PROLONGATIONDATE", "Uzadılma tarixi", True, "d"), ("STOPCALCDATE", "Dayandırılma tarixi", True, "d"),
-          ("CONTRACTTYPENAME", "Depozitin tipi", True, "s"), ("USERNAME", "İstifadəçinin adı", True, "s"),
-          ("FILIAL", None, True, "s"), ("AGENTID", "Cəlb edənin İD-si", True, "f")]
+# DepositsData persistent TFields in definition order (DMDepositManagerImpl_new.dfm:322-435): (field, DisplayLabel, Visible, kind)
+FIELDS = [("ID", None, False, "f"), ("CONTRACTNO", "Müqavilənin №", True, "s"), ("CONTRACTACCNO", "Hesabın №", True, "s"),
+          ("VAL_NAME", "$", True, "s"), ("CUSTOMERNAME", "Müştərinin adı", True, "s"), ("INTERESTACCNO", "Faiz Hesabın №", True, "s"),
+          ("OPENDATE", "Açılma tarixi", True, "d"), ("CLOSEDATE", "Bağlanma tarixi", True, "d"), ("AMOUNT", "Məbləğ", True, "f"),
+          ("EKAMOUNT", "Ekvivalent", True, "f"), ("INTEREST", "Faiz", True, "s"), ("FACTICALDEBT", "Cari Məbləğ", True, "f"),
+          ("EKFACTICALDEBT", "Ekvivalent", True, "f"), ("FACTICALINTERESTDEBT", "Cari Məbləğ üzrə %", True, "f"),
+          ("EKFACTICALINTERESTDEBT", "Ekvivalent", True, "f"), ("STOPCALCULATIONDATE", "Son Kapital/Ödəmə tarixi", True, "d"),
+          ("CURRENCY", None, False, "f"), ("PERSONALTYPE", None, False, "f"), ("CLIENTTYPE", None, False, "f"),
+          ("BRANCHID", None, False, "f"), ("CONTRACTTYPE", None, False, "i"), ("STATUS", None, False, "f"),
+          ("CUSTOMERID", None, False, "f"), ("USID", None, False, "f")]
 FIELD_NAMES = {f for f, *_ in FIELDS}
 
-# Menu item -> (advanced right checked first or None, BPL, exportproc parameter). NewDepositsManagerForm.pas handlers.
+# Menu item -> (advanced right checked first or None, BPL, exportproc parameter). DepositsManagerImpl_new.pas handlers.
 PLUGINS = {
-    "contract_insert": (None, "NewDepositsContract.bpl", "InsertContract"),                # N16Click :808 / ToolButton1
-    "contract_edit": ("DM_CONTRACTUPDATE", "NewDepositsContract.bpl", "EditContract"),     # N17Click :813 / ToolButton3
-    "contract_look": ("DM_CONTRACTLOOK", "NewDepositsContract.bpl", "LookContract"),       # MainGridDblClick :537
-    "apply_money": (None, "NewDepositsApplyMoney.bpl", ""),                               # N23Click :876 (miDeposit too)
-    "extract_money": (None, "NewDepositsExtractMoney.bpl", ""),                           # miWithdrawClick :578, N25Click :881
-    "capitalize": (None, "NewDepositsCapitalize.bpl", ""),                                 # miCapitalizationClick :567
-    "untimely": ("REPAYMENT", "NewDepositsUntimelyEtMoney.bpl", ""),                      # miUntimelyWithdrawClick :572
-    "percent_converting": (None, "NewDepositsPercentConverting.bpl", ""),                 # N12Click :803, N27Click :886
-    "prolongation": (None, "NewDepositsProlongation.bpl", ""),                            # N9Click :949 (+ DmDataSet.Refresh)
-    "shedule": (None, "NewDepositsShedule.bpl", ""),                                      # N36Click :924
-    "wreport": (None, "NewDepositsWReport.bpl", ""),                                      # N21Click :871 Müqavilə çapı
-    "filter": (None, "NewDepositsFilter.bpl", ""),                                        # N10Click :793 Filter Paneli
-    "statement": (None, "Sb_General.bpl", "depozit_stetment"),                            # AccountLookClick :583 (LoadPlugin3)
-    "sett_cccgroups": ("DM_ADMIN", "NewDepositsSettings.bpl", "showcccgroups"),           # N2Click :909
-    "sett_categories": ("DM_ADMIN", "NewDepositsSettings.bpl", "showcategories"),         # N3Click :929
-    "sett_deposittypes": ("DM_ADMIN", "NewDepositsSettings.bpl", "showdeposittypes"),     # N4Click :934
-    "sett_accountturning": ("DM_ADMIN", "NewDepositsSettings.bpl", "showaccountturning"),  # N5Click :939
-    "sett_wrsetup": ("DM_ADMIN", "NewDepositsWRSetup.bpl", "showSBWRBookmarkSetup"),      # FayllarBukmarklar1Click :332
-    "sett_wrgroups": ("DM_ADMIN", "NewDepositsWRGroups.bpl", ""),                         # iplr1Click :352
-    "sett_percent": ("DM_ADMIN", "NewDepositsPercentSettings.bpl", ""),                   # N7Click :944
-    "sett_balance": ("DM_ADMIN", "NewDepositsBalanceSettings.bpl", ""),                   # N11Click :798
-    "rep_mis": (None, "NewDepositsReport.bpl", ""),                                       # N32Click :914 Mis Hesabatı
-    "rep_control": (None, "NewDepositsControl.bpl", ""),                                  # Kontrol1Click :778
-    "rep_logs": (None, "NewDepositsLogs.bpl", ""),                                        # Loqlar1Click :532
+    "contract_insert": ("NEW_SBCM_CONTRACT", "SBDM_Contract_new.bpl", "InsertContract"),        # ToolButton1Click :1001, N16
+    "contract_edit": ("EDIT_SBCM_CONTRACT", "SBDM_Contract_new.bpl", "EditContract"),            # ToolButton3Click :1012, N17
+    "apply_money": ("NEW_SBCM_TRANSH", "SBDM_ApplyMoney_new.bpl", ""),                           # miDepositClick :701, N23
+    "extract_money": ("NEW_SBCM_PEYMENT", "SBDM_ExtractMoney_new.bpl", ""),                       # miWithdrawClick :719, N25
+    "partial_payment": ("NEW_SBCM_PARTIAL_PEYMENT", "SBDM_PartialPayment_new.bpl", ""),          # N15Click :757
+    "capitalize": ("NEW_SBCM_CAPITALIZATION", "SBDM_Capitalize_new.bpl", ""),                    # miCapitalizationClick :692, N24
+    "untimely": ("NEW_SBCM_UNTIMELY", "SBDM_UntimelyEtMoney_new.bpl", ""),                       # miUntimelyWithdrawClick :710, N26
+    "percent_converting": ("NEW_SBCM_CALC_PERCENT", "SBDM_PercentConverting_new.bpl", ""),       # N12Click :743, N27
+    "prolongation": ("NEW_SBCM_PROLONGATION", "SBDM_Prolongation_new.bpl", ""),                 # N9Click :856, N8
+    "shedule": (None, "Sbdm_Shedule_new.bpl", ""),                                               # N36Click :851 (N14Click :752 invisible)
+    "filter": (None, "SBDM_Filter_new.bpl", ""),                                                 # N10Click :738 'Filter Paneli'
+    "rep_contract_ops": ("SBCM_PRINT_APPLYMONEY", "SBDM_ContractReport_new.bpl", ""),            # N20Click :833 (on hold)
+    "wreport": ("SBCM_PRINT_CONTRACT1", "SBDM_WReport_new.bpl", ""),                             # N21Click :842 (on hold)
+    "sett_refer": (None, "SBDM_Settings_new.bpl", "showrefer"),                                  # N1Click :828 (N1 invisible)
+    "sett_cccgroups": ("SBCM_ACCOUNT_GROUP", "SBDM_Settings_new.bpl", "showcccgroups"),          # N2Click :1052
+    "sett_categories": ("SBCM_CUSTOMERS_TYPE", "SBDM_Settings_new.bpl", "showcategories"),       # N3Click :1095
+    "sett_deposittypes": ("SBCM_DEPOSIT_TYPE", "SBDM_Settings_new.bpl", "showdeposittypes"),      # N4Click :1105
+    "sett_accountturning": ("SBCM_LOSS_INCOME_ADJUSTMENT_ACC", "SBDM_Settings_new.bpl", "showaccountturning"),  # N5Click :1115
+    "sett_wrsetup": ("SBCM_PRINT_CONTRACT", "SBDM_WRSetup_new.bpl", "showSBWRBookmarkSetup"),   # N6Click :1125
+    "sett_percent": ("SBCM_PERCENT_SETTING", "SBDM_PercentSettings_new.bpl", ""),               # N7Click :1135
+    "sett_accounts": (None, "SBDM_DepozitAccSettings_new.bpl", ""),                             # Hesablarin1Click :462 (invisible)
+    "rep_period": ("SBCM_PERIOD_REPORT", "SBDM_PeriodReport_new.bpl", ""),                      # N31Click :1062 (on hold)
+    "rep_mis": ("SBCM_MIS_REPORT", "SBDM_Report_new.bpl", ""),                                  # N32Click :1072 (on hold)
+    "rep_balance": ("SBCM_OF_BALANCE_REPORT", "SBDM_ReportofBalance_new.bpl", ""),              # N33Click :1081 (on hold)
 }
-# Advanced rights the ported plugin forms check before a confirmation (the action endpoints check them again)
-FORM_RIGHTS = {"DELETE_DM_TRANSH", "DELETE_SBCM_PEYMENT"}
-# Plugin keys whose BPL form is ported: the browser opens the web form, which runs the same right check itself.
-MIGRATED = {"contract_insert", "contract_edit", "contract_look", "apply_money", "extract_money"}
-# DM_ADMIN: ToolButton9MouseActivate :1094 checks it when the Sazlamalar button is pressed (before its drop-down opens).
+# The deposit contract prints and the deposit reports are on hold by the user: never ported.
+ON_HOLD = {"rep_contract_ops", "wreport", "rep_period", "rep_mis", "rep_balance"}
+# Plugin keys whose BPL form is ported: the browser opens the web form after this right check.
+MIGRATED: set = set()
 DATE_SEPARATOR = "."   # FormatDateTime('dd/MM/yyyy'): '/' = Windows DateSeparator (az-AZ '.', unverified on the bank PCs)
+NO_DEPOSIT = "Heç bir Depozit seçilməyib!"               # Get_SelectedContID (CommonDeclsImpl_new.pas:47-52)
 
 
 class DepError(Exception):
@@ -84,16 +84,16 @@ class DepError(Exception):
 
 
 class FilterIn(BaseModel):
-    """FilterPanel state (CheckBox + lookup KeyValue per GroupBox)."""
+    """FilterPanel state (CheckBox + lookup KeyValue per GroupBox), DepositsManagerImpl_new.dfm:19-414."""
     cb_currency: bool = False
     currency: int = 0
     cb_filial: bool = False
     filial: int = 0
     cb_contracttype: bool = False
     contracttype: int = 0
-    cb_persons: bool = False          # GroupBox2 'Müştərilərin kateq' -> field clienttype (dm_categories)
+    cb_persons: bool = False          # GroupBox2 'Müştərilərin kateq' (sbcm_categories_new) -> field clienttype
     category: int = 0
-    cb_clienttype: bool = False       # GroupBox3 'Müştərilərin mənsubiyyəti' -> field personaltype (dm_persons)
+    cb_clienttype: bool = False       # GroupBox3 'Müştərilərin mənsubiyyəti' (sbcm_persons_new) -> field personaltype
     person: int = 0
     cb_status: bool = False
     status_index: int = Field(0, ge=-1, le=1)
@@ -103,22 +103,19 @@ class FilterIn(BaseModel):
 
 
 class ListIn(BaseModel):
-    order: str | None = None          # None = DataModuleCreate order 'cont.id'
-    desc: bool = False
     filtered: bool = False            # False until ActnFilterExecute first ran (Filtered := True)
     filter: FilterIn = FilterIn()
 
 
 def build_filter_string(f: FilterIn) -> str:
-    """BuildFilterString :611-673, literally."""
+    """BuildFilterString DepositsManagerImpl_new.pas:488-550, literally (ConcatFilter check=true -> ' and ')."""
     res = ""
 
     def concat(prefix, checked, key):
         nonlocal res
         if checked:
-            tmp = "(%s=%s)" % (prefix, key)                       # csFormat = '(%s=%s)', op = ' and '
+            tmp = "(%s=%s)" % (prefix, key)                       # csFormat = '(%s=%s)'
             res = tmp if res == "" else res + " and " + tmp
-
     concat("CURRENCY", f.cb_currency, f.currency)
     concat("branchid", f.cb_filial, f.filial)
     concat("contracttype", f.cb_contracttype, f.contracttype)
@@ -139,18 +136,8 @@ def build_filter_string(f: FilterIn) -> str:
     return res
 
 
-def order_text(order: str | None, desc: bool) -> str:
-    """MainGridTitleClick :543-564: FieldName + ' DESC' (MarkerIndex = 2) or ' ASC'."""
-    if not order:
-        return DEFAULT_ORDER
-    o = order.upper()
-    if o not in GRID:
-        raise DepError("error.generic")
-    return o + (" DESC" if desc else " ASC")
-
-
 def query_rows(conn, b: ListIn):
-    rows = conn.query(subst(Q.SQL_DMDATASET, "OrderField", order_text(b.order, b.desc)))
+    rows = conn.query(subst(Q.SQL_DEPOSITSDATA, "OrderField", ORDER))
     expr = build_filter_string(b.filter) if b.filtered else ""
     if expr:
         try:
@@ -161,9 +148,10 @@ def query_rows(conn, b: ListIn):
 
 
 def init_data(conn):
-    """ActiveFormCreate :690-707 + DataModuleCreate + PrepareFilter :676-688 (KeyValue := first record, 0 if empty)."""
-    lk = {"valutes": conn.query(Q.SQL_VALUTES), "filials": conn.query(Q.SQL_FILIALS), "types": conn.query(Q.SQL_DM_TYPES),
-          "categories": conn.query(Q.SQL_DM_CATEGORIES), "persons": conn.query(Q.SQL_DM_PERSONS)}
+    """ActiveFormCreate :566-583 + DataModuleCreate (DM.pas:87-102) + PrepareFilter :552-564 (KeyValue := first record)."""
+    lk = {"valutes": conn.query(Q.SQL_VALUTES), "filials": conn.query(Q.SQL_FILIALS), "types": conn.query(Q.SQL_DEPOSITTYPES),
+          "categories": conn.query(Q.SQL_CATEGORIES), "persons": conn.query(Q.SQL_PERSONS)}
+    conn.query(Q.SQL_USERS)                                   # users.Open (its combo LCBUsers is commented out)
     first = lambda k, f: int(lk[k][0][f] or 0) if lk[k] else 0  # noqa: E731 - AsInteger of an empty dataset = 0
     bd = conn.query(Q.SQL_BANKDATE)
     fil = conn.query(Q.SQL_FILIALID)
@@ -173,13 +161,12 @@ def init_data(conn):
                          "category": first("categories", "ID"), "person": first("persons", "ID"), "status_index": 0,
                          "d1": bank_date, "d2": bank_date},
             "bank_date": bank_date, "filial_id": int(fil[0]["KOD_FIL"]) if fil else None,
-            "grid": GRID, "plugins": {k: {"right": v[0], "bpl": v[1], "param": v[2]} for k, v in PLUGINS.items()}}
+            "grid": GRID, "plugins": {k: {"right": v[0], "bpl": v[1], "param": v[2], "on_hold": k in ON_HOLD} for k, v in PLUGINS.items()}}
 
 
 def export_xlsx(rows) -> bytes:
-    """BitBtnexpClick :600-609: EExport.ExportDataset(DataSet, 'Depozitlər', True, False) - CMExcelExport (Packages/VCL)
-    ExportTitles :606-689: every Visible TField (VisibleFieldsOnly default True) in field order, title = DisplayName;
-    WideString columns NumberFormat '@', integer fields '000000'."""
+    """BitBtnexpClick :477-486: DataSet.Last, then EExport.ExportDataset(DataSet, 'Depozitlər', True) - CMExcelExport
+    (Packages/VCL): every Visible TField in field order, title = DisplayName; WideString columns NumberFormat '@'."""
     from openpyxl import Workbook
     from openpyxl.utils import get_column_letter
     wb = Workbook()
@@ -212,21 +199,26 @@ def check_right(conn, code: str):
     conn.call_proc("sb_aca", "checkadvancedobjectaccess", [code], commit=False)
 
 
-def close_deposit(conn, contract_id: int):
-    """N18Click :819-848: dm_stored_programs.CloseDeposit(ContractID => current ID) then Refresh. The SelectedRows loop is
-    commented out, so only the current record is closed even when several rows are selected. No Commit (DOA package call)."""
-    conn.call_proc(PKG, "CloseDeposit", [], named={"ContractID": int(contract_id)}, commit=False)
+def close_deposits(conn, ids: list[int]):
+    """N18Click :767-800: CloseDeposit(ContractID) for every SelectedRows bookmark, in selection order, then Refresh.
+    No Commit (DOA package call); an error stops the loop (no try/except), the earlier calls stay in the transaction."""
+    for cid in ids:
+        conn.call_proc(PKG, "CloseDeposit", [], named={"ContractID": int(cid)}, commit=False)
 
 
 def calc_enabled(conn, contract_id: int) -> bool:
-    """N19Click :855-856: CallBooleanFunction('IsCalculationEnabled',['ContractID',Get_SelectedContID])."""
+    """N19Click :810-811: CallBooleanFunction('IsCalculationEnabled',['ContractID',get_SelectedContID])."""
     return conn.call_bool(PKG, "IsCalculationEnabled", [], named={"ContractID": int(contract_id)})
 
 
 def toggle_calc(conn, contract_id: int, was_enabled: bool):
-    """N19Click :861-868: the value read before the confirmation decides Disable/EnableCalculation. No Commit."""
+    """N19Click :816-823: the value read before the confirmation decides Disable/EnableCalculation. No Commit, no Refresh."""
     conn.call_proc(PKG, "DisableCalculation" if was_enabled else "EnableCalculation", [],
                    named={"ContractID": int(contract_id)}, commit=False)
+
+
+class CloseIn(BaseModel):
+    ids: list[int] = Field(default_factory=list, max_length=10000)   # MainGrid.SelectedRows (bookmarks)
 
 
 def make_router(current, require_module, err):
@@ -256,39 +248,36 @@ def make_router(current, require_module, err):
 
     @r.post("/plugin/{key}")
     def _plugin(key: str, ws=Depends(g)):
-        """Right check of the handler, then LoadPlugin. The BPL forms are not ported yet: 'not migrated' answer."""
+        """Right check of the handler, then LoadPlugin. Not ported plugins answer 'not migrated' / 'on hold'."""
         if key not in PLUGINS:
             err(404, "error.generic")
         right, bpl, param = PLUGINS[key]
         if right:
             check_right(ws.conn, right)
-        return {"ok": key in MIGRATED, "migrated": key in MIGRATED, "bpl": bpl, "param": param}
+        return {"ok": key in MIGRATED, "migrated": key in MIGRATED, "on_hold": key in ON_HOLD, "bpl": bpl, "param": param}
 
-    @r.post("/right")
-    def _right(body: dict, ws=Depends(g)):
-        """The plugin forms call sb_aca.checkadvancedobjectaccess before their confirmation dialogs (e.g. ActnDelExecute)."""
-        code = str(body.get("code") or "")
-        if code not in FORM_RIGHTS:
+    @r.post("/close")
+    def _close(b: CloseIn, ws=Depends(g)):
+        check_right(ws.conn, "SBCM_CLOSE_CONTRACT")         # N18Click :772-775, before the confirmation (UI asks first: /right)
+        close_deposits(ws.conn, b.ids)
+        return {"ok": True, "pending": bool(b.ids), "closed": len(b.ids)}
+
+    @r.post("/right/{code}")
+    def _right(code: str, ws=Depends(g)):
+        """Handler right checks that Delphi runs before a confirmation dialog (N18Click, N19Click)."""
+        if code not in ("SBCM_CLOSE_CONTRACT", "SBCM_STOP_START_CALCPERCENT"):
             err(404, "error.generic")
         check_right(ws.conn, code)
         return {"ok": True}
 
-    @r.post("/settings-menu")
-    def _settings(ws=Depends(g)):
-        check_right(ws.conn, "DM_ADMIN")                  # ToolButton9MouseActivate :1094-1099
-        return {"ok": True}
-
-    @r.post("/{contract_id}/close")
-    def _close(contract_id: int, ws=Depends(g)):
-        close_deposit(ws.conn, contract_id)
-        return {"ok": True, "pending": True}
-
     @r.get("/{contract_id}/calc")
     def _calc(contract_id: int, ws=Depends(g)):
+        check_right(ws.conn, "SBCM_STOP_START_CALCPERCENT")  # N19Click :807-809
         return {"enabled": calc_enabled(ws.conn, contract_id)}
 
     @r.post("/{contract_id}/calc")
     def _calc_toggle(contract_id: int, body: dict, ws=Depends(g)):
+        check_right(ws.conn, "SBCM_STOP_START_CALCPERCENT")
         toggle_calc(ws.conn, contract_id, bool(body.get("enabled")))
         return {"ok": True, "pending": True}
 

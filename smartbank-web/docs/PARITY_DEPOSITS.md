@@ -1,132 +1,97 @@
-# Parity: Deposits manager (NewDepositsManager)
+# Parity: Deposits manager (DepositsManager_New, production)
 
 | | |
 |---|---|
-| CLSID | `{9ABE87C4-2DB3-41CE-BF01-6B6EED2677C5}` CLASS_NewDepositsManagerImpl (TLB:55); second CoClass `{776C93C9-…}` TNewDepositsManager_ uses the same route |
-| Delphi source | `NewDepositsManager/NewDepositsManager/NewDepositsManagerForm.pas` (1111 lines) + `.dfm`, `NewDepositDataModule.pas/.dfm`, `NewDepositsCommon/NewCommonDeclsImpl.pas` |
-| Web | API `api/app/deposits.py`, SQL `api/app/dep_sql.py`, mock `api/app/db/mock_dep.py` + `api/fixtures/deposits.json`, UI `web/public/modules/deposits.js` (route `/m/newdepositsmanager`) |
-| Tree | Mock tree Item4\Item0 "Deposits manager" Action #9 (CaptionKey `deposits.title`) |
-| Tests | `api/tests/test_deposits.py` (14), E2E `e2e/deposits_screens.py`, screenshots 242–249 |
-| Production lineage | NewDepositsManager/ has the newest real OCX builds (2013-12-05, archive 2018-05-12). **Please confirm** that DepositsManager / DepositsManager_New / DepositTeze / DepozitAqroinvest_neftfondu are not in production use. |
+| Production module | **`Packages/DepositsManager_New`** (user decision 2026-10-20). Built in `SBWorld_Tale.groupproj` together with the `Packages/SBDM_*_new` plugins. |
+| CLSID | `{FC4F6C2E-FDCA-40AF-AE35-8F57F648EE56}` CLASS_DepositsManager_new (DepositsManager_New_TLB.pas:52) |
+| Delphi source | `DepositsManagerImpl_new.pas` (1155 lines) + `.dfm`, `DMDepositManagerImpl_new.pas/.dfm`, `Packages/SBDM_Common_new/CommonDeclsImpl_new.pas` |
+| Oracle objects | `sbcm_contracts_new`, `sbcm_contract_accounts_new`, `sbcm_contract_state_new`, `sbcm_tranches_new`, `sbcm_deposit_Types_new`, `sbcm_categories_new`, `sbcm_persons_new`, `temprate`, `avalute`, `filial`, `user$`, `sysdat`, `bankinfo`; packages `sbcm_stored_programs_new` (pmNamed), `sb_aca` |
+| Web | API `api/app/deposits.py`, SQL `api/app/dep_sql.py`, mock `api/app/db/mock_dep.py` + `api/fixtures/deposits.json`, UI `web/public/modules/deposits.js` (route `/m/depositsmanager-new`) |
+| Tree / modules.json | Mock tree Item4\Item0 "Deposits manager" → `axinplace:{FC4F6C2E-…}`; `web/modules.json` marks DepositsManager_New migrated and the two NewDepositsManager CoClasses not migrated |
+| Tests | `api/tests/test_deposits.py` (14), E2E `e2e/deposits_screens.py`, screenshots 250–257 |
 
-## Main form: what is ported (lists first)
-
-| Delphi | Web | Ref |
-|---|---|---|
-| DmDataSet main SQL (verbatim, `order by :OrderField` otSubst) | `SQL_DMDATASET`; `:OrderField` uses only the 16 MainGrid column names, `cont.id` by default | dfm:198-242 |
-| Lookups: avalute, filial, dm_types, dm_categories, dm_persons, sysdat, bankinfo | `/api/deposits/init` | dfm:7-163 |
-| PrepareFilter: each combo KeyValue := first record (0 if empty) | `defaults` | pas:676-688 |
-| MainGridTitleClick: `FIELD ASC`, then DESC on the second click | header click ▲/▼ | pas |
-| BuildFilterString + `Filtered := True` (TDataSet.Filter) | literal port, evaluated by `tdataset_filter.py`; the expression is shown under the grid | pas:611-673 |
-| Checkbox/combo/date change → ActnFilterExecute | the same change events reapply the filter (CBStatus has no OnClick, so it waits for the next change) | dfm |
-| TBFilteration: toggles FilterPanel, both pickers := bank date | Filter button toggles the top panel (no left sidebar, by decision) | pas |
-| BitBtnexp → CMExcelExport (visible fields, DisplayLabel titles) | `/api/deposits/export.xlsx`, browser download | CMExcelExport.pas:606 |
-| Axtarış Paneli (Ctrl+Shift+S): SearchRecord srIgnoreCase+srPartialMatch, from current, forward, wrap confirm, 'Yazı tapılmadı!' | client-side, same messages | pas:280-310 |
-| Grid multi-select (dgExtendedSelect) | Ctrl+click | dfm |
-| ToolButton7 Yeniləmək → N28Click (reopen + Locate ID, only if RecordCount>0) | Refresh | pas |
-| N18 Bağlamaq (F8) → `dm_stored_programs.CloseDeposit(ContractID)` + Refresh | `POST /{id}/close`, **no commit** (`pending: true`) | pas:819-848 |
-| N19 Hesablamanı dayandırmaq/davam etdirmək → IsCalculationEnabled, then Disable/EnableCalculation | `GET/POST /{id}/calc`, no commit | pas:850-869 |
-| Sazlamalar ▾ → CheckAdvancedObjectAccess('DM_ADMIN') before the drop-down | `/settings-menu` | pas:1094 |
-| Rights on handlers: DM_CONTRACTUPDATE (edit), DM_CONTRACTLOOK (dbl-click), REPAYMENT (vaxtsız), DM_ADMIN (settings) | `sb_aca.checkadvancedobjectaccess` before the plugin call | pas |
-| Shortcuts: Ctrl+N/E/D/M/P/F/T, F8, Ctrl+Shift+S | same keys (browsers may keep Ctrl+N for "new window") | dfm |
-
-## Plugin forms (BPL): status
-
-All of these are called via `LoadPlugin(bpl, param)` (NewCommonDeclsImpl.pas:31-41). In the web app the right check runs, then the page shows "not migrated yet (BPL)".
-
-| Menu | BPL / param | Delphi folder (units / lines) | Status |
-|---|---|---|---|
-| Yeni / Redaktə / dbl-click | NewDepositsContract.bpl InsertContract / EditContract / LookContract | NewDepositsContract (6 / 1550) | **ported** (see below) |
-| Yatırım | NewDepositsApplyMoney.bpl | NewDepositsApplyMoney (6 / 1367) | **ported** (`dep_money.py`, `deposits_money.js`) |
-| Əmanətin ödənilməsi | NewDepositsExtractMoney.bpl | NewDepositsExtractMoney (3 / 548) | **ported** (`dep_money.py`, `deposits_money.js`) |
-| Kapitallaşdırma (toolbar) | NewDepositsCapitalize.bpl | NewDepositsCapitalize (2 / 362) | todo |
-| Əmanətin vaxtsız ödənilməsi | NewDepositsUntimelyEtMoney.bpl (REPAYMENT) | SBDM_UntimelyEtMoney_new (3 / 558) | todo |
-| Faizlərin hesablanması | NewDepositsPercentConverting.bpl | NewDepositsPercentConverting (5 / 1219) | todo |
-| Prolonqasiya | NewDepositsProlongation.bpl (+ Refresh) | NewDepositsProlongation (2 / 288) | todo |
-| Ödəmə planı | NewDepositsShedule.bpl | NewDepositsShedule (3 / 340) | todo |
-| Müqavilə çapı | NewDepositsWReport.bpl | NewDepositsWReport (2 / 247) | on hold (print) |
-| Filter Paneli (Ctrl+F) | NewDepositsFilter.bpl | NewDepositsFilter (4 / 597) | todo |
-| Hesablara baxış | Sb_General.bpl depozit_stetment | Packages | todo |
-| Settings: groups / categories / types / account turning | NewDepositsSettings.bpl show* | NewDepositsSettings (12 / 1315) | todo |
-| Settings: print files / types | NewDepositsWRSetup.bpl, NewDepositsWRGroups.bpl | (6 / 593), (4 / 458) | todo |
-| Settings: percent / balance | NewDepositsPercentSettings.bpl, NewDepositsBalanceSettings.bpl | (7 / 1439), (1 / 96) | todo |
-| Reports: Mis / Kontrol / Loqlar | NewDepositsReport.bpl, NewDepositsControl.bpl, NewDepositsLogs.bpl | (2 / 397), (1 / 117), (2 / 255) | on hold (reports) |
-| Archive module | NewDepositsArchive (separate CLSID {D24ECADF-…}) | (3 / 1228) | todo |
-
-## NewDepositsContract.bpl (new / edit / view contract)
-
-API `api/app/dep_contract.py` (`/api/deposits/contract/*`), SQL `dep_contract_sql.py`, UI `web/public/modules/deposits_contract.js`,
-tests `api/tests/test_dep_contract.py` (14), E2E `e2e/dep_contract_screens.py`, screenshots 250–254.
+## Main form: what is ported
 
 | Delphi | Web | Ref |
 |---|---|---|
-| exportproc InsertContract / EditContract / LookContract | `POST /open {mode}`; Edit checks DM_CONTRACTUPDATE, Look DM_CONTRACTLOOK first (manager handlers) | F:634-688 |
-| PanelInsertVizible: dm_contract_type NAME = panel, PANELTYPE=1 visible at TOPID, other listed panels hidden | `panels()`; unlisted panels keep the dfm Visible (AgentPanel, PecentDatePanel hidden) | F:191-222 |
-| PanelUpdateVizible: every listed panel visible at TOPID except ThirdPersonNamePanel | same | F:223-284 |
-| DepositTypes Filter 'status=0' on Insert, none on Edit/Look; Filals unfiltered / 'id='+BRANCHID | same | F:642-670, 742-747 |
-| AddContract: SEG_DM_CONTRACTS (SequenceField amOnNewRecord), CURRENCY 0, Branchid Get_FilialID, dates = PC `Date`, Amount/due/overdue 0.00, prizeid/tocard from the combos, agentid 0 | `add_contract()` | F:693-718, DM dfm:568 |
-| DBEditNumberChange (customer no. and currency OnChange): Customers, FPersonstype, ClientTypes (valcategory 1 when currency <> 0) → FClientType; no customer = FClientType keeps its old value | `ev_customer` | F:542-581 |
-| ContractTypesChange (+ ComboBoxPrize.OnClick): reopen DepPeriods/DepCapperiod; Insert: `dm_contract.getcontractno(dtid, filialid, przid)` | `ev_type` | F:506-532 |
-| LCBPeriodsKeyValueChanged → DepCapperiod reopen (LCBPeriodsChange body commented out) | `ev_period` | F:405-415 |
-| LCBCapPerChange: CLOSEDATE by period_type İL/AY/GÜN, DtClose enabled when period<>0, DmDepositPerSettings (amount band), rates (Insert: settings; Edit: record), FDepPerSetid, DBLookupPercent visible when >1 row, FIRSTINTERESTPAYDAT = IncMonth(open, capperiod div 30) | `ev_capper` | F:286-353 |
-| CheckNeedsFields: first Null of 9 fields → hint '"%s" sahəsinə qiymət daxil olunmayıb! ' (DisplayLabel) | `deposits.c_err_empty` with the Delphi label | F:443-498 |
-| Qeyd et: SaveDeposits → Post → ApplyRecord `dmaddcontract` / `dmupdatecontract` (pmNamed, all 25 names) → **commit** (CommitOnPost default) | same; failed call → rollback | F:883-979, DM:203-279 |
-| Insert: AddAccount `dmgenerateaccountnumber` + `getaddaccount` per dm_accno_columname row (p_id 0..n-1), **no commit**, then AddContract (form stays open with the next blank record) | `pending: true`, new record returned | F:835-878, 981-1004 |
-| Edit: Self.Close after Post; FormClose → RefreshWithSavely(True) (RecNo kept, selection cleared) when FCommited | `closed: true`, main grid reloads | F:761-767 |
-| İmtina et: Insert → Cancel (no new record; the next Qeyd et shows the CUSTOMERID hint); Edit → close | browse state | F:895-898 |
-| Bağla / Esc: 'Dəyişiklər qeyd olunmayacaq !' when Modified; F5 RefreshDataSets; Enter → SelectNext | same | F:769-804 |
-| Kreditin siyahısı (not FInserted): CreditContractno with :contractid := **DepositPorpsSID** (SID#), lookups Name/FilialName from the form's single-customer / filtered-filial datasets | `/credits` | NewFormCreditImpl.pas:31-38 |
-| ThirdPerson '...' toggles ReadOnly | same | F:821-833 |
+| DepositsData SQL (verbatim, `order by :OrderField`, otSubst) | `SQL_DEPOSITSDATA`; always `cont.id` (set in DataModuleCreate, never changed) | DM.dfm:228-289, DM.pas:87-102 |
+| MainGrid (TXDBGrid) 11 columns, dgTitleButtons but **no OnTitleClick** | same columns, header click does nothing | dfm:855-1113 |
+| Lookups: avalute, filial, sbcm_deposit_Types_new, sbcm_categories_new, sbcm_persons_new, sysdat, bankinfo, users (opened, combo commented out) | `/api/deposits/init` | DM.dfm:12-186 |
+| PrepareFilter: each combo KeyValue := first record (0 if empty), LCBStatus index 0 | `defaults` | pas:552-564 |
+| BuildFilterString (CBpersons → `clienttype` with the categories combo, CBClientType → `personaltype` with the persons combo – crossed names kept) + `Filtered := True` | literal port, `tdataset_filter.py`; expression shown under the grid | pas:488-550, 590-602 |
+| Only the combos and LCBStatus have OnChange (`DBLookupComboboxEh1Change` → ActnFilterExecute); **check boxes and date pickers have no handler** | ticking a box or changing a date waits for the next combo change | dfm:19-414 |
+| FilterPanel `Align = alLeft`, Visible False; TBFilteration toggles it and sets both pickers := bank date | Filter button toggles the top panel (current layout kept: left sidebar only for Accounts / Transaction Manager) | pas:993-999 |
+| SpeedButton1 'X' on the filter panel: no OnClick | ✕ button does nothing | dfm:37-49 |
+| BitBtnexp (in the filter panel): DataSet.Last, CMExcelExport 'Depozitlər', visible TFields (15) with DisplayLabel titles | `/api/deposits/export.xlsx` | pas:477-486 |
+| Axtarış Paneli (N35, **Ctrl+Alt+S** = ShortCut 49235): 6 edits, field = copy(Name,5); SearchRecord srIgnoreCase+srPartialMatch, from current, forward, wrap confirm, 'Yazı tapılmadı!'; only EditContractNo clears OnExit | client-side, same messages | pas:268-279, 620-666 |
+| Yeniləmək (ToolButton7 / N28 → ActnRefresh): SelectedRows.Clear, Get_SelectedContID (raises 'Heç bir Depozit seçilməyib!' when empty), Refresh, Locate ID | same | pas:604-618 |
+| N18 Bağlamaq (F8): right SBCM_CLOSE_CONTRACT, confirm (two texts by SelectedRows.Count), **CloseDeposit for every SelectedRows bookmark**, Refresh | `/right/SBCM_CLOSE_CONTRACT` then `POST /close {ids}`; Ctrl+click marks rows; no rows marked → nothing closed; **no commit** | pas:767-800 |
+| N19 Hesablamanı dayandırmaq/davam etdirmək: right SBCM_STOP_START_CALCPERCENT, IsCalculationEnabled, confirm, Disable/EnableCalculation | `GET/POST /{id}/calc`, no commit, no refresh | pas:802-826 |
+| Rights before each plugin (see table below) | `sb_aca.checkadvancedobjectaccess` in `/plugin/{key}` | pas |
+| Shortcuts Ctrl+N/E/D/M/T/U/P/F, F8, Ctrl+Alt+S | same keys (browsers may keep Ctrl+N) | dfm:1679-1778 |
 
-Contract-form quirks kept: `overdueinterest := dueinterest field` and `dueinterest := overdueinterest field` are crossed in SaveDeposits (F:965-966);
-the credit list filters by the user SID# instead of the contract ID; FCommited is never reset while the BPL stays loaded (web: per form open);
-DBLookupPercent has no DataField, so picking a rate there changes nothing; GenAnnualInt only reads values.
+## Plugin forms (BPL): inventory and status
 
-Contract-form unverified items:
-- The order in which the EhLib data-aware controls fire OnChange when a record is loaded. The web runs customer → type → periods → capital period on open.
-  In Edit this recomputes CLOSEDATE / FIRSTINTERESTPAYDAT and takes FDepPerSetid from the settings, so saving an unchanged contract can change them.
-- Lookup list datasets are assumed to sit on the selected key (EhLib locates the ListSource on selection); the capital periods after a type change are those of the selected period (else the first).
-- `dm_contract` body (getcontractno, dmaddcontract, dmupdatecontract, dmgenerateaccountnumber, getaddaccount) and the dm_* DDL are not in the repo; the mock is an assumption.
-- In the mock AZN is valute 944, so valcategory is always 1; Delphi's default CURRENCY 0 suggests 0 = AZN on the real DB.
+All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no check that the file exists – LoadPackage raises).
 
-## Delphi quirks, kept as they are
+| Menu | Right | BPL / param | Source folder (units / lines) | Status |
+|---|---|---|---|---|
+| Yeni Kontrakt / N16 Ctrl+N | NEW_SBCM_CONTRACT | SBDM_Contract_new.bpl InsertContract | Packages/SBDM_Contract_new (3 / 3126; the folder also holds NewDepositsContract.dpk) | todo (next) |
+| Redaktə / N17 Ctrl+E | EDIT_SBCM_CONTRACT | SBDM_Contract_new.bpl EditContract | same | todo |
+| Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | todo |
+| Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | todo |
+| Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
+| Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
+| Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | todo |
+| Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source |
+| Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | todo |
+| Ödəmə planı (N36; N14 invisible) | – | Sbdm_Shedule_new.bpl | Packages/Sbdm_Shedule_new (3 / 1577) | todo |
+| Filter Paneli (N10 Ctrl+F) | – | SBDM_Filter_new.bpl | **source not in the repo** | blocked – needs the source |
+| Yatrımların və yığımların çapı (N20) | SBCM_PRINT_APPLYMONEY | SBDM_ContractReport_new.bpl | Packages/SBDM_ContractReport_new (3 / 3155) | **on hold by user** |
+| Müqavilə çapı (N21) | SBCM_PRINT_CONTRACT1 | SBDM_WReport_new.bpl | Packages/SBDM_WReport_new (2 / 629) | **on hold by user** |
+| Sazlamalar: Bankın seçmələri (N1, Visible False) | – | SBDM_Settings_new.bpl showrefer | Packages/SBDM_Settings_new (9 / 2908) | todo (hidden) |
+| Sazlamalar: Hesab qrupları (N2) | SBCM_ACCOUNT_GROUP | SBDM_Settings_new.bpl showcccgroups | same | todo |
+| Sazlamalar: Müştəri tipləri (N3) | SBCM_CUSTOMERS_TYPE | SBDM_Settings_new.bpl showcategories | same | todo |
+| Sazlamalar: Depozitin tipləri (N4) | SBCM_DEPOSIT_TYPE | SBDM_Settings_new.bpl showdeposittypes | same | todo |
+| Sazlamalar: Gəlir zərər hesablarının sazlanması (N5) | SBCM_LOSS_INCOME_ADJUSTMENT_ACC | SBDM_Settings_new.bpl showaccountturning | same | todo |
+| Sazlamalar: Müqavilə çapı (Sazlanması) (N6) | SBCM_PRINT_CONTRACT | SBDM_WRSetup_new.bpl showSBWRBookmarkSetup | Packages/SBDM_WRSetup_new (6 / 2006) | todo (print template setup – confirm whether it is covered by the print hold) |
+| Sazlamalar: Faizlərin sazlanması (N7) | SBCM_PERCENT_SETTING | SBDM_PercentSettings_new.bpl | Packages/SBDM_PercentSettings_new (1 / 1833) | todo |
+| Sazlamalar: Hesabların sazlanması (Hesablarin1, Visible False) | – | SBDM_DepozitAccSettings_new.bpl | Packages/SBDM_DepozitAccSettings_new (1 / 64) | todo (hidden) |
+| Hesabatlar: Period Hesabatı (N31) | SBCM_PERIOD_REPORT | SBDM_PeriodReport_new.bpl | Packages/SBDM_PeriodReport_new (3 / 2487) | **on hold by user** |
+| Hesabatlar: Mis Hesabatı (N32) | SBCM_MIS_REPORT | SBDM_Report_new.bpl | Packages/SBDM_Report_new (2 / 1387) | **on hold by user** |
+| Hesabatlar: Balans Üzrə Hesabat (N33) | SBCM_OF_BALANCE_REPORT | SBDM_ReportofBalance_new.bpl | Packages/SBDM_ReportofBalance_new (1 / 712) | **on hold by user** |
+| Common | – | SBDM_Common_new.bpl (LoadPlugin, Get_SelectedContID, TrDelayed_Show) | Packages/SBDM_Common_new (2 / 597) | used by the ports |
 
-1. **Status filter errors**: BuildFilterString writes `status=…`, but DmDataSet has no STATUS field, so TDataSet raises "Field 'STATUS' not found" and the web app returns `deposits.err_filter`, as Delphi does.
-2. **Bağlamaq** shows the "Seçilmiş müqavilələr…" text when more than one row is selected, but the loop is commented out, so only the **current** row is closed.
-3. The popup **Yeniləmək** (N28 → ActnRefresh, no OnExecute) is disabled. The toolbar Refresh works.
-4. **Kapitallaşdırma** in the grid popup (N24, Ctrl+T) has no handler. N26 (Ctrl+U), N15 and N14 are invisible and are left out.
-5. RepairMenu **Period Hesabatı** and **Balans Üzrə Hesabat** have no OnClick, so they do nothing.
-6. N19 (calculation toggle) does not refresh the grid, as in Delphi.
-7. The Excel export sheet name uses an uninitialized `i` in Delphi. The web app uses 'Depozitlər'.
-8. StatusImages, dm_tranches and the users combo (commented out) are unused. The SQL is kept in `dep_sql.py` for reference.
-9. TDataSet FilterError messages come out in upper case ('STATUS').
-10. N18 with an empty grid would call CloseDeposit(0) in Delphi. The web app does nothing when there is no current row.
-11. The MainGrid has persistent columns, so the ID column is shown even though the ID TField has Visible=False (export skips it). **Unverified** on a real build.
+Archive: DepositsManager_New has no archive menu item. `Packages/SBDM_DepositsArchive` (CLSID `{339266A2-…}`) reads the classic `sbcm_*` tables (not `_new`), and `NewDepositsManager/NewDepositsArchive` belongs to NewDepositsManager → both are skip candidates.
 
-## Unverified / mock assumptions
-- `DateSeparator` assumed '.' (FormatDateTime('dd/MM/yyyy') in the filter text, which follows the Windows locale on the bank PCs).
-- The `dm_stored_programs` package body and `dm_*` DDL are not in the repo. The mock assumes:
-  - CloseDeposit deletes from dm_active_contracts and sets status 0.
-  - Disable/EnableCalculation set or clear stopcalcdate.
-  - IsCalculationEnabled = stopcalcdate is null.
-- The real SmartBankIni tree node for deposits (the mock uses Action #9).
-- Production lineage (see the top table).
+## Differences from NewDepositsManager (the previous, non-production port)
 
-
-## Yatırım / Əmanətin ödənilməsi (NewDepositsApplyMoney, NewDepositsExtractMoney)
-
-| Delphi | Web | Source |
+| Area | NewDepositsManager | DepositsManager_New |
 |---|---|---|
-| FrmApplyMoney: Tranches grid (Məbləğ/Tarix/Qeyd), contract header, Yeni / Sil / Excel / Çıxış | apply modal; SQL verbatim in `dep_money_sql.py` | FrmApplyMoney.dfm, DMApplyMoney.dfm |
-| Yeni → right INSERT_DM_TRANSH → FrmAddMoney (Debit acc, % from DBEdit text, client accs + "Seçilməyib", Qalıq) | `/apply/add`, `/apply/ostat` | FrmApplyMoney.pas, FrmAddMoney.pas |
-| % text = 0 → 'Yatrımın % dərəcəsi 0 ola bilməz.' | `deposits.m_err_percent0` | FrmAddMoney.pas |
-| DepositMoney(Usetransaction) → TrDelayed_Show (DM_DELAYED_TRANSACTIONS) → CommitDepositMoney(DoCommit) | `/apply/run` → confirm modal → `/delayed/finish` (same Oracle session; package commits) | DMApplyMoney.pas, NewTemporaryTransactionsFormImpl.pas |
-| Sil → DELETE_DM_TRANSH → confirm → DeleteDepositMoney (no commit); Sil always enabled (ActnDelUpdate not wired) | `/right` pre-check, `/apply/delete` | FrmApplyMoney.pas |
-| Excel → EXCEL_DM_TRANSH, sheet 'Depozit yatrımları' | `/apply/export.xlsx` | FrmApplyMoney.pas |
-| FrmExtractMoney: payments grid incl. TRID/INTTRID/TRANCHESID; Yeni (INSERT_SBCM_PEYMENT; SetResiduaryAmount default), Ləğv (DELETE_SBCM_PEYMENT, disabled when empty), Excel (EXCEL_SBCM_PEYMENT, 'Ödənilmiş əməliyyat') | `/extract/*` | FrmExtractMoney.pas, FrmAddExtractMoney.pas, DMExtractMoney.pas |
+| Schema / package | `dm_*` tables, `dm_stored_programs` | `sbcm_*_new` tables, `sbcm_stored_programs_new` |
+| Main list | 21 fields incl. ID, CUSTOMERID, PROLONGATIONDATE, OSTAT, AGENTID, FILIAL, user name; closed contracts hidden | 24 fields incl. CONTRACTACCNO, INTERESTACCNO, three EK* equivalents (`temprate`), STOPCALCULATIONDATE; every `type# = 3` contract shown |
+| Sorting | MainGridTitleClick ASC/DESC | none (no handler) |
+| Filter triggers | check boxes + combos + dates | combos and LCBStatus only |
+| Search panel | 8 fields, Ctrl+Shift+S | 6 fields (acc. numbers, last cap. date), Ctrl+Alt+S |
+| Close (F8) | only the current record (loop commented out), no right | every marked row, right SBCM_CLOSE_CONTRACT |
+| Calc stop/resume | no right | SBCM_STOP_START_CALCPERCENT |
+| Rights | DM_CONTRACTUPDATE / DM_CONTRACTLOOK / REPAYMENT / DM_ADMIN (settings button) | one NEW_/EDIT_/SBCM_ right per menu item (table above); no settings-button check |
+| Double-click | LookContract | nothing |
+| Extra items | Kontrol, Loqlar, Hesablara baxış (Sb_General), WRGroups, BalanceSettings | Əmanətin qismən ödənilməsi, Hesabların sazlanması (hidden) |
+| Plugins | NewDeposits*.bpl (NewDepositsManager/*) | SBDM_*_new.bpl (Packages/SBDM_*_new) |
 
-Quirks kept: checkedtranch checks are commented out in Delphi (not ported); Extract N1 handler body is commented out; CreditAccs is opened but unused.
-Web-only: if a confirmation is left open (page reload), the next Run first dismisses it with Commit(False) — Delphi's modal cannot reach that state.
-Not migrated: Apply N1 "Əməliyyata baxmaq" opens SBDM_TransactionViewer.bpl (shows the not-migrated notice).
-Unverified: DM_DELAYED_TRANSACTIONS semantics and PL/SQL BOOLEAN binds (Usetransaction/DoCommit) in python-oracledb thin mode; dm_credit_tranches / dm_payment package bodies are not in the sources.
-Screenshots 255–259. Tests `api/tests/test_dep_money.py` (DEPOSITOR opens the forms but is denied INSERT_DM_TRANSH / DELETE_DM_TRANSH).
+The NewDepositsManager contract / deposit / withdrawal ports (pushed earlier in 0e8df431 and 542b51ac) were removed from the app in this rework; they stay in git history.
+
+## Mock assumptions (bodies not in the repo)
+
+`sbcm_stored_programs_new`: Get_ContractAccount / Get_ContractAccountName = account number / name; GetpercentCollection = fixture string;
+CloseDeposit zeroes the state rows and sets calculationenabled 0 (ORA-20101 if already closed); IsCalculationEnabled = calculationenabled = 1;
+Disable/EnableCalculation set it 0 / 1.
+
+## Unverified
+
+- TXDBGrid (XDBGrids.pas not in the repo): SelectedRows with `MultiSelectOptions = [msNone]` + dgExtendedSelect/dgMarkerAutoToggle is assumed to work like TDBGrid multi-select (Ctrl+click). If XDBGrid never fills SelectedRows, F8 closes nothing in Delphi.
+- After Close the Delphi Refresh keeps the record position; the web selects the first row.
+- `(select distinct stopcalculationdate …)` / `calculationenabled` raise ORA-01427 in Oracle when the state rows differ; the mock data keeps them equal.
+- DateSeparator for the opendate filter literal (az-AZ '.').
+- Package call commit behaviour: no explicit Commit in the form; DepositsData `CommitOnPost = False`.

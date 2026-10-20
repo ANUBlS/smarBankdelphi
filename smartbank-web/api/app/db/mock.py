@@ -94,7 +94,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._dep_func(key, named)            # NewDepositsManager plugins (dm_contract, ...)
+        r = self._dep_func(key, named)            # DepositsManager_New plugins
         if r is NotImplemented:
             r = self._xs_func(key, args)
         if r is NotImplemented:
@@ -151,7 +151,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._dep_bool(key, named)            # NewDepositsManager (dm_stored_programs)
+        r = self._dep_bool(key, named)            # DepositsManager_New (sbcm_stored_programs_new)
         if r is not NotImplemented:
             return r
         r = self._oacc_bool(key, named)
@@ -185,7 +185,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._dep_proc(key, named)     # NewDepositsManager (dm_stored_programs)
+        r = self._dep_proc(key, named)     # DepositsManager_New (sbcm_stored_programs_new)
         if r is NotImplemented:
             r = self._cards_proc(key, args)    # Cards (card_main)
         if r is NotImplemented:
@@ -236,7 +236,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._dep_query(sql, b)  # NewDepositsManager (exact verbatim SQL text only)
+        r = self._dep_query(sql, b)  # DepositsManager_New (exact verbatim SQL text only)
         if r is NotImplemented:
             r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
         if r is NotImplemented:
