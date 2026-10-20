@@ -119,3 +119,14 @@ TT_SQL_TRANSACTIONS = text(['select',
     '  from SBCM_DELAYED_TRANSACTIONS_new',
     ' ',
     ' '])
+
+
+# ------------------------------------------------------------------ SBDM_Prolongation_new
+# frmProlongationImpl_new.dfm:389-401 prolongations
+P_SQL_PROLONGATIONS = text(['SELECT id, id#, hdate, olddate, newdate',
+    '  FROM sbcm_prolongations_new',
+    'where id# = :Contractid',
+    'order by hdate'])
+# frmProlongationImpl_new.dfm:202-212 DepositInf
+P_SQL_DEPOSITINF = text(['select closedate from sbcm_contracts_new',
+    'where id = :ContractID'])

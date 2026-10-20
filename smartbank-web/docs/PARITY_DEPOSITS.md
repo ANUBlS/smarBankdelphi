@@ -43,10 +43,10 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
 | Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
 | Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | todo |
-| Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source |
-| Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | todo |
+| Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
+| Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | **ported** – api/app/dep_prolong.py, deposits_ops.js |
 | Ödəmə planı (N36; N14 invisible) | – | Sbdm_Shedule_new.bpl | Packages/Sbdm_Shedule_new (3 / 1577) | todo |
-| Filter Paneli (N10 Ctrl+F) | – | SBDM_Filter_new.bpl | **source not in the repo** | blocked – needs the source |
+| Filter Paneli (N10 Ctrl+F) | – | SBDM_Filter_new.bpl | **source not in the repo** | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Yatrımların və yığımların çapı (N20) | SBCM_PRINT_APPLYMONEY | SBDM_ContractReport_new.bpl | Packages/SBDM_ContractReport_new (3 / 3155) | **on hold by user** |
 | Müqavilə çapı (N21) | SBCM_PRINT_CONTRACT1 | SBDM_WReport_new.bpl | Packages/SBDM_WReport_new (2 / 629) | **on hold by user** |
 | Sazlamalar: Bankın seçmələri (N1, Visible False) | – | SBDM_Settings_new.bpl showrefer | Packages/SBDM_Settings_new (9 / 2908) | todo (hidden) |
@@ -54,7 +54,7 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Sazlamalar: Müştəri tipləri (N3) | SBCM_CUSTOMERS_TYPE | SBDM_Settings_new.bpl showcategories | same | todo |
 | Sazlamalar: Depozitin tipləri (N4) | SBCM_DEPOSIT_TYPE | SBDM_Settings_new.bpl showdeposittypes | same | todo |
 | Sazlamalar: Gəlir zərər hesablarının sazlanması (N5) | SBCM_LOSS_INCOME_ADJUSTMENT_ACC | SBDM_Settings_new.bpl showaccountturning | same | todo |
-| Sazlamalar: Müqavilə çapı (Sazlanması) (N6) | SBCM_PRINT_CONTRACT | SBDM_WRSetup_new.bpl showSBWRBookmarkSetup | Packages/SBDM_WRSetup_new (6 / 2006) | todo (print template setup – confirm whether it is covered by the print hold) |
+| Sazlamalar: Müqavilə çapı (Sazlanması) (N6) | SBCM_PRINT_CONTRACT | SBDM_WRSetup_new.bpl showSBWRBookmarkSetup | Packages/SBDM_WRSetup_new (6 / 2006) | **on hold** (user decision: held together with the contract prints) |
 | Sazlamalar: Faizlərin sazlanması (N7) | SBCM_PERCENT_SETTING | SBDM_PercentSettings_new.bpl | Packages/SBDM_PercentSettings_new (1 / 1833) | todo |
 | Sazlamalar: Hesabların sazlanması (Hesablarin1, Visible False) | – | SBDM_DepozitAccSettings_new.bpl | Packages/SBDM_DepozitAccSettings_new (1 / 64) | todo (hidden) |
 | Hesabatlar: Period Hesabatı (N31) | SBCM_PERIOD_REPORT | SBDM_PeriodReport_new.bpl | Packages/SBDM_PeriodReport_new (3 / 2487) | **on hold by user** |
@@ -119,6 +119,19 @@ Contract-form unverified / mock:
 Mock assumptions (package bodies not in the repo): depositmoney / WithDrawMoney write one delayed posting per leg; Commit*(True) inserts into sbcm_tranches_new / sbcm_payments_new and moves sbcm_contract_state_new; the three tranche checks come from fixture `_tranch_checks` (default 1 / 3 / 5 = OK); getpersentTransh = sbcm_interests_new.INTEREST.
 
 Unverified: E_SQL_CREDITACCS / E_SQL_CUSTACC use the classic `sbcm_acc_zone_info` and `sbcm_stored_programs.Get_ContractAccount` exactly as the _new dfm does (looks like a leftover in the Delphi source, kept verbatim); PL/SQL BOOLEAN arguments (usetransaction, DoCommit) passed as Python bool in thin mode; N1 'Əməliyyata baxmaq' opens SBDM_TransactionViewer.bpl (not migrated, shows a notice).
+
+## SBDM_Prolongation_new.bpl (Prolonqasiya)
+
+| Delphi | Web |
+|---|---|
+| exportproc: prolongations (`sbcm_prolongations_new`, order by hdate) + DepositInf (closedate) for Get_SelectedContID | `/api/deposits/prolong/open` |
+| Toolbar Əlavə etmək / Silmək (ActnDel 'Sonuncunu silmək') / Excel-ə at / Çıxış; Del and Excel need RecordCount > 0 | list modal; disabled on an empty grid, the API re-checks |
+| ActnAddProlong: INSERT_SBCM_PROLONGATION; frmAddProlongation_new FormShow: DTPNew := Get_BankDate, DTPLast := CloseDate | `/prolong/add/open` |
+| BitBtnOkClick: Trunc(DTPNew) <= CloseDate -> 'Tarixi düzgün  daxil edin !' (form stays open); else AddProlongation(ContractID, Get_BankDate, ProlongDate) positional, Refresh both | `/prolong/add`, key p_err_date |
+| ActnDel: DELETE_SBCM_PROLONGATION, 'Silinməsinə Əminsinizmi?', DelLastProlongation(Get_SelectedContID) | `/prolong/delete` |
+| ActnExport: EXCEL_SBCM__PROLONGATION (double underscore, verbatim), sheet 'Prolonqasiya', ID# hidden | `/prolong/export.xlsx` |
+
+No Commit is issued by the plugin after AddProlongation / DelLastProlongation, and the manager grid is not refreshed on close (no FormClose handler); both kept. Mock assumption: AddProlongation logs (old closedate -> new) and moves sbcm_contracts_new.closedate; DelLastProlongation removes the newest row and restores OLDDATE.
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

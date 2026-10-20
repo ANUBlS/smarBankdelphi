@@ -19,7 +19,7 @@ from .base import DBError
 
 _DB = None
 _FX: dict = {}
-DATE_COLS = {"OPENDATE", "CLOSEDATE", "STOPCALCULATIONDATE", "HDATE", "FIRSTINTERESTPAYDAT", "CLOSE_DAT"}
+DATE_COLS = {"OLDDATE", "NEWDATE", "OPENDATE", "CLOSEDATE", "STOPCALCULATIONDATE", "HDATE", "FIRSTINTERESTPAYDAT", "CLOSE_DAT"}
 
 
 def reset():
@@ -176,7 +176,7 @@ def _sqlite(sql: str) -> str:
 _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")
 _OWN = {Q.SQL_VALUTES, Q.SQL_FILIALS, Q.SQL_DEPOSITTYPES, Q.SQL_CATEGORIES, Q.SQL_PERSONS, Q.SQL_USERS, Q.SQL_TRANCHES, _MAIN}
 _OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_")}                # SBDM_Contract_new
-_OWN |= {v for k, v in vars(QO).items() if "SQL_" in k}                          # SBDM_ApplyMoney_new, SBDM_ExtractMoney_new, TrDelayed_Show
+_OWN |= {v for k, v in vars(QO).items() if "SQL_" in k}                          # SBDM_ApplyMoney_new, SBDM_ExtractMoney_new, TrDelayed_Show, SBDM_Prolongation_new
 
 
 def _bind(v):
@@ -250,9 +250,24 @@ class DepMixin:
             return r[0] == 1
         return NotImplemented
 
-    def _dep_proc(self, key, named):
+    def _dep_proc(self, key, named, args=()):
         n = named or {}
         db = _db()
+        if key == "SBCM_PROLONGATION_NEW.ADDPROLONGATION":          # assumed: log the change and move the closing date
+            cid, hd, nd = int(args[0]), args[1].date().isoformat(), args[2].date().isoformat()
+            old = db.execute("select closedate from sbcm_contracts_new where id = ?", [cid]).fetchone()
+            nid = (db.execute("select max(id) from sbcm_prolongations_new").fetchone()[0] or 7000) + 1
+            db.execute('insert into sbcm_prolongations_new (ID, "id#", HDATE, OLDDATE, NEWDATE) values (?,?,?,?,?)', [nid, cid, hd, old[0] if old else None, nd])
+            db.execute("update sbcm_contracts_new set closedate = ? where id = ?", [nd, cid])
+            return {}
+        if key == "SBCM_PROLONGATION_NEW.DELLASTPROLONGATION":      # assumed: drop the newest row, restore OLDDATE
+            cid = int(args[0])
+            r = db.execute('select id, olddate from sbcm_prolongations_new where "id#" = ? order by hdate desc, id desc', [cid]).fetchone()
+            if r is None:
+                raise DBError("ORA-01403: no data found", 1403)
+            db.execute("delete from sbcm_prolongations_new where id = ?", [r[0]])
+            db.execute("update sbcm_contracts_new set closedate = ? where id = ?", [r[1], cid])
+            return {}
         if key == "SBCM_STORED_PROGRAMS_NEW.CLOSEDEPOSIT":
             cid = int(n["ContractID"])
             r = db.execute('select sum(facticaldebt), max(calculationenabled) from sbcm_contract_state_new where "id#" = ?', [cid]).fetchone()

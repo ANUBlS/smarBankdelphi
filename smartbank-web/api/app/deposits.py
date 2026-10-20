@@ -71,9 +71,9 @@ PLUGINS = {
     "rep_balance": ("SBCM_OF_BALANCE_REPORT", "SBDM_ReportofBalance_new.bpl", ""),              # N33Click :1081 (on hold)
 }
 # The deposit contract prints and the deposit reports are on hold by the user: never ported.
-ON_HOLD = {"rep_contract_ops", "wreport", "rep_period", "rep_mis", "rep_balance"}
+ON_HOLD = {"sett_wrsetup", "rep_contract_ops", "wreport", "rep_period", "rep_mis", "rep_balance"}
 # Plugin keys whose BPL form is ported: the browser opens the web form after this right check.
-MIGRATED: set = {"contract_insert", "contract_edit", "apply_money", "extract_money"}
+MIGRATED: set = {"contract_insert", "contract_edit", "apply_money", "extract_money", "prolongation"}
 DATE_SEPARATOR = "."   # FormatDateTime('dd/MM/yyyy'): '/' = Windows DateSeparator (az-AZ '.', unverified on the bank PCs)
 NO_DEPOSIT = "Heç bir Depozit seçilməyib!"               # Get_SelectedContID (CommonDeclsImpl_new.pas:47-52)
 

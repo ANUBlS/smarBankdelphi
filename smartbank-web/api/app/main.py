@@ -365,3 +365,5 @@ from . import dep_contract  # noqa: E402
 app.include_router(dep_contract.make_router(current, require_module, err))
 from . import dep_ops  # noqa: E402
 app.include_router(dep_ops.make_router(current, require_module, err))
+from . import dep_prolong  # noqa: E402
+app.include_router(dep_prolong.make_router(current, require_module, err))

@@ -185,7 +185,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._dep_proc(key, named)     # DepositsManager_New (sbcm_stored_programs_new)
+        r = self._dep_proc(key, named, args)     # DepositsManager_New (sbcm_stored_programs_new)
         if r is NotImplemented:
             r = self._cards_proc(key, args)    # Cards (card_main)
         if r is NotImplemented:

@@ -141,6 +141,56 @@
     }, 'dep-sub dep-contract');
   }
 
+  // ---------------------------------------------------------------- SBDM_Prolongation_new (frmProlongation_new)
+  async function prolongForm(sel) {
+    const body = { contract_id: sel.id }, P = '/api/deposits/prolong';
+    let o; try { o = await api(P + '/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    D().modal('<div class="opBody"></div>', (m, close) => {
+      const draw = () => {
+        const dis = o.rows.length ? '' : 'disabled';                                   // ActnDelUpdate / ActnExportUpdate
+        m.querySelector('.opBody').innerHTML = `<h3>${esc(K('m_prolongation'))} · ${esc(sel.no)}</h3>
+          <div class="toolbar" style="gap:8px"><button class="btn" data-a="new">${esc(K('p_add'))}</button><button class="btn secondary" data-a="del" ${dis} title="${esc(K('p_del_last'))}">${esc(K('o_delete'))}</button>
+            <button class="btn secondary" data-a="xls" ${dis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
+          <div class="tablewrap" style="max-height:45vh;margin-top:8px"><table class="grid"><thead><tr><th>№</th><th>${esc(K('o_date'))}</th><th>${esc(K('p_old'))}</th><th>${esc(K('p_new'))}</th></tr></thead>
+          <tbody>${o.rows.map(x => `<tr data-id="${x.id}"><td>${x.id}</td><td>${esc(dt(x.hdate))}</td><td>${esc(dt(x.olddate))}</td><td>${esc(dt(x.newdate))}</td></tr>`).join('')
+            || `<tr><td colspan="4" class="muted">${esc(K('empty_ops'))}</td></tr>`}</tbody></table></div>`;
+        const b = (a) => m.querySelector(`[data-a="${a}"]`);
+        b('new').onclick = () => addProlong(body, (r) => { o = r; draw(); });
+        b('del').onclick = async () => {
+          try {
+            await right('DELETE_SBCM_PROLONGATION');
+            if (!confirm(K('p_confirm_delete'))) return;
+            o = await api(P + '/delete', { method: 'POST', body }); draw();
+          } catch (e) { toast(D().errText(e), 'error'); }
+        };
+        b('xls').onclick = () => download(P + '/export.xlsx', body, 'Prolonqasiya.xlsx');
+        b('exit').onclick = exit;
+      };
+      // FormClose has no refresh of the manager grid (none in frmProlongationImpl_new.pas)
+      const onKey = (e) => { if (e.key === 'Escape' && [...document.querySelectorAll('.backdrop.stacked')].pop() === m.parentElement) exit(); };
+      const exit = () => { document.removeEventListener('keydown', onKey); close(); };
+      document.addEventListener('keydown', onKey);
+      draw();
+    }, 'wide');
+  }
+  async function addProlong(body, after) {                // ActnAddProlongExecute: INSERT_SBCM_PROLONGATION, frmAddProlongation_new
+    let a; try { a = await api('/api/deposits/prolong/add/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    D().modal(`<h3>${esc(K('m_prolongation'))}</h3><div id="prErr"></div>
+      <fieldset class="dgrp"><legend>${esc(K('p_last_close'))}</legend><input type="date" id="prLast" disabled value="${esc(a.closedate ?? '')}"></fieldset>
+      <fieldset class="dgrp"><legend>${esc(K('p_new_close'))}</legend><input type="date" id="prNew" value="${esc(a.newdate)}"></fieldset>
+      <div class="actions"><button class="btn" id="prOk">${esc(K('o_accept'))}</button><button class="btn secondary" id="prNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      q('#prNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#prOk').onclick = async () => {
+        q('#prErr').innerHTML = '';
+        try { const r = await api('/api/deposits/prolong/add', { method: 'POST', body: { ...body, newdate: q('#prNew').value } }); close(); after(r); }
+        catch (e) { q('#prErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }   // MessageDlg(rsInvalidDate) keeps the form open
+      };
+      q('#prNew').focus();
+    }, 'dep-sub dep-contract');
+  }
+
   const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
     delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
     cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
@@ -152,4 +202,5 @@
   const needSel = (cfg) => (sel) => sel ? listForm(cfg, sel) : toast(K('err_no_deposit'), 'error');   // Get_SelectedContID
   window.SB.depForms.apply_money = needSel(APPLY);
   window.SB.depForms.extract_money = needSel(EXTRACT);
+  window.SB.depForms.prolongation = (sel) => sel ? prolongForm(sel) : toast(K('err_no_deposit'), 'error');
 })();
