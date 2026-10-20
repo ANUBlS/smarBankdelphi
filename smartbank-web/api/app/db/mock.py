@@ -37,6 +37,8 @@ from .mock_azips import AzipsMixin, AzipsEditMixin
 from .mock_azips_in import AzipsInMixin
 from .mock_xohks import XohksMixin
 from .mock_cards import CardsMixin
+from . import mock_dep
+from .mock_dep import DepMixin
 from . import mock_cards
 from . import mock_xohks
 from ..config import settings
@@ -64,6 +66,7 @@ def reset():
     mock_azips.reset()
     mock_xohks.reset()
     mock_cards.reset()
+    mock_dep.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -77,7 +80,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -146,6 +149,9 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._dep_bool(key, named)            # NewDepositsManager (dm_stored_programs)
+        if r is not NotImplemented:
+            return r
         r = self._oacc_bool(key, named)
         if r is not NotImplemented:
             return r
@@ -177,7 +183,9 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._cards_proc(key, args)    # Cards (card_main)
+        r = self._dep_proc(key, named)     # NewDepositsManager (dm_stored_programs)
+        if r is NotImplemented:
+            r = self._cards_proc(key, args)    # Cards (card_main)
         if r is NotImplemented:
             r = self._xs_proc(key, args)       # XÖHKS step 2 (XS_CONTROL)
         if r is NotImplemented:
@@ -226,7 +234,9 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
+        r = self._dep_query(sql, b)  # NewDepositsManager (exact verbatim SQL text only)
+        if r is NotImplemented:
+            r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
         if r is NotImplemented:
             r = self._azi_query(sql, b)  # AZIPS part 4b-2
         if r is NotImplemented:
