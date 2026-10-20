@@ -46,8 +46,8 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 8 | CashDesk / TFrmCashDesk | `Packages/CashDeskLast` | 20 | 19 | 66 | 5493 |  | SB_TRANSACTION, SB_COMPLEX_TRANSACTIONS, SB_CASHREPORT | copies: Packages/CashDeskLast01112012; Packages/CashDeskLast10122012; Packages/CashDeskLast_20072017 |
-| 9 | CashSymbols / TCashSymbolX | `Packages/CashSymbols` | 1 | 1 | 1 | 449 |  | SB_CASHREPORT |  |
+| 8 | CashDesk / TFrmCashDesk | `Packages/CashDeskLast` | 20 | 19 | 66 | 5493 |  | SB_TRANSACTION, SB_COMPLEX_TRANSACTIONS, SB_CASHREPORT | **ported** (route `/m/cashdesk`, see PARITY_CASHDESK.md); QuickReport prints on hold by the user. Production = CashDeskLast (user decision Oct 20, 2026); copies not ported: Packages/CashDeskLast01112012; Packages/CashDeskLast10122012; Packages/CashDeskLast_20072017 |
+| 9 | CashSymbols / TCashSymbolX | `Packages/CashSymbols` | 1 | 1 | 1 | 449 |  | SB_CASHREPORT | **ported** (route `/m/cashsymbols`, see PARITY_CASHDESK.md) |
 
 ### Tier 1 – Currency exchange & rates
 
