@@ -10,7 +10,7 @@
   The grids have no Columns: every field is shown.
 - Excel yükləmələr (N12Click :1259, right card_excelfile -> TEXCELform Unitexcel.pas): FormActivate excels.Open (card_excelform);
   Button1 'Aç' / DBGrid1DblClick open the sub form by the current row's Id: 1 TSalary (Unitsalary.pas), 2 Tnewcardex (EXCELNEWCARD.pas),
-  3 TProlongationxls (PROLONGATIONUNIT.pas), 4 Taccountclose (accountcloseunit.pas)."""
+  3 TProlongationxls (PROLONGATIONUNIT.pas), 4 Taccountclose (accountcloseunit.pas) - ported in cards_xls.py."""
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
@@ -24,7 +24,7 @@ from .customers import row
 LINES_LIM1 = ["select * FROM card_limits where status=1"]          # limittur.dfm OracleDataSet1
 LINES_LIM2 = ["select * FROM card_limits where status=2"]          # limittur.dfm OracleDataSet2
 KL_COLS = ("BANKID", "BANKNAME", "HESAB1", "KLIRING1", "MEBLEQ", "INFO")      # klirinqUnit.dfm DBGrid1 / DBGrid2 FieldNames
-EXCEL_FORMS = {1: "salary", 2: "newcardex", 3: "prolongationxls", 4: "accountclose"}
+EXCEL_FORMS = {1: "salary", 2: "newcard", 3: "prolong", 4: "accclose"}     # cards_xls.FORMS keys
 
 
 def _q(ws, lines, sort=None):
@@ -157,6 +157,7 @@ def make_router(current, require_module, err):
     @r.post("/excelforms/open")
     def _eo(ws=Depends(g)):
         ws.conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["card_excelfile"], commit=False)
+        ws.module_state["cards_excel"] = True                       # the sub forms (cards_xls) are opened from this form
         return {"grid": [row(x) for x in _q(ws, Q.LINES_EXCELS)]}
 
     @r.post("/excelforms/pick")

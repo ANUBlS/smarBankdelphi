@@ -354,3 +354,5 @@ from . import cards_fileops  # noqa: E402
 app.include_router(cards_fileops.make_router(current, require_module, err))
 from . import cards_misc  # noqa: E402
 app.include_router(cards_misc.make_router(current, require_module, err))
+from . import cards_xls  # noqa: E402
+app.include_router(cards_xls.make_router(current, require_module, err))

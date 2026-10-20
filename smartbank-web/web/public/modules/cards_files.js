@@ -214,9 +214,45 @@
     function draw() {
       box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_excel'))}</h3><div class="toolbar"><button class="btn" id="ex_o">${esc(K('ex_open'))}</button></div>
         ${gridHtml('ex_g', ['ID', ['NAME', 'name']], d.grid, { sel: new Set([cur]) })}`;
-      const go = async () => { const r = await call('/pick', { id: cur }); if (r && r.form) toast(K('not_ported') + ' (' + r.form + ')'); };
+      const go = async () => { const r = await call('/pick', { id: cur }); if (r && r.form) xlsform(box, r.form, () => excelforms(box)); };
       box.querySelector('#ex_o').onclick = go;
       box.querySelectorAll('#ex_g tbody tr[data-id]').forEach(tr => { tr.onclick = () => { cur = +tr.dataset.id; draw(); }; tr.ondblclick = () => { cur = +tr.dataset.id; go(); }; });
+    }
+    draw();
+  }
+  // Excel yükləmələr sub forms (api/app/cards_xls.py): TSalary Unitsalary.pas, TNEWCARDEX EXCELNEWCARD.pas, TPROLONGATIONXLS PROLONGATIONUNIT.pas,
+  // Taccountclose accountcloseunit.pas. Toolbar isertbtn 'Bazaya Göndər' (OpenDialogCards -> one workbook uploaded by hand, sheet 'CARDS'),
+  // ToolButton1 'Təsdiq Et', ToolButton7 'Excel' (N11 '1-ci pəncərə' / N12 '2-ci pəncərə'), ToolButton2 'Sil'; grid popups EXCEL (+ SELECT ALL).
+  const XTITLE = { salary: 'Salary', newcard: 'NEW CARD', prolong: 'PROLONGATION', accclose: 'Account_close' };
+  async function xlsform(box, form, back) {
+    const call = caller('/api/cards/xls/' + form);
+    let d = await call('/open'); if (!d) return;
+    const sel = new Set();
+    const pick = () => new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = '.xls,.xlsx';
+      i.onchange = async () => { const f = i.files[0]; res(f ? { name: f.name, b64: await readB64(f) } : null); }; i.click(); });
+    function draw() {
+      const C = d.cols.map(c => c == null ? null : [c, c]);
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(XTITLE[form])}</h3><div class="toolbar" style="gap:6px;flex-wrap:wrap">
+        <button class="btn secondary" id="xs_close">${esc(K('close'))}</button>
+        ${form === 'newcard' ? `<label>${esc(K('xs_date'))} <input type="date" id="xs_dt" value="${esc(d.date || '')}"></label>` : ''}
+        <button class="btn" id="xs_b">${esc(K('cf_tobase'))}</button><button class="btn" id="xs_c">${esc(K('cf_confirm'))}</button>
+        <button class="btn secondary" id="xs_x1">${esc(K('xs_win1'))}</button><button class="btn secondary" id="xs_x2">${esc(K('xs_win2'))}</button>
+        <button class="btn secondary" id="xs_d">${esc(K('kl_delete'))}</button></div>
+        ${gridHtml('xs_g1', C, d.grid1, { sel, sortable: d.sortable, icon: r => icon(r.status) })}${gridHtml('xs_g2', C, d.grid2, { sortable: d.sortable, icon: r => icon(r.status) })}`;
+      const q = (id) => box.querySelector('#' + id), set = (r) => { if (r) { d = r; draw(); say(r.messages); if (r.error) toast(r.error, 'error'); } };
+      q('xs_close').onclick = async () => { if (form === 'salary') await call('/close'); back(); };      // TSalary FormClose :274: delete_salary
+      q('xs_b').onclick = async () => {                                         // isertbtnClick: OpenDialogCards.Execute (cancel -> no file)
+        const body = (await pick()) || {}; if (form === 'newcard') body.date = q('xs_dt').value || null; set(await call('/tobase', body)); };
+      q('xs_c').onclick = async () => {                                         // Unitsalary ToolButton1Click :286 asks first; the others do not
+        let yes = true; if (form === 'salary') yes = (await ask(K('xs_ask_sal'), [['yes', K('yes')], ['no', K('no')]])) === 'yes';
+        set(await call('/confirm', { yes })); };
+      q('xs_d').onclick = async () => set(await call('/delete'));
+      const ex = (g) => download('/api/cards/xls/' + form + '/excel', form + '.xlsx', { grid: g, field: '' });
+      q('xs_x1').onclick = () => ex('grid1'); q('xs_x2').onclick = () => ex('grid2');
+      if (d.sortable) [['xs_g1', 'grid1'], ['xs_g2', 'grid2']].forEach(([id, g]) => q(id).querySelectorAll('th[data-f]').forEach(th => th.onclick = async () => { if (th.dataset.f) set(await call('/sort', { grid: g, field: th.dataset.f })); }));
+      // grid popups: DBGrid1 PopupMenu2 EXCEL1 -> N11 (+ SELECT ALL on Account_close); DBGrid2 PopupMenu3 EXCEL2 -> N12 (NEW CARD: both grids use PopupMenu2 -> N11)
+      wireSel(q('xs_g1'), d.grid1 || [], sel, () => {}, draw, { items: form === 'accclose' ? [['x', 'EXCEL'], ['all', 'SELECT ALL']] : [['x', 'EXCEL']], onItem: () => ex('grid1') });
+      const g2 = q('xs_g2'); if (g2) g2.oncontextmenu = (e) => { e.preventDefault(); ex(form === 'newcard' ? 'grid1' : 'grid2'); };
     }
     draw();
   }

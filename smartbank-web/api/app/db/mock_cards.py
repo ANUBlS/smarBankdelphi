@@ -99,7 +99,8 @@ def _pats():
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
-                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2", "LINES_CADDI"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2", "LINES_CADDI",
+                         "LINES_SALARYBASE", "LINES_SALARYBASE2"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
@@ -156,6 +157,8 @@ def _num(v):
 
 class CardsMixin:
     def _cards_query(self, sql, b):
+        if sql == Q.text(Q.LINES_DSSYSDAT):
+            return NotImplemented                                             # DSSysdat: the shared sysdat of the main mock
         if sql.startswith(Q.text(Q.LINES_MESSAGES)) and "ORDER BY" in sql[len(Q.text(Q.LINES_MESSAGES)):]:
             raise DBError("ORA-00933: SQL command not properly ended", 933)       # cfilepas DBGrid1TitleClick after 'order by status'
         if sql.startswith(Q.text(Q.LINES_SAZLAMALAR)) and "ORDER BY" in sql[len(Q.text(Q.LINES_SAZLAMALAR)):]:
@@ -187,7 +190,7 @@ class CardsMixin:
         s = re.sub(r"card_main\.filialkod", "card_main_filialkod", s, flags=re.I)
         s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
-        params = {k.lower(): (v.isoformat() if type(v) is dt.date else v) for k, v in (b or {}).items()}
+        params = {k.lower(): (v.isoformat() if type(v) in (dt.date, dt.datetime) else v) for k, v in (b or {}).items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower() if m.group(1).lower() in params else m.group(0), s)
         if ":user__" in s:
             params["user__"] = self.username
@@ -264,6 +267,9 @@ class CardsMixin:
         if r is not NotImplemented:
             return r
         r = self._sett_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
+        r = self._xls_proc(key, list(args))
         if r is not NotImplemented:
             return r
         if key == "CARD_MAIN.DELETE_APPLICATION":
@@ -364,6 +370,64 @@ class CardsMixin:
             return NotImplemented
         self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
         return {}
+
+    def _xls_proc(self, key, a):
+        """Excel yükləmələr sub forms (cards_xls), Card Number Change (cards_cardnum), POS ON-US commission (cards_posonus): the card_main /
+        card_commission_our_pos_onus bodies are not in the repo. Emulation: <x>delete drops the not yet posted rows (status 1 / 3 / NULL),
+        <x>update / saltr mark the new rows 1 (3 + INFO when the key column is empty), <x>commit / transaction_salary set 1 -> 2."""
+        db = _db()
+        k = key.split(".", 1)[-1].lower()
+        XT = {"salary": ("CARD_XLSSALARY", "RBSNUMBER"), "new": ("card_xlsnewcard", "NAME"), "pro": ("card_xlsprolongation", "CARDNUMBER"),
+              "acc": ("card_xlsaccountclose", "CARDNUMBER")}
+        dele = {"delete_salary": "salary", "newdelet": "new", "prodelet": "pro", "accdelete": "acc", "accdelet": "acc"}
+        upd = {"saltr": "salary", "newupdate": "new", "proupdate": "pro", "accupdate": "acc"}
+        com = {"transaction_salary": "salary", "newcommit": "new", "procommit": "pro", "acccommit": "acc"}
+        if key.startswith("CARD_MAIN.") and k in dele:
+            db.execute(f"delete from {XT[dele[k]][0]} where status is null or status in (1, 3)")
+        elif key.startswith("CARD_MAIN.") and k in upd:
+            t, c = XT[upd[k]]
+            db.execute(f"update {t} set STATUS = case when {c} is null then 3 else 1 end, INFO = case when {c} is null then '{c} boşdur' end "
+                       "where status is null")
+        elif key.startswith("CARD_MAIN.") and k in com:
+            db.execute(f"update {XT[com[k]][0]} set STATUS = 2 where status = 1")
+        elif key == "CARD_MAIN.UPDATEDATE":
+            pass
+        elif key == "CARD_MAIN.DELETCARDNUM":                                # cardnumbersource.pas
+            db.execute("delete from card_cardnumber where status in (1, 3)")
+        elif key == "CARD_MAIN.EDITCARDNUMBER":
+            card, name, card2, acc, ref = (list(a) + [None] * 5)[:5]
+            known = db.execute("select count(*) from card_clients where reference = ?", [ref]).fetchone()[0]
+            nid = (db.execute("select max(id) from card_cardnumber").fetchone()[0] or 0) + 1
+            db.execute("insert into card_cardnumber (ID, REFERANCE, CARDNUMBER, OLDCARDNUMBER, NAME, RBSNUMBER, INFO, STATUS) values (?,?,?,?,?,?,?,?)",
+                       [nid, ref, card2, card, name, acc, None if known else "Referans tapılmadı", 1 if known else 3])
+        elif key == "CARD_MAIN.CARDNUMDELETE":
+            db.execute("delete from card_cardnumber where id = ?", [int(a[0])])
+        elif key == "CARD_MAIN.CARDNUMCHANGE":
+            r = db.execute("select referance, cardnumber from card_cardnumber where id = ? and status = 1", [int(a[0])]).fetchone()
+            if r:
+                db.execute("update card_clients set cardnumber = ? where reference = ?", [r[1], r[0]])
+                db.execute("update card_cardnumber set STATUS = 2 where id = ?", [int(a[0])])
+        elif key == "CARD_MAIN.CARDNUMBER":
+            db.execute("update card_clients set cardnumber = ? where reference = ?", [a[1], a[0]])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.INS_CARD_MESSAGES_C_COMMISION":
+            n = (db.execute("select max(id) from card_messages_c_commision").fetchone()[0] or 0)
+            for i, (card, fee) in enumerate([("4169730000001111", 0.35), ("4169730000002222", 1.2)], 1):
+                db.execute("insert into card_messages_c_commision (ID, CARDNUMBER, RBSNUMBER, FEEAMOUNT, TRANDATE, CURRENCY, FILE_NAME, STATUS, "
+                           "INFO_COMMISION, SYSDAT) values (?,?,?,?,?,?,?,?,?,?)",
+                           [n + i, card, "3811001944000000000" + str(i), fee, self._tek(), "944", "C0002.285", 1, "ON-US POS", self._tek()])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.CARD_MERCHAND_C_COMISSION":
+            db.execute("update card_messages_c_commision set TRID1 = id + 70000, TRID2 = id + 80000, STATUS = 2 where id = ?", [int(a[0])])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.DEL_CARD_MESSAGES_C_COMMISION":
+            db.execute("delete from card_messages_c_commision where id = ? and trid1 is null and trid2 is null", [int(a[0])])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.DEL_CARD_MESSAGES_COMM_COMMIT":
+            db.execute("delete from card_messages_c_commision where id = ? and (trid1 is not null or trid2 is not null)", [int(a[0])])
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
+
+    def _tek(self):
+        return self.st["sys"]["tek_dat"]
 
     def _cards_execute(self, sql, b):
         """DOA DML of the Sazlama forms (cards_sett.SQL / cards_sett2.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""

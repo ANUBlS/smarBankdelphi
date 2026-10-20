@@ -45,4 +45,4 @@ def test_limits_and_excel_list():
     assert c["grid1"] == [] and len(c["grid2"]) == 2 and c["messages"] == ["Limitlər daxil edildi!"]
     e = P("/excelforms/open")
     assert [x["id"] for x in e["grid"]] == [1, 2, 3, 4]
-    assert P("/excelforms/pick", {"id": 3})["form"] == "prolongationxls" and P("/excelforms/pick", {"id": 9})["form"] is None
+    assert P("/excelforms/pick", {"id": 3})["form"] == "prolong" and P("/excelforms/pick", {"id": 9})["form"] is None
