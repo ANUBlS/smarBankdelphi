@@ -389,3 +389,5 @@ from . import currencyposition  # noqa: E402
 app.include_router(currencyposition.make_router(current, require_module, err))
 from . import cp_capital  # noqa: E402
 app.include_router(cp_capital.make_router(current, require_module, err))
+from . import exchangemgr  # noqa: E402
+app.include_router(exchangemgr.make_router(current, require_module, err))
