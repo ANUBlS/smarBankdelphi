@@ -16,6 +16,7 @@ from .. import dep_sql as Q
 from .. import dep_contract_sql as QC
 from .. import dep_ops_sql as QO
 from .. import dep_settings_sql as QS
+from .. import dep_pct_sql as QP
 from .base import DBError
 
 _DB = None
@@ -27,6 +28,7 @@ def reset():
     global _DB
     _DB = None
     _PEND.clear()
+    PCT_LOG.clear()
 
 
 def _db():
@@ -102,6 +104,7 @@ def _save_deposit(db, update: bool, n: dict, user: dict):
 
 
 _PEND: dict = {}
+PCT_LOG: list = []                      # SBDM_PercentSettings_new package calls (tests)
 _CTX: dict = {}
 
 
@@ -230,6 +233,7 @@ _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")
 _OWN = {Q.SQL_VALUTES, Q.SQL_FILIALS, Q.SQL_DEPOSITTYPES, Q.SQL_CATEGORIES, Q.SQL_PERSONS, Q.SQL_USERS, Q.SQL_TRANCHES, _MAIN}
 _OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_")}                # SBDM_Contract_new
 _OWN |= {v for k, v in vars(QS).items() if "_SQL_" in k}                         # SBDM_Settings_new
+_OWN |= {v for k, v in vars(QP).items() if "_SQL_" in k}                         # SBDM_PercentSettings_new
 _OWN |= {v for k, v in vars(QO).items() if "SQL_" in k}                          # SBDM_ApplyMoney_new, SBDM_ExtractMoney_new, TrDelayed_Show, SBDM_Prolongation_new
 
 
@@ -266,6 +270,10 @@ class DepMixin:
         if key == "SBCM_PERCENT_CONVERTING_NEW.GETDATEINTERVAL":   # assumed: whole months between the dates
             a, b = args
             return (b.year - a.year) * 12 + b.month - a.month - (1 if b.day < a.day else 0)
+        if key == "SBCM_PERCENT_CONVERTING_NEW.GET_WRITE_MEMORY":   # assumed: rows of the selection not yet written (write_memory 0)
+            val, period, cap, dep, amt = args
+            return float(_db().execute("select count(*) from sbcm_depositpersetting_new where currencyid = ? and periodid = ? and capitalid = ? "
+                                       "and depid = ? and amount_setting_id = ? and coalesce(write_memory, 0) = 0", [val, period, cap, dep, amt]).fetchone()[0])
         if key == "SBCM_PERCENT_CONVERTING_NEW.GETCONVERTEDDEBT":  # assumed: simple interest for <interval> months, Integer
             iv, amount, rate = args
             return int(round(amount * rate / 100 * iv / 12))
@@ -290,8 +298,8 @@ class DepMixin:
         return NotImplemented
 
     def _dep_execute(self, sql, binds):
-        """DOA default ApplyRecord DML of the SBDM_Settings_new datasets (dep_settings.post / delete)."""
-        m = re.match(r"\s*(insert into|update|delete from)\s+(sbcm_categories_new|sbcm_acc_zone_info_new|sbcm_deposit_types_new|sbcm_settings_new)\b", sql, re.I)
+        """DOA default ApplyRecord DML of the SBDM_Settings_new / SBDM_PercentSettings_new datasets (dep_settings.post / delete)."""
+        m = re.match(r"\s*(insert into|update|delete from)\s+(sbcm_categories_new|sbcm_acc_zone_info_new|sbcm_deposit_types_new|sbcm_settings_new|sbcm_depperiods_new|sbcm_depcapitalperiods_new|sbcm_amount_setting|sbcm_depositpersetting_new|sbcm_depositunitime_new)\b", sql, re.I)
         if not m:
             return False
         db = _db()
@@ -338,6 +346,16 @@ class DepMixin:
             if db.execute("select count(*) from sbcm_contracts_new where contracttype = ?", [tid]).fetchone()[0]:
                 raise DBError("ORA-02292: integrity constraint violated - child record found", 2292)
             db.execute("delete from sbcm_deposit_types_new where id = ?", [tid])
+            return {}
+        if key in ("SBCM_PERCENT_CONVERTING_NEW.DEPPSETING_UPD_HIST_NEW", "SBCM_PERCENT_CONVERTING_NEW.DEPPSETING_HIST_NEW",
+                   "SBCM_PERCENT_CONVERTING_NEW.UPD_TRANSH_PERCENT"):
+            PCT_LOG.append((key.split(".")[1], list(args)))   # assumed: history / tranche updates, no visible effect in the mock
+            return {}
+        if key == "SBCM_PERCENT_CONVERTING_NEW.UPD_CONFIR_AND_WRIT_MEMORY_NEW":   # assumed: flag 0 -> write_memory 1, 1 -> confirmation 1
+            val, period, cap, dep, amt, flag = args
+            PCT_LOG.append(("upd_confir_and_writ_memory_new", list(args)))
+            db.execute(f"update sbcm_depositpersetting_new set {'confirmation' if flag else 'write_memory'} = 1 where currencyid = ? and periodid = ? "
+                       "and capitalid = ? and depid = ? and amount_setting_id = ?", [val, period, cap, dep, amt])
             return {}
         if key == "SBCM_RPDEPOSITORY_NEW.UPD_SBCM_REFERENCES":
             db.execute('update "SBCM_References_new" set name = ?, lname = ?, parentid = ?, value = ?, sourcelist = ? where id = ?',

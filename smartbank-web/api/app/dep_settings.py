@@ -40,7 +40,7 @@ def _rows(conn, sql, binds=None):
 
 
 # (table, [(field, DisplayName, required, kind)])  - the persistent TFields with FieldKind = fkData, in dfm order.
-# kind: "f" TFloatField, "i" TIntegerField, int n = TWideStringField Size n
+# kind: "f" TFloatField, "i" TIntegerField, "d" TDateTimeField, int n = TWideStringField Size n
 DS = {
     "categories": ("sbcm_categories_new", [("CATEGORY", "CATEGORY", False, 128)]),                    # frmCategoriesImpl_new.dfm:87-90
     "zone_info": ("sbcm_acc_zone_info_new", [("ZONEID", "ZONEID", False, "f"), ("ACCGROUP", "ACCGROUP", False, "f")]),   # frmAccGroupsImpl_new.dfm:150-155
@@ -56,6 +56,8 @@ def _conv(f, kind, v):
     """TField.AsString assignment: StrToFloat / StrToInt ('x' is not a valid ... value); string fields keep MaxLength = Size."""
     if v is None or v == "":
         return None
+    if kind == "d":                                            # TDateTimeField: only assigned by code (server side)
+        return v
     if kind in ("f", "i"):
         try:
             x = float(str(v).replace(",", ".")) if kind == "f" else int(str(v))
@@ -79,10 +81,13 @@ def post(conn, ds, rid, values: dict, current: dict | None = None):
             raise SErr("deposits.st_err_required", field=lab)
     try:
         if rid is None:
-            cols = [f for f, _, _, _ in fields]
-            conn.execute(f"insert into {table} ({', '.join(cols)}) values ({', '.join(':' + c for c in cols)})", rec)
+            cols = [f for f, _, _, _ in fields]       # bind names b0.. (column names such as TYPE# are not valid bind names)
+            conn.execute(f"insert into {table} ({', '.join(cols)}) values ({', '.join(f':b{i}' for i in range(len(cols)))})",
+                         {f"b{i}": rec[c] for i, c in enumerate(cols)})
         else:
-            conn.execute(f"update {table} set {', '.join(f'{c} = :{c}' for c in rec)} where rowid = :RID", {**rec, "RID": rid})
+            cols = list(rec)
+            conn.execute(f"update {table} set {', '.join(f'{c} = :b{i}' for i, c in enumerate(cols))} where rowid = :RID",
+                         {**{f"b{i}": rec[c] for i, c in enumerate(cols)}, "RID": rid})
         conn.commit()
     except DBError:
         conn.rollback()

@@ -377,3 +377,5 @@ from . import dep_capitalize  # noqa: E402
 app.include_router(dep_capitalize.make_router(current, require_module, err))
 from . import dep_settings  # noqa: E402
 app.include_router(dep_settings.make_router(current, require_module, err))
+from . import dep_pct  # noqa: E402
+app.include_router(dep_pct.make_router(current, require_module, err))

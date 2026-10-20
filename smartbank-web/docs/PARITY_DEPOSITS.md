@@ -1,5 +1,7 @@
 # Parity: Deposits manager (DepositsManager_New, production)
 
+**Status: complete** (2026-10-20) except the items held by the user (contract prints SBDM_WReport_new / SBDM_ContractReport_new, the print setup SBDM_WRSetup_new, the reports SBDM_PeriodReport_new / SBDM_Report_new / SBDM_ReportofBalance_new) and the two plugins whose source is not in the repo (SBDM_PercentConverting_new 'Faizlərin hesablanması', SBDM_Filter_new 'Filter Paneli') – these open the "not migrated" / "on hold" notice.
+
 | | |
 |---|---|
 | Production module | **`Packages/DepositsManager_New`** (user decision 2026-10-20). Built in `SBWorld_Tale.groupproj` together with the `Packages/SBDM_*_new` plugins. |
@@ -8,7 +10,7 @@
 | Oracle objects | `sbcm_contracts_new`, `sbcm_contract_accounts_new`, `sbcm_contract_state_new`, `sbcm_tranches_new`, `sbcm_deposit_Types_new`, `sbcm_categories_new`, `sbcm_persons_new`, `temprate`, `avalute`, `filial`, `user$`, `sysdat`, `bankinfo`; packages `sbcm_stored_programs_new` (pmNamed), `sb_aca` |
 | Web | API `api/app/deposits.py`, SQL `api/app/dep_sql.py`, mock `api/app/db/mock_dep.py` + `api/fixtures/deposits.json`, UI `web/public/modules/deposits.js` (route `/m/depositsmanager-new`) |
 | Tree / modules.json | Mock tree Item4\Item0 "Deposits manager" → `axinplace:{FC4F6C2E-…}`; `web/modules.json` marks DepositsManager_New migrated and the two NewDepositsManager CoClasses not migrated |
-| Tests | `api/tests/test_deposits.py` (14), E2E `e2e/deposits_screens.py`, screenshots 250–257 |
+| Tests | `api/tests/test_deposits.py` (14) + one test file per plugin (`test_dep_*.py`, incl. `test_dep_settings.py` 6, `test_dep_pct.py` 4); E2E `e2e/deposits_screens.py` + `e2e/dep_*_screens.py`; screenshots 250–294 |
 
 ## Main form: what is ported
 
@@ -49,14 +51,14 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Filter Paneli (N10 Ctrl+F) | – | SBDM_Filter_new.bpl | **source not in the repo** | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Yatrımların və yığımların çapı (N20) | SBCM_PRINT_APPLYMONEY | SBDM_ContractReport_new.bpl | Packages/SBDM_ContractReport_new (3 / 3155) | **on hold by user** |
 | Müqavilə çapı (N21) | SBCM_PRINT_CONTRACT1 | SBDM_WReport_new.bpl | Packages/SBDM_WReport_new (2 / 629) | **on hold by user** |
-| Sazlamalar: Bankın seçmələri (N1, Visible False) | – | SBDM_Settings_new.bpl showrefer | Packages/SBDM_Settings_new (9 / 2908) | todo (hidden) |
-| Sazlamalar: Hesab qrupları (N2) | SBCM_ACCOUNT_GROUP | SBDM_Settings_new.bpl showcccgroups | same | todo |
-| Sazlamalar: Müştəri tipləri (N3) | SBCM_CUSTOMERS_TYPE | SBDM_Settings_new.bpl showcategories | same | todo |
-| Sazlamalar: Depozitin tipləri (N4) | SBCM_DEPOSIT_TYPE | SBDM_Settings_new.bpl showdeposittypes | same | todo |
-| Sazlamalar: Gəlir zərər hesablarının sazlanması (N5) | SBCM_LOSS_INCOME_ADJUSTMENT_ACC | SBDM_Settings_new.bpl showaccountturning | same | todo |
+| Sazlamalar: Bankın seçmələri (N1, Visible False) | – | SBDM_Settings_new.bpl showrefer | Packages/SBDM_Settings_new (9 / 2908) | **ported** (hidden: opened only by code) – api/app/dep_settings.py, deposits_settings.js |
+| Sazlamalar: Hesab qrupları (N2) | SBCM_ACCOUNT_GROUP | SBDM_Settings_new.bpl showcccgroups | same | **ported** – dep_settings.py |
+| Sazlamalar: Müştəri tipləri (N3) | SBCM_CUSTOMERS_TYPE | SBDM_Settings_new.bpl showcategories | same | **ported** – dep_settings.py |
+| Sazlamalar: Depozitin tipləri (N4) | SBCM_DEPOSIT_TYPE | SBDM_Settings_new.bpl showdeposittypes | same | **ported** – dep_settings.py |
+| Sazlamalar: Gəlir zərər hesablarının sazlanması (N5) | SBCM_LOSS_INCOME_ADJUSTMENT_ACC | SBDM_Settings_new.bpl showaccountturning | same | **ported** – dep_settings.py |
 | Sazlamalar: Müqavilə çapı (Sazlanması) (N6) | SBCM_PRINT_CONTRACT | SBDM_WRSetup_new.bpl showSBWRBookmarkSetup | Packages/SBDM_WRSetup_new (6 / 2006) | **on hold** (user decision: held together with the contract prints) |
-| Sazlamalar: Faizlərin sazlanması (N7) | SBCM_PERCENT_SETTING | SBDM_PercentSettings_new.bpl | Packages/SBDM_PercentSettings_new (1 / 1833) | todo |
-| Sazlamalar: Hesabların sazlanması (Hesablarin1, Visible False) | – | SBDM_DepozitAccSettings_new.bpl | Packages/SBDM_DepozitAccSettings_new (1 / 64) | todo (hidden) |
+| Sazlamalar: Faizlərin sazlanması (N7) | SBCM_PERCENT_SETTING | SBDM_PercentSettings_new.bpl | Packages/SBDM_PercentSettings_new (1 / 1833) | **ported** – api/app/dep_pct.py, deposits_pct.js |
+| Sazlamalar: Hesabların sazlanması (Hesablarin1, Visible False) | – | SBDM_DepozitAccSettings_new.bpl | Packages/SBDM_DepozitAccSettings_new (1 / 64) | **ported** (empty form; hidden) – deposits_pct.js |
 | Hesabatlar: Period Hesabatı (N31) | SBCM_PERIOD_REPORT | SBDM_PeriodReport_new.bpl | Packages/SBDM_PeriodReport_new (3 / 2487) | **on hold by user** |
 | Hesabatlar: Mis Hesabatı (N32) | SBCM_MIS_REPORT | SBDM_Report_new.bpl | Packages/SBDM_Report_new (2 / 1387) | **on hold by user** |
 | Hesabatlar: Balans Üzrə Hesabat (N33) | SBCM_OF_BALANCE_REPORT | SBDM_ReportofBalance_new.bpl | Packages/SBDM_ReportofBalance_new (1 / 712) | **on hold by user** |
@@ -186,6 +188,44 @@ Unverified: whether VCL greys out Ləğv et / Excel-ə at (DisableIfNoHandler) o
 
 CanAfterRefresh is assigned but never read, so the manager grid is not refreshed on close (kept). Mock assumption: Capitalization moves Total from the accrued interest to the principal (interest account → deposit account posting).
 
+## SBDM_Settings_new.bpl (Sazlamalar: N1–N5)
+
+ReferLoader_new.exportproc creates the form and ShowModal per parameter. API `api/app/dep_settings.py` (`/api/deposits/sett/*`), SQL `dep_settings_sql.py`, UI `deposits_settings.js`, tests `test_dep_settings.py` (6), E2E `e2e/dep_settings_screens.py`, screenshots 283–289.
+All five forms edit TOracleDataSets directly; DOA's default ApplyRecord is reproduced (insert / update / delete by rowid with the persistent fkData fields), CommitOnPost (default True) commits each Post / Delete, TDataSet.Post checks Required fields ("Field '<DisplayName>' must have a value"). The OnApplyRecord handlers of DepositTypes and settings only read fields (their package calls are commented out) and leave Applied False, so the default applies.
+
+| Form | Delphi | Web |
+|---|---|---|
+| showcategories (frmCategoriesImpl_new) | DBGridEh + TDBNavigator on `sbcm_categories_new`; **Esc in the grid = Categories.Delete** (DBGridEh1KeyPress, no confirmation) and KeyPreview FormKeyPress closes the form | navigator (first … refresh), Esc closes **and deletes the current record** (as in Delphi; an inserted row is cancelled) |
+| showcccgroups (frmAccGroupsImpl_new) | acc_zones (read-only list) master → acc_zone_info detail (DetailFields ZONEID, editable, navigator) | zones grid + editable detail grid; new rows get ZONEID := the zone |
+| showdeposittypes (frmDepositTypesImpl_new + frmAddEditDepositTypesImpl_new) | Yeni / Redaktə / Silmək / Yeniləmək / Bağla; add-edit form: Adı (TYPE, required), Tipi (WITHDRAWTYPE lookup over `sbcm_deposit_addtypes_new` withdrtype<>'Inadvance'), CheckBox2 'Cari məbləğə görə hesabla' → AMOUNT_RULE, hidden CheckBox1 → PERCENT_RULE; Qəbul = Post (commit), İmtina = Cancel; Esc only closes – the caller's Refresh then runs CheckBrowseMode (Post if modified) | same; Silmək = 'Silinməsinə əminsinizmi?' + `SBCM_RPDEPOSITORY_new.delDepositTypes(ID)` positional, **no commit** |
+| showaccountturning (frmAccountTurningImpl_new + frmAddEditAccTurningImpl_new) | Categories → movie_names (TYPEID) → settings (PARENTID) with lookup fields filialname / currencyname / accountnumber; Add / Edit / Del actions (Edit / Del enabled when RecordCount > 0), Yeniləmək, Bağla; add-edit: Filial, Valyuta, Hesab № (Accounts: InternalBankAccs zone); Qəbul sets CurrencyID := valute.Valute then Post | same |
+| showrefer (frmReferencesImpl_new, menu N1 Visible = False) | tree from `SBCM_References_new` (ParentID = -1 recursively); value edit or ';'-split combo; Qəbul → `sbcm_rpdepository_new.UPD_SBCM_REFERENCES(ID, Name, LName, ParentID, NewValue, SourceList)`, Refresh, no commit | reachable only by code (`SB.depForms.sett_refer()`), same behaviour |
+
+## SBDM_PercentSettings_new.bpl (Faizlərin sazlanması, N7)
+
+API `api/app/dep_pct.py` (`/api/deposits/pct/*`), SQL `dep_pct_sql.py`, UI `web/public/modules/deposits_pct.js`, tests `test_dep_pct.py` (4), E2E `e2e/dep_pct_screens.py`, screenshots 290–293. P = PercentSettingImpl_new.pas.
+
+| Delphi | Web |
+|---|---|
+| Layout: Depozitlərin tipləri / Müddətlər üzrə + Kapitallaşdırma müddətləri üzrə / Valyutalar + Məbləğlər / Artım Məbləğləri və Faizlər / Müddətdən əvvəl faiz dərəcələri; Yaddaşa yaz, Təsdiqlə, 'Əvvəlki yatrımlarında % dərəcələrini dəyiş' | same order and grid columns (dfm titles / DisplayLabels; № = AutoNumber) |
+| Cursor chain: DepositTypes → depperiods (DEPID) → depcapitalperiods (PERIODID); any of these or Valutes → WaitForOp reopens DSsbcm_amount_setting(periodid, currencyid) → DSRsbcm_amount_settingDataChange reopens DepositPerSetting(depid, periodid, capitalid, currencyid, amount_setting_id) → WaitFor reopens Depositdatsettings (P:421-650) | `state()` resolves the same chain; dependents go back to the first row whenever an upper cursor moves; a record being inserted counts as ID 0 |
+| DepositTypes / Valutes have no ROWID (read-only); the other five grids edit with DOA's default ApplyRecord, CommitOnPost, AfterPost Refresh | same; keys as TDBGrid: Insert / Down on the last row (append), F2 / double-click / typing (edit), moving to another row posts; **Enter also posts (web convenience)** |
+| Delete key (XDBGrid3KeyDown on periods / caps / amounts, XDBGrid6KeyDown on Depositdatsettings): RecordCount > 0, 'Silinməsinə əminsinizmi?', Delete (commit) | same |
+| XDBGrid5KeyDown (rates): confirm, `deppseting_hist_new(id, 0)`, Delete | same |
+| XDBGrid7KeyPress (amounts): PeriodID, Currencyid := current period / currency | applied to the posted record after a key press in insert / edit state |
+| XDBGrid6KeyPress (early payout): Depsetid := DepositPerSetting.ID, Depid, PeriodID, CapitalID, valcod, amount_setting_id | same |
+| XDBGrid5KeyPress (rates), **on every key press**: read the 18 values (AsFloat), then (insert / edit) assign DepID, PeriodID, CapitalID, Currencyid, amount_setting_id, WRITE_MEMORY 0, CONFIRMATION 0, hdate := sysdat.tek_dat, then `deppseting_upd_hist_new(18 values)` | one `/keypress` call per key press (queued, in order) with the values written to the fields so far; no commit |
+| XFButton1 Yaddaşa yaz: right SBCM_PERCENT_SETTING_SAVE, `upd_confir_and_writ_memory_new(valute, period, capital, type, amount_setting, 0)`, ShowMessage | same, no commit |
+| XFButton2 Təsdiqlə: right SBCM_PERCENT_SETTING_COMMIT; checkbox → MessageDlg → `upd_transh_percent(keys, Məbləğ(min), Məbləğ(max), İllik%)`; `say := get_write_memory(keys)`; > 0 → '…yaddaşa yazılmadığından təsdiqlənə bilməz!'; = 0 → `upd_confir_and_writ_memory_new(…, 1)` + '…təsdiqləndi.'; < 0 → nothing | same; the browser shows the question between two calls, so the right is checked twice; no commit |
+| Esc: the grid cancels its edit, KeyPreview closes the form, XDBGrid5KeyPress still runs (one more history call when the rates grid has focus) | same |
+| The form is created in `initialization` and the package is never unloaded, so later openings keep the cursor positions (FormShow's Open calls are no-ops) and XFCheckBox1 is reset | cursor positions kept in the browser; the data is re-read on each opening (Delphi would show the data of the first opening until a Post / Refresh) |
+
+DSsysdat `select * from sysdat` is read through the manager's `select tek_dat from sysdat` (only TEK_DAT is used). `sbcm_amount_setting` (no `_new`) is used verbatim.
+
+## SBDM_DepozitAccSettings_new.bpl (Hesabların sazlanması, Hesablarin1 Visible = False)
+
+FrmDepozitAccSettings contains only a TStatusBar; KeyPreview is on but there is no key handler, so Esc does nothing and the window close box closes it. The web shows the same empty form with a ✕ button (reachable only by code, `SB.depForms.sett_accounts()`), screenshot 294.
+
 ## Differences from NewDepositsManager (the previous, non-production port)
 
 | Area | NewDepositsManager | DepositsManager_New |
@@ -209,6 +249,8 @@ The NewDepositsManager contract / deposit / withdrawal ports (pushed earlier in 
 `sbcm_stored_programs_new`: Get_ContractAccount / Get_ContractAccountName = account number / name; GetpercentCollection = fixture string;
 CloseDeposit zeroes the state rows and sets calculationenabled 0 (ORA-20101 if already closed); IsCalculationEnabled = calculationenabled = 1;
 Disable/EnableCalculation set it 0 / 1.
+`SBCM_RPDEPOSITORY_new`: delDepositTypes refuses a type used by a contract (ORA-02292); UPD_SBCM_REFERENCES updates the row.
+`sbcm_percent_converting_new`: deppseting_upd_hist_new / deppseting_hist_new / upd_transh_percent are logged only; upd_confir_and_writ_memory_new sets write_memory (flag 0) or confirmation (flag 1) to 1 on the selected rate rows; get_write_memory = number of selected rate rows with write_memory 0. New rows get their ID from an assumed BEFORE INSERT trigger (max + 1).
 
 ## Unverified
 
@@ -217,3 +259,7 @@ Disable/EnableCalculation set it 0 / 1.
 - `(select distinct stopcalculationdate …)` / `calculationenabled` raise ORA-01427 in Oracle when the state rows differ; the mock data keeps them equal.
 - DateSeparator for the opendate filter literal (az-AZ '.').
 - Package call commit behaviour: no explicit Commit in the form; DepositsData `CommitOnPost = False`.
+- DOA `UpdateStatus` outside cached updates: the PercentSettings KeyPress handlers assume it reports usInserted / usModified for the record being inserted / edited. If DOA returns usUnmodified there, Delphi never assigns the master values and a new rate row fails on 'CURRENCYID must have a value'.
+- DOA default ApplyRecord column list (all persistent data fields vs. only modified ones) and the ID source for new settings rows (trigger / sequence) – the web inserts every data field, ID null.
+- SBDM_PercentSettings_new on a second opening shows the data of the first opening in Delphi (datasets stay open); the web re-reads it.
+- The real bodies of the sbcm_percent_converting_new procedures and of delDepositTypes / UPD_SBCM_REFERENCES (not in the repo).

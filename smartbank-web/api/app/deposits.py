@@ -73,7 +73,7 @@ PLUGINS = {
 # The deposit contract prints and the deposit reports are on hold by the user: never ported.
 ON_HOLD = {"sett_wrsetup", "rep_contract_ops", "wreport", "rep_period", "rep_mis", "rep_balance"}
 # Plugin keys whose BPL form is ported: the browser opens the web form after this right check.
-MIGRATED: set = {"contract_insert", "contract_edit", "apply_money", "extract_money", "prolongation", "shedule", "untimely", "partial_payment", "capitalize", "sett_refer", "sett_cccgroups", "sett_categories", "sett_deposittypes", "sett_accountturning"}
+MIGRATED: set = {"contract_insert", "contract_edit", "apply_money", "extract_money", "prolongation", "shedule", "untimely", "partial_payment", "capitalize", "sett_refer", "sett_cccgroups", "sett_categories", "sett_deposittypes", "sett_accountturning", "sett_percent", "sett_accounts"}
 DATE_SEPARATOR = "."   # FormatDateTime('dd/MM/yyyy'): '/' = Windows DateSeparator (az-AZ '.', unverified on the bank PCs)
 NO_DEPOSIT = "Heç bir Depozit seçilməyib!"               # Get_SelectedContID (CommonDeclsImpl_new.pas:47-52)
 
