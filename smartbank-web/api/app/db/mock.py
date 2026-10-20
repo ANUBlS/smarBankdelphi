@@ -345,7 +345,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
-        r = self._cs_plsql(sql, binds or {})
+        r = self._dep_plsql(sql, binds or {})         # DepositsManager_New plugins
+        if r is NotImplemented:
+            r = self._cs_plsql(sql, binds or {})
         if r is NotImplemented:
             r = self._cr_plsql(sql, binds or {})
         if r is NotImplemented:

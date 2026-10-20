@@ -100,7 +100,8 @@ def test_calc_toggle():
 def test_plugin_rights_and_not_migrated():
     c = cl()
     r = c.post("/api/deposits/plugin/contract_insert").json()
-    assert r["bpl"] == "SBDM_Contract_new.bpl" and r["param"] == "InsertContract" and not r["migrated"]
+    assert r["bpl"] == "SBDM_Contract_new.bpl" and r["param"] == "InsertContract" and r["migrated"]
+    assert not c.post("/api/deposits/plugin/capitalize").json()["migrated"]
     assert c.post("/api/deposits/plugin/rep_mis").json()["on_hold"] is True
     assert c.post("/api/deposits/plugin/nope").status_code == 404
 

@@ -36,8 +36,8 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 
 | Menu | Right | BPL / param | Source folder (units / lines) | Status |
 |---|---|---|---|---|
-| Yeni Kontrakt / N16 Ctrl+N | NEW_SBCM_CONTRACT | SBDM_Contract_new.bpl InsertContract | Packages/SBDM_Contract_new (3 / 3126; the folder also holds NewDepositsContract.dpk) | todo (next) |
-| Redaktə / N17 Ctrl+E | EDIT_SBCM_CONTRACT | SBDM_Contract_new.bpl EditContract | same | todo |
+| Yeni Kontrakt / N16 Ctrl+N | NEW_SBCM_CONTRACT | SBDM_Contract_new.bpl InsertContract | Packages/SBDM_Contract_new (3 / 3126; the folder also holds NewDepositsContract.dpk) | **ported** (see below) |
+| Redaktə / N17 Ctrl+E | EDIT_SBCM_CONTRACT | SBDM_Contract_new.bpl EditContract | same | **ported** |
 | Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | todo |
 | Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | todo |
 | Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
@@ -63,6 +63,44 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Common | – | SBDM_Common_new.bpl (LoadPlugin, Get_SelectedContID, TrDelayed_Show) | Packages/SBDM_Common_new (2 / 597) | used by the ports |
 
 Archive: DepositsManager_New has no archive menu item. `Packages/SBDM_DepositsArchive` (CLSID `{339266A2-…}`) reads the classic `sbcm_*` tables (not `_new`), and `NewDepositsManager/NewDepositsArchive` belongs to NewDepositsManager → both are skip candidates.
+
+## SBDM_Contract_new.bpl (new / edit contract)
+
+API `api/app/dep_contract.py` (`/api/deposits/contract/*`), SQL `dep_contract_sql.py`, UI `web/public/modules/deposits_contract.js`,
+tests `api/tests/test_dep_contract.py` (10), E2E `e2e/dep_contract_screens.py`, screenshots 258–262. F = frmDepositContract_new_Impl.pas, DM = dmDepositContract_new_Impl.pas.
+
+| Delphi | Web | Ref |
+|---|---|---|
+| exportproc InsertContract → New, EditContract → Edit (no LookContract; the manager has no double-click) | `POST /open {mode}`; the right (NEW_/EDIT_SBCM_CONTRACT) is re-checked server-side | F:471-483, 663-688 |
+| DataModuleCreate opens valutes, Filals, DepositTypes1 (no status filter), ClientTypes, persons, Customers | `static_lists`; Customers is the full `select id,name from customers`, the web filters it for the name drop-down (`/customers?q=`) | DM:158-171 |
+| AddContract: DepositPorps(CONTRACTID 0) Insert; CURRENCY 0, Branchid Get_FilialID, Open/Close/FIRSTINTERESTPAYDAT Get_BankDate | `add_contract` (bank date / filial of the manager) | F:488-503 |
+| EditContract: Open(Get_SelectedContID), Edit, ShowAccounts | `load_contract` + `show_accounts`; DepositPorpsCalcFields calls `GetPeriod(bdat, edat)` (PeriodContracts, not shown) | F:505-527, DM:262-269 |
+| CUSTOMERID OnChange → ShowAccounts: reopen DepositAccs / InterestsAccs / ClientAccs / BoorowerAccs / DSBEFO_INTERESTPEYTACC with :CustID, ChAutopr := (Autopr = 1) | `customer` event (ID edit on exit, or a name picked in the list) | DM:271-275, F:586-658 |
+| Account lookups (except ClientAccs) are details of `valutes` (val_acc) – they follow the currency combo | `currency` event re-queries them | dfm:126-158 |
+| ContractTypesKeyValueChanged → DepPeriods / DepCapperiod reopen; LCBPeriodsKeyValueChanged → DepCapperiod reopen | `type` / `period` events | F:276-286, 394-404 |
+| LCBPeriodsChange: 'Ay' → IncMonth(open, period), 'Gün' → open + period, close-date edit Enabled := period <> 0 | same; fires when the combo text changes (list reopened) or on user selection | F:247-274 |
+| LCBCapPerChange: FIRSTINTERESTPAYDAT := IncMonth(open, period div 30) (period > 0, else IncMonth(open, period)) | same | F:228-239 |
+| GenAnnualInt only on **Enter** in Depozitin tipi / Müddət / Kap.per / Valyuta / Məbləğ: Get_DefaultContractRate ×3 (p_defint/p_defUntimeint TF / FT / FF) → INTEREST (FloatToStr), OVERDUEINTEREST, DUEINTEREST; skipped unless the four combos have values | `genint` event; PL/SQL BOOLEAN literals in an anonymous block | F:165-226 |
+| CheckNeedsFields: 12 fields (DisplayName; INTEREST has none → 'INTEREST'), the 4 account ids <> 0, `Check_BankAccount`, BefoPercent account when the type's WITHDRAWTYPE = 'BefoPercent' | same order and texts (`deposits.c_err_*`) | F:322-384 |
+| Qeyd et → SaveDeposits → Post → ApplyRecord `NewDeposit` / `UpdateDeposit(p_ContractID = Get_SelectedContID)` (pmNamed, 23 / 24 names) → **commit** (CommitOnPost default) | same; a failed call rolls back | F:298-304, 689-749, DM:190-260 |
+| Insert: AddContract again, the form stays open; Edit: Close → FormClose RefreshWithSavely(True) | `closed` flag; the manager grid reloads | F:731-749, 535-541 |
+| İmtina et (insert) → Cancel twice: empty dataset in browse; the next Qeyd et shows the "Filial" hint | browse state | F:288-291 |
+| Bağla / Esc → CloseQuery 'Dəyişiklər qeyd olunmayacaq !'#13'Əminsiniz?' when Modified; F5 → RefreshDataSets | same | F:543-577 |
+
+Contract-form quirks kept:
+- `Amount := DBNumberEditEh.Value` with an empty amount raises a Variant conversion error, so pressing Enter in the type / period / currency combos before an amount is typed shows that error (`deposits.c_err_variant`).
+- ShowAccounts sets ChAutopr from the AUTOPR field, which is Null on a new record: choosing a customer in insert mode clears the "Avto prolonq." box that New() had ticked.
+- F5 before a customer is chosen in insert mode refreshes closed account datasets → "Cannot perform this operation on a closed dataset".
+- Changing the customer keeps the previously chosen account ids in the record (only `<> 0` is checked on save).
+- `usrs` is never opened, so the fkLookup USERNAME (Lbluser) stays empty in Edit.
+- `DSBEFO_INTERESTPEYTACC` uses the classic `sbcm_acc_zone_info` / `sbcm_acc_zones` tables (not `_new`).
+- The form `uses NewCommonDeclsImpl` (NewDepositsCommon) while the dpk requires SBDM_Common_new; the web uses the manager's current row, bank date and filial (as CommonDeclsImpl_new would).
+
+Contract-form unverified / mock:
+- EhLib order of OnChange / OnKeyValueChanged when the Edit record loads (the web runs type → period → capital period; this recomputes CLOSEDATE and FIRSTINTERESTPAYDAT, so saving an unchanged contract can change them).
+- Lookup list cursors are assumed to sit on the selected key (first row when not found).
+- FloatToStr decimal separator ('.' assumed).
+- `sbcm_contract_new` body (NewDeposit, UpdateDeposit, GetPeriod, Get_DefaultContractRate, Check_BankAccount) is not in the repo; mock = fixture `_rates`, `_bankacc_missing`, unique contract number.
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

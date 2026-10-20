@@ -13,10 +13,12 @@ import re
 import sqlite3
 
 from .. import dep_sql as Q
+from .. import dep_contract_sql as QC
 from .base import DBError
 
 _DB = None
-DATE_COLS = {"OPENDATE", "CLOSEDATE", "STOPCALCULATIONDATE", "HDATE"}
+_FX: dict = {}
+DATE_COLS = {"OPENDATE", "CLOSEDATE", "STOPCALCULATIONDATE", "HDATE", "FIRSTINTERESTPAYDAT", "CLOSE_DAT"}
 
 
 def reset():
@@ -30,7 +32,9 @@ def _db():
         from ..config import settings
         D = json.load(open(os.path.join(settings.mock_fixtures, "deposits.json"), encoding="utf-8"))
         c = sqlite3.connect(":memory:", check_same_thread=False)
-        pc = D.get("_percent", {})
+        global _FX
+        _FX = D
+        pc = D.setdefault("_percent", {})
         acc = lambda col: (lambda i: None if i is None else (c.execute(f"select {col} from account where id = ?", [i]).fetchone() or [None])[0])  # noqa: E731
         c.create_function("sp_get_contractaccount", 1, acc("acc_no"))
         c.create_function("sp_get_contractaccountname", 1, acc("name"))
@@ -47,6 +51,45 @@ def _db():
     return _DB
 
 
+def _fx():
+    _db()
+    return _FX
+
+
+def _save_deposit(db, update: bool, n: dict, user: dict):
+    """Assumed sbcm_contract_new.NewDeposit / UpdateDeposit body (not in the repo): one row in sbcm_contracts_new (type# 3),
+    sbcm_contract_accounts_new, sbcm_overdueinterests_new and (new only) sbcm_contract_state_new; p_Percent becomes the
+    GetpercentCollection text. Duplicate contract numbers raise ORA-00001."""
+    d = lambda v: None if v is None else v.date().isoformat()  # noqa: E731
+    no = n["p_ContractNo"]
+    if update:
+        cid = int(n["p_ContractID"])
+        if db.execute('select 1 from sbcm_contracts_new where contractno = ? and id <> ?', [no, cid]).fetchone():
+            raise DBError("ORA-00001: unique constraint (SMART.SBCM_CONTRACTS_NEW_UK) violated", 1)
+        if not db.execute('select 1 from sbcm_contracts_new where id = ?', [cid]).fetchone():
+            raise DBError("ORA-01403: no data found", 1403)
+    else:
+        if db.execute('select 1 from sbcm_contracts_new where contractno = ?', [no]).fetchone():
+            raise DBError("ORA-00001: unique constraint (SMART.SBCM_CONTRACTS_NEW_UK) violated", 1)
+        cid = (db.execute("select max(id) from sbcm_contracts_new").fetchone()[0] or 5000) + 1
+        db.execute('insert into sbcm_contracts_new (id, "type#", "sid#") values (?, 3, ?)', [cid, int(user.get("sid", 23) or 23)])
+        db.execute('insert into sbcm_contract_accounts_new ("id#") values (?)', [cid])
+        db.execute('insert into sbcm_overdueinterests_new ("id#") values (?)', [cid])
+        db.execute('insert into sbcm_contract_state_new ("id#", facticaldebt, facticalinterestdebt, calculationenabled) values (?, 0, 0, 1)', [cid])
+    db.execute("""update sbcm_contracts_new set contractno=?, opendate=?, closedate=?, amount=?, currency=?, personaltype=?,
+                  clienttype=?, branchid=?, contracttype=?, customerid=?, autopr=?, periodid=?, capitalperid=?, firstinterestpaydat=?
+                  where id=?""", [no, d(n["p_OpenDate"]), d(n["p_CloseDate"]), n["p_Amount"], n["p_currency"], n["p_personaltype"],
+                                  n["p_ClientType"], n["p_branchid"], n["p_ContractType"], n["p_customerid"], n["p_autopr"],
+                                  n["p_PeriodID"], n["p_capitalperid"], d(n["p_stopCalcdate"]), cid])
+    db.execute("""update sbcm_contract_accounts_new set contractaccid=?, clientaccid=?, interestaccid=?, booroweraccid=?,
+                  befo_interestpeytaccid=? where "id#"=?""", [n["p_ContractAccID"], n["p_ClientAccID"], n["p_InterestAccID"],
+                                                             n["p_BoorowerAccID"], n["p_BEFO_INTERESTPEYTACCID"] or None, cid])
+    db.execute('update sbcm_overdueinterests_new set overdueinterest=?, dueinterest=? where "id#"=?',
+               [n["p_OverduePercent"], n["p_DuePercent"], cid])
+    _FX["_percent"][str(cid)] = n["p_Percent"]
+    return {}
+
+
 def _sqlite(sql: str) -> str:
     s = re.sub(r"sbcm_stored_programs_new\.(Get_ContractAccountName|Get_ContractAccount|GetpercentCollection)\(",
                lambda m: "sp_" + m.group(1).lower() + "(", sql)
@@ -56,6 +99,7 @@ def _sqlite(sql: str) -> str:
 
 _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")
 _OWN = {Q.SQL_VALUTES, Q.SQL_FILIALS, Q.SQL_DEPOSITTYPES, Q.SQL_CATEGORIES, Q.SQL_PERSONS, Q.SQL_USERS, Q.SQL_TRANCHES, _MAIN}
+_OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_")}                # SBDM_Contract_new
 
 
 def _bind(v):
@@ -87,6 +131,22 @@ class DepMixin:
         return NotImplemented
 
     def _dep_func(self, key, named):
+        n = named or {}
+        if key == "SBCM_CONTRACT_NEW.GETPERIOD":          # assumed: whole months between bdat and edat
+            b, e = n["bdat"], n["edat"]
+            if b is None or e is None:
+                return 0
+            return (e.year - b.year) * 12 + e.month - b.month - (1 if e.day < b.day else 0)
+        return NotImplemented
+
+    def _dep_plsql(self, sql, binds):
+        if "sbcm_contract_new.Get_DefaultContractRate(" in sql:   # assumed: fixture _rates[depid] = [int, untimely, due]
+            rates = _fx().get("_rates", {}).get(str(int(binds["p_DepositType"])))
+            if rates is None:
+                return None
+            if "p_defint => true" in sql:
+                return float(rates[0])
+            return float(rates[1] if "p_defUntimeint => true" in sql else rates[2])
         return NotImplemented
 
     def _dep_commit(self):
@@ -98,6 +158,10 @@ class DepMixin:
             _DB.rollback()
 
     def _dep_bool(self, key, named):
+        if key == "SBCM_CONTRACT_NEW.CHECK_BANKACCOUNT":
+            n = named or {}
+            k = [int(n["p_categoryID"]), int(n["p_currencyID"]), int(n["p_BranchID"])]
+            return k not in _fx().get("_bankacc_missing", [])
         if key == "SBCM_STORED_PROGRAMS_NEW.ISCALCULATIONENABLED":
             r = _db().execute('select max(calculationenabled) from sbcm_contract_state_new where "id#" = ?',
                               [int((named or {})["ContractID"])]).fetchone()
@@ -120,4 +184,6 @@ class DepMixin:
             db.execute('update sbcm_contract_state_new set calculationenabled = ? where "id#" = ?',
                        [0 if key.endswith("DISABLECALCULATION") else 1, int(n["ContractID"])])
             return {}
+        if key in ("SBCM_CONTRACT_NEW.NEWDEPOSIT", "SBCM_CONTRACT_NEW.UPDATEDEPOSIT"):
+            return _save_deposit(db, key.endswith("UPDATEDEPOSIT"), n, getattr(self, "user", {}) or {})
         return NotImplemented

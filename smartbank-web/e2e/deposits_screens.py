@@ -42,7 +42,7 @@ with sync_playwright() as p:
     pg.locator("#dGrid tr[data-id='5002']").click(); pg.locator("#dGrid tr[data-id='5004']").click(modifiers=["Control"])
     pg.keyboard.press("F8"); pg.wait_for_timeout(700)
     shot(pg, "255-deposits-closed.png")
-    pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("Control+n"); pg.wait_for_selector(".toast"); shot(pg, "256-deposits-not-migrated.png")
+    pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("Control+p"); pg.wait_for_selector(".toast"); shot(pg, "256-deposits-not-migrated.png")
     pg.close()
     pg = login(b, "DEPOSITOR", "Depositor#2026")
     pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("F8"); pg.wait_for_selector(".toast")
