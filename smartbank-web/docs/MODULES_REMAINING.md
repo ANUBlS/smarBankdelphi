@@ -87,7 +87,7 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 |---|---|---|---|---|---|---|---|---|---|
 | 27 | AIFPAYMENTS / TAIFPAYMENT | `Packages/AIFPAYMENTS---------` | 8 | 8 | 15 | 1510 | 2014-06-02 | AIF_PAYMENTS, SB_ACA | **folder name ends with dashes (usually means retired) – confirm** |
 | 28 | ASANFinance / TASANFinanceForm | `Packages/ASANFinance` | 7 | 7 | 14 | 1729 |  | ASAN_TRANSACTION | **ported** (route `/m/asanfinance`, see PARITY_ASANFINANCE.md); HTTP client behind ASAN_MODE; five QuickReport prints on hold; no other copies |
-| 29 | BBPayings / TBBPayingsForm | `Packages/BBPayings` | 3 | 3 | 3 | 637 |  | CABLE_MANAGER, SBOP |  |
+| 29 | BBPayings / TBBPayingsForm | `Packages/BBPayings` | 3 | 3 | 3 | 637 |  | CABLE_MANAGER, SBOP | **ported** (route `/m/bbpayings`, see PARITY_BBPAYINGS.md); no prints; no other copies |
 | 30 | Emanat_view / TEmwanat_view | `Packages/EmanatViews` | 2 | 2 | 6 | 749 | 2017-09-29 | PG_WSPAYMENT |  |
 | 31 | EmanetSH / TEmanet | `Packages/Emanet` | 2 | 2 | 6 | 3769 |  | SB_EMANET |  |
 | 32 | ExpressManager / TExpress | `Packages/ExpressManager_nbc` | 29 | 28 | 122 | 14490 | 2017-10-06 | EXPESS_OPERATIONS, SB_ACA, SB_CASHREPORT | copies: ExpressSource/ExpressManager_nbc_2016; ExpressSource/ExpressManager_nbc_xarab; ExpressSource/ExpressManager_nbc_xarabarchive; ExpressSource/ExpressManager_turan_2017 … |
