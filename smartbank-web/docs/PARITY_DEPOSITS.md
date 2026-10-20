@@ -38,8 +38,8 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 |---|---|---|---|---|
 | Yeni Kontrakt / N16 Ctrl+N | NEW_SBCM_CONTRACT | SBDM_Contract_new.bpl InsertContract | Packages/SBDM_Contract_new (3 / 3126; the folder also holds NewDepositsContract.dpk) | **ported** (see below) |
 | Redaktə / N17 Ctrl+E | EDIT_SBCM_CONTRACT | SBDM_Contract_new.bpl EditContract | same | **ported** |
-| Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | todo |
-| Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | todo |
+| Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | **ported** – api/app/dep_ops.py, deposits_ops.js |
+| Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | **ported** – api/app/dep_ops.py, deposits_ops.js |
 | Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
 | Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
 | Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | todo |
@@ -101,6 +101,24 @@ Contract-form unverified / mock:
 - Lookup list cursors are assumed to sit on the selected key (first row when not found).
 - FloatToStr decimal separator ('.' assumed).
 - `sbcm_contract_new` body (NewDeposit, UpdateDeposit, GetPeriod, Get_DefaultContractRate, Check_BankAccount) is not in the repo; mock = fixture `_rates`, `_bankacc_missing`, unique contract number.
+
+## SBDM_ApplyMoney_new.bpl / SBDM_ExtractMoney_new.bpl (Yatırım, Əmanətin ödənilməsi) + TrDelayed_Show
+
+| Delphi | Web |
+|---|---|
+| frmApplyMoneynew: Tranches grid (№, Tarix, Məbləğ, Faiz, Qeyd), 'Müqavilə haqqında' / Müştəri, Yeni / Silmək / Excel -ə at / Çıxış | list modal; Sil and Excel always enabled (no OnUpdate in the dfm) |
+| ActnAdd: INSERT_SBCM_TRANSH; frmAddMoneynew FormShow: getpersentTransh -> PercentEdit (FloatToStr), counttranch, Get_BankDate | `/apply/add` |
+| ActnTransactionExecute AM:104-267: Percent = 0 message; checkedtranch / checkedaddtranch / checkedtranch_max_limit all called; check1 only when counttransh = 0, check2 + check3 only when > 0; depositmoney(..., Trname 'null', usetransaction True) | `/apply/run`, keys a_chk1_*, a_chk2_*, a_chk3_* (verbatim az texts) |
+| ActnDel: DELETE_SBCM_TRANSH, 'Silinməsinə əminsinizmi?', DeleteDepositMoney(P_DepMoneyID), no commit | `/apply/delete` (stays pending in the session like the Delphi session) |
+| ActnExport: EXCEL_SBCM_TRANSH, sheet 'Depozit yatrımları' | `/apply/export.xlsx` |
+| frmExtractMoney_new: Payments grid (№, Tarix, Əsas məbləğdən, Faiz məbləğindən), Yeni / Ləğv etmək / Excel -ə at / Çıxış; Del/Excel need RecordCount > 0 | list modal, buttons disabled on an empty grid, the API re-checks |
+| frmAddExtractMoney_new: Əsas məbləğ / Faiz məbləği groups, Tarix, Müştəri Hesab (CreditAccs = InternalBankAccs zone, Locate ClientACCID); Actiontr enabled when main + interest > 0; WithDrawMoney(..., UseTransactions, showTransaction True) | `/extract/add`, `/extract/run` |
+| TrDelayed_Show: SBCM_DELAYED_TRANSACTIONS_new grid (Tarix, Debet, $, Kredit, $, Kassa sim., TrAmount), Təyinatı; Təsdiq et / İmtina et ('Əməliyyat aparılmayacaq! Əminsinizmi?'); Commit<Op>(DoCommit) | delayed modal; second call `/delayed/finish {ok}` on the same session; a confirmation left open is dismissed (Commit(False)) before the next operation |
+| FormClose: RefreshWithSavely when an operation was OK | main grid reload on Çıxış |
+
+Mock assumptions (package bodies not in the repo): depositmoney / WithDrawMoney write one delayed posting per leg; Commit*(True) inserts into sbcm_tranches_new / sbcm_payments_new and moves sbcm_contract_state_new; the three tranche checks come from fixture `_tranch_checks` (default 1 / 3 / 5 = OK); getpersentTransh = sbcm_interests_new.INTEREST.
+
+Unverified: E_SQL_CREDITACCS / E_SQL_CUSTACC use the classic `sbcm_acc_zone_info` and `sbcm_stored_programs.Get_ContractAccount` exactly as the _new dfm does (looks like a leftover in the Delphi source, kept verbatim); PL/SQL BOOLEAN arguments (usetransaction, DoCommit) passed as Python bool in thin mode; N1 'Əməliyyata baxmaq' opens SBDM_TransactionViewer.bpl (not migrated, shows a notice).
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

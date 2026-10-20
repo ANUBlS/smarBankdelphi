@@ -1,0 +1,155 @@
+/* SBDM_ApplyMoney_new.bpl (Yatırım), SBDM_ExtractMoney_new.bpl (Əmanətin ödənilməsi) and the delayed-transactions
+   confirmation (SBDM_Common_new TrDelayed_Show). Every rule runs in the API (api/app/dep_ops.py). */
+(function () {
+  const { api, esc, toast } = window.SB;
+  const D = () => window.SB.dep;
+  const K = (k, p) => window.SB.t('deposits.' + k, p);
+  const money = (v) => v === null || v === undefined || v === '' ? '' : Number(v).toLocaleString(window.I18N.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const dt = (v) => v ? String(v).slice(0, 10).split('-').reverse().join('.') : '';
+  const numIn = (s) => { const x = parseFloat(String(s).replace(/\s/g, '').replace(',', '.')); return isNaN(x) ? 0 : x; };
+  const right = (code) => api('/api/deposits/right/' + code, { method: 'POST' });
+
+  async function download(url, body, name) {
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF': window.SB.csrf || '' }, credentials: 'same-origin', body: JSON.stringify(body) });
+    if (!res.ok) { const j = await res.json().catch(() => ({})); toast(D().errText(j.detail || { key: 'error.generic' }), 'error'); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(await res.blob()); a.download = name; a.click();
+  }
+
+  // ---------------------------------------------------------------- TrDelayed_Show (TTransactionsViewForm_new)
+  function delayed(r) {
+    return new Promise((resolve) => {
+      let done = false, cur = 0;
+      D().modal(`<h3>${esc(r.caption)}</h3><div class="tablewrap" style="max-height:50vh"><table class="grid"><thead><tr>
+        <th>${esc(K('o_date'))}</th><th>Debet</th><th>$</th><th>Kredit</th><th>$</th><th>${esc(K('o_tt_cash'))}</th><th style="text-align:right">${esc(K('o_total'))}</th></tr></thead>
+        <tbody>${r.delayed.map((x, i) => `<tr data-i="${i}" class="${i === 0 ? 'sel' : ''}"><td>${esc(dt(x.trdate))}</td><td>${esc(x.debitaccno ?? '')}</td><td>${esc(x.debitcurrency ?? '')}</td>
+          <td>${esc(x.creditaccno ?? '')}</td><td>${esc(x.creditcurrency ?? '')}</td><td>${esc(x.inbalancechar ?? '')}</td><td style="text-align:right">${esc(money(x.tramount))}</td></tr>`).join('') || `<tr><td colspan="7" class="muted">—</td></tr>`}</tbody></table></div>
+        <label class="muted">${esc(K('o_tt_purpose'))}</label><input class="ro" readonly id="ttDesc" style="width:100%" value="${esc(r.delayed[0]?.trdescription ?? '')}">
+        <div class="actions"><button class="btn" id="ttOk">${esc(K('tt_commit'))}</button><button class="btn secondary" id="ttNo">${esc(K('tt_dismiss'))}</button></div>`, (m, close) => {
+        m.querySelectorAll('tr[data-i]').forEach(tr => tr.onclick = () => {
+          cur = +tr.dataset.i; m.querySelectorAll('tr[data-i]').forEach(x => x.classList.toggle('sel', x === tr));
+          m.querySelector('#ttDesc').value = r.delayed[cur]?.trdescription ?? '';
+        });
+        const fin = async (ok) => {
+          if (done) return;
+          if (!ok && !confirm(K('tt_cancel_confirm'))) return;          // FormCloseQuery: 'Əməliyyat aparılmayacaq! Əminsinizmi?'
+          done = true; close();
+          try { await api('/api/deposits/delayed/finish', { method: 'POST', body: { ok } }); resolve(ok); }
+          catch (e) { toast(D().errText(e), 'error'); resolve(false); }
+        };
+        m.querySelector('#ttOk').onclick = () => fin(true);
+        m.querySelector('#ttNo').onclick = () => fin(false);
+        m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); fin(false); } });
+        m.querySelector('#ttOk').focus();
+      }, 'wide dep-sub dep-tt');
+    });
+  }
+  window.SB.depDelayed = delayed;
+
+  // shared list form (frmApplyMoneynew / frmExtractMoney_new)
+  function listForm(cfg, sel) {
+    const body = { contract_id: sel.id };
+    return (async () => {
+      let o; try { o = await api(cfg.url + '/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+      const f = { o, refresh: false, cur: o[cfg.rows][0]?.id ?? null };
+      D().modal('<div class="opBody"></div>', (m, close) => {
+        let exit = () => { close(); if (f.refresh) D().reloadMain(false); };     // FormClose: RefreshWithSavely when an op was OK
+        const draw = () => {
+          const rows = f.o[cfg.rows], empty = !rows.length, dis = cfg.delNeedsRows && empty ? 'disabled' : '';
+          m.querySelector('.opBody').innerHTML = `<h3>${esc(K(cfg.caption, { no: sel.no }))}</h3>
+            <div class="toolbar" style="gap:8px"><button class="btn" data-a="new">${esc(K('o_new'))}</button><button class="btn secondary" data-a="del" ${dis}>${esc(K(cfg.delLabel))}</button>
+              <button class="btn secondary" data-a="xls" ${dis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
+            <fieldset class="dgrp" style="margin:8px 0"><legend>${esc(K(cfg.group))}</legend>${cfg.group === 'o_about' ? esc(K('o_customer')) + ': ' : ''}<b>${esc(f.o.info.name ?? '')}</b></fieldset>
+            <div class="tablewrap" style="max-height:45vh"><table class="grid"><thead><tr>${cfg.cols.map(c => `<th style="${c[2] === 'm' ? 'text-align:right' : ''}">${esc(c[1].startsWith('o_') ? K(c[1]) : c[1])}</th>`).join('')}</tr></thead>
+            <tbody>${rows.map(x => `<tr data-id="${x.id}" class="${x.id === f.cur ? 'sel' : ''}">${cfg.cols.map(c => `<td style="${c[2] === 'm' ? 'text-align:right' : ''}">${esc(c[2] === 'm' ? money(x[c[0]]) : c[2] === 'd' ? dt(x[c[0]]) : (x[c[0]] ?? ''))}</td>`).join('')}</tr>`).join('')
+              || `<tr><td colspan="${cfg.cols.length}" class="muted">${esc(K('empty_ops'))}</td></tr>`}</tbody></table></div>`;
+          m.querySelectorAll('tr[data-id]').forEach(tr => {
+            tr.onclick = () => { f.cur = +tr.dataset.id; draw(); };
+            tr.oncontextmenu = (e) => { f.cur = +tr.dataset.id; draw(); window.SB.contextMenu(e, [{ label: K('view_tr'), onClick: () => toast(K('not_migrated', { bpl: 'SBDM_TransactionViewer.bpl' }), 'info') }]); };
+          });
+          const b = (a) => m.querySelector(`[data-a="${a}"]`);
+          b('new').onclick = () => cfg.add(f, body, async () => { f.refresh = true; f.o = await api(cfg.url + '/open', { method: 'POST', body }); f.cur = f.o[cfg.rows][0]?.id ?? null; draw(); });
+          b('del').onclick = async () => {
+            try {
+              await right(cfg.delRight);
+              if (!confirm(K('confirm_delete'))) return;
+              f.o = await api(cfg.url + '/delete', { method: 'POST', body: { ...body, item_id: f.cur ?? 0 } }); f.cur = f.o[cfg.rows][0]?.id ?? null; draw();
+            } catch (e) { toast(D().errText(e), 'error'); }
+          };
+          b('xls').onclick = () => download(cfg.url + '/export.xlsx', body, cfg.xls);
+          b('exit').onclick = exit;
+        };
+        draw();
+        // Esc closes the form when it is the top modal (focus may be on <body> after a sub-form closed)
+        const onKey = (e) => { if (e.key === 'Escape' && [...document.querySelectorAll('.backdrop.stacked')].pop() === m.parentElement) exit(); };
+        document.addEventListener('keydown', onKey);
+        const exit0 = exit; exit = () => { document.removeEventListener('keydown', onKey); exit0(); };
+      }, 'wide');
+    })();
+  }
+
+  // ---------------------------------------------------------------- frmAddMoneynew
+  async function addMoney(f, body, after) {
+    let a; try { a = await api('/api/deposits/apply/add', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    D().modal(`<h3>${esc(K('m_deposit'))}</h3><div id="amErr"></div><div class="dc-form">
+      <div class="dc-row"><label>${esc(K('o_dep_amount'))}</label><input class="ro" readonly value="${esc(money(a.info.amount))}"></div>
+      <div class="dc-row"><label>${esc(K('o_date2'))}</label><input type="date" disabled value="${esc(a.date)}"></div>
+      <div class="dc-row"><label>${esc(K('o_sum'))}</label><input id="amSum" inputmode="decimal" value="${esc(a.sum)}"></div>
+      <div class="dc-row"><label>${esc(K('o_annual'))}</label><input id="amPct" value="${esc(a.percent_text)}"></div>
+      <div class="dc-row"><label>${esc(K('o_custacc'))}</label><select id="amAcc">${a.debit.map(x => `<option value="${x.id}" ${x.id === a.accid ? 'selected' : ''}>${esc(x.acc_no)} · ${esc(x.name ?? '')}</option>`).join('')}</select></div></div>
+      <div class="actions"><button class="btn" id="amOk" disabled>${esc(K('o_accept'))}</button><button class="btn secondary" id="amNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      const upd = () => { q('#amOk').disabled = !(numIn(q('#amSum').value) > 0); };    // ActnTransactionUpdate: Value > 0
+      q('#amSum').oninput = upd;
+      q('#amNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#amOk').onclick = async () => {
+        q('#amErr').innerHTML = '';
+        try {
+          const r = await api('/api/deposits/apply/run', { method: 'POST', body: { ...body, accid: q('#amAcc').value ? +q('#amAcc').value : null, total: numIn(q('#amSum').value), percent_text: q('#amPct').value, counttransh: a.counttransh } });
+          if (await delayed(r)) { close(); await after(); }               // ModalResult := mrOk
+        } catch (e) { q('#amErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }
+      };
+      q('#amSum').focus(); q('#amSum').select();
+    }, 'dep-sub dep-contract');
+  }
+
+  // ---------------------------------------------------------------- frmAddExtractMoney_new
+  async function addExtract(f, body, after) {
+    let a; try { a = await api('/api/deposits/extract/add', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    const grp = (cap, acc, ost, id, val) => `<fieldset class="dgrp" style="margin-bottom:8px"><legend>${esc(K(cap))}</legend>
+      <div class="dc-row"><label>${esc(K('o_accno'))}</label><input class="ro" readonly value="${esc(acc ?? '')}"></div>
+      <div class="dc-row"><label>${esc(K('o_rest'))}</label><input class="ro" readonly value="${esc(money(ost))}"></div>
+      <div class="dc-row"><label>${esc(K('o_topay'))}</label><input id="${id}" inputmode="decimal" value="${esc(val)}"></div></fieldset>`;
+    D().modal(`<h3>${esc(K('m_withdraw'))}</h3><div id="emErr"></div>
+      ${grp('o_g_main', a.custacc.contractaccno, a.info.facticaldebt, 'emMain', a.main)}
+      ${grp('o_g_int', a.custacc.interestaccno, a.info.facticalinterestdebt, 'emInt', a.interest)}
+      <div class="dc-form"><div class="dc-row"><label>${esc(K('o_date'))}</label><input type="date" disabled value="${esc(a.date)}"></div>
+      <div class="dc-row"><label>${esc(K('o_custacc'))}</label><select id="emAcc"><option value=""></option>${a.accs.map(x => `<option value="${x.id}" ${x.id === a.accid ? 'selected' : ''}>${esc(x.acc_no)} · ${esc(x.name ?? '')}</option>`).join('')}</select></div></div>
+      <div class="actions"><button class="btn" id="emOk">${esc(K('o_accept'))}</button><button class="btn secondary" id="emNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      const upd = () => { q('#emOk').disabled = !((numIn(q('#emMain').value) + numIn(q('#emInt').value)) > 0); };   // ActiontrUpdate
+      ['#emMain', '#emInt'].forEach(s => q(s).oninput = upd); upd();
+      q('#emNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#emOk').onclick = async () => {
+        q('#emErr').innerHTML = '';
+        try {
+          const r = await api('/api/deposits/extract/run', { method: 'POST', body: { ...body, accid: q('#emAcc').value ? +q('#emAcc').value : null, main: numIn(q('#emMain').value), interest: numIn(q('#emInt').value) } });
+          if (await delayed(r)) { close(); await after(); }
+        } catch (e) { q('#emErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }
+      };
+    }, 'dep-sub dep-contract');
+  }
+
+  const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
+    delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
+    cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
+  const EXTRACT = { url: '/api/deposits/extract', rows: 'payments', caption: 'o_e_caption', group: 'o_customer', delLabel: 'o_cancel_op', delRight: 'DELETE_SBCM_PEYMENT',
+    delNeedsRows: true, xls: 'Odenilmis_emeliyyat.xlsx', add: addExtract,
+    cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['facticaldebt', 'o_main_from', 'm'], ['interestdebt', 'o_int_from', 'm']] };
+
+  window.SB.depForms = window.SB.depForms || {};
+  const needSel = (cfg) => (sel) => sel ? listForm(cfg, sel) : toast(K('err_no_deposit'), 'error');   // Get_SelectedContID
+  window.SB.depForms.apply_money = needSel(APPLY);
+  window.SB.depForms.extract_money = needSel(EXTRACT);
+})();

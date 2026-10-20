@@ -14,6 +14,7 @@ import sqlite3
 
 from .. import dep_sql as Q
 from .. import dep_contract_sql as QC
+from .. import dep_ops_sql as QO
 from .base import DBError
 
 _DB = None
@@ -24,6 +25,7 @@ DATE_COLS = {"OPENDATE", "CLOSEDATE", "STOPCALCULATIONDATE", "HDATE", "FIRSTINTE
 def reset():
     global _DB
     _DB = None
+    _PEND.clear()
 
 
 def _db():
@@ -46,6 +48,7 @@ def _db():
             c.execute(f'create table "{t}" ({", ".join(chr(34) + k + chr(34) for k in cols)})')
             for r in rows:
                 c.execute(f'insert into "{t}" ({", ".join(chr(34) + k + chr(34) for k in r)}) values ({", ".join("?" * len(r))})', list(r.values()))
+        c.execute('delete from "SBCM_DELAYED_TRANSACTIONS_new"')   # the fixture row only defines the columns
         c.commit()
         _DB = c
     return _DB
@@ -90,8 +93,81 @@ def _save_deposit(db, update: bool, n: dict, user: dict):
     return {}
 
 
+_PEND: dict = {}
+
+
+def _delayed(db, rows, date):
+    """Assumed: the operation procedure writes its proposed postings to SBCM_DELAYED_TRANSACTIONS_new (temporary table)."""
+    db.execute('delete from "SBCM_DELAYED_TRANSACTIONS_new"')
+    for deb, cre, amt, txt in rows:
+        a = lambda i: db.execute("select acc_no, (select val_name from avalute where valute = account.val_acc) from account where id = ?", [i]).fetchone() or (None, None)  # noqa: E731
+        (dn, dc), (cn, cc) = a(deb), a(cre)
+        db.execute('insert into "SBCM_DELAYED_TRANSACTIONS_new" (DEBITACCNO, DEBITCURRENCY, CREDITACCNO, CREDITCURRENCY, TRDATE, INBALANCECHAR, '
+                   'FLAGS, DEBITAMOUNT, CREDITAMOUNT, NATAMOUNT, TRDESCRIPTION, CANPROCESS) values (?,?,?,?,?,?,?,?,?,?,?,?)',
+                   [dn, dc, cn, cc, date, "+", 0, amt, None, amt, txt, 1])
+
+
+def _ops(key, n, db):
+    """sbcm_credit_tranches_new / sbcm_payment_new (bodies not in the repo) - assumed behaviour, see PARITY_DEPOSITS.md."""
+    d = lambda v: None if v is None else v.date().isoformat()  # noqa: E731
+    accs = lambda cid: db.execute('select clientaccid, contractaccid, interestaccid from sbcm_contract_accounts_new where "id#" = ?', [cid]).fetchone()  # noqa: E731
+    if key == "SBCM_CREDIT_TRANCHES_NEW.DEPOSITMONEY":
+        cid = int(n["contractid"]); a = accs(cid)
+        if not a:
+            raise DBError("ORA-01403: no data found", 1403)
+        _PEND.clear(); _PEND.update(op="apply", cid=cid, total=n["total"], pct=n["PERCENT"], date=d(n["hdate"]))
+        _delayed(db, [(n["P_ClientAccID"], a[1], n["total"], "Depozit yatırımı")], d(n["hdate"]))
+        return {}
+    if key == "SBCM_PAYMENT_NEW.WITHDRAWMONEY":
+        cid = int(n["ContractID"]); a = accs(cid)
+        cs = db.execute('select sum(facticaldebt), sum(facticalinterestdebt) from sbcm_contract_state_new where "id#" = ?', [cid]).fetchone() or (0, 0)
+        if n["FacticalDebtWithdraw"] > (cs[0] or 0) or n["InterestDebtWithdraw"] > (cs[1] or 0):
+            raise DBError("ORA-20103: mock: amount exceeds the deposit balance", 20103)
+        _PEND.clear(); _PEND.update(op="extract", cid=cid, main=n["FacticalDebtWithdraw"], int=n["InterestDebtWithdraw"], date=d(n["HDate"]))
+        rows = [(a[1], n["P_AccID"], n["FacticalDebtWithdraw"], "Əsas məbləğin ödənilməsi")] if n["FacticalDebtWithdraw"] else []
+        rows += [(a[2], n["P_AccID"], n["InterestDebtWithdraw"], "Faizin ödənilməsi")] if n["InterestDebtWithdraw"] else []
+        _delayed(db, rows, d(n["HDate"]))
+        return {}
+    if key in ("SBCM_CREDIT_TRANCHES_NEW.COMMITDEPOSITMONEY", "SBCM_PAYMENT_NEW.COMMITWITHDRAWMONEY"):
+        p = dict(_PEND); _PEND.clear()
+        if not n["DoCommit"]:
+            db.rollback(); return {}
+        nid = lambda t: (db.execute(f"select max(id) from {t}").fetchone()[0] or 9000) + 1  # noqa: E731
+        if p.get("op") == "apply":
+            db.execute('insert into sbcm_tranches_new ("id#", ID, HDATE, TOTAL, RESERVE, TRID, DESCRIPTION) values (?,?,?,?,?,?,?)',
+                       [p["cid"], nid("sbcm_tranches_new"), p["date"], p["total"], p["pct"], 800000 + nid("sbcm_tranches_new"), None])
+            db.execute('update sbcm_contract_state_new set facticaldebt = facticaldebt + ? where "id#" = ?', [p["total"], p["cid"]])
+        elif p.get("op") == "extract":
+            db.execute('insert into sbcm_payments_new ("id#", ID, HDATE, FACTICALDEBT, INTERESTDEBT, TRID, INTTRID) values (?,?,?,?,?,?,?)',
+                       [p["cid"], nid("sbcm_payments_new"), p["date"], p["main"], p["int"], 810000, 810001])
+            db.execute('update sbcm_contract_state_new set facticaldebt = facticaldebt - ?, facticalinterestdebt = facticalinterestdebt - ? '
+                       'where "id#" = ?', [p["main"], p["int"], p["cid"]])
+        db.execute('delete from "SBCM_DELAYED_TRANSACTIONS_new"')
+        db.commit()
+        return {}
+    if key in ("SBCM_CREDIT_TRANCHES_NEW.DELETEDEPOSITMONEY", "SBCM_PAYMENT_NEW.DELETEWITHDRAWMONEY"):
+        t, k = ("sbcm_tranches_new", "P_DepMoneyID") if "TRANCHES" in key else ("sbcm_payments_new", "P_DepWMoneyID")
+        if db.execute(f"delete from {t} where id = ?", [int(n[k])]).rowcount == 0:
+            raise DBError("ORA-20102: mock: operation not found", 20102)
+        return {}
+    return NotImplemented
+
+
+def _ops_func(key, n, db):
+    if key == "SBCM_CREDIT_TRANCHES_NEW.GETPERSENTTRANSH":     # assumed: the contract's interest (sbcm_interests_new)
+        r = db.execute('select interest from sbcm_interests_new where "id#" = ?', [int(n["ContractID"])]).fetchone()
+        return float(r[0]) if r and r[0] is not None else 0.0
+    if key == "SBCM_CREDIT_TRANCHES_NEW.COUNTTRANCH":
+        return db.execute('select count(*) from sbcm_tranches_new where "id#" = ?', [int(n["p_contractid"])]).fetchone()[0]
+    chk = {"SBCM_CREDIT_TRANCHES_NEW.CHECKEDTRANCH": 0, "SBCM_CREDIT_TRANCHES_NEW.CHECKEDADDTRANCH": 1,
+           "SBCM_CREDIT_TRANCHES_NEW.CHECKEDTRANCH_MAX_LIMIT": 2}
+    if key in chk:
+        return _FX.get("_tranch_checks", {}).get(str(int(n["p_contractid"])), [1, 3, 5])[chk[key]]
+    return NotImplemented
+
+
 def _sqlite(sql: str) -> str:
-    s = re.sub(r"sbcm_stored_programs_new\.(Get_ContractAccountName|Get_ContractAccount|GetpercentCollection)\(",
+    s = re.sub(r"sbcm_stored_programs(?:_new)?\.(Get_ContractAccountName|Get_ContractAccount|GetpercentCollection)\(",
                lambda m: "sp_" + m.group(1).lower() + "(", sql)
     s = s.replace("user$", '"user$"')
     return re.sub(r"\b(sid|id|type)#", r'"\1#"', s)
@@ -100,6 +176,7 @@ def _sqlite(sql: str) -> str:
 _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")
 _OWN = {Q.SQL_VALUTES, Q.SQL_FILIALS, Q.SQL_DEPOSITTYPES, Q.SQL_CATEGORIES, Q.SQL_PERSONS, Q.SQL_USERS, Q.SQL_TRANCHES, _MAIN}
 _OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_")}                # SBDM_Contract_new
+_OWN |= {v for k, v in vars(QO).items() if "SQL_" in k}                          # SBDM_ApplyMoney_new, SBDM_ExtractMoney_new, TrDelayed_Show
 
 
 def _bind(v):
@@ -132,6 +209,9 @@ class DepMixin:
 
     def _dep_func(self, key, named):
         n = named or {}
+        r = _ops_func(key, n, _db())
+        if r is not NotImplemented:
+            return r
         if key == "SBCM_CONTRACT_NEW.GETPERIOD":          # assumed: whole months between bdat and edat
             b, e = n["bdat"], n["edat"]
             if b is None or e is None:
@@ -184,6 +264,9 @@ class DepMixin:
             db.execute('update sbcm_contract_state_new set calculationenabled = ? where "id#" = ?',
                        [0 if key.endswith("DISABLECALCULATION") else 1, int(n["ContractID"])])
             return {}
+        r = _ops(key, n, db)
+        if r is not NotImplemented:
+            return r
         if key in ("SBCM_CONTRACT_NEW.NEWDEPOSIT", "SBCM_CONTRACT_NEW.UPDATEDEPOSIT"):
             return _save_deposit(db, key.endswith("UPDATEDEPOSIT"), n, getattr(self, "user", {}) or {})
         return NotImplemented
