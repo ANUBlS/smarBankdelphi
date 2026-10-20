@@ -40,7 +40,7 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Redaktə / N17 Ctrl+E | EDIT_SBCM_CONTRACT | SBDM_Contract_new.bpl EditContract | same | **ported** |
 | Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | **ported** – api/app/dep_ops.py, deposits_ops.js |
 | Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | **ported** – api/app/dep_ops.py, deposits_ops.js |
-| Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
+| Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | **ported** – api/app/dep_partial.py, deposits_ops.js (non-functional in production, see section) |
 | Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
 | Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | **ported** – api/app/dep_untimely.py, deposits_ops.js |
 | Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
@@ -156,6 +156,22 @@ No right check (N36Click), no Commit in the plugin; ActionClose has no handler, 
 | Button2Click İmtina: Session.Rollback; Close. Esc: Close only | `/untimely/cancel`; Esc closes without the call |
 
 Right NEW_SBCM_UNTIMELY is re-checked by the API (the manager checks it before LoadPlugin). The manager grid is not refreshed afterwards (as in Delphi). frmUntimelyEtMoneyImpl.pas (no _new suffix) in the same folder is a dead older copy. Mock assumptions: UntimeWithDrawMoney pays the whole principal plus either the accrued interest (checkbox) or the principal × untimely rate (fixture `_rates[type][1]`) × days(calc date → bank date) / 365; commit zeroes the state.
+
+## SBDM_PartialPayment_new.bpl (qismən ödəmə)
+
+The production plugin is a viewer only; the web port reproduces that.
+
+| Delphi | Web |
+|---|---|
+| exportproc: Payments (`sbcm_tranches_new`), DepositInfo, DebitAccs / CreditAccs / PercentAccs (classic `sbcm_acc_zone_info` × `sbcm_acc_zones_new`, verbatim), Sysdat | `/api/deposits/partial/open` |
+| Grid: AutoNumber №, Tarix, Faiz, Yatrım Məbləği, Qeyd; Müştəri | same |
+| Yeni: INSERT_SBCM_PARTIAL_PEYMENT, FrmPaymentAdd_new (Əməliyyat Tarixi, Müştəri Hesab, Əsas məbləğ / Faiz məbləği with Hesabın №, Qalıq, Ödəniləcək məbləğ; FormShow zeroes) | `/partial/add/open` |
+| Ləğv et / Excel-ə at: actions without OnExecute (disabled); OnClick only checks DELETE_/EXCEL_SBCM_PARTIAL_PEYMENT | disabled buttons |
+| Qəbul: ActionTr has only OnUpdate (enabled when amount > 0), no OnExecute | enabled by the amount, click = notice, nothing is posted |
+| EdMainDebitChange (SetPaymentPecentAmount with GetParameter(3/4)) is not wired to EdMainDebit.OnChange | not called; interest fields stay 0 |
+| N1 'Əməliyyata baxmaq' has no OnClick | no context menu |
+
+Unverified: whether VCL greys out Ləğv et / Excel-ə at (DisableIfNoHandler) or lets their OnClick run the right check only – the outcome is the same, nothing happens.
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

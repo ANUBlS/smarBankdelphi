@@ -221,3 +221,62 @@ U_SQL_DEPOSITINFO = text(['select cust.name,',
     'acc.id# = :ContractID and',
     'cstate.id# = :ContractID',
     ' '])
+
+
+# ------------------------------------------------------------------ SBDM_PartialPayment_new (DataModPartialPaymentImpl_new.dfm)
+# (Sysdat is PP_SYSDAT: served by the generic mock sysdat handler, not the deposits SQLite)
+# Payments (dfm:5-10)
+PP_SQL_PAYMENTS = text(['SELECT rowid,a.*',
+    'FROM sbcm_tranches_new a',
+    'where id# = :ContractID',
+    'order by hdate'])
+# DepositInfo (dfm:46-58)
+PP_SQL_DEPOSITINFO = text(['select',
+    '     cust.name,',
+    '     cont.amount,',
+    '     cont.currency,',
+    '     cont.customerid',
+    'from customers cust,',
+    '     sbcm_contracts_new cont',
+    'where',
+    'cont.id = :ContractID and ',
+    'cust.id = cont.customerid',
+    ''])
+# Sysdat (dfm:93-95)
+PP_SYSDAT = text(['select tek_dat from sysdat'])
+# DebitAccs (dfm:121-135)
+PP_SQL_DEBITACCS = text(['select ',
+    '       id,',
+    '       acc_no,',
+    '       name',
+    'from account ',
+    'where close_dat is null',
+    'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info',
+    'where zoneid = (select zoneid from sbcm_acc_zones_new',
+    "where name = 'Deposit'))",
+    'and id in(select CONTRACTACCID from sbcm_contract_accounts_new where id#=:contractid)',
+    ''])
+# CreditAccs (dfm:155-169)
+PP_SQL_CREDITACCS = text(['select ',
+    '       id,',
+    '       acc_no,',
+    '       name',
+    'from account ',
+    'where close_dat is null',
+    'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info ',
+    'where zoneid = (select zoneid from sbcm_acc_zones_new',
+    "where name = 'Account'))",
+    'and id in(select CLIENTACCID from sbcm_contract_accounts_new where id#=:contractid)',
+    ''])
+# PercentAccs (dfm:189-203)
+PP_SQL_PERCENTACCS = text(['select ',
+    '       id,',
+    '       acc_no,',
+    '       name',
+    'from account ',
+    'where close_dat is null',
+    'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info ',
+    'where zoneid = (select zoneid from sbcm_acc_zones_new',
+    "where name = 'Percent'))",
+    'and id in(select INTERESTACCID from sbcm_contract_accounts_new where id#=:contractid)',
+    ''])

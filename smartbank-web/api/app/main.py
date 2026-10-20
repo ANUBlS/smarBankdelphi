@@ -371,3 +371,5 @@ from . import dep_shedule  # noqa: E402
 app.include_router(dep_shedule.make_router(current, require_module, err))
 from . import dep_untimely  # noqa: E402
 app.include_router(dep_untimely.make_router(current, require_module, err))
+from . import dep_partial  # noqa: E402
+app.include_router(dep_partial.make_router(current, require_module, err))

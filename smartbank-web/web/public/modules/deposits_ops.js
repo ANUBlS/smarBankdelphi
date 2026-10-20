@@ -273,6 +273,54 @@
     }, 'dep-contract dc-wide');
   }
 
+  // ---------------------------------------------------------------- SBDM_PartialPayment_new (FrmPartialPayment_new / FrmPaymentAdd_new)
+  async function partialForm(sel) {
+    const body = { contract_id: sel.id };
+    let o; try { o = await api('/api/deposits/partial/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    let cur = o.rows[0]?.id ?? null;
+    D().modal('<div class="opBody"></div>', (m, close) => {
+      const draw = () => {
+        m.querySelector('.opBody').innerHTML = `<h3>${esc(K('pp_caption', { no: sel.no }))}</h3>
+          <div class="toolbar" style="gap:8px"><button class="btn" data-a="new">${esc(K('o_new'))}</button>
+            <button class="btn secondary" disabled>${esc(K('pp_cancel'))}</button><button class="btn secondary" disabled>${esc(K('o_excel'))}</button>
+            <button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
+          <fieldset class="dgrp" style="margin:8px 0"><legend>${esc(K('o_customer'))}</legend><b>${esc(o.name ?? '')}</b></fieldset>
+          <div class="tablewrap" style="max-height:45vh"><table class="grid"><thead><tr><th>№</th><th>${esc(K('o_date'))}</th><th>${esc(K('o_reserve'))}</th><th style="text-align:right">${esc(K('pp_total'))}</th><th>${esc(K('o_descr'))}</th></tr></thead>
+          <tbody>${o.rows.map((x, i) => `<tr data-id="${x.id}" class="${x.id === cur ? 'sel' : ''}"><td>${i + 1}</td><td>${esc(dt(x.hdate))}</td><td>${esc(x.reserve ?? '')}</td><td style="text-align:right">${esc(money(x.total))}</td><td>${esc(x.description ?? '')}</td></tr>`).join('')
+            || `<tr><td colspan="5" class="muted">${esc(K('empty_ops'))}</td></tr>`}</tbody></table></div>`;
+        m.querySelectorAll('tr[data-id]').forEach(tr => { tr.onclick = () => { cur = +tr.dataset.id; draw(); }; });   // PMShowTr N1 has no OnClick
+        m.querySelector('[data-a="new"]').onclick = () => partialAdd({ ...body, item_id: cur });
+        m.querySelector('[data-a="exit"]').onclick = exit;
+      };
+      const onKey = (e) => { if (e.key === 'Escape' && [...document.querySelectorAll('.backdrop.stacked')].pop() === m.parentElement) exit(); };
+      const exit = () => { document.removeEventListener('keydown', onKey); close(); };
+      document.addEventListener('keydown', onKey);
+      draw();
+    }, 'wide');
+  }
+  async function partialAdd(body) {
+    let a; try { a = await api('/api/deposits/partial/add/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    const ro = (v) => `<input class="ro" readonly value="${esc(v ?? '')}">`;
+    D().modal(`<h3>${esc(K('m_partial'))}</h3><div class="dc-form">
+      <div class="dc-row"><label>${esc(K('pp_opdate'))}</label>${ro(a.tek_dat)}</div>
+      <div class="dc-row"><label>${esc(K('o_custacc'))}</label><span class="dc-pair">${ro(a.creditacc)}${ro(a.name)}</span></div></div>
+      <div class="dc-cols" style="margin-top:8px"><fieldset class="dgrp"><legend>${esc(K('o_g_main'))}</legend><div class="dc-form">
+        <div class="dc-row"><label>${esc(K('o_accno'))}</label>${ro(a.debitacc)}</div><div class="dc-row"><label>${esc(K('o_rest'))}</label>${ro(money(a.total))}</div>
+        <div class="dc-row"><label>${esc(K('o_topay'))}</label><input id="ppMain" inputmode="decimal" value="${esc(a.main)}"></div></div></fieldset>
+      <fieldset class="dgrp"><legend>${esc(K('o_g_int'))}</legend><div class="dc-form">
+        <div class="dc-row"><label>${esc(K('o_accno'))}</label>${ro(a.percentacc)}</div><div class="dc-row"><label>${esc(K('o_rest'))}</label>${ro(money(a.rest))}</div>
+        <div class="dc-row"><label>${esc(K('o_topay'))}</label>${ro(money(a.interest))}</div></div></fieldset></div>
+      <div class="actions"><button class="btn" id="ppOk" disabled>${esc(K('o_accept'))}</button><button class="btn secondary" id="ppNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      const upd = () => { q('#ppOk').disabled = !(numIn(q('#ppMain').value) > 0); };   // ActionTrUpdate
+      q('#ppMain').oninput = upd;
+      q('#ppOk').onclick = () => toast(K('s_noop'), 'info');                           // ActionTr has no OnExecute
+      q('#ppNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#ppMain').focus();
+    }, 'dep-sub dep-contract dc-wide');
+  }
+
   const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
     delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
     cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
@@ -286,5 +334,6 @@
   window.SB.depForms.extract_money = needSel(EXTRACT);
   window.SB.depForms.shedule = (sel) => sel ? sheduleForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.untimely = (sel) => sel ? untimelyForm(sel) : toast(K('err_no_deposit'), 'error');
+  window.SB.depForms.partial_payment = (sel) => sel ? partialForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.prolongation = (sel) => sel ? prolongForm(sel) : toast(K('err_no_deposit'), 'error');
 })();
