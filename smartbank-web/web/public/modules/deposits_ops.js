@@ -191,6 +191,55 @@
     }, 'dep-sub dep-contract');
   }
 
+  // ---------------------------------------------------------------- Sbdm_Shedule_new (form1 / TPaymentShedule_new)
+  async function sheduleForm(sel) {
+    const body = { contract_id: sel.id, contract_no: sel.no };
+    let o; try { o = await api('/api/deposits/shedule/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    let saveOn = false;                       // ToolButton1 / ToolButton14 visually re-enabled by 'Plan' (their actions have no handler)
+    D().modal('<div class="opBody"></div>', (m, close) => {
+      const tb = (lab, a, on) => `<button class="btn secondary" data-a="${a}" ${on ? '' : 'disabled'}>${esc(K(lab))}</button>`;
+      const grid = () => `<table class="grid"><thead><tr><th>№</th><th>${esc(K('o_date'))}</th><th style="text-align:right">${esc(K('s_rate_col'))}</th><th style="text-align:right">${esc(K('s_calc_col'))}</th></tr></thead>
+          <tbody>${o.rows.map(x => `<tr><td>${x.seqno}</td><td>${esc(dt(x.hdate))}</td><td style="text-align:right">${esc(x.interest ?? '')}</td><td style="text-align:right">${esc(money(x.ipinterest))}</td></tr>`).join('')
+            || `<tr><td colspan="4" class="muted">${esc(K('empty_ops'))}</td></tr>`}</tbody></table>`;
+      const draw = () => {
+        m.querySelector('.opBody').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><h3>${esc(o.caption)}</h3><button class="btn secondary" data-a="x" title="${esc(K('o_exit'))}">✕</button></div>
+          <div class="toolbar" style="gap:6px">${tb('s_save', 'save', saveOn)}${tb('s_print', 'print')}${tb('o_exit', 'exit')}</div>
+          <div class="toolbar" style="gap:6px;margin-top:6px">${tb('o_new', 'add')}${tb('s_edit', 'edit')}${tb('o_delete', 'del', saveOn)}${tb('s_refresh', 'ref')}
+            <button class="btn" data-a="plan">${esc(K('s_plan'))}</button>${tb('s_change', 'chg')}</div>
+          <fieldset class="dgrp" style="margin:8px 0"><legend>${esc(K('o_customer'))}</legend><input class="ro" readonly style="width:100%" value="${esc(o.name)}"></fieldset>
+          <fieldset class="dgrp"><legend>${esc(K('s_about'))}</legend><div class="dc-form" style="grid-template-columns:auto 1fr auto 1fr;display:grid;gap:6px 10px">
+            <label>${esc(K('s_amount'))}</label><input class="ro" readonly value="${esc(o.amount)}"><label>${esc(K('s_open'))}</label><input class="ro" readonly value="${esc(o.opendate)}">
+            <label>${esc(K('s_rate'))}</label><input class="ro" readonly value="${esc(o.interest)}"><label>${esc(K('s_close'))}</label><input class="ro" readonly value="${esc(o.closedate)}"></div></fieldset>
+          <div class="tablewrap" style="max-height:40vh;margin-top:8px" id="shGrid">${grid()}</div>`;
+        const b = (a) => m.querySelector(`[data-a="${a}"]`);
+        b('save').onclick = b('del').onclick = () => toast(K('s_noop'), 'info');
+        b('plan').onclick = () => planForm(body, (rows) => { o.rows = rows; m.querySelector('#shGrid').innerHTML = grid(); }, () => { saveOn = true; draw(); });
+        b('x').onclick = exit;
+      };
+      // ActionClose has no handler either: the form closes through the window close box (✕) / Esc (no FormKeyPress -> Esc ignored in Delphi)
+      const exit = () => close();
+      draw();
+    }, 'wide');
+  }
+  async function planForm(body, onRows, onShown) {   // ToolButton18Click -> TPaymentShedule_new.ShowModal
+    let p; try { p = await api('/api/deposits/shedule/plan/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    onShown();
+    D().modal(`<h3>${esc(K('s_plan'))}</h3><div id="spErr"></div><fieldset class="dgrp"><legend>${esc(K('s_terms'))}</legend>
+      <div class="dc-form"><div class="dc-row"><label>${esc(K('s_first'))}</label><input type="date" id="spDate" value="${esc(p.date)}"></div>
+      <div class="dc-row"><label>${esc(K('s_sum'))}</label><input id="spAmt" inputmode="decimal" value="${esc(p.amount)}"></div>
+      <div class="dc-row"><label>${esc(K('s_periods'))}</label><input id="spPer" value="${esc(p.periods)}"></div></div></fieldset>
+      <div class="actions"><button class="btn" id="spOk">${esc(K('o_accept'))}</button><button class="btn secondary" id="spNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      q('#spNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#spOk').onclick = async () => {                // Button1Click: sbcmperiod, OracleDataSet2.Refresh; the form stays open
+        q('#spErr').innerHTML = '';
+        try { onRows((await api('/api/deposits/shedule/plan/accept', { method: 'POST', body: { contract_id: body.contract_id, date: q('#spDate').value, amount: numIn(q('#spAmt').value), periods: q('#spPer').value, time: p.time } })).rows); }
+        catch (e) { q('#spErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }
+      };
+    }, 'dep-sub dep-contract');
+  }
+
   const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
     delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
     cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
@@ -202,5 +251,6 @@
   const needSel = (cfg) => (sel) => sel ? listForm(cfg, sel) : toast(K('err_no_deposit'), 'error');   // Get_SelectedContID
   window.SB.depForms.apply_money = needSel(APPLY);
   window.SB.depForms.extract_money = needSel(EXTRACT);
+  window.SB.depForms.shedule = (sel) => sel ? sheduleForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.prolongation = (sel) => sel ? prolongForm(sel) : toast(K('err_no_deposit'), 'error');
 })();

@@ -130,3 +130,28 @@ P_SQL_PROLONGATIONS = text(['SELECT id, id#, hdate, olddate, newdate',
 # frmProlongationImpl_new.dfm:202-212 DepositInf
 P_SQL_DEPOSITINF = text(['select closedate from sbcm_contracts_new',
     'where id = :ContractID'])
+
+
+# ------------------------------------------------------------------ Sbdm_Shedule_new (ScheduleDataModuleImpl_new.dfm)
+# sbdm_customers (dfm:5-202)
+S_SQL_CUSTOMERS = text(['select * from customers c ,sbcm_contracts_new s',
+    'where c.id=s.CUSTOMERID and',
+    '           s.id=:id',
+    '',
+    '     ',
+    '',
+    ' '])
+# OracleDataSet1 (dfm:208-222)
+S_SQL_INTERESTS = text(['select * from sbcm_interests_new',
+    'where id#=:id'])
+# OracleDataSet2 (dfm:228-270)
+S_SQL_SCHEDULE = text(['SELECT Z.RowID,Z.*',
+    '  FROM SBCM_PAYMENT_SCHEDULE_new Z',
+    'WHERE Z.id#=:Id',
+    'ORDER BY HDATE'])
+# OracleDataSet3 (dfm:295-414)
+S_SQL_DEPTYPE = text(['select * from sbcm_contracts_new s,sbcm_deposit_types_new d',
+    'where s.CONTRACTTYPE=d.id and',
+    '      d.DATEINTERVAL>0 and',
+    '      s.id=:v_id',
+    ''])

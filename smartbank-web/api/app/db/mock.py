@@ -94,7 +94,7 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._dep_func(key, named)            # DepositsManager_New plugins
+        r = self._dep_func(key, named, args)      # DepositsManager_New plugins
         if r is NotImplemented:
             r = self._xs_func(key, args)
         if r is NotImplemented:

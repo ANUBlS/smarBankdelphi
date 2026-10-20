@@ -45,7 +45,7 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | todo |
 | Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | **ported** – api/app/dep_prolong.py, deposits_ops.js |
-| Ödəmə planı (N36; N14 invisible) | – | Sbdm_Shedule_new.bpl | Packages/Sbdm_Shedule_new (3 / 1577) | todo |
+| Ödəmə planı (N36; N14 invisible) | – | Sbdm_Shedule_new.bpl | Packages/Sbdm_Shedule_new (3 / 1577) | **ported** – api/app/dep_shedule.py, deposits_ops.js |
 | Filter Paneli (N10 Ctrl+F) | – | SBDM_Filter_new.bpl | **source not in the repo** | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Yatrımların və yığımların çapı (N20) | SBCM_PRINT_APPLYMONEY | SBDM_ContractReport_new.bpl | Packages/SBDM_ContractReport_new (3 / 3155) | **on hold by user** |
 | Müqavilə çapı (N21) | SBCM_PRINT_CONTRACT1 | SBDM_WReport_new.bpl | Packages/SBDM_WReport_new (2 / 629) | **on hold by user** |
@@ -132,6 +132,18 @@ Unverified: E_SQL_CREDITACCS / E_SQL_CUSTACC use the classic `sbcm_acc_zone_info
 | ActnExport: EXCEL_SBCM__PROLONGATION (double underscore, verbatim), sheet 'Prolonqasiya', ID# hidden | `/prolong/export.xlsx` |
 
 No Commit is issued by the plugin after AddProlongation / DelLastProlongation, and the manager grid is not refreshed on close (no FormClose handler); both kept. Mock assumption: AddProlongation logs (old closedate -> new) and moves sbcm_contracts_new.closedate; DelLastProlongation removes the newest row and restores OLDDATE.
+
+## Sbdm_Shedule_new.bpl (ödəmə planı)
+
+| Delphi | Web |
+|---|---|
+| exportproc: caption '%s № li müqavilə üçün ödəmə planı.', sbdm_customers (customers × sbcm_contracts_new), OracleDataSet1 (sbcm_interests_new), OracleDataSet2 (SBCM_PAYMENT_SCHEDULE_new, SeqNo = RecNo), OracleDataSet3 (type with DATEINTERVAL > 0) | `/api/deposits/shedule/open` |
+| Müştəri / Depozit Haqqında (Depozitin məbləği, İllik faiz (%), Verilmə / Qaytarılma Tarixi), grid №, Tarix, İllik Faiz, Hesablanmış faiz | same layout |
+| Toolbars: Yaddaşa yaz, Çap, Çıxış / Yeni, Redaktə, Silmək, Yeniləmək, Plan, Planı dəyiş – every TAction has no OnExecute (shown disabled); ToolButton1Click / ToolButton14Click are not wired to any OnClick | the same buttons disabled; Save and Delete become enabled after Plan (ToolButton18Click sets Enabled) but do nothing (notice) |
+| ToolButton18Click 'Plan': getdateinterval(StrToDate(open), StrToDate(close)), getconverteddebt(interval, amount, interest) as Integer, Periodların sayı := DATEINTERVAL ('' when OracleDataSet3 is empty); DateTimePicker1 keeps the dfm value 23.04.2010 21:40:02 (the get_date line is commented out) | `/shedule/plan/open` |
+| Button1Click 'Qəbul': SBCM_PAYMENT_SCHEDULE1_new.sbcmperiod(deposid, PaymentDate incl. time, per_amount, period => StrToInt, perc => StrToCurr(DBEdit2)); Refresh; form stays open; İmtina closes | `/shedule/plan/accept`; StrToInt error -> s_err_int |
+
+No right check (N36Click), no Commit in the plugin; ActionClose has no handler, so the web form closes with the title-bar ✕ (the Delphi window close box). Mock assumptions: getdateinterval = whole months, getconverteddebt = amount × rate / 100 × months / 12 rounded, sbcmperiod replaces the rows with <period> monthly rows of per_amount / period.
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

@@ -207,8 +207,14 @@ class DepMixin:
             return _run(sql, b)
         return NotImplemented
 
-    def _dep_func(self, key, named):
+    def _dep_func(self, key, named, args=()):
         n = named or {}
+        if key == "SBCM_PERCENT_CONVERTING_NEW.GETDATEINTERVAL":   # assumed: whole months between the dates
+            a, b = args
+            return (b.year - a.year) * 12 + b.month - a.month - (1 if b.day < a.day else 0)
+        if key == "SBCM_PERCENT_CONVERTING_NEW.GETCONVERTEDDEBT":  # assumed: simple interest for <interval> months, Integer
+            iv, amount, rate = args
+            return int(round(amount * rate / 100 * iv / 12))
         r = _ops_func(key, n, _db())
         if r is not NotImplemented:
             return r
@@ -253,6 +259,20 @@ class DepMixin:
     def _dep_proc(self, key, named, args=()):
         n = named or {}
         db = _db()
+        if key == "SBCM_PAYMENT_SCHEDULE1_NEW.SBCMPERIOD":          # assumed: <period> monthly rows from PaymentDate, equal parts
+            cid, start, amount, period = int(n["deposid"]), n["PaymentDate"], float(n["per_amount"]), int(n["period"])
+            if period <= 0:
+                raise DBError("ORA-01476: divisor is equal to zero", 1476)
+            db.execute('delete from "SBCM_PAYMENT_SCHEDULE_new" where "id#" = ?', [cid])
+            nid = (db.execute('select max(id) from "SBCM_PAYMENT_SCHEDULE_new"').fetchone()[0] or 6000)
+            for k in range(period):
+                mth = start.month - 1 + k
+                y, mo = start.year + mth // 12, mth % 12 + 1
+                import calendar
+                d = dt.date(y, mo, min(start.day, calendar.monthrange(y, mo)[1]))
+                db.execute('insert into "SBCM_PAYMENT_SCHEDULE_new" (ID, "id#", HDATE, INTEREST, IPINTEREST) values (?,?,?,?,?)',
+                           [nid + k + 1, cid, d.isoformat(), n["perc"], round(amount / period, 2)])
+            return {}
         if key == "SBCM_PROLONGATION_NEW.ADDPROLONGATION":          # assumed: log the change and move the closing date
             cid, hd, nd = int(args[0]), args[1].date().isoformat(), args[2].date().isoformat()
             old = db.execute("select closedate from sbcm_contracts_new where id = ?", [cid]).fetchone()
