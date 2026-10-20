@@ -51,6 +51,8 @@ from . import mock_cards
 from . import mock_rt
 from . import mock_mo
 from .mock_mo import MoMixin
+from . import mock_ord
+from .mock_ord import OrdMixin
 from .mock_rt import RtMixin
 from . import mock_xohks
 from ..config import settings
@@ -85,6 +87,7 @@ def reset():
     mock_em.reset()
     mock_rt.reset()
     mock_mo.reset()
+    mock_ord.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -98,7 +101,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -273,7 +276,9 @@ class MockConnection(MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMi
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._mo_query(sql, b)  # Packages/MemorialOrder (own texts only)
+        r = self._ord_query(sql, b)  # Packages/Order (own texts only)
+        if r is NotImplemented:
+            r = self._mo_query(sql, b)  # Packages/MemorialOrder (own texts only)
         if r is NotImplemented:
             r = self._rt_query(sql, b)  # Packages/LastRates + RateDifferenceReport (own texts only)
         if r is NotImplemented:

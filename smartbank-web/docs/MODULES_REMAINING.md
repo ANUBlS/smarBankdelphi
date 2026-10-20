@@ -67,8 +67,8 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
 | 18 | MemorialOrder / TfrmMemorialOrder | `Packages/MemorialOrder` | 3 | 3 | 7 | 521 |  |  | **ported** (route `/m/memorialorder`, see PARITY_MEMORIALORDER.md): filter panel, combos, Sazlama (Memorial table edit, CommitOnPost); Transactions never opened and Yeniləmək / Hesabat have no handler in Delphi; no other copies |
-| 19 | MemorialProject / TMemorial | `Packages/Memorial` | 15 | 15 | 14 | 2363 |  | SB_MEMORIAL | copies: Packages/Memorial_yeni (tam hazir deyil) |
-| 20 | Order / TOrderForm | `Packages/Order` | 6 | 4 | 6 | 962 |  |  |  |
+| 19 | MemorialProject / TMemorial | `Packages/Memorial` | 15 | 15 | 14 | 2363 |  | SB_MEMORIAL | **waiting for the user's choice of production folder** (same CLSID {968D2765-8464-11D6-AA2F-00C0262B568B}): `Packages/Memorial` vs `Packages/Memorial_yeni (tam hazir deyil)` (= 'not finished') |
+| 20 | Order / TOrderForm | `Packages/Order` | 6 | 4 | 6 | 962 |  |  | **ported** (route `/m/order`, see PARITY_ORDER.md); 'Sərəncam' print (QuickReport) on hold; no other copies |
 | 21 | PaymentDecreeX / TPaymentDecree | `Packages/PaymentDecree` | 8 | 7 | 16 | 2974 |  | SB_PAYMENTDECREE | copies: Packages/PaymentDecree29112012 |
 | 22 | Payments / TPaymentsForm | `Packages/Payments` | 4 | 4 | 4 | 1628 |  | MAILBANKING, SB_ADM, SB_ACA |  |
 
