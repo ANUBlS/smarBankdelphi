@@ -29,7 +29,7 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 
 | # | module (CLSID name / class) | production folder | units | forms | SQL | lines | built | main Oracle packages | status / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | DepositsManager_New / TDepositsManager_new | `Packages/DepositsManager_New` | 2 | 2 | 10 | 1282 | 2012-08-02 | SBCM_STORED_PROGRAMS_NEW, SB_ACA | **ported – complete** (route `/m/depositsmanager-new`, all `Packages/SBDM_*_new` plugins – see PARITY_DEPOSITS.md) except: contract prints, print setup (SBDM_WRSetup_new) and reports on hold by the user; SBDM_PercentConverting_new and SBDM_Filter_new blocked (source missing from the repo). |
+| 1 | DepositsManager_New / TDepositsManager_new | `Packages/DepositsManager_New` | 2 | 2 | 10 | 1282 | 2012-08-02 | SBCM_STORED_PROGRAMS_NEW, SB_ACA | **ported – complete** (route `/m/depositsmanager-new`, all `Packages/SBDM_*_new` plugins – see PARITY_DEPOSITS.md) except: contract prints, print setup (SBDM_WRSetup_new) and reports on hold by the user; SBDM_PercentConverting_new and SBDM_Filter_new skipped (no source, per user Oct 20, 2026). |
 
 ### Deposits – skip candidates (not used by DepositsManager_New)
 
