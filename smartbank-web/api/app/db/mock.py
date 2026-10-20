@@ -106,7 +106,7 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._em_func(key, args)              # Packages/ExchangeMGR-NBC (EXCH_MGR, SBOP)
+        r = self._em_func(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR, SBOP)
         if r is NotImplemented:
             r = self._cp_func(key, args)          # Packages/CurrencyPosition (sb_currencyposition, SB_CAPITAL)
         if r is NotImplemented:
@@ -208,7 +208,7 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._em_proc(key, args)             # Packages/ExchangeMGR-NBC (EXCH_MGR)
+        r = self._em_proc(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR)
         if r is NotImplemented:
             r = self._cp_proc(key, args)         # Packages/CurrencyPosition (sb_currencyposition)
         if r is NotImplemented:
@@ -357,6 +357,8 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._em_execute(sql, binds or {}):
+            return
         if self._cp_execute(sql, binds or {}):
             return
         if self._ex_execute(sql, binds or {}):
@@ -395,7 +397,9 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
-        r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
+        r = self._em_plsql(sql, binds or {})          # Packages/ExchangeMGR-NBC (EXCH_TRANS.ex_transaction*)
+        if r is NotImplemented:
+            r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
         if r is NotImplemented:
             r = self._dep_plsql(sql, binds or {})     # DepositsManager_New plugins
         if r is NotImplemented:
@@ -432,6 +436,7 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._em_commit()
         self._cp_commit()
         self._ex_commit()
         self._cd_commit()
@@ -440,6 +445,7 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
         self._xs_commit()
 
     def rollback(self):
+        self._em_rollback()
         self._dep_rollback()
         self._cr_rollback()
         self._xs_rollback()

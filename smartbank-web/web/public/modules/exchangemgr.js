@@ -35,9 +35,11 @@
     if (j.message) toast(T(j.message.slice(3)), 'error');
     const S = { tab: 0, ...j, offices: j.offices || [], provarch: j.provarch || [], resurs: j.resurs || [], remainder: j.remainder || [],
       rates: j.rates || [], rates_filial: j.rates_filial || [], rfilial: j.rfilial || [], cur: 0, curT: 0, curR: 0, title: 'dat', rtitle: 'dat',
-      filter: 2, rateDate: d10(j.dat), filialDate: d10(j.dat), filialKey: -1 };
+      filter: 2, rateDate: d10(j.dat), filialDate: d10(j.dat), filialKey: -1, opForm: {} };
     const office = () => S.offices[S.cur];
     const body = () => ({ ex_no: office() ? office().ex_no : null, dat: d10(S.dat), sdat: d10(S.sdat), title: S.title, rtitle: S.rtitle });
+    const ctx = { S, body, office: () => office(), draw: () => draw(),
+      apply: (r) => { ['provarch', 'rates', 'remainder', 'sum_fee'].forEach(k => { if (k in r) S[k] = r[k]; }); if (S.curT >= trans().length) S.curT = 0; } };
     const notYet = (k) => () => toast(T('not_yet', { what: T(k) }), 'info');
     const held = (k) => () => toast(T('on_hold', { what: T(k) }), 'info');
     // FilterRadioGroupClick: 0 'status=1', 1 'status=2', 2 '' (or RecordCount = 0)
@@ -55,7 +57,7 @@
         case 1: return `<div class="toolbar">${sysd()}${btn('rRef', 'refresh')}${btn('rAdd', 'add')}${btn('rConf', 'confirm')}${btn('rDel', 'delete')}${btn('rPrint', 'print')}</div>
           <div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gResurs', G.resurs, S.resurs, S.curR)}`;
         case 2: { const tr = trans(), r = tr[S.curT];
-          return `<div class="toolbar">${sysd()}${btn('tRef', 'refresh')}${btn('tAdd', 'add')}${btn('tConf', 'confirm', !r || r.trans_close !== 0)}${btn('tDel', 'delete')}${btn('tPrint', 'print', !r || r.trans_close !== 1)}${btn('tOst', 'remainders')}
+          return `<div class="toolbar">${sysd()}${btn('tRef', 'refresh')}<span class="em-dd">${btn('tAdd', 'add')}<span class="em-menu" id="tMenu" hidden><button data-op="purchase">${esc(T('m_purchase'))}</button><button data-op="selling">${esc(T('m_selling'))}</button></span></span>${btn('tConf', 'confirm', !r || r.trans_close !== 0)}${btn('tDel', 'delete')}${btn('tPrint', 'print', !r || r.trans_close !== 1)}${btn('tOst', 'remainders')}
             <fieldset class="cd-g"><legend>Filter</legend>${['f_purchase', 'f_selling', 'f_all'].map((k, i) => `<label><input type="radio" name="emF" value="${i}" ${S.filter === i ? 'checked' : ''}> ${esc(T(k))}</label>`).join(' ')}</fieldset></div>
             <div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gTrans', G.trans, tr, S.curT, true)}
             <div class="toolbar"><span>${esc(T('l_fee_total'))}</span><input readonly value="${esc(fN(S.sum_fee, 2))}" style="width:140px;text-align:right"></div>`; }
@@ -84,8 +86,13 @@
       const fk = q('fKey'); if (fk) fk.onchange = async () => {                                                      // DBLookupComboBox2Click
         S.filialKey = +fk.value; try { S.rates_filial = (await api(P + '/rates-filial', { method: 'POST', body: { ex_id: S.filialKey, dat: S.filialDate } })).rates_filial; } catch (e) { toast(errT(e), 'error'); } draw(); };
       [['mAdd', 'f_addexch'], ['mEdit', 'f_editexch'], ['mDel', 'delete'], ['mSet', 'settings'], ['mPar', 'parameters'], ['mAcc', 'acc_settings'], ['rAdd', 'f_resurs'], ['rConf', 'confirm'], ['rDel', 'delete'],
-        ['tAdd', 'f_purchase_selling'], ['tConf', 'confirm'], ['tDel', 'delete'], ['tOst', 'remainders'], ['fEdit', 'edit'], ['fXls', 'excel']].forEach(([id, k]) => on(id, notYet(k)));
+        ['tOst', 'remainders'], ['fEdit', 'edit'], ['fXls', 'excel']].forEach(([id, k]) => on(id, notYet(k)));
       on('rPrint', held('print')); on('tPrint', held('print'));
+      // Əməliyyatlar toolbar (chunk 2): ToolBtnAddTrans DropdownMenu = PopupMenu (Purchase / Selling; ExchangeCurrency Visible = False)
+      on('tAdd', (e) => { e.stopPropagation(); const mn = q('tMenu'); mn.hidden = !mn.hidden; });
+      b.querySelectorAll('#tMenu [data-op]').forEach(x => x.onclick = () => { q('tMenu').hidden = true; window.SB.emOps.opDialog(x.dataset.op, ctx); });
+      on('tConf', () => window.SB.emOps.confirmTrans(ctx, trans()[S.curT]));          // ToolButton27Click
+      on('tDel', () => window.SB.emOps.deleteTrans(ctx, trans()[S.curT]));           // ToolButton6Click2
     }
     async function showTab(i) {
       S.tab = i;
