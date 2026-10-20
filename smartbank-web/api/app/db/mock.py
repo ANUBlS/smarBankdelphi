@@ -52,6 +52,8 @@ from . import mock_rt
 from . import mock_mo
 from .mock_mo import MoMixin
 from . import mock_ord
+from . import mock_pay
+from .mock_pay import PayMixin
 from .mock_ord import OrdMixin
 from .mock_rt import RtMixin
 from . import mock_xohks
@@ -88,6 +90,7 @@ def reset():
     mock_rt.reset()
     mock_mo.reset()
     mock_ord.reset()
+    mock_pay.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -101,7 +104,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -217,7 +220,9 @@ class MockConnection(OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMi
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._em_proc(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR)
+        r = self._pay_proc(key, args)                  # Packages/Payments (standalone Ibank_change_status)
+        if r is NotImplemented:
+            r = self._em_proc(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR)
         if r is NotImplemented:
             r = self._cp_proc(key, args)         # Packages/CurrencyPosition (sb_currencyposition)
         if r is NotImplemented:
@@ -276,7 +281,9 @@ class MockConnection(OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMi
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._ord_query(sql, b)  # Packages/Order (own texts only)
+        r = self._pay_query(sql, b)  # Packages/Payments (own texts only)
+        if r is NotImplemented:
+            r = self._ord_query(sql, b)  # Packages/Order (own texts only)
         if r is NotImplemented:
             r = self._mo_query(sql, b)  # Packages/MemorialOrder (own texts only)
         if r is NotImplemented:
