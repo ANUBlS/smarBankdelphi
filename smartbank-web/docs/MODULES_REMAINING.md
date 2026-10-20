@@ -53,9 +53,9 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 10 | CurrencyPosition / TFrmCurrencyPosition | `Packages/CurrencyPosition` | 6 | 6 | 20 | 2999 |  | SB_CAPITAL, SB_CURRENCYPOSITION | copies: Packages/CurrPos/CurrencyPosition; Packages/CurrPos/CurrencyPosition_until_elnur |
-| 11 | Exchange / TFrmExchange | `Packages/Exchange` | 10 | 10 | 16 | 2044 |  | SB_EXCHANGE, SB_MTOUTVIEW, SB_ACA |  |
-| 12 | ExchangeMGR / TExchangeMGR_X | `Packages/ExchangeMGR-NBC` | 28 | 27 | 1 | 9656 |  |  | copies: DepositTeze/ExchangeMGR_IBAN; Packages/ExchangeMGR-Turan; Packages/ExchangeMGR_IBAN; Teymur/ExchangeMGR |
+| 10 | CurrencyPosition / TFrmCurrencyPosition | `Packages/CurrencyPosition` | 6 | 6 | 20 | 2999 |  | SB_CAPITAL, SB_CURRENCYPOSITION | production confirmed by the user 2026-10-20; Packages/CurrPos/* are ignored |
+| 11 | Exchange / TFrmExchange | `Packages/Exchange` | 10 | 10 | 16 | 2044 |  | SB_EXCHANGE, SB_MTOUTVIEW, SB_ACA | **ported** (route `/m/exchange`, see PARITY_EXCHANGE.md; QuickReport prints on hold) |
+| 12 | ExchangeMGR / TExchangeMGR_X | `Packages/ExchangeMGR-NBC` | 28 | 27 | 1 | 9656 |  |  | production `Packages/ExchangeMGR-NBC` confirmed by the user 2026-10-20; ExchangeMGR-Turan / ExchangeMGR_IBAN / DepositTeze / Teymur copies are ignored |
 | 13 | OldRatesProj / TOldRatesFormX | `Packages/LastRates` | 1 | 1 | 3 | 453 |  | SBOP |  |
 | 14 | RateDifference / TRateDifferenceForm | `Packages/RateDifference` | 1 | 1 | 1 | 336 |  |  |  |
 | 15 | RateDifferenceReport / TRateDifferenceReportX | `Packages/RateDifferenceReport` | 3 | 3 | 4 | 848 |  | SBOP |  |
