@@ -68,6 +68,7 @@ for _f in FORMS.values():                                  # DOA INSERT on these
     _f["table"] = m.group(1)
     CF.DML_TABLES.add(m.group(1).lower())
 MAX_BYTES = 20 * 1024 * 1024
+BADFILE = "Workbooks.Open: the file is not an Excel workbook (.xls / .xlsx)"
 
 
 # ------------------------------------------------------------------------------------------------ Excel OLE replacement
@@ -81,7 +82,7 @@ class Sheet:
             try:
                 wb = openpyxl.load_workbook(io.BytesIO(data), read_only=True, data_only=True)
             except Exception:       # noqa: BLE001
-                raise ValueError("file") from None
+                raise ValueError(BADFILE) from None
             ws = next((wb[n] for n in wb.sheetnames if n.upper() == "CARDS"), None)      # Excel sheet names: case-insensitive
             if ws is None:
                 raise ValueError("Worksheets['CARDS']: Invalid index.")
@@ -95,7 +96,7 @@ class Sheet:
             try:
                 wb = xlrd.open_workbook(file_contents=data)
             except Exception:       # noqa: BLE001
-                raise ValueError("file") from None
+                raise ValueError(BADFILE) from None
             ws = next((wb.sheet_by_name(n) for n in wb.sheet_names() if n.upper() == "CARDS"), None)
             if ws is None:
                 raise ValueError("Worksheets['CARDS']: Invalid index.")
@@ -113,7 +114,7 @@ class Sheet:
                         v = None
                     self.cells[(i + 1, j + 1)] = v
         else:
-            raise ValueError("file")
+            raise ValueError(BADFILE)
 
     def value(self, r, c):
         return self.cells.get((r, c))
@@ -237,7 +238,7 @@ def _import(ws, form, sheet: Sheet) -> int:
 def to_base(ws, form, data: bytes | None, date: str | None = None) -> dict:
     c, s = FORMS[form], _st(ws, form)
     msgs = []
-    sheet = Sheet(data) if data is not None else None      # an unreadable file fails before anything is called (Workbooks.Open)
+    sheet = None
     try:
         if form == "newcard":                                   # EXCELNEWCARD.pas isertbtnClick :66
             d = dt.date.fromisoformat(date) if date else dt.date.today()
@@ -245,8 +246,9 @@ def to_base(ws, form, data: bytes | None, date: str | None = None) -> dict:
             if not d > dt.date.today():                         # IF DateTimePicker1.DateTime > DATE (date part only: Kind dtkDate)
                 return _view(ws, form, messages=["Tarixi düz seçin!"])
             _p(ws, "newdelet")
-            if sheet is not None:
-                _open(ws, form, 0)
+            if data is not None:
+                _open(ws, form, 0)                              # YENICARD.Open, then Workbooks.Open / Worksheets['CARDS']
+                sheet = Sheet(data)
                 j = _import(ws, form, sheet)
                 ws.conn.commit()
                 _p(ws, "newupdate")
@@ -255,8 +257,9 @@ def to_base(ws, form, data: bytes | None, date: str | None = None) -> dict:
             _p(ws, "updatedate", [dt.datetime(d.year, d.month, d.day)])
         elif form == "salary":                                  # Unitsalary.pas isertbtnClick :68
             t = ""
-            if sheet is not None:
+            if data is not None:
                 _open(ws, form, 0)
+                sheet = Sheet(data)
                 j = _import(ws, form, sheet)
                 t = sheet.text(6, 3)
                 ws.conn.commit()
@@ -266,8 +269,9 @@ def to_base(ws, form, data: bytes | None, date: str | None = None) -> dict:
         else:                                                   # PROLONGATIONUNIT.pas :62 / accountcloseunit.pas :61
             pre, upd = ("prodelet", "proupdate") if form == "prolong" else ("accdelete", "accupdate")
             _p(ws, pre)
-            if sheet is not None:
+            if data is not None:
                 _open(ws, form, 0)
+                sheet = Sheet(data)
                 j = _import(ws, form, sheet)
                 ws.conn.commit()
                 _p(ws, upd)

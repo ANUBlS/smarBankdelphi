@@ -356,3 +356,6 @@ from . import cards_misc  # noqa: E402
 app.include_router(cards_misc.make_router(current, require_module, err))
 from . import cards_xls  # noqa: E402
 app.include_router(cards_xls.make_router(current, require_module, err))
+from . import cards_cardnum, cards_posonus  # noqa: E402
+app.include_router(cards_cardnum.make_router(current, require_module, err))
+app.include_router(cards_posonus.make_router(current, require_module, err))

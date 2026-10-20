@@ -83,8 +83,12 @@ def test_salary_no_file_and_errors():
     assert r["messages"] == [] and r["grid1"] == []
     e = P("/xls/salary/tobase", {"name": "s.xlsx", "b64": wb({(10, 2): "A", (10, 4): "x1", (11, 2): "B"})})
     assert "'x1' is not a valid floating point value" in e["error"] and e["messages"] == []
-    P("/xls/salary/tobase", {"name": "s.xlsx", "b64": wb({(10, 2): "A"}, sheet="Sheet1")}, code=400)
-    P("/xls/salary/tobase", {"name": "s.txt", "b64": base64.b64encode(b"hello").decode()}, code=400)
+    assert "Worksheets['CARDS']" in P("/xls/salary/tobase", {"name": "s.xlsx", "b64": wb({(10, 2): "A"}, sheet="Sheet1")})["error"]
+    assert P("/xls/salary/tobase", {"name": "s.txt", "b64": base64.b64encode(b"hello").decode()})["error"].startswith("Workbooks.Open")
+    P("/xls/prolong/open")
+    MC._db().execute("insert into card_xlsprolongation (ID, CARDNUMBER, STATUS) values (9, 'X', 1)")
+    e = P("/xls/prolong/tobase", {"name": "p.txt", "b64": base64.b64encode(b"hello").decode()})
+    assert e["error"].startswith("Workbooks.Open") and e["grid1"] == []                      # prodelet runs before the workbook is opened
 
 
 def test_newcard():

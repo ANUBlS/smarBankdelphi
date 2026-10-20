@@ -256,7 +256,100 @@
     }
     draw();
   }
-  const OTHER = { kliring, limits, excel: excelforms };
+  // yes / no / cancel / yes-to-all loop questions (the Delphi SelectedRows loop; the server replays it with the answers)
+  async function askLoop(n, q1, qAll) {
+    const answers = []; let wait = true;
+    for (let i = 0; i < n && wait; i++) {
+      let a = await ask(q1, [['yes', K('yes')], ['no', K('no')], ['cancel', K('cancel')], ['all', K('yes_all')]]);
+      if (a === 'all') { const b = await ask(qAll.replace('%d', n - i), [['yes', K('yes')], ['cancel', K('cancel')]]); a = b === 'yes' ? 'all' : 'all_no'; if (a === 'all') wait = false; }
+      answers.push(a); if (a === 'cancel') break;
+    }
+    return answers;
+  }
+  // TCARDNUMBER (cardnumbersource.pas, api/app/cards_cardnum.py): TabSheet1 'Auto' (file -> editcardnumber, Təsdiq Et / Sil loops, Excel),
+  // TabSheet2 'Manual' (Edit1 reference + Enter -> client2, Edit2 new card number, Save / Clear)
+  const CN_LBL = [['Edit4', 'RBS NUMBER'], ['Edit6', 'CLIENT NUMBER'], ['ComboBox10', 'TITLE'], ['ComboBox11', 'VIP'], ['ComboBox12', 'STATUS'],
+    ['Edit15', 'FIRST NAME'], ['Edit16', 'LAST NAME'], ['Edit17', 'HOME PHONE'], ['Edit27', 'WORK PHONE'], ['Edit18', 'PASSPORT N'], ['DateTimePicker7', 'BIRTH DAY'],
+    ['Edit20', 'COUNTRY'], ['Edit19', 'CITY'], ['Edit21', 'LANG'], ['Edit22', 'ADDRESS'], ['ComboBox1', 'CARD TYPE'], ['DateTimePicker8', 'EXP. DATE'],
+    ['ComboBox4', 'RESIDENT'], ['Edit26', 'REFERENCE'], ['Edit25', 'SECURITY WORD'], ['Edit24', 'CARD NUMBER'], ['Edit23', 'EMBOSS NAME'], ['ComboBox2', 'COMPANY']];
+  async function cardnumber(box) {
+    const call = caller('/api/cards/cardnum');
+    let d = await call('/open'); if (!d) return;
+    const sel = new Set(); let cur = null;
+    const today = new Date().toISOString().slice(0, 10);
+    function draw() {
+      const C = d.cols.map(c => c == null ? null : [c, c]);
+      const tabs = `<div class="toolbar" style="gap:4px"><button class="btn ${d.page === 'auto' ? '' : 'secondary'}" id="cn_ta">Auto</button><button class="btn ${d.page === 'manual' ? '' : 'secondary'}" id="cn_tm">Manual</button>
+        <button class="btn secondary" id="cn_close">${esc(K('close'))}</button></div>`;
+      const auto = `<div class="toolbar" style="gap:6px;flex-wrap:wrap;margin-top:6px">
+          <label class="btn secondary" style="cursor:pointer">${esc(K('cf_upload'))}<input type="file" id="cn_f" style="display:none"></label>
+          <span class="muted" id="cn_fn">${d.file ? esc(d.file.name) : esc(K('cf_nofile'))}</span>
+          <button class="btn" id="cn_b">${esc(K('cf_tobase'))}</button><button class="btn" id="cn_c">${esc(K('cf_confirm'))}</button>
+          <button class="btn secondary" id="cn_x1">${esc(K('xs_win1'))}</button><button class="btn secondary" id="cn_x2">${esc(K('xs_win2'))}</button>
+          <button class="btn secondary" id="cn_d">${esc(K('kl_delete'))}</button></div>
+        ${gridHtml('cn_g1', C, d.grid1, { sel, icon: r => icon(r.status) })}${gridHtml('cn_g2', C, d.grid2, { icon: r => icon(r.status) })}`;
+      const val = (k) => { const v = d.boxes[k] || ''; return v === 'TODAY' ? today : v; };
+      const manual = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 12px;margin-top:8px">
+          <label>REFERANCE<input id="cn_e1" style="text-transform:uppercase" value="${esc(d.edit1)}"></label><label>CARD NUMBER<input id="cn_e2" value="${esc(d.edit2)}"></label>
+          ${CN_LBL.map(([k, l]) => `<label>${esc(l)}<input ${k.startsWith('DateTime') ? 'type="date"' : ''} disabled value="${esc(val(k))}"></label>`).join('')}</div>
+        <div class="toolbar" style="gap:6px;margin-top:8px"><button class="btn" id="cn_s">Save</button><button class="btn secondary" id="cn_cl">Clear</button></div>`;
+      box.innerHTML = `<h3 style="margin:8px 0">CARDNUMBER</h3>${tabs}${d.page === 'auto' ? auto : manual}`;
+      const q = (id) => box.querySelector('#' + id), set = (r) => { if (r) { d = r; draw(); say(r.messages); if (r.error) toast(r.error, 'error'); } };
+      q('cn_ta').onclick = async () => set(await call('/tab', { page: 'auto' }));
+      q('cn_tm').onclick = async () => set(await call('/tab', { page: 'manual' }));
+      q('cn_close').onclick = () => { box.innerHTML = ''; };
+      if (d.page === 'auto') {
+        q('cn_f').onchange = async () => { const f = q('cn_f').files[0]; if (f) set(await call('/upload', { name: f.name, b64: await readB64(f) })); };
+        q('cn_b').onclick = async () => set(await call('/tobase'));
+        const ids = () => { const o = d.grid1.map(r => r.id).filter(i => sel.has(i)); return o.length ? o : (cur != null ? [cur] : []); };
+        q('cn_c').onclick = async () => { const a = await askLoop(ids().length, K('cn_ask_change'), K('cn_ask_change_all')); const r = await call('/change', { ids: [...sel], current: cur, answers: a }); sel.clear(); set(r); };
+        q('cn_d').onclick = async () => { const a = await askLoop(ids().length, K('cn_ask_del'), K('cn_ask_del_all')); const r = await call('/delete', { ids: [...sel], current: cur, answers: a }); sel.clear(); set(r); };
+        const ex = (g) => download('/api/cards/cardnum/excel/' + g, 'KART_NOMRELERI.xlsx');
+        q('cn_x1').onclick = () => ex('grid1'); q('cn_x2').onclick = () => ex('grid2');
+        const items = [['x', 'EXCEL'], ['all', 'SELECT ALL']];                  // PopupMenu2 on both grids: EXCEL1 (cardnumber1), SELECTALL1 (DBGrid1)
+        wireSel(q('cn_g1'), d.grid1, sel, (id) => { cur = id; }, draw, { items, onItem: () => ex('grid1') });
+        q('cn_g2').oncontextmenu = (e) => { e.preventDefault(); ex('grid1'); };
+        box.onkeydown = (e) => { if (e.ctrlKey && e.key.toLowerCase() === 'a' && d.page === 'auto') { e.preventDefault(); d.grid1.forEach(r => sel.add(r.id)); draw(); } };
+      } else {
+        const e1 = q('cn_e1');
+        e1.onkeydown = async (e) => { if (e.key === 'Enter') set(await call('/edit1', { edit1: e1.value.toUpperCase() })); };
+        e1.oninput = async () => { if (e1.value === '') set(await call('/clear')); };   // any key with Edit1 empty clears the boxes
+        q('cn_cl').onclick = async () => set(await call('/clear'));
+        q('cn_s').onclick = async () => {
+          const e1v = q('cn_e1').value.toUpperCase(), e2v = q('cn_e2').value;
+          let yes = false; if (e1v && e2v) yes = (await ask(K('cn_ask_save'), [['yes', K('yes')], ['no', K('no')]])) === 'yes';
+          set(await call('/save', { edit1: e1v, edit2: e2v, yes })); };
+      }
+    }
+    draw();
+  }
+  // TPostCommisionOnus (PostCommisionOnusImpl.pas, api/app/cards_posonus.py): Oxu, Təsdiq et, date + Yeniləmək, grid popups Sil / Hamısını seçmək
+  async function poscomm(box) {
+    const call = caller('/api/cards/posonus');
+    let d = await call('/open'); if (!d) return;
+    const sel = { grid1: new Set(), grid2: new Set() }, cur = { grid1: null, grid2: null };
+    const askN = async (n, text) => { const a = []; for (let i = 0; i < n; i++) { const x = await ask(text.replace('%d', n - i), [['yes', K('yes')], ['cancel', K('cancel')]]); a.push(x); if (x === 'yes') break; } return a; };
+    const pickIds = (g) => { const o = d[g].map(r => r.id).filter(i => sel[g].has(i)); return o.length ? o : (cur[g] != null ? [cur[g]] : []); };
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">Commission Our POS-ONUS</h3><div class="toolbar" style="gap:6px;flex-wrap:wrap">
+        <button class="btn secondary" id="po_close">${esc(K('close'))}</button><button class="btn" id="po_r">${esc(K('po_read'))}</button><button class="btn" id="po_c">${esc(K('cf_confirm'))}</button>
+        <input type="date" id="po_dt" value="${esc(d.date)}"><button class="btn secondary" id="po_y">${esc(K('cf_refresh'))}</button></div>
+        ${gridHtml('po_g1', d.cols1, d.grid1, { sel: sel.grid1 })}${gridHtml('po_g2', d.cols2, d.grid2, { sel: sel.grid2 })}`;
+      const q = (id) => box.querySelector('#' + id), set = (r) => { if (r) { d = r; sel.grid1.clear(); sel.grid2.clear(); draw(); say(r.messages); if (r.error) toast(r.error, 'error'); } };
+      q('po_close').onclick = () => { box.innerHTML = ''; };
+      q('po_r').onclick = async () => set(await call('/read'));
+      q('po_y').onclick = async () => set(await call('/refresh', { date: q('po_dt').value }));
+      q('po_c').onclick = async () => { const n = d.grid1.length ? pickIds('grid1').length : 0;
+        set(await call('/confirm', { ids: [...sel.grid1], current: cur.grid1, answers: await askN(n, K('po_ask_conf')) })); };
+      const del = async (g) => set(await call('/delete', { grid: g, ids: [...sel[g]], current: cur[g], answers: await askN(pickIds(g).length, K('po_ask_del')) }));
+      ['grid1', 'grid2'].forEach((g, i) => wireSel(q('po_g' + (i + 1)), d[g], sel[g], (id) => { cur[g] = id; }, draw,
+        { items: [['del', 'Sil'], ['all', K('po_all')]], onItem: () => del(g) }));
+      box.onkeydown = (e) => { if (e.key === 'Escape') box.innerHTML = '';                 // FormKeyPress: Esc -> Close
+        if (e.ctrlKey && e.key.toLowerCase() === 'a') { const g = document.activeElement && document.activeElement.id === 'po_g2' ? 'grid2' : 'grid1'; e.preventDefault(); d[g].forEach(r => sel[g].add(r.id)); draw(); } };
+    }
+    draw();
+  }
+  const OTHER = { kliring, limits, excel: excelforms, cardnumber, poscomm };
 
   async function cfile(box) {
     const P = '/api/cards/cfile';
