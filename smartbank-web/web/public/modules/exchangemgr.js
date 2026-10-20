@@ -1,15 +1,15 @@
 /* Exchange Manager (V.D.M.) – port of Packages/ExchangeMGR-NBC (TExchangeMGR_X, Unit_ExchangeMGR.pas/.dfm). API:
    api/app/exchangemgr.py. Chunk 1: the main PageControl with the read side of 'Valyuta D. M.', 'Resurslar',
    'Əməliyyatlar', 'Məzənnələr', 'Filiallar üzrə məzənnələr' and 'V.D.M-də Qalıqlar'. GridMaster's current office is the
-   master of the Resurslar / Əməliyyatlar / Qalıqlar datasets (DOA Master/Detail EX_NO -> :ex_id). Toolbar actions of
-   the forms not ported yet show the "not migrated yet" notice; prints show the "on hold" notice. */
+   master of the Resurslar / Əməliyyatlar / Qalıqlar datasets (DOA Master/Detail EX_NO -> :ex_id). Chunk 2 operations:
+   exchangemgr_ops.js; chunk 3 set-up forms: exchangemgr_setup.js. Prints show the "on hold" notice. */
 (function () {
   const { api, t, esc, toast } = window.SB;
   const P = '/api/exchangemgr', T = (k, p) => t('em.' + k, p);
   const errT = (e) => t(e.key || 'error.generic', e) + (e.ora ? ' ' + e.ora : '');
   const d10 = (s) => String(s || '').slice(0, 10);
   const fD = (s) => { if (!s) return ''; const [y, m, d] = d10(s).split('-'); return `${d}.${m}.${y}`; };
-  const fN = (v, dec) => { if (v === null || v === undefined || v === '') return ''; const n = Number(v); if (dec === undefined) return String(v).replace('.', ',');
+  const fN = (v, dec) => { if (v === null || v === undefined || v === '') return ''; const n = Number(v); if (dec === undefined) return String(isNaN(n) ? v : Number(n.toPrecision(15))).replace('.', ',');   // FloatToStr: 15 significant digits
     const s = Math.abs(n).toFixed(dec).split('.'); return (n < 0 ? '-' : '') + s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ',' + s[1]; };
   const TABS = ['t_main', 't_resurs', 't_trans', 't_rate', 't_rfilial', 't_remainder', 't_turnover'];
   // DBGrid column lists (Unit_ExchangeMGR.dfm): [field, caption key, format]
@@ -35,12 +35,11 @@
     if (j.message) toast(T(j.message.slice(3)), 'error');
     const S = { tab: 0, ...j, offices: j.offices || [], provarch: j.provarch || [], resurs: j.resurs || [], remainder: j.remainder || [],
       rates: j.rates || [], rates_filial: j.rates_filial || [], rfilial: j.rfilial || [], cur: 0, curT: 0, curR: 0, title: 'dat', rtitle: 'dat',
-      filter: 2, rateDate: d10(j.dat), filialDate: d10(j.dat), filialKey: -1, opForm: {} };
+      filter: 2, rateDate: d10(j.dat), filialDate: d10(j.dat), filialKey: -1, opForm: {}, curF: 0, rfEdit: null };
     const office = () => S.offices[S.cur];
     const body = () => ({ ex_no: office() ? office().ex_no : null, dat: d10(S.dat), sdat: d10(S.sdat), title: S.title, rtitle: S.rtitle });
     const ctx = { S, body, office: () => office(), draw: () => draw(),
       apply: (r) => { ['provarch', 'rates', 'remainder', 'sum_fee'].forEach(k => { if (k in r) S[k] = r[k]; }); if (S.curT >= trans().length) S.curT = 0; } };
-    const notYet = (k) => () => toast(T('not_yet', { what: T(k) }), 'info');
     const held = (k) => () => toast(T('on_hold', { what: T(k) }), 'info');
     // FilterRadioGroupClick: 0 'status=1', 1 'status=2', 2 '' (or RecordCount = 0)
     const trans = () => S.filter === 2 ? S.provarch : S.provarch.filter(r => r.status === (S.filter === 0 ? 1 : 2));
@@ -54,7 +53,7 @@
       switch (S.tab) {
         case 0: return `<div class="toolbar">${btn('mAdd', 'add')}${btn('mEdit', 'edit')}${btn('mDel', 'delete')}${btn('mSet', 'settings')}${btn('mPar', 'parameters')}${btn('mAcc', 'acc_settings')}</div>
           ${grid('gMaster', G.master, S.offices, S.cur)}`;
-        case 1: return `<div class="toolbar">${sysd()}${btn('rRef', 'refresh')}${btn('rAdd', 'add')}${btn('rConf', 'confirm')}${btn('rDel', 'delete')}${btn('rPrint', 'print')}</div>
+        case 1: return `<div class="toolbar">${sysd()}${btn('rRef', 'refresh')}<span class="em-dd">${btn('rAdd', 'add')}<span class="em-menu" id="rMenu" hidden><button data-rs="give">${esc(T('rs_give'))}</button><button data-rs="return">${esc(T('rs_return'))}</button></span></span>${btn('rConf', 'confirm')}${btn('rDel', 'delete')}${btn('rPrint', 'print')}</div>
           <div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gResurs', G.resurs, S.resurs, S.curR)}`;
         case 2: { const tr = trans(), r = tr[S.curT];
           return `<div class="toolbar">${sysd()}${btn('tRef', 'refresh')}<span class="em-dd">${btn('tAdd', 'add')}<span class="em-menu" id="tMenu" hidden><button data-op="purchase">${esc(T('m_purchase'))}</button><button data-op="selling">${esc(T('m_selling'))}</button></span></span>${btn('tConf', 'confirm', !r || r.trans_close !== 0)}${btn('tDel', 'delete')}${btn('tPrint', 'print', !r || r.trans_close !== 1)}${btn('tOst', 'remainders')}
@@ -63,12 +62,22 @@
             <div class="toolbar"><span>${esc(T('l_fee_total'))}</span><input readonly value="${esc(fN(S.sum_fee, 2))}" style="width:140px;text-align:right"></div>`; }
         case 3: return `<div class="toolbar"><input type="date" disabled value="${esc(S.rateDate)}"></div>${grid('gRate', G.rate, S.rates, -1)}`;
         case 4: return `<div class="toolbar">${esc(T('l_date'))} <input type="date" disabled value="${esc(S.filialDate)}"> <span>Filial</span>
-            <select id="fKey">${S.rfilial.map(f => `<option value="${f.id}" ${f.id === S.filialKey ? 'selected' : ''}>${esc(f.name)}</option>`).join('')}</select>${btn('fEdit', 'edit')}${btn('fXls', 'excel')}</div>
-            ${grid('gRFilial', G.rfilial, S.rates_filial, -1)}`;
+            <select id="fKey">${S.rfilial.map(f => `<option value="${f.id}" ${f.id === S.filialKey ? 'selected' : ''}>${esc(f.name)}</option>`).join('')}</select>
+            <span class="em-nav">${[['nEdit', 'nav_edit', '▲', !!S.rfEdit], ['nPost', 'nav_post', '✔', !S.rfEdit], ['nCancel', 'nav_cancel', '✖', !S.rfEdit], ['nRef', 'nav_refresh', '↻', false]]
+              .map(([id, k, ic, dis]) => `<button class="btn secondary" id="${id}" title="${esc(T(k))}" ${dis ? 'disabled' : ''}>${ic}</button>`).join('')}</span>${btn('fXls', 'excel')}</div>
+            ${rfGrid()}`;
         case 5: return `<div class="toolbar"><input type="date" disabled value="${esc(d10(S.dat))}"></div><div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gRemain', G.remain, S.remainder, -1)}`;
         case 6: return `<p>${esc(T('turnover_next'))}</p>`;
       }
       return '';
+    }
+    // DBGrid3 on ODSRatesFilial: the four course columns are editable while the dataset is in dsEdit (DBNavigator1)
+    function rfGrid() {
+      const E = S.rfEdit, ed = window.SB.emSetup.RF_EDIT;
+      return `<div class="em-grid"><table class="grid acc-grid" id="gRFilial"><thead><tr>${G.rfilial.map(c => `<th>${esc(T(c[1]))}</th>`).join('')}</tr></thead><tbody>${
+        S.rates_filial.map((r, i) => `<tr data-i="${i}" class="${i === S.curF ? 'sel' : ''}">${G.rfilial.map(c => E && E.i === i && ed.includes(c[0])
+          ? `<td><input class="em-cell" data-f="${c[0]}" value="${esc(E.vals[c[0]] ?? '')}"></td>`
+          : `<td ${typeof r[c[0]] === 'number' ? 'style="text-align:right"' : ''}>${esc(cell(r, c))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     }
     function draw() {
       const b = el.querySelector('#emBody');
@@ -84,9 +93,24 @@
       on('tRef', () => scroll(S.cur));                                                                                // ToolButton11Click2
       on('rRef', async () => { try { S.resurs = (await api(P + '/resurs/refresh', { method: 'POST', body: body() })).resurs; } catch (e) { toast(errT(e), 'error'); } draw(); });   // ToolButton20Click
       const fk = q('fKey'); if (fk) fk.onchange = async () => {                                                      // DBLookupComboBox2Click
-        S.filialKey = +fk.value; try { S.rates_filial = (await api(P + '/rates-filial', { method: 'POST', body: { ex_id: S.filialKey, dat: S.filialDate } })).rates_filial; } catch (e) { toast(errT(e), 'error'); } draw(); };
-      [['mAdd', 'f_addexch'], ['mEdit', 'f_editexch'], ['mDel', 'delete'], ['mSet', 'settings'], ['mPar', 'parameters'], ['mAcc', 'acc_settings'], ['rAdd', 'f_resurs'], ['rConf', 'confirm'], ['rDel', 'delete'],
-        ['tOst', 'remainders'], ['fEdit', 'edit'], ['fXls', 'excel']].forEach(([id, k]) => on(id, notYet(k)));
+        S.filialKey = +fk.value; S.rfEdit = null; S.curF = 0;   // Close cancels the edit
+        try { S.rates_filial = (await api(P + '/rates-filial', { method: 'POST', body: { ex_id: S.filialKey, dat: S.filialDate } })).rates_filial; } catch (e) { toast(errT(e), 'error'); } draw(); };
+      // chunk 3 set-up forms (exchangemgr_setup.js)
+      const X = window.SB.emSetup;
+      on('mAdd', () => X.officeDialog(ctx, false)); on('mEdit', () => X.officeDialog(ctx, true)); on('mDel', () => X.officeDelete(ctx));   // ToolBtnAdd/Edit/DeleteClick2
+      on('mSet', () => X.iniSettings('Exchange.ini')); on('mPar', () => X.parametrForm()); on('mAcc', () => X.accountForm(ctx));          // ToolButton15/31/17
+      on('rAdd', (e) => { e.stopPropagation(); const mn = q('rMenu'); mn.hidden = !mn.hidden; });                    // ToolButton47 DropdownMenu = PopupMenuResurs
+      b.querySelectorAll('#rMenu [data-rs]').forEach(x => x.onclick = () => { q('rMenu').hidden = true; X.resursDialog(ctx, x.dataset.rs === 'give'); });
+      on('rConf', () => X.resursConfirm(ctx, S.resurs[S.curR])); on('rDel', () => X.resursDelete(ctx, S.resurs[S.curR]));   // ToolButton34 / ToolButton38
+      on('tOst', () => X.remainderForm(ctx));                                                                         // TlBOstatClick2
+      on('nEdit', () => X.rfNav(ctx, 'edit')); on('nPost', () => X.rfNav(ctx, 'post')); on('nCancel', () => X.rfNav(ctx, 'cancel')); on('nRef', () => X.rfNav(ctx, 'refresh'));
+      on('fXls', () => toast(T('tech_work'), 'info'));                                                                // BitBtn14Click: 'Texniki işlər gedir'
+      b.querySelectorAll('#gRFilial tr[data-i]').forEach(tr => tr.onclick = async (e) => {
+        if (e.target.tagName === 'INPUT' || +tr.dataset.i === S.curF) return;
+        if (S.rfEdit) await X.rfNav(ctx, 'post');                                                                     // scrolling posts (CheckBrowseMode)
+        S.curF = +tr.dataset.i; draw(); });
+      b.querySelectorAll('#gRFilial input.em-cell').forEach(x => x.oninput = () => {
+        const v = x.value.trim().replace(',', '.'); S.rfEdit.vals[x.dataset.f] = v === '' ? null : (isNaN(Number(v)) ? x.value : Number(v)); });
       on('rPrint', held('print')); on('tPrint', held('print'));
       // Əməliyyatlar toolbar (chunk 2): ToolBtnAddTrans DropdownMenu = PopupMenu (Purchase / Selling; ExchangeCurrency Visible = False)
       on('tAdd', (e) => { e.stopPropagation(); const mn = q('tMenu'); mn.hidden = !mn.hidden; });
@@ -95,6 +119,7 @@
       on('tDel', () => window.SB.emOps.deleteTrans(ctx, trans()[S.curT]));           // ToolButton6Click2
     }
     async function showTab(i) {
+      if (S.rfEdit && S.tab === 4 && i !== 4) await window.SB.emSetup.rfNav(ctx, 'post');
       S.tab = i;
       if (i === 3) { try { S.rates = (await api(P + '/rates', { method: 'POST', body: { dat: S.rateDate } })).rates; } catch (e) { toast(errT(e), 'error'); } }   // TabShRateShow
       if (i === 5) { try { const r = await api(P + '/remainder/show', { method: 'POST', body: body() }); if (r.refreshed) S.remainder = r.remainder; } catch (e) { toast(errT(e), 'error'); } }   // TabRemainderShow

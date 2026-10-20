@@ -411,7 +411,9 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
         return r
 
     def plsql_out(self, sql, binds=None):
-        r = self._azi_plsql_out(sql, binds or {})
+        r = self._em_plsql_out(sql, binds or {})      # Packages/ExchangeMGR-NBC (get_ex_office_out_params)
+        if r is NotImplemented:
+            r = self._azi_plsql_out(sql, binds or {})
         if r is NotImplemented:
             r = self._omem_plsql_out(sql, binds or {})
         if r is NotImplemented:

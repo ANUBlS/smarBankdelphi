@@ -41,6 +41,8 @@ def _db():
         D = json.load(open(os.path.join(settings.mock_fixtures, "exchangemgr.json"), encoding="utf-8"))
         c = sqlite3.connect(":memory:", check_same_thread=False)
         c.create_function("decode", -1, _decode)
+        acc_list = D.get("exchangemgr_access", [])           # ASSUMED SB_ACA.checkmodaccess_int: 1 for these users
+        c.create_function("checkmodaccess_int", 2, lambda m, n: 1 if str(n).upper() in acc_list else 0)
         for t, rows in D.items():
             if not isinstance(rows, list) or (rows and not isinstance(rows[0], dict)):
                 continue
@@ -64,7 +66,7 @@ def _bind(v):
 
 def _run(sql, binds=None):
     c = _db()[0]
-    s = sql.replace("rownum,", "row_number() over () as rownum,")
+    s = sql.replace("rownum,", "row_number() over () as rownum,").replace("SB_ACA.checkmodaccess_int(", "checkmodaccess_int(")
     used = {k: _bind(v) for k, v in (binds or {}).items() if ":" + k in sql}
     try:
         cur = c.execute(s, used)
@@ -87,8 +89,17 @@ _ALL = {getattr(Q, n) for n in dir(Q) if n.startswith("DM_")} - {Q.DM_ODSSysdat}
 # avalute, account ...) are shared with other modules, so they are only answered as a last resort
 _OWN = {q for q in _ALL if any(t in q.lower() for t in ("ex_", "operkurs", "from dual"))}
 _LATE = _ALL - _OWN
+_RF_UPD = re.compile(r"update EX_RATES_FILIAL set ((?:[A-Z_]+ = :[A-Z_]+(?:, )?)+) where rowid = :doa__rowid")
 _ACC_FN = {"EXCH_MGR.GET_PURCHASE_NO": "PURCHASE_ACC_ID", "EXCH_MGR.GET_SELLING_NO": "SELLING_ACC_ID",
            "EXCH_MGR.GET_CASH_ACC_NO": "CASH_ACC_ID", "EXCH_MGR.GET_PUR_ACC_NO": "PUR_ACC_ID"}
+
+
+def _acc_row(c, nid, a):
+    """a = (ex_id, val_id, val_name, purchase, selling, profit, harm, cash, pur)."""
+    no = lambda i: (c.execute("select ACC_NO from account where ID=?", [i]).fetchone() or [None])[0]   # noqa: E731
+    c.execute("insert into ex_accounts (ID, EX_ID, VAL_ID, VAL_NAME, PURCHASE_ACC_ID, SELLING_ACC_ID, PROFIT_ACC_ID, HARM_ACC_ID, CASH_ACC_ID, "
+              "PUR_ACC_ID, PURCHASE_ACC_NO, SELLING_ACC_NO, PROFIT_ACC_NO, HARM_ACC_NO, CASH_ACC_NO, PUR_ACC_NO) values "
+              "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [nid, *a, *[no(x) for x in a[3:9]]])
 
 
 class EmMixin:
@@ -121,6 +132,19 @@ class EmMixin:
             return 11
         if key == "EXCH_MGR.ROUNDNEW":                    # ASSUMED: half-up to 2 decimals
             return float(Decimal(repr(float(args[0]))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+        if key == "EXCH_MGR.EX_OFFICE_ADD":                # ASSUMED: inserts the ex_office row, returns its id
+            CALLS.append((key, list(args)))
+            c = _db()[0]
+            nid = (c.execute("select max(ID) from ex_office").fetchone()[0] or 0) + 1
+            c.execute("insert into ex_office (ID, EX_NO, EX_NAME, EX_ADDRESS, EX_WORKER_NAME, EX_CHECK_NO, FILIAL) values (?,?,?,?,?,?,?)",
+                      [nid, *args])
+            return nid
+        if key == "EXCH_MGR.EX_ACCOUNTS_ADD":              # ASSUMED: inserts the ex_accounts row (acc numbers from account)
+            CALLS.append((key, list(args)))
+            c = _db()[0]
+            nid = (c.execute("select max(ID) from ex_accounts").fetchone()[0] or 0) + 1
+            _acc_row(c, nid, args)
+            return nid
         if key in _ACC_FN:                               # ASSUMED: the ex_accounts *_ACC_ID of (ex_id, val_id), as text
             r = _run("select * from ex_accounts where EX_ID = :e and VAL_ID = :v", {"e": args[0], "v": args[1]})
             return None if not r or r[0][_ACC_FN[key]] is None else str(r[0][_ACC_FN[key]])
@@ -142,6 +166,9 @@ class EmMixin:
         return NotImplemented
 
     def _em_bool(self, key, args):
+        if key == "EXCH_MGR.CHECK_USERROLE":              # ASSUMED: true for SMART
+            CALLS.append((key, list(args)))
+            return str(args[0]).upper() == "SMART"
         if key == "EXCH_MGR.EX_CALENDAR":
             return _bind(args[0]) in _db()[1]["calendar"]
         return NotImplemented
@@ -160,6 +187,46 @@ class EmMixin:
                                  [n["a_ex_id"], n["a_cust_name"], n["a_cust_lname"], n["a_cust_father"], n["a_cust_passport"], n["a_cust_date"],
                                   n["a_cust_confirm"], n["a_cust_giving_member"], n["a_cust_country"], n["a_country"]])
             return {}
+        c = _db()[0] if key.startswith("EXCH_MGR.") else None
+        if key == "EXCH_MGR.EX_OFFICE_EDIT":                # ASSUMED: updates the ex_office row by ID
+            CALLS.append((key, list(args)))
+            c.execute("update ex_office set EX_NO=?, EX_NAME=?, EX_ADDRESS=?, EX_WORKER_NAME=?, EX_CHECK_NO=?, FILIAL=? where ID=?",
+                      [*args[1:], args[0]])
+            return {}
+        if key in ("EXCH_MGR.EX_OFFICE_DELETE", "EXCH_MGR.EX_ACCOUNTS_DELETE", "EXCH_MGR.VDMRESURSDELETE"):
+            CALLS.append((key, list(args)))
+            t = {"EXCH_MGR.EX_OFFICE_DELETE": "ex_office", "EXCH_MGR.EX_ACCOUNTS_DELETE": "ex_accounts"}.get(key, "ex_resurs")
+            c.execute(f"delete from {t} where ID=?", [args[0]])
+            return {}
+        if key == "EXCH_MGR.EX_ACCOUNTS_EDIT":
+            CALLS.append((key, list(args)))
+            c.execute("delete from ex_accounts where ID=?", [args[0]])
+            _acc_row(c, args[0], args[1:])
+            return {}
+        if key == "EXCH_MGR.EX_ADMIN_IN_ADD":              # (user_id, filial, user_name, ex_no, ex_name)
+            CALLS.append((key, list(args)))
+            nid = (c.execute("select max(ID) from ex_admin_in").fetchone()[0] or 0) + 1
+            c.execute("insert into ex_admin_in (ID, USER_ID, FILIAL, USER_NAME, EX_ID, EX_NAME) values (?,?,?,?,?,?)", [nid, *args])
+            return {}
+        if key == "EXCH_MGR.EX_ADMIN_IN_DEL":              # (user_id, user_name, ex_id, ex_name)
+            CALLS.append((key, list(args)))
+            c.execute("delete from ex_admin_in where USER_ID=? and EX_ID=?", [args[0], args[2]])
+            return {}
+        if key in ("EXCH_MGR.VDMRESURSINSERT", "EXCH_MGR.VDMRETRUNRESURSINSERT"):   # ASSUMED: new uncommitted ex_resurs row
+            a = [_bind(x) for x in args]
+            CALLS.append((key, a))
+            nid = (c.execute("select max(ID) from ex_resurs").fetchone()[0] or 0) + 1
+            if key == "EXCH_MGR.VDMRESURSINSERT":
+                st, nd, ns, ds = 1, a[6], a[9], a[10]
+            else:
+                st, nd, ns, ds = 2, None, 0, a[8]
+            c.execute("insert into ex_resurs (ID, EX_NO, DAT, STATUS, COMMITSTATUS, NEXTSTATUS, NEXTDAY, VAL_ID, VAL_NAME, EX_NAME, AMOUNT, "
+                      "INSUSER, DESCRIPT) values (?,?,?,?,0,?,?,?,?,?,?,?,?)", [nid, a[2], a[5], st, ns, nd, a[0], a[1], a[3], a[4], self.username, ds])
+            return {}
+        if key == "EXCH_MGR.VDMRESURSTRANSACTION":         # ASSUMED: posts the resource -> commitstatus 1
+            CALLS.append((key, list(args)))
+            c.execute("update ex_resurs set COMMITSTATUS=1, COMMITUSER=? where ID=?", [self.username, args[0]])
+            return {}
         if key == "EXCH_MGR.EX_PROVARCH_DELETE":          # ASSUMED: (status, id) -> the row leaves ex_provarch
             CALLS.append((key, list(args)))
             _db()[0].execute("delete from ex_provarch where ID = ?", [args[1]])
@@ -176,7 +243,24 @@ class EmMixin:
         return 1
 
     def _em_execute(self, sql, b):
-        return False
+        m = _RF_UPD.fullmatch(sql)
+        if not m:
+            return False
+        CALLS.append(("UPDATE EX_RATES_FILIAL", {k: _bind(v) for k, v in b.items()}))
+        sets = {k: b[k] for k in re.findall(r"([A-Z_]+) = :", m.group(1))}
+        _db()[0].execute(f"update ex_rates_filial set {', '.join(k + ' = :' + k for k in sets)} where rowid = :rid",
+                         {**sets, "rid": int(b["doa__rowid"])})
+        return True
+
+    def _em_plsql_out(self, sql, b):
+        if not sql.startswith("begin EXCH_MGR.get_ex_office_out_params("):
+            return NotImplemented
+        CALLS.append(("EXCH_MGR.GET_EX_OFFICE_OUT_PARAMS", b.get("v_id")))
+        r = _run("select * from ex_office where ID = :i", {"i": b.get("v_id")})
+        if not r:                                         # ASSUMED: no_data_found
+            raise DBError("ORA-01403: no data found", 1403)
+        o = r[0]
+        return {"p1": o["EX_NO"], "p2": o["EX_NAME"], "p3": o["EX_ADDRESS"], "p4": o["EX_WORKER_NAME"], "p5": o["EX_CHECK_NO"], "p6": o["FILIAL"]}
 
     def _em_commit(self):
         if _DB is not None:
