@@ -397,3 +397,7 @@ from . import em_setup  # noqa: E402
 app.include_router(em_setup.make_router(current, require_module, err))
 from . import em_turnover  # noqa: E402
 app.include_router(em_turnover.make_router(current, require_module, err))
+from . import oldrates, ratedifference, ratedifferencereport  # noqa: E402
+app.include_router(oldrates.make_router(current, require_module, err))
+app.include_router(ratedifference.make_router(current, require_module, err))
+app.include_router(ratedifferencereport.make_router(current, require_module, err))

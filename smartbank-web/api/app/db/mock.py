@@ -48,6 +48,8 @@ from .mock_cp import CpMixin
 from .mock_ex import ExMixin
 from .mock_em import EmMixin
 from . import mock_cards
+from . import mock_rt
+from .mock_rt import RtMixin
 from . import mock_xohks
 from ..config import settings
 
@@ -79,6 +81,7 @@ def reset():
     mock_ex.reset()
     mock_cp.reset()
     mock_em.reset()
+    mock_rt.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -92,7 +95,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -267,7 +270,9 @@ class MockConnection(EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, X
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._em_query(sql, b)  # Packages/ExchangeMGR-NBC (em_sql texts)
+        r = self._rt_query(sql, b)  # Packages/LastRates + RateDifferenceReport (own texts only)
+        if r is NotImplemented:
+            r = self._em_query(sql, b)  # Packages/ExchangeMGR-NBC (em_sql texts)
         if r is NotImplemented:
             r = self._cp_query(sql, b)  # Packages/CurrencyPosition (cp_sql texts / per-user tables)
         if r is NotImplemented:
