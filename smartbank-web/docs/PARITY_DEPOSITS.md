@@ -41,7 +41,7 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Yatırım (miDeposit, N23 Ctrl+D) | NEW_SBCM_TRANSH | SBDM_ApplyMoney_new.bpl | Packages/SBDM_ApplyMoney_new (3 / 1440) | **ported** – api/app/dep_ops.py, deposits_ops.js |
 | Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | **ported** – api/app/dep_ops.py, deposits_ops.js |
 | Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | **ported** – api/app/dep_partial.py, deposits_ops.js (non-functional in production, see section) |
-| Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
+| Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | **ported** – api/app/dep_capitalize.py, deposits_ops.js |
 | Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | **ported** – api/app/dep_untimely.py, deposits_ops.js |
 | Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | **ported** – api/app/dep_prolong.py, deposits_ops.js |
@@ -172,6 +172,19 @@ The production plugin is a viewer only; the web port reproduces that.
 | N1 'Əməliyyata baxmaq' has no OnClick | no context menu |
 
 Unverified: whether VCL greys out Ləğv et / Excel-ə at (DisableIfNoHandler) or lets their OnClick run the right check only – the outcome is the same, nothing happens.
+
+## SBDM_Capitalize_new.bpl (kapitallaşdırma)
+
+| Delphi | Web |
+|---|---|
+| exportproc: DepositInfo (classic `sbcm_stored_programs.Get_ContractAccount`, verbatim), Capitals (`sbcm_capitalization_new`); caption '<no> nömrəli depozitin  kapitallaşdırılması' | `/api/deposits/capitalize/open` |
+| Toolbar Yeni / Ləğv etmək / Excel -ə at / Çıxış; grid №, Tarix, Məbləğ (TRID hidden); 'Müqavilə haqqında' / Müştəri | list modal |
+| ActnAddTr: INSERT_SBCM_CAPITALIZATION, frmAddCapitalize_new (Tarix = Get_BankDate disabled, Məbləğ, Əsas məbləğ / Faiz məbləği accounts and balances); ActnTransUpdate: > 0 | `/capitalize/add/open` |
+| ActnTransExecute: Capitalization(ContractID, HDate, Total, UseTransactions True) outside the try; TrDelayed_Show 'Depozit karitallaşdırılması ...' (typo in the source, kept); CommitWithDrawMoney(DoCommit); OK closes and refreshes Capitals | `/capitalize/run` + `/delayed/finish` |
+| ActnDel (no OnUpdate – enabled on an empty grid): DELETE_SBCM_CAPITALIZATION, 'Silinməsinə əminsinizmi?', DeleteCapitalization(p_capitalizationID), no commit | `/capitalize/delete` |
+| ActnExport (RecordCount > 0): EXCEL_SBCM_CAPITALIZATION, sheet 'Kapitallaşdırma' | `/capitalize/export.xlsx` |
+
+CanAfterRefresh is assigned but never read, so the manager grid is not refreshed on close (kept). Mock assumption: Capitalization moves Total from the accrued interest to the principal (interest account → deposit account posting).
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

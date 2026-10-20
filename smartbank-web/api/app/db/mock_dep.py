@@ -158,6 +158,18 @@ def _ops(key, n, db):
         rows += [(a[2], n["p_CreditAccID"], intr, "Faizin ödənilməsi")] if intr else []
         _delayed(db, rows, _PEND["date"])
         return {}
+    if key == "SBCM_PAYMENT_NEW.CAPITALIZATION":            # assumed: move <Total> of the accrued interest into the principal
+        cid = int(n["ContractID"]); a = accs(cid)
+        cs = db.execute('select sum(facticalinterestdebt) from sbcm_contract_state_new where "id#" = ?', [cid]).fetchone()
+        if float(n["Total"]) > float(cs[0] or 0):
+            raise DBError("ORA-20105: mock: amount exceeds the accrued interest", 20105)
+        _PEND.clear(); _PEND.update(op="capitalize", cid=cid, total=float(n["Total"]), date=d(n["HDate"]))
+        _delayed(db, [(a[2], a[1], float(n["Total"]), "Faizin kapitallaşdırılması")], d(n["HDate"]))
+        return {}
+    if key == "SBCM_PAYMENT_NEW.DELETECAPITALIZATION":
+        if db.execute("delete from sbcm_capitalization_new where id = ?", [int(n["p_capitalizationID"])]).rowcount == 0:
+            raise DBError("ORA-20106: mock: capitalization not found", 20106)
+        return {}
     if key in ("SBCM_CREDIT_TRANCHES_NEW.COMMITDEPOSITMONEY", "SBCM_PAYMENT_NEW.COMMITWITHDRAWMONEY"):
         p = dict(_PEND); _PEND.clear()
         if not n["DoCommit"]:
@@ -167,6 +179,11 @@ def _ops(key, n, db):
             db.execute('insert into sbcm_tranches_new ("id#", ID, HDATE, TOTAL, RESERVE, TRID, DESCRIPTION) values (?,?,?,?,?,?,?)',
                        [p["cid"], nid("sbcm_tranches_new"), p["date"], p["total"], p["pct"], 800000 + nid("sbcm_tranches_new"), None])
             db.execute('update sbcm_contract_state_new set facticaldebt = facticaldebt + ? where "id#" = ?', [p["total"], p["cid"]])
+        elif p.get("op") == "capitalize":
+            db.execute('insert into sbcm_capitalization_new (ID, "id#", HDATE, TOTAL, TRID) values (?,?,?,?,?)',
+                       [nid("sbcm_capitalization_new"), p["cid"], p["date"], p["total"], 830000])
+            db.execute('update sbcm_contract_state_new set facticaldebt = facticaldebt + ?, facticalinterestdebt = facticalinterestdebt - ? '
+                       'where "id#" = ?', [p["total"], p["total"], p["cid"]])
         elif p.get("op") == "untimely":
             db.execute('insert into sbcm_payments_new ("id#", ID, HDATE, FACTICALDEBT, INTERESTDEBT, TRID, INTTRID) values (?,?,?,?,?,?,?)',
                        [p["cid"], nid("sbcm_payments_new"), p["date"], p["main"], p["int"], 820000, 820001])
@@ -205,7 +222,7 @@ def _sqlite(sql: str) -> str:
                lambda m: "sp_" + m.group(1).lower() + "(", sql)
     s = s.replace("sbcm_payment_new.GetOverduePercent_new(", "sp_getoverduepercent_new(")
     s = s.replace("user$", '"user$"')
-    return re.sub(r"\b(sid|id|type)#", r'"\1#"', s)
+    return re.sub(r"\b(sid|id|type)#", lambda m: '"' + m.group(1).lower() + '#"', s, flags=re.I)
 
 
 _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")

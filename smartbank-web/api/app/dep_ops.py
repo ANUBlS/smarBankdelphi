@@ -25,7 +25,8 @@ XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 # kind -> (package, commit procedure, TrDelayed_Show caption = rsTransactionsWillProcessed)
 DELAYED = {"apply": (PKG_TR, "CommitDepositMoney", "Depozit yatrımı ..."),
            "extract": (PKG_PAY, "CommitWithDrawMoney", "Depozitin ödənilməsi ..."),
-           "untimely": (PKG_PAY, "CommitWithDrawMoney", "Depozitin vaxtından əvvəl ödənilməsi ...")}
+           "untimely": (PKG_PAY, "CommitWithDrawMoney", "Depozitin vaxtından əvvəl ödənilməsi ..."),
+           "capitalize": (PKG_PAY, "CommitWithDrawMoney", "Depozit karitallaşdırılması ...")}   # sic (Cyrillic р) in frmAddCapitalizeImpl_new.pas
 # CMExcelExport: visible TFields in field order (field, DisplayName, kind)
 A_EXPORT = [("TOTAL", "Məbləğ", "f"), ("RESERVE", "Faiz", "f"), ("HDATE", "Tarix", "d"), ("DESCRIPTION", "Qeyd", "s")]
 E_EXPORT = [("ID", "№", "f"), ("HDATE", "Tarix", "d"), ("FACTICALDEBT", "Əsas məbləğdən", "f"), ("INTERESTDEBT", "Faiz məbləğindən", "f")]

@@ -280,3 +280,27 @@ PP_SQL_PERCENTACCS = text(['select ',
     "where name = 'Percent'))",
     'and id in(select INTERESTACCID from sbcm_contract_accounts_new where id#=:contractid)',
     ''])
+
+
+# ------------------------------------------------------------------ SBDM_Capitalize_new (frmCapitalizeImpl_new.dfm)
+# Capitals (dfm:233-238)
+K_SQL_CAPITALS = text(['',
+    'SELECT ID,  hdate, total, trid',
+    '  FROM sbcm_capitalization_new',
+    '  where ID# = :ContractID'])
+# DepositInfo (dfm:265-285)
+K_SQL_DEPOSITINFO = text(['select cont.contractno,',
+    '       cust.name,',
+    '       cstate.facticaldebt,',
+    '       cstate.facticalinterestdebt,',
+    '       sbcm_stored_programs.Get_ContractAccount(acc.ContractAccID) as ContractAccNo,',
+    '      sbcm_stored_programs.Get_ContractAccount(acc.InterestAccID) as InterestAccNo',
+    'from sbcm_contracts_new cont,',
+    '     customers cust,',
+    '     sbcm_contract_accounts_new acc,',
+    '     sbcm_contract_state_new cstate',
+    'where',
+    '    cont.id = :ContractID and',
+    '    cust.id = cont.customerID and',
+    '    acc.id# = :ContractID and',
+    '    cstate.id# = :ContractID '])

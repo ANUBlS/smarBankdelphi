@@ -52,12 +52,12 @@
       let o; try { o = await api(cfg.url + '/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
       const f = { o, refresh: false, cur: o[cfg.rows][0]?.id ?? null };
       D().modal('<div class="opBody"></div>', (m, close) => {
-        let exit = () => { close(); if (f.refresh) D().reloadMain(false); };     // FormClose: RefreshWithSavely when an op was OK
+        let exit = () => { close(); if (f.refresh && !cfg.noRefresh) D().reloadMain(false); };   // capitalize: CanAfterRefresh is never read     // FormClose: RefreshWithSavely when an op was OK
         const draw = () => {
-          const rows = f.o[cfg.rows], empty = !rows.length, dis = cfg.delNeedsRows && empty ? 'disabled' : '';
+          const rows = f.o[cfg.rows], empty = !rows.length, dis = cfg.delNeedsRows && empty ? 'disabled' : '', xdis = (cfg.xlsNeedsRows ?? cfg.delNeedsRows) && empty ? 'disabled' : '';
           m.querySelector('.opBody').innerHTML = `<h3>${esc(K(cfg.caption, { no: sel.no }))}</h3>
             <div class="toolbar" style="gap:8px"><button class="btn" data-a="new">${esc(K('o_new'))}</button><button class="btn secondary" data-a="del" ${dis}>${esc(K(cfg.delLabel))}</button>
-              <button class="btn secondary" data-a="xls" ${dis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
+              <button class="btn secondary" data-a="xls" ${xdis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
             <fieldset class="dgrp" style="margin:8px 0"><legend>${esc(K(cfg.group))}</legend>${cfg.group === 'o_about' ? esc(K('o_customer')) + ': ' : ''}<b>${esc(f.o.info.name ?? '')}</b></fieldset>
             <div class="tablewrap" style="max-height:45vh"><table class="grid"><thead><tr>${cfg.cols.map(c => `<th style="${c[2] === 'm' ? 'text-align:right' : ''}">${esc(c[1].startsWith('o_') ? K(c[1]) : c[1])}</th>`).join('')}</tr></thead>
             <tbody>${rows.map(x => `<tr data-id="${x.id}" class="${x.id === f.cur ? 'sel' : ''}">${cfg.cols.map(c => `<td style="${c[2] === 'm' ? 'text-align:right' : ''}">${esc(c[2] === 'm' ? money(x[c[0]]) : c[2] === 'd' ? dt(x[c[0]]) : (x[c[0]] ?? ''))}</td>`).join('')}</tr>`).join('')
@@ -150,7 +150,7 @@
         const dis = o.rows.length ? '' : 'disabled';                                   // ActnDelUpdate / ActnExportUpdate
         m.querySelector('.opBody').innerHTML = `<h3>${esc(K('m_prolongation'))} · ${esc(sel.no)}</h3>
           <div class="toolbar" style="gap:8px"><button class="btn" data-a="new">${esc(K('p_add'))}</button><button class="btn secondary" data-a="del" ${dis} title="${esc(K('p_del_last'))}">${esc(K('o_delete'))}</button>
-            <button class="btn secondary" data-a="xls" ${dis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
+            <button class="btn secondary" data-a="xls" ${xdis}>${esc(K('o_excel'))}</button><button class="btn secondary" data-a="exit">${esc(K('o_exit'))}</button></div>
           <div class="tablewrap" style="max-height:45vh;margin-top:8px"><table class="grid"><thead><tr><th>№</th><th>${esc(K('o_date'))}</th><th>${esc(K('p_old'))}</th><th>${esc(K('p_new'))}</th></tr></thead>
           <tbody>${o.rows.map(x => `<tr data-id="${x.id}"><td>${x.id}</td><td>${esc(dt(x.hdate))}</td><td>${esc(dt(x.olddate))}</td><td>${esc(dt(x.newdate))}</td></tr>`).join('')
             || `<tr><td colspan="4" class="muted">${esc(K('empty_ops'))}</td></tr>`}</tbody></table></div>`;
@@ -321,6 +321,37 @@
     }, 'dep-sub dep-contract dc-wide');
   }
 
+  // ---------------------------------------------------------------- frmAddCapitalize_new
+  async function addCap(f, body, after) {
+    let a; try { a = await api('/api/deposits/capitalize/add/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    const ro = (v) => `<input class="ro" readonly value="${esc(v ?? '')}">`;
+    D().modal(`<h3>${esc(K('m_capitalize'))}</h3><div id="kaErr"></div><div class="dc-form">
+      <div class="dc-row"><label>${esc(K('o_date'))}</label><input type="date" disabled value="${esc(a.date)}"></div>
+      <div class="dc-row"><label>${esc(K('o_total'))}</label><input id="kaSum" inputmode="decimal" value="${esc(a.total)}"></div></div>
+      <div class="dc-cols" style="margin-top:8px"><fieldset class="dgrp"><legend>${esc(K('o_g_main'))}</legend><div class="dc-form">
+        <div class="dc-row"><label>${esc(K('o_accno'))}</label>${ro(a.info.contractaccno)}</div><div class="dc-row"><label>${esc(K('o_rest'))}</label>${ro(money(a.info.facticaldebt))}</div></div></fieldset>
+      <fieldset class="dgrp"><legend>${esc(K('o_g_int'))}</legend><div class="dc-form">
+        <div class="dc-row"><label>${esc(K('o_accno'))}</label>${ro(a.info.interestaccno)}</div><div class="dc-row"><label>${esc(K('o_rest'))}</label>${ro(money(a.info.facticalinterestdebt))}</div></div></fieldset></div>
+      <div class="actions"><button class="btn" id="kaOk" disabled>${esc(K('o_accept'))}</button><button class="btn secondary" id="kaNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      const upd = () => { q('#kaOk').disabled = !(numIn(q('#kaSum').value) > 0); };    // ActnTransUpdate
+      q('#kaSum').oninput = upd;
+      q('#kaNo').onclick = close;
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } });
+      q('#kaOk').onclick = async () => {
+        q('#kaErr').innerHTML = '';
+        try {
+          const r = await api('/api/deposits/capitalize/run', { method: 'POST', body: { contract_id: body.contract_id, total: numIn(q('#kaSum').value) } });
+          if (await delayed(r)) { close(); await after(); }               // mrOk -> Capitals.Refresh
+        } catch (e) { q('#kaErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }
+      };
+      q('#kaSum').focus(); q('#kaSum').select();
+    }, 'dep-sub dep-contract dc-wide');
+  }
+  const CAPITALIZE = { url: '/api/deposits/capitalize', rows: 'rows', caption: 'k_caption', group: 'o_about', delLabel: 'o_cancel_op', delRight: 'DELETE_SBCM_CAPITALIZATION',
+    delNeedsRows: false, xlsNeedsRows: true, xls: 'Kapitallasdirma.xlsx', add: addCap, noRefresh: true,
+    cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm']] };
+
   const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
     delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
     cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
@@ -335,5 +366,6 @@
   window.SB.depForms.shedule = (sel) => sel ? sheduleForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.untimely = (sel) => sel ? untimelyForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.partial_payment = (sel) => sel ? partialForm(sel) : toast(K('err_no_deposit'), 'error');
+  window.SB.depForms.capitalize = needSel(CAPITALIZE);
   window.SB.depForms.prolongation = (sel) => sel ? prolongForm(sel) : toast(K('err_no_deposit'), 'error');
 })();
