@@ -193,6 +193,7 @@
       <div id="kGrid" style="margin-top:8px;max-height:45vh;overflow:auto"></div>
       <fieldset class="cd-g" style="margin-top:6px"><legend>${esc(T('overall'))}</legend><input id="kAA" readonly style="width:160px;text-align:right"> <input id="kAP" readonly style="width:160px;text-align:right"></fieldset>`, (m, close) => {
       const q = (id) => m.querySelector('#' + id);
+      m.style.width = 'min(1250px, 96vw)'; m.style.maxWidth = '96vw';
       const label = () => { q('kLabel').textContent = C.label; q('kLabel').style.color = C.color; };
       const afterPost = () => {                                                         // ODSCheckingAfterPost :231-256
         const s = rows.reduce((a, r) => a + (+r.calclimit || 0), 0);
