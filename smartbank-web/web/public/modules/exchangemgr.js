@@ -59,7 +59,9 @@
           return `<div class="toolbar">${sysd()}${btn('tRef', 'refresh')}<span class="em-dd">${btn('tAdd', 'add')}<span class="em-menu" id="tMenu" hidden><button data-op="purchase">${esc(T('m_purchase'))}</button><button data-op="selling">${esc(T('m_selling'))}</button></span></span>${btn('tConf', 'confirm', !r || r.trans_close !== 0)}${btn('tDel', 'delete')}${btn('tPrint', 'print', !r || r.trans_close !== 1)}${btn('tOst', 'remainders')}
             <fieldset class="cd-g"><legend>Filter</legend>${['f_purchase', 'f_selling', 'f_all'].map((k, i) => `<label><input type="radio" name="emF" value="${i}" ${S.filter === i ? 'checked' : ''}> ${esc(T(k))}</label>`).join(' ')}</fieldset></div>
             <div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gTrans', G.trans, tr, S.curT, true)}
-            <div class="toolbar"><span>${esc(T('l_fee_total'))}</span><input readonly value="${esc(fN(S.sum_fee, 2))}" style="width:140px;text-align:right"></div>`; }
+            <div class="toolbar em-search"><b>${esc(T('src_title'))}</b>${[['srA', 'src_amount'], ['srE', 'src_ekv'], ['srF', 'src_fee'], ['srC', 'src_course']].map(([id, k]) =>
+              `<label>${esc(T(k))}<input id="${id}" style="width:90px"></label>`).join('')}
+              <span>${esc(T('l_fee_total'))}</span><input readonly value="${esc(fN(S.sum_fee, 2))}" style="width:140px;text-align:right"></div>`; }
         case 3: return `<div class="toolbar"><input type="date" disabled value="${esc(S.rateDate)}"></div>${grid('gRate', G.rate, S.rates, -1)}`;
         case 4: return `<div class="toolbar">${esc(T('l_date'))} <input type="date" disabled value="${esc(S.filialDate)}"> <span>Filial</span>
             <select id="fKey">${S.rfilial.map(f => `<option value="${f.id}" ${f.id === S.filialKey ? 'selected' : ''}>${esc(f.name)}</option>`).join('')}</select>
@@ -67,7 +69,7 @@
               .map(([id, k, ic, dis]) => `<button class="btn secondary" id="${id}" title="${esc(T(k))}" ${dis ? 'disabled' : ''}>${ic}</button>`).join('')}</span>${btn('fXls', 'excel')}</div>
             ${rfGrid()}`;
         case 5: return `<div class="toolbar"><input type="date" disabled value="${esc(d10(S.dat))}"></div><div class="em-office">${esc(office() ? office().ex_name : '')}</div>${grid('gRemain', G.remain, S.remainder, -1)}`;
-        case 6: return `<p>${esc(T('turnover_next'))}</p>`;
+        case 6: return window.SB.emTurnover.html(S);                                  // chunk 4 (exchangemgr_turnover.js)
       }
       return '';
     }
@@ -115,6 +117,15 @@
       // Əməliyyatlar toolbar (chunk 2): ToolBtnAddTrans DropdownMenu = PopupMenu (Purchase / Selling; ExchangeCurrency Visible = False)
       on('tAdd', (e) => { e.stopPropagation(); const mn = q('tMenu'); mn.hidden = !mn.hidden; });
       b.querySelectorAll('#tMenu [data-op]').forEach(x => x.onclick = () => { q('tMenu').hidden = true; window.SB.emOps.opDialog(x.dataset.op, ctx); });
+      // PanelSearch Edit_Src_*Change2 (:1389-1445): ODSExchProvarch.Locate(field, Text, [loCaseInsensitive, loPartialKey]) on the
+      // filtered dataset; OnExit clears the edit
+      [['srA', 'debitamount'], ['srE', 'lamount'], ['srF', 'fee_amount'], ['srC', 'op_course']].forEach(([id, f]) => { const x = q(id); if (!x) return;
+        x.oninput = () => { const v = x.value.toLowerCase(); if (v === '') return;
+          const i = trans().findIndex(r => r[f] !== null && r[f] !== undefined && (String(r[f]).toLowerCase().startsWith(v) || fN(r[f]).toLowerCase().startsWith(v)));
+          if (i >= 0 && i !== S.curT) { S.curT = i; b.querySelectorAll('#gTrans tr[data-i]').forEach(tr => tr.classList.toggle('sel', +tr.dataset.i === i));
+            const r = trans()[i]; q('tConf').disabled = !r || r.trans_close !== 0; q('tPrint').disabled = !r || r.trans_close !== 1; } };
+        x.onblur = () => { x.value = ''; }; });
+      if (S.tab === 6) window.SB.emTurnover.bind(b, S, draw);
       on('tConf', () => window.SB.emOps.confirmTrans(ctx, trans()[S.curT]));          // ToolButton27Click
       on('tDel', () => window.SB.emOps.deleteTrans(ctx, trans()[S.curT]));           // ToolButton6Click2
     }

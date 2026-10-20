@@ -41,6 +41,7 @@ def _db():
         D = json.load(open(os.path.join(settings.mock_fixtures, "exchangemgr.json"), encoding="utf-8"))
         c = sqlite3.connect(":memory:", check_same_thread=False)
         c.create_function("decode", -1, _decode)
+        c.create_function("nvl", 2, lambda a, b: b if a is None else a)
         acc_list = D.get("exchangemgr_access", [])           # ASSUMED SB_ACA.checkmodaccess_int: 1 for these users
         c.create_function("checkmodaccess_int", 2, lambda m, n: 1 if str(n).upper() in acc_list else 0)
         for t, rows in D.items():
@@ -89,6 +90,24 @@ _ALL = {getattr(Q, n) for n in dir(Q) if n.startswith("DM_")} - {Q.DM_ODSSysdat}
 # avalute, account ...) are shared with other modules, so they are only answered as a last resort
 _OWN = {q for q in _ALL if any(t in q.lower() for t in ("ex_", "operkurs", "from dual"))}
 _LATE = _ALL - _OWN
+# texts that Delphi edits at run time (SQL[n] := ...) or that EXCH_MGR.Get_Turn_Over_Str* build: matched by their head
+_PREFIX = tuple(t[:60] for t in (Q.DM_ODSTraffics, Q.DM_ODSDel_ExProvarch, Q.DM_Amountsum, Q.DM_ODSReporting, Q.DM_ODSReestrReport))
+
+
+def _turn_over_sql(base, args):
+    """ASSUMED EXCH_MGR.Get_Turn_Over_Str / Get_Turn_Over_StrDel (beg, end, val_id, status, ex_no): the dm text with the date
+    range of the arguments and 'and p.<col>=N' filters for the values > -1 / status > 0 (the package source is not in the repo)."""
+    beg, end, val_id, status, ex_no = args
+    s = re.sub(r"'24-Nov-2006' and '28-Nov-2006'", f"'{_bind(beg)}' and '{_bind(end)}'", base).rstrip()
+    if status and status > 0:
+        s += f" and p.status={int(status)}"
+    if val_id is not None and val_id > -1:
+        s += f" and p.val_id={int(val_id)}"
+    if ex_no is not None and ex_no > -1:
+        s += f" and p.ex_id={int(ex_no)}"
+    return s
+
+
 _RF_UPD = re.compile(r"update EX_RATES_FILIAL set ((?:[A-Z_]+ = :[A-Z_]+(?:, )?)+) where rowid = :doa__rowid")
 _ACC_FN = {"EXCH_MGR.GET_PURCHASE_NO": "PURCHASE_ACC_ID", "EXCH_MGR.GET_SELLING_NO": "SELLING_ACC_ID",
            "EXCH_MGR.GET_CASH_ACC_NO": "CASH_ACC_ID", "EXCH_MGR.GET_PUR_ACC_NO": "PUR_ACC_ID"}
@@ -107,7 +126,7 @@ class EmMixin:
         if sql == Q.DM_ODSSysdat:
             s = _db()[1]["sysdate"]
             return [{"SSDAT": dt.datetime.fromisoformat(s["date"]), "STIME": s["time"]}]
-        if sql in _OWN or sql.startswith(Q.DM_ODSRatesFilial.split("\n")[0] + "\n"):
+        if sql in _OWN or sql.startswith(Q.DM_ODSRatesFilial.split("\n")[0] + "\n") or sql.startswith(_PREFIX):
             return _run(sql, b)
         return NotImplemented
 
@@ -132,6 +151,9 @@ class EmMixin:
             return 11
         if key == "EXCH_MGR.ROUNDNEW":                    # ASSUMED: half-up to 2 decimals
             return float(Decimal(repr(float(args[0]))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+        if key in ("EXCH_MGR.GET_TURN_OVER_STR", "EXCH_MGR.GET_TURN_OVER_STRDEL"):
+            CALLS.append((key, [_bind(a) for a in args]))
+            return _turn_over_sql(Q.DM_ODSTraffics if key.endswith("_STR") else Q.DM_ODSDel_ExProvarch, args)
         if key == "EXCH_MGR.EX_OFFICE_ADD":                # ASSUMED: inserts the ex_office row, returns its id
             CALLS.append((key, list(args)))
             c = _db()[0]

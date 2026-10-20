@@ -395,3 +395,5 @@ from . import em_trans  # noqa: E402
 app.include_router(em_trans.make_router(current, require_module, err))
 from . import em_setup  # noqa: E402
 app.include_router(em_setup.make_router(current, require_module, err))
+from . import em_turnover  # noqa: E402
+app.include_router(em_turnover.make_router(current, require_module, err))
