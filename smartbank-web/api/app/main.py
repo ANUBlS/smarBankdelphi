@@ -348,3 +348,7 @@ from . import cards_sett2  # noqa: E402
 app.include_router(cards_sett2.make_router(current, require_module, err))
 from . import cards_cfile  # noqa: E402
 app.include_router(cards_cfile.make_router(current, require_module, err))
+from . import cards_caddi  # noqa: E402
+app.include_router(cards_caddi.make_router(current, require_module, err))
+from . import cards_fileops  # noqa: E402
+app.include_router(cards_fileops.make_router(current, require_module, err))

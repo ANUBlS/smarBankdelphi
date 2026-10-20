@@ -96,6 +96,7 @@ def tokenize(src, line0=1):
     return toks
 
 
+LOOP_LIMIT = 500_000
 KW = {"begin", "end", "if", "then", "else", "for", "to", "downto", "do", "while", "repeat", "until", "case", "of", "try",
       "finally", "except", "on", "with", "and", "or", "not", "div", "mod", "xor", "var", "procedure", "function", "in",
       "raise", "const"}
@@ -914,7 +915,11 @@ class Interp:
                     break
             return
         if k == "while":
+            n = 0
             while self.ev(s[1]):
+                n += 1
+                if n > LOOP_LIMIT:              # e.g. a read loop waiting for a 'Total' line past Eof: Delphi hangs (Not Responding)
+                    raise PascalError(f"loop at line {s[3]} did not end after {LOOP_LIMIT} passes (the Delphi client would hang here)")
                 try:
                     self.run(s[2])
                 except _Continue:

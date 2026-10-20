@@ -15,7 +15,7 @@ from .base import DBError, dedupe
 
 _DB = None
 _PATS = None
-DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE", "OP_DATE"}
+DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE", "OP_DATE", "BEGDAT"}
 
 
 def reset():
@@ -97,7 +97,7 @@ def _pats():
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
-                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2", "LINES_CADDI"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
@@ -117,6 +117,36 @@ DONE = {"CARD_MAIN." + n.upper() for n in ("donenewcard", "donesupcard", "donepr
                                            "DONESECURE", "cardnamechange")}
 
 
+# file operation forms (cards_fileops): procedure -> (table, argument columns) / table
+FO_INSERT = {"insert_dxxx": ("card_dxxxfiles", ["INSTITUTION", "CURRENCY", "TRANDATE", "MERCHANT", "AMOUNT", "FEE", "TERMINAL", "TYPES", "TR_TYPE",
+                                                "FILENAME", "BANK_KODE", "MERCH_NAME", "AUTH_CODE"]),
+             "insert_sms_messages": ("card_smsfiles", ["TERMINALNAME", "CARDNUMBER", "TERMINAL", "AUTH_CODE", "AMOUNT_TR", "TRANDATE", "CURRENCY",
+                                                      "POST_DATE", "AMOUNTSET", "FILENAME"]),
+             "insert_intretail": ("card_intretalifiles", ["CHANELL", "TR_TYPE", "OUTWORDSTATUS", "TR_CURRENCY", "ACC_CURRENCY", "MERCHANT", "CARDNUMBER",
+                                                         "TR_DATE", "AUTH", "TR_AMOUNT", "ACC_AMOUNT", "FEE", "CLEAR_AMOUNT", "TERMINAL", "FILENAME"]),
+             "insert_rvisa": ("card_rvisafiles", ["REPORTING_FOR", "REPORTING_CODE", "REPORTING_DATE", "ROLLUP_TO", "ROLLUP_TO_CODE", "PROC_DATE",
+                                                  "FUNDS_XFER_ENTITY", "FUNDS_XFER_CODE", "SETTLEMENT_CURRENCY", "INTERCHANGE_TOTAL_AMMOUNT",
+                                                  "INTERCHANGE_ISDEBET", "REIMBURSEMENT_FEES_AMOUNT", "REIMBURSEMENT_FEES_ISDEBET", "VISA_CHARGES_AMMOUNT",
+                                                  "VISA_CHARGES_ISDEBET", "SETTLEMENT_AMOUNT", "SETTLEMENT_AMOUNT_ISDEBET", "FILENAME"]),
+             # insert_dfiles: 25 fixed-width fields + currency + file + 1; named where UnitDfile's commented preview names them (:483-490)
+             "insert_dfiles": ("card_dfiles", ["F1", "F2", "F3", "F4", "F5", "BANKNAME", "F7", "LOROACCOUNT", "F9", "F10", "PAYMENTORDERAMMOUNT",
+                                               "PAYMENTDIRECTION", "F13", "F14", "F15", "F16", "F17", "SOURCECONTRACT", "TRANSACTIONDATE",
+                                               "TRANSACTIONTIME", "F21", "F22", "F23", "F24", "F25", "CURRENCY", "FILENAME", "F28"])}
+FO_DELETE = {"delete_dxxx": "card_dxxxfiles", "empty_sms_messages": "card_smsfiles", "empty_intretail": "card_intretalifiles",
+             "delete_dfiles": "card_dfiles", "rvisa_delete": "card_rvisafiles"}
+FO_TRANS = {"transaction_dxxx": "card_dxxxfiles", "transaction_sms": "card_smsfiles", "transaction_int": "card_intretalifiles",
+            "transaction_d": "card_dfiles"}
+FO_NOOP = {"dxxarxiv", "smsarxiv", "intarxiv", "darxiv"}
+
+
+def _num(v):
+    """Oracle's implicit VARCHAR2 -> NUMBER conversion for a NUMBER column bound with a string."""
+    try:
+        return int(str(v).strip())
+    except ValueError:
+        return v
+
+
 class CardsMixin:
     def _cards_query(self, sql, b):
         if sql.startswith(Q.text(Q.LINES_MESSAGES)) and "ORDER BY" in sql[len(Q.text(Q.LINES_MESSAGES)):]:
@@ -126,6 +156,10 @@ class CardsMixin:
             raise DBError("ORA-00933: SQL command not properly ended", 933)
         if not any(p.match(sql) for p in _pats()):
             return NotImplemented
+        if sql.startswith(Q.text(Q.LINES_CADDI)) and sql.count("ORDER BY") > 1:
+            raise DBError("ORA-00933: SQL command not properly ended", 933)       # cfile_addi DBGrid1TitleClick: the lines accumulate
+        if "trunc(sysdate)" in sql:
+            sql = sql.replace("trunc(sysdate)", "'" + dt.datetime.combine(dt.date.today(), dt.time()).isoformat() + "'")
         if sql.startswith(Q.text(Q.LINES_DOMESTIC)):
             # domesticbank.pas TitleClick on the three acc_no columns: 'ORDER BY ACC_NO' is ambiguous, ACC_NO_1 / _2 are only DOA field names
             m = re.search(r"ORDER BY (ACC_NO(?:_\d)?)\r\n", sql[len(Q.text(Q.LINES_DOMESTIC)):])
@@ -158,7 +192,10 @@ class CardsMixin:
             o = {}
             for k, v in zip(names, r):
                 if (k in DATE_COLS or (k == "BIRTHDAY" and re.match(r"\d{4}-\d\d-\d\dT", str(v)))) and isinstance(v, str):
-                    v = dt.datetime.fromisoformat(v)
+                    try:
+                        v = dt.datetime.fromisoformat(v)
+                    except ValueError:
+                        pass                                                   # a VARCHAR2 date column (e.g. card_dxxxfiles.TRANDATE)
                 o[k] = v
             out.append(o)
         return out
@@ -216,6 +253,9 @@ class CardsMixin:
             _db().execute("update card_client_app set STATUS = 1 where id = ?", [int(args[0])])
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
+        r = self._fo_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
         r = self._sett_proc(key, list(args))
         if r is not NotImplemented:
             return r
@@ -224,6 +264,35 @@ class CardsMixin:
             _db().execute("delete from card_client_app where id = ?", [int(args[0])])
             return {}
         return NotImplemented
+
+    def _fo_proc(self, key, a):
+        """File operation forms (cards_fileops): card_main bodies not in the repo. delete_<x> drops the not yet posted rows (status 1),
+        insert_<x> adds one status-1 row with the arguments in FO_INSERT order, <x>arxiv is a no-op, transaction_<x> sets STATUS 2."""
+        db = _db()
+        k = key.split(".", 1)[-1].lower()
+        if k in FO_INSERT:
+            t, cols = FO_INSERT[k]
+            nid = (db.execute(f"select max(id) from {t}").fetchone()[0] or 0) + 1
+            rec = dict(zip(cols, a), ID=nid, STATUS=1)
+            have = {r[1].upper() for r in db.execute(f"pragma table_info({t})")}
+            for col in rec:
+                if col.upper() not in have:
+                    db.execute(f"alter table {t} add column {col}")              # the real DDL is not in the repo
+            db.execute(f"insert into {t} ({', '.join(rec)}) values ({', '.join('?' * len(rec))})",
+                       [v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v for v in rec.values()])
+        elif k in FO_DELETE:
+            db.execute(f"delete from {FO_DELETE[k]}" + ("" if k == "rvisa_delete" else " where status = 1"))
+        elif k in FO_TRANS:
+            if a:
+                db.execute(f"update {FO_TRANS[k]} set STATUS = 2 where id = ?", [int(a[0])])
+            else:                                                              # transaction_d: no argument, every loaded row
+                db.execute(f"update {FO_TRANS[k]} set STATUS = 2 where status in (1, 3)")
+        elif k in FO_NOOP:
+            pass
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
 
     def _sett_proc(self, key, a):
         """Sazlama sub forms (cards_sett2): the card_main bodies are not in the repo; emulated as one insert / delete on the table the
@@ -237,6 +306,14 @@ class CardsMixin:
         ins = lambda t, r: db.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))  # noqa: E731
         if key in ("CARD_MAIN.DELETE_TRANCACTION_C", "CARD_MAIN.CARXIV"):
             pass                                                               # bodies not in the repo: no-op (recorded)
+        elif key == "CARD_MAIN.MULTI_DEL":                                    # cfile_addi Button1Click: body not in the repo
+            db.execute("delete from card_messages_c_additional where docid = ? and status = 1", [_num(a[0])])
+        elif key == "CARD_MAIN.MULTI_INS":
+            ins("card_messages_c_additional", dict(ID=nid("card_messages_c_additional"), DOCID=_num(a[0]), AMMOUNT=float(str(a[1]).replace(",", ".") or 0),
+                                                   VALUTE=a[2], CURRENCYNAME=one("select val_name from avalute_t where valute = ?", [a[2]]),
+                                                   STATUS=1, BEGDAT=dt.datetime.combine(dt.date.today(), dt.time()).isoformat()))
+        elif key == "CARD_MAIN.TRANSACTION_MULTI":
+            db.execute("update card_messages_c_additional set STATUS = 2, TRANID = id + 9000 where id = ?", [int(a[0])])
         elif key == "CARD_MAIN.TRANSACTION_C":
             db.execute("update card_messages_c set STATUS = 2 where id = ?", [int(a[0])])   # posted -> messages2 (status 2)
         elif key == "CARD_MAIN.NEW_CARTTYPE":

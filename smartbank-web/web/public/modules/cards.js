@@ -33,6 +33,9 @@
       if (i === 'k1') return ufx(el.querySelector('#cbody'));
       if (i === 'payment') return payment(el.querySelector('#cbody'));
       if (i === 'cfile') return window.SBCardsFiles.cfile(el.querySelector('#cbody'));   // cards_files.js (step 4)
+      if (window.SBCardsFiles.FO[i]) return window.SBCardsFiles.fileop(el.querySelector('#cbody'), i);
+      if (window.SBCardsFiles.OTHER && window.SBCardsFiles.OTHER[i]) return window.SBCardsFiles.OTHER[i](el.querySelector('#cbody'));
+      if (i === 'rez') return toast(K('on_hold'));                                       // Möhkəməndirmə (FileReport.bpl 'REZ'): on hold by user
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
