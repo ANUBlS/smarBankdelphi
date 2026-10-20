@@ -94,7 +94,9 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._xs_func(key, args)
+        r = self._dep_func(key, named)            # NewDepositsManager plugins (dm_contract, ...)
+        if r is NotImplemented:
+            r = self._xs_func(key, args)
         if r is NotImplemented:
             r = self._azi_func(key, args)
         if r is NotImplemented:
@@ -370,10 +372,12 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._dep_commit()
         self._cr_commit()
         self._xs_commit()
 
     def rollback(self):
+        self._dep_rollback()
         self._cr_rollback()
         self._xs_rollback()
 

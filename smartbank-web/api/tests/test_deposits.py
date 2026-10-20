@@ -93,8 +93,9 @@ def test_calc_toggle():
 
 def test_plugins_not_migrated_and_unknown_key():
     c = cl()
-    r = c.post("/api/deposits/plugin/contract_insert").json()
-    assert r["migrated"] is False and r["bpl"] == "NewDepositsContract.bpl"
+    r = c.post("/api/deposits/plugin/wreport").json()                # Müqavilə çapı: on hold
+    assert r["migrated"] is False and r["bpl"] == "NewDepositsWReport.bpl"
+    assert c.post("/api/deposits/plugin/contract_insert").json()["migrated"] is True
     assert c.post("/api/deposits/plugin/nope").status_code == 404
 
 

@@ -52,6 +52,11 @@
   }
 
   async function plugin(el, key) {
+    const form = (window.SB.depForms || {})[key];
+    if (form) {                                    // ported BPL form: it runs the handler's right check itself
+      const cur = st.rows.find(x => x.id === st.cur);
+      return form(cur ? { id: cur.id, no: cur.contractno } : null, el);
+    }
     try {
       const r = await api('/api/deposits/plugin/' + key, { method: 'POST' });
       if (!r.migrated) toast(K('not_migrated', { bpl: r.bpl + (r.param ? ' (' + r.param + ')' : '') }), 'info');
@@ -200,7 +205,29 @@
     load(el);
   }
 
+  // Shared helpers of the ported plugin forms (deposits_*.js)
+  window.SB.dep = {
+    errText, K,
+    errHtmlInner: (e) => esc(e.key ? t(e.key, e) : String(e)) + (e.ora ? `<span class="ora">${esc(e.ora)}</span>` : ''),
+    modal(html, onMount, cls) {                    // stacked modal (the BPL forms are modal over the manager)
+      const d = document.createElement('div'); d.className = 'backdrop stacked';
+      d.innerHTML = `<div class="modal ${cls || ''}" role="dialog">${html}</div>`; document.body.appendChild(d);
+      const close = () => d.remove(); onMount && onMount(d.querySelector('.modal'), close); return close;
+    },
+    reloadMain(clearSel) {                         // RefreshWithSavely(True, rmMoveRecNoAfterRefresh)
+      if (!st.el) return;
+      const i = Math.max(0, st.rows.findIndex(x => x.id === st.cur));
+      api('/api/deposits/list', { method: 'POST', body: body() }).then(r => {
+        st.rows = r.rows; st.lastFilter = r.filter;
+        const j = Math.min(i, st.rows.length - 1); st.cur = j >= 0 ? st.rows[j].id : null;
+        st.sel = clearSel ? new Set() : new Set(st.cur != null ? [st.cur] : []); grid(st.el);
+      }).catch(e => toast(errText(e), 'error'));
+    },
+    current: () => st.rows.find(x => x.id === st.cur) || null,
+  };
+
   window.SB.pages['/m/newdepositsmanager'] = async (el) => {
+    st.el = el;
     el.innerHTML = '<div class="spinner"></div>';
     try { st.init = await api('/api/deposits/init'); } catch (e) { el.innerHTML = `<div class="card"><div class="alert error">${esc(errText(e))}</div></div>`; return; }
     Object.assign(st, { rows: [], cur: null, sel: new Set(), order: null, desc: false, filtered: false, showFilter: false, showSearch: false });

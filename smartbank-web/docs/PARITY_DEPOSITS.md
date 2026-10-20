@@ -36,7 +36,7 @@ All of these are called via `LoadPlugin(bpl, param)` (NewCommonDeclsImpl.pas:31-
 
 | Menu | BPL / param | Delphi folder (units / lines) | Status |
 |---|---|---|---|
-| Yeni / Redaktə / dbl-click | NewDepositsContract.bpl InsertContract / EditContract / LookContract | NewDepositsContract (6 / 1550) | **next** |
+| Yeni / Redaktə / dbl-click | NewDepositsContract.bpl InsertContract / EditContract / LookContract | NewDepositsContract (6 / 1550) | **ported** (see below) |
 | Yatırım | NewDepositsApplyMoney.bpl | NewDepositsApplyMoney (6 / 1367) | todo |
 | Əmanətin ödənilməsi | NewDepositsExtractMoney.bpl | NewDepositsExtractMoney (3 / 548) | todo |
 | Kapitallaşdırma (toolbar) | NewDepositsCapitalize.bpl | NewDepositsCapitalize (2 / 362) | todo |
@@ -52,6 +52,42 @@ All of these are called via `LoadPlugin(bpl, param)` (NewCommonDeclsImpl.pas:31-
 | Settings: percent / balance | NewDepositsPercentSettings.bpl, NewDepositsBalanceSettings.bpl | (7 / 1439), (1 / 96) | todo |
 | Reports: Mis / Kontrol / Loqlar | NewDepositsReport.bpl, NewDepositsControl.bpl, NewDepositsLogs.bpl | (2 / 397), (1 / 117), (2 / 255) | on hold (reports) |
 | Archive module | NewDepositsArchive (separate CLSID {D24ECADF-…}) | (3 / 1228) | todo |
+
+## NewDepositsContract.bpl (new / edit / view contract)
+
+API `api/app/dep_contract.py` (`/api/deposits/contract/*`), SQL `dep_contract_sql.py`, UI `web/public/modules/deposits_contract.js`,
+tests `api/tests/test_dep_contract.py` (14), E2E `e2e/dep_contract_screens.py`, screenshots 250–254.
+
+| Delphi | Web | Ref |
+|---|---|---|
+| exportproc InsertContract / EditContract / LookContract | `POST /open {mode}`; Edit checks DM_CONTRACTUPDATE, Look DM_CONTRACTLOOK first (manager handlers) | F:634-688 |
+| PanelInsertVizible: dm_contract_type NAME = panel, PANELTYPE=1 visible at TOPID, other listed panels hidden | `panels()`; unlisted panels keep the dfm Visible (AgentPanel, PecentDatePanel hidden) | F:191-222 |
+| PanelUpdateVizible: every listed panel visible at TOPID except ThirdPersonNamePanel | same | F:223-284 |
+| DepositTypes Filter 'status=0' on Insert, none on Edit/Look; Filals unfiltered / 'id='+BRANCHID | same | F:642-670, 742-747 |
+| AddContract: SEG_DM_CONTRACTS (SequenceField amOnNewRecord), CURRENCY 0, Branchid Get_FilialID, dates = PC `Date`, Amount/due/overdue 0.00, prizeid/tocard from the combos, agentid 0 | `add_contract()` | F:693-718, DM dfm:568 |
+| DBEditNumberChange (customer no. and currency OnChange): Customers, FPersonstype, ClientTypes (valcategory 1 when currency <> 0) → FClientType; no customer = FClientType keeps its old value | `ev_customer` | F:542-581 |
+| ContractTypesChange (+ ComboBoxPrize.OnClick): reopen DepPeriods/DepCapperiod; Insert: `dm_contract.getcontractno(dtid, filialid, przid)` | `ev_type` | F:506-532 |
+| LCBPeriodsKeyValueChanged → DepCapperiod reopen (LCBPeriodsChange body commented out) | `ev_period` | F:405-415 |
+| LCBCapPerChange: CLOSEDATE by period_type İL/AY/GÜN, DtClose enabled when period<>0, DmDepositPerSettings (amount band), rates (Insert: settings; Edit: record), FDepPerSetid, DBLookupPercent visible when >1 row, FIRSTINTERESTPAYDAT = IncMonth(open, capperiod div 30) | `ev_capper` | F:286-353 |
+| CheckNeedsFields: first Null of 9 fields → hint '"%s" sahəsinə qiymət daxil olunmayıb! ' (DisplayLabel) | `deposits.c_err_empty` with the Delphi label | F:443-498 |
+| Qeyd et: SaveDeposits → Post → ApplyRecord `dmaddcontract` / `dmupdatecontract` (pmNamed, all 25 names) → **commit** (CommitOnPost default) | same; failed call → rollback | F:883-979, DM:203-279 |
+| Insert: AddAccount `dmgenerateaccountnumber` + `getaddaccount` per dm_accno_columname row (p_id 0..n-1), **no commit**, then AddContract (form stays open with the next blank record) | `pending: true`, new record returned | F:835-878, 981-1004 |
+| Edit: Self.Close after Post; FormClose → RefreshWithSavely(True) (RecNo kept, selection cleared) when FCommited | `closed: true`, main grid reloads | F:761-767 |
+| İmtina et: Insert → Cancel (no new record; the next Qeyd et shows the CUSTOMERID hint); Edit → close | browse state | F:895-898 |
+| Bağla / Esc: 'Dəyişiklər qeyd olunmayacaq !' when Modified; F5 RefreshDataSets; Enter → SelectNext | same | F:769-804 |
+| Kreditin siyahısı (not FInserted): CreditContractno with :contractid := **DepositPorpsSID** (SID#), lookups Name/FilialName from the form's single-customer / filtered-filial datasets | `/credits` | NewFormCreditImpl.pas:31-38 |
+| ThirdPerson '...' toggles ReadOnly | same | F:821-833 |
+
+Contract-form quirks kept: `overdueinterest := dueinterest field` and `dueinterest := overdueinterest field` are crossed in SaveDeposits (F:965-966);
+the credit list filters by the user SID# instead of the contract ID; FCommited is never reset while the BPL stays loaded (web: per form open);
+DBLookupPercent has no DataField, so picking a rate there changes nothing; GenAnnualInt only reads values.
+
+Contract-form unverified items:
+- The order in which the EhLib data-aware controls fire OnChange when a record is loaded. The web runs customer → type → periods → capital period on open.
+  In Edit this recomputes CLOSEDATE / FIRSTINTERESTPAYDAT and takes FDepPerSetid from the settings, so saving an unchanged contract can change them.
+- Lookup list datasets are assumed to sit on the selected key (EhLib locates the ListSource on selection); the capital periods after a type change are those of the selected period (else the first).
+- `dm_contract` body (getcontractno, dmaddcontract, dmupdatecontract, dmgenerateaccountnumber, getaddaccount) and the dm_* DDL are not in the repo; the mock is an assumption.
+- In the mock AZN is valute 944, so valcategory is always 1; Delphi's default CURRENCY 0 suggests 0 = AZN on the real DB.
 
 ## Delphi quirks, kept as they are
 

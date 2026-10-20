@@ -70,6 +70,8 @@ PLUGINS = {
     "rep_control": (None, "NewDepositsControl.bpl", ""),                                  # Kontrol1Click :778
     "rep_logs": (None, "NewDepositsLogs.bpl", ""),                                        # Loqlar1Click :532
 }
+# Plugin keys whose BPL form is ported: the browser opens the web form, which runs the same right check itself.
+MIGRATED = {"contract_insert", "contract_edit", "contract_look"}
 # DM_ADMIN: ToolButton9MouseActivate :1094 checks it when the Sazlamalar button is pressed (before its drop-down opens).
 DATE_SEPARATOR = "."   # FormatDateTime('dd/MM/yyyy'): '/' = Windows DateSeparator (az-AZ '.', unverified on the bank PCs)
 
@@ -258,7 +260,7 @@ def make_router(current, require_module, err):
         right, bpl, param = PLUGINS[key]
         if right:
             check_right(ws.conn, right)
-        return {"ok": False, "migrated": False, "bpl": bpl, "param": param}
+        return {"ok": key in MIGRATED, "migrated": key in MIGRATED, "bpl": bpl, "param": param}
 
     @r.post("/settings-menu")
     def _settings(ws=Depends(g)):
