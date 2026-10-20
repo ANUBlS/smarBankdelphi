@@ -72,19 +72,28 @@
    "ID": 1,
    "TYPE": "Müddətli əmanət",
    "WITHDRAWTYPE": "Standart",
-   "DATEINTERVAL": 12
+   "DATEINTERVAL": 12,
+   "ADDITIONALTYPE": "Standart",
+   "PERCENT_RULE": 0,
+   "AMOUNT_RULE": 1
   },
   {
    "ID": 2,
    "TYPE": "Tələbli əmanət",
    "WITHDRAWTYPE": "Standart",
-   "DATEINTERVAL": 0
+   "DATEINTERVAL": 0,
+   "ADDITIONALTYPE": "Standart",
+   "PERCENT_RULE": 0,
+   "AMOUNT_RULE": 0
   },
   {
    "ID": 3,
    "TYPE": "Korporativ depozit",
    "WITHDRAWTYPE": "BefoPercent",
-   "DATEINTERVAL": 6
+   "DATEINTERVAL": 6,
+   "ADDITIONALTYPE": "Standart",
+   "PERCENT_RULE": 0,
+   "AMOUNT_RULE": 0
   }
  ],
  "sbcm_categories_new": [
@@ -785,23 +794,28 @@
  "sbcm_acc_zones_new": [
   {
    "ZONEID": 1,
-   "NAME": "Deposit"
+   "NAME": "Deposit",
+   "DESCRIPTION": "Depozit hesabları"
   },
   {
    "ZONEID": 2,
-   "NAME": "Percent"
+   "NAME": "Percent",
+   "DESCRIPTION": "Faiz hesabları"
   },
   {
    "ZONEID": 3,
-   "NAME": "Account"
+   "NAME": "Account",
+   "DESCRIPTION": "Müştəri hesabları"
   },
   {
    "ZONEID": 4,
-   "NAME": "Credit"
+   "NAME": "Credit",
+   "DESCRIPTION": "Kredit hesabları"
   },
   {
    "ZONEID": 5,
-   "NAME": "InternalBankAccs"
+   "NAME": "InternalBankAccs",
+   "DESCRIPTION": "Bankdaxili hesablar"
   }
  ],
  "sbcm_acc_zone_info_new": [
@@ -824,6 +838,14 @@
   {
    "ZONEID": 3,
    "ACCGROUP": 3811
+  },
+  {
+   "ZONEID": 5,
+   "ACCGROUP": 1001
+  },
+  {
+   "ZONEID": 5,
+   "ACCGROUP": 3400
   }
  ],
  "sbcm_acc_zones": [
@@ -1218,12 +1240,20 @@
   {
    "ID": 41,
    "NAME": "outComeAccForDeposit",
-   "TYPEID": 1
+   "TYPEID": 1,
+   "DESCRIPTION": "Depozit ödənişi üçün hesab"
   },
   {
    "ID": 43,
    "NAME": "outComeAccForDeposit",
-   "TYPEID": 3
+   "TYPEID": 3,
+   "DESCRIPTION": "Gəlir hesabı"
+  },
+  {
+   "ID": 42,
+   "NAME": "lossAccForDeposit",
+   "TYPEID": 1,
+   "DESCRIPTION": "Xərc hesabı"
   }
  ],
  "sbcm_settings_new": [
@@ -1231,19 +1261,22 @@
    "ID": 1,
    "PARENTID": 41,
    "CURRENCYID": 944,
-   "ACCID": 340101
+   "ACCID": 340101,
+   "BRANCHID": 101
   },
   {
    "ID": 2,
    "PARENTID": 41,
    "CURRENCYID": 840,
-   "ACCID": 340102
+   "ACCID": 340102,
+   "BRANCHID": 101
   },
   {
    "ID": 3,
    "PARENTID": 43,
    "CURRENCYID": 944,
-   "ACCID": 340101
+   "ACCID": 340101,
+   "BRANCHID": 101
   }
  ],
  "sbcm_capitalization_new": [
@@ -1253,6 +1286,71 @@
    "HDATE": "2026-06-10",
    "TOTAL": 1250.0,
    "TRID": 730001
+  }
+ ],
+ "sbcm_deposit_addtypes_new": [
+  {
+   "ID": 1,
+   "ADDTYPENAME": "Standart",
+   "ADDTYPEDESC": "Standart",
+   "WITHDRTYPE": "Standart",
+   "WITHDRTYPEDESC": "Standart ödəniş"
+  },
+  {
+   "ID": 2,
+   "ADDTYPENAME": "Monthly",
+   "ADDTYPEDESC": "Aylıq",
+   "WITHDRTYPE": "Monthly",
+   "WITHDRTYPEDESC": "Aylıq ödəniş"
+  },
+  {
+   "ID": 3,
+   "ADDTYPENAME": "BefoPercent",
+   "ADDTYPEDESC": "Əvvəlcədən",
+   "WITHDRTYPE": "Inadvance",
+   "WITHDRTYPEDESC": "Faiz əvvəlcədən"
+  }
+ ],
+ "SBCM_References_new": [
+  {
+   "ID": 1,
+   "NAME": "General",
+   "LNAME": "Ümumi",
+   "PARENTID": -1,
+   "VALUE": null,
+   "SOURCELIST": null
+  },
+  {
+   "ID": 2,
+   "NAME": "DaysInYear",
+   "LNAME": "İldə gün sayı",
+   "PARENTID": 1,
+   "VALUE": "365",
+   "SOURCELIST": "360;365;366"
+  },
+  {
+   "ID": 3,
+   "NAME": "RoundDigits",
+   "LNAME": "Yuvarlaqlaşdırma",
+   "PARENTID": 1,
+   "VALUE": "2",
+   "SOURCELIST": null
+  },
+  {
+   "ID": 4,
+   "NAME": "Interest",
+   "LNAME": "Faizlər",
+   "PARENTID": -1,
+   "VALUE": null,
+   "SOURCELIST": null
+  },
+  {
+   "ID": 5,
+   "NAME": "CalcMode",
+   "LNAME": "Hesablama üsulu",
+   "PARENTID": 4,
+   "VALUE": "Daily",
+   "SOURCELIST": "Daily;Monthly"
   }
  ]
 }

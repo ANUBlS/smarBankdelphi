@@ -15,6 +15,7 @@ import sqlite3
 from .. import dep_sql as Q
 from .. import dep_contract_sql as QC
 from .. import dep_ops_sql as QO
+from .. import dep_settings_sql as QS
 from .base import DBError
 
 _DB = None
@@ -228,6 +229,7 @@ def _sqlite(sql: str) -> str:
 _MAIN = Q.SQL_DEPOSITSDATA.replace(":OrderField", "cont.id")
 _OWN = {Q.SQL_VALUTES, Q.SQL_FILIALS, Q.SQL_DEPOSITTYPES, Q.SQL_CATEGORIES, Q.SQL_PERSONS, Q.SQL_USERS, Q.SQL_TRANCHES, _MAIN}
 _OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_")}                # SBDM_Contract_new
+_OWN |= {v for k, v in vars(QS).items() if "_SQL_" in k}                         # SBDM_Settings_new
 _OWN |= {v for k, v in vars(QO).items() if "SQL_" in k}                          # SBDM_ApplyMoney_new, SBDM_ExtractMoney_new, TrDelayed_Show, SBDM_Prolongation_new
 
 
@@ -287,6 +289,25 @@ class DepMixin:
             return float(rates[1] if "p_defUntimeint => true" in sql else rates[2])
         return NotImplemented
 
+    def _dep_execute(self, sql, binds):
+        """DOA default ApplyRecord DML of the SBDM_Settings_new datasets (dep_settings.post / delete)."""
+        m = re.match(r"\s*(insert into|update|delete from)\s+(sbcm_categories_new|sbcm_acc_zone_info_new|sbcm_deposit_types_new|sbcm_settings_new)\b", sql, re.I)
+        if not m:
+            return False
+        db = _db()
+        try:
+            cur = db.execute(_sqlite(sql), {k: _bind(v) for k, v in binds.items()})
+        except sqlite3.Error as e:
+            raise DBError(f"ORA-00904: mock: {e}", 904)
+        if m.group(1).lower() == "insert into":                  # assumed BEFORE INSERT trigger: ID from a sequence
+            t = m.group(2)
+            cols = [r[1].upper() for r in db.execute(f"pragma table_info({t})")]
+            if "ID" in cols:
+                db.execute(f"update {t} set id = (select coalesce(max(id), 0) + 1 from {t}) where rowid = ? and id is null", [cur.lastrowid])
+        elif cur.rowcount == 0:
+            raise DBError("ORA-01403: no data found", 1403)
+        return True
+
     def _dep_commit(self):
         if _DB is not None:
             _DB.commit()
@@ -312,6 +333,16 @@ class DepMixin:
         n = named or {}
         db = _db()
         _CTX["tek_dat"] = self.st["sys"]["tek_dat"][:10]
+        if key == "SBCM_RPDEPOSITORY_NEW.DELDEPOSITTYPES":        # assumed: refuses a type used by a contract
+            tid = int(args[0])
+            if db.execute("select count(*) from sbcm_contracts_new where contracttype = ?", [tid]).fetchone()[0]:
+                raise DBError("ORA-02292: integrity constraint violated - child record found", 2292)
+            db.execute("delete from sbcm_deposit_types_new where id = ?", [tid])
+            return {}
+        if key == "SBCM_RPDEPOSITORY_NEW.UPD_SBCM_REFERENCES":
+            db.execute('update "SBCM_References_new" set name = ?, lname = ?, parentid = ?, value = ?, sourcelist = ? where id = ?',
+                       [args[1], args[2], args[3], args[4], args[5], int(args[0])])
+            return {}
         if key == "SBCM_PAYMENT_SCHEDULE1_NEW.SBCMPERIOD":          # assumed: <period> monthly rows from PaymentDate, equal parts
             cid, start, amount, period = int(n["deposid"]), n["PaymentDate"], float(n["per_amount"]), int(n["period"])
             if period <= 0:

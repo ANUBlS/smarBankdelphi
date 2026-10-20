@@ -315,6 +315,8 @@ class MockConnection(DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMix
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._dep_execute(sql, binds or {}):
+            return
         if self._azi_execute(sql, binds or {}):
             return
         if self._aze_execute(sql, binds or {}):
