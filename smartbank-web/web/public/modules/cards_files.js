@@ -171,6 +171,57 @@
     draw();
   }
 
+  // TKlirinq_form (klirinqUnit.pas): Bazaya Göndər :71, Təsdiq Et :61 (one question), Sil :169, Excel dropdown N11 / N12, TitleClick, FormClose :176
+  async function kliring(box) {
+    const call = caller('/api/cards/kliring');
+    let d = await call('/open'); if (!d) return;
+    const sel = new Set(); const C = ['BANKID', null, 'BANKNAME', 'HESAB1', 'KLIRING1', 'MEBLEQ', 'INFO'];
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_kliring'))}</h3><div class="toolbar" style="gap:6px;flex-wrap:wrap">
+        <button class="btn secondary" id="kl_close">${esc(K('close'))}</button><button class="btn" id="kl_b">${esc(K('cf_tobase'))}</button>
+        <button class="btn" id="kl_c">${esc(K('cf_confirm'))}</button><button class="btn secondary" id="kl_x1">Excel 1</button><button class="btn secondary" id="kl_x2">Excel 2</button>
+        <button class="btn secondary" id="kl_d">${esc(K('kl_delete'))}</button></div>
+        ${gridHtml('kl_g1', C, d.grid1, { sel, sortable: true, key: 'id', icon: r => icon(r.status) })}${gridHtml('kl_g2', C, d.grid2, { sortable: true, icon: r => icon(r.status) })}`;
+      const q = (id) => box.querySelector('#' + id), set = (r) => { if (r) { d = r; draw(); if (r.error) toast(r.error, 'error'); } };
+      q('kl_close').onclick = async () => { await call('/close'); box.innerHTML = ''; };     // FormClose :176: kliring_delete
+      q('kl_b').onclick = async () => set(await call('/tobase'));
+      q('kl_c').onclick = async () => { const a = await ask(K('kl_ask'), [['yes', K('yes')], ['no', K('no')]]); set(await call('/confirm', { yes: a === 'yes' })); };
+      q('kl_d').onclick = async () => set(await call('/delete'));
+      q('kl_x1').onclick = () => download('/api/cards/kliring/excel', 'kliring.xlsx', { grid: 'grid1', field: '' });
+      q('kl_x2').onclick = () => download('/api/cards/kliring/excel', 'kliring.xlsx', { grid: 'grid2', field: '' });
+      [['kl_g1', 'grid1'], ['kl_g2', 'grid2']].forEach(([id, g]) => q(id).querySelectorAll('th[data-f]').forEach(th => th.onclick = async () => { if (th.dataset.f) set(await call('/sort', { grid: g, field: th.dataset.f })); }));
+      wireSel(q('kl_g1'), d.grid1, sel, () => {}, draw, { items: [['all', 'SELECT ALL'], ['x', 'EXCEL']], onItem: () => q('kl_x1').click() });
+    }
+    draw();
+  }
+  // Tlim (limittur.pas): Təsdiq et :61 (card_main.limits), Yenilə; grids without Columns show every field
+  async function limits(box) {
+    const call = caller('/api/cards/limits');
+    let d = await call('/open'); if (!d) return;
+    const cols = (rows) => rows && rows.length ? Object.keys(rows[0]).map(k => [k.toUpperCase(), k.toUpperCase()]) : [];
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">Limits</h3><div class="toolbar" style="gap:6px"><button class="btn" id="li_c">${esc(K('cf_confirm'))}</button>
+        <button class="btn secondary" id="li_r">${esc(K('cf_refresh'))}</button></div>${gridHtml('li_g1', cols(d.grid1), d.grid1)}${gridHtml('li_g2', cols(d.grid2), d.grid2)}`;
+      box.querySelector('#li_c').onclick = async () => { const r = await call('/confirm'); if (r) { d = r; draw(); say(r.messages); } };
+      box.querySelector('#li_r').onclick = async () => { const r = await call('/refresh'); if (r) { d = r; draw(); } };
+    }
+    draw();
+  }
+  // TEXCELform (Unitexcel.pas): card_excelform list, 'Aç' / double click -> the sub form of the row's Id
+  async function excelforms(box) {
+    const call = caller('/api/cards/excelforms');
+    const d = await call('/open'); if (!d) return; let cur = d.grid.length ? d.grid[0].id : null;
+    function draw() {
+      box.innerHTML = `<h3 style="margin:8px 0">${esc(K('mi_excel'))}</h3><div class="toolbar"><button class="btn" id="ex_o">${esc(K('ex_open'))}</button></div>
+        ${gridHtml('ex_g', ['ID', ['NAME', 'name']], d.grid, { sel: new Set([cur]) })}`;
+      const go = async () => { const r = await call('/pick', { id: cur }); if (r && r.form) toast(K('not_ported') + ' (' + r.form + ')'); };
+      box.querySelector('#ex_o').onclick = go;
+      box.querySelectorAll('#ex_g tbody tr[data-id]').forEach(tr => { tr.onclick = () => { cur = +tr.dataset.id; draw(); }; tr.ondblclick = () => { cur = +tr.dataset.id; go(); }; });
+    }
+    draw();
+  }
+  const OTHER = { kliring, limits, excel: excelforms };
+
   async function cfile(box) {
     const P = '/api/cards/cfile';
     const call = async (path, body) => { try { return await api(P + path, { method: 'POST', body: body || {} }); } catch (e) { toast(errT(e), 'error'); return null; } };
@@ -227,5 +278,5 @@
     }
     draw();
   }
-  window.SBCardsFiles = { cfile, fileop, FO, H };
+  window.SBCardsFiles = { cfile, fileop, FO, OTHER, H };
 })();

@@ -23,21 +23,21 @@ Main form `MAINFORMImpl1.pas` (TMAINFORM): toolbar only (Panel2 holds a logo). M
 | Prosedur ▸ Verifikasiya | N13Click :1286 (visible only when card_settings.dord = 1, PopupMenu1Popup :1273) | VERIF | Tverification (unitverification.pas) | planned (menu visibility done) |
 | Prosedur ▸ Online Cards | OnlineCards1Click :990 | – (no right, no myswift check) | Tonline (onlinec.pas) | **done (3f)** |
 | Prosedur ▸ Karta Mədaxil | K1Click :547 | – (no right check) | TUFXFORM (card_ufx.pas, UFX card deposit) | **done (3f)** |
-| Əməliyyat ▸ C File | MenuItem1Click :1061 | card_cfile | Tcfile (cfilepas.pas, + cfile_addi.pas) | planned |
-| Əməliyyat ▸ Dxxx File | MenuItem2Click :1110 | card_dxxxfile | TDxxx (UnitDxxx.pas) | planned |
-| Əməliyyat ▸ SMS | MenuItem3Click :1096 | card_smsfiles | Tsmsfile (sms.pas) | planned |
-| Əməliyyat ▸ Int.Reatil | IntReatil1Click :1103 | card_intretail | Tintfile (Unitintfile.pas) | planned |
-| Əməliyyat ▸ R.Visa | RVisa1Click :1123 | card_rvisa | Trvisa (UnitRvisa.pas) | planned |
-| Əməliyyat ▸ D File | DFile1Click :1130 | card_dfile | TDfile (UnitDfile.pas) | planned |
-| Əməliyyat ▸ Exchange file | E1Click :398 | – (no right check) | Texchange_files (card_Exchange_file.pas, + excsett.pas) | planned |
-| Əməliyyat ▸ RbsDoFile | R1Click :1117 | – (no right check) | Tdorbsfile (Rbsdofiles.pas, + rbsstate.pas, card_states.pas) | planned |
-| Əməliyyat ▸ RbsTax | T1Click :647 | – (no right check) | TRbsdoTax (Taxrbs.pas, + Taxfilessettings.pas) | planned |
+| Əməliyyat ▸ C File | MenuItem1Click :1061 | card_cfile | Tcfile (cfilepas.pas, + cfile_addi.pas) | **done (4a, 4b)** |
+| Əməliyyat ▸ Dxxx File | MenuItem2Click :1110 | card_dxxxfile | TDxxx (UnitDxxx.pas) | **done (4b)** |
+| Əməliyyat ▸ SMS | MenuItem3Click :1096 | card_smsfiles | Tsmsfile (sms.pas) | **done (4b)** |
+| Əməliyyat ▸ Int.Reatil | IntReatil1Click :1103 | card_intretail | Tintfile (Unitintfile.pas) | **done (4b)** |
+| Əməliyyat ▸ R.Visa | RVisa1Click :1123 | card_rvisa | Trvisa (UnitRvisa.pas) | **done (4b)** |
+| Əməliyyat ▸ D File | DFile1Click :1130 | card_dfile | TDfile (UnitDfile.pas) | **done (4b)** |
+| Əməliyyat ▸ Exchange file | E1Click :398 | – (no right check) | Texchange_files (card_Exchange_file.pas, + excsett.pas) | **done (4c; excsett in 3h)** |
+| Əməliyyat ▸ RbsDoFile | R1Click :1117 | – (no right check) | Tdorbsfile (Rbsdofiles.pas) | **done (4c)**; rbsstate / card_states are opened only from rezform (Hesabatlar): on hold |
+| Əməliyyat ▸ RbsTax | T1Click :647 | – (no right check) | TRbsdoTax (Taxrbs.pas, + Taxfilessettings.pas) | **done (4c; Taxfilessettings in 3h)** |
 | Əməliyyat ▸ Dilling | Dilling1Click :1137 (Visible = False) | card_dilinq | – | not ported (unreachable) |
-| Əməliyyat ▸ Kliring | Kliring1Click :1143 | card_klirinq | TKlirinq_form (klirinqUnit.pas) | planned |
-| Əməliyyat ▸ Excel yükləmələr | N12Click :1259 | card_excelfile | TEXCELform (Unitexcel.pas) | planned |
+| Əməliyyat ▸ Kliring | Kliring1Click :1143 | card_klirinq | TKlirinq_form (klirinqUnit.pas) | **done (4d)** |
+| Əməliyyat ▸ Excel yükləmələr | N12Click :1259 | card_excelfile | TEXCELform (Unitexcel.pas) | **list done (4d)**; sub forms Unitsalary / EXCELNEWCARD / PROLONGATIONUNIT / accountcloseunit planned |
 | Əməliyyat ▸ Card Number Change | cARDNUMBERCHANGE1Click :1266 | card_cardnumber | TCARDNUMBER (cardnumbersource.pas) | planned |
 | Əməliyyat ▸ Möhkəməndirmə | N14Click :1295 → LoadPlugin('FileReport.bpl','REZ') | – | separate BPL (Packages/Cards_New/FileReprt) | **on hold by user** (report) |
-| Əməliyyat ▸ Limitlər | Limitlr1Click :1152 | – | Tlim (limittur.pas) | planned |
+| Əməliyyat ▸ Limitlər | Limitlr1Click :1152 | – | Tlim (limittur.pas) | **done (4d)** |
 | Əməliyyat ▸ Commission Our POS-ONUS | PostCommisiononus1Click :1279 | card_cfile | TPostCommisionOnus | planned |
 | Sazlama | ToolButton3Click :1089 | card_setting | TForm10 (setac.pas) | **done: list + all 14 forms (3g, 3h)** |
 | Hesabatlar | ToolButton7Click :1075 | card_hesabat | THesabatlar (rezform.pas) | **on hold by user** |
@@ -291,10 +291,53 @@ Then the later logic-update phase for cards, once the user shares the new rules.
 | ToolButton1Click 'Təsdiq Et' | `/confirm`: per selected row Yes/No/Cancel/Yes to all + "%d  sayda əməliyyat təsdiq edildi?"; Cancel = Break |
 | DBGrid1 (status 1/3, ImageList icons) / DBGrid2 (status 2) | grid1 / grid2; multiselect, PopupMenu1 SELECT ALL; RefwithSel hidden and no dgTitleClick, so no sorting |
 | ToolButton7 Excel | `/excel` -> CFILES.xlsx |
-| ToolButton2 'XML Göndər' (cfile_addi.pas TAdditional_cfile, 436 lines) | **not ported yet**: button shows "not ported" |
+| ToolButton2 'XML Göndər' (cfile_addi.pas TAdditional_cfile) | done in step 4b |
 
 Interpreter: local `type X = record … end;` and `array of X` were added (PRec / PRecArray). Tests: api/tests/test_cards_cfile.py (4). Screenshots 224-226 (e2e/cards_cfile.py).
 Unverified: delete_trancaction_c / carxiv / transaction_c bodies (mock: no-op, no-op, STATUS=2), card_messages_c.ID source (trigger/sequence? mock uses max+1), RichEdit colour positions (1 char per line break assumed), DecimalSeparator for StrToFloat, cfilepas ImageList1 images assumed equal to applicationpas ImageList1 (app_status_N.png reused).
 
+## Step 4b: XML Göndər (cfile_addi.pas) and the shared file-form engine – done
+- **TAdditional_cfile** (`api/app/cards_caddi.py`, `/api/cards/caddi/*`, opened from C File ▸ 'XML Göndər'; no right check): caddi / c_add_ar are not Active at design
+  time, so both grids are empty until 'Yenile' :426. 'Bazaya Göndər' :233 = Button1Click :76 on the uploaded XML (one file): per DocTransList child multi_del(DocID),
+  per SynteticTransList child StrToInt GMTrCurrency / GMCurrency, tr <> sr -> multi_ins(DocID, GMAmount text, sr); no try (an EConvertError stops the loop, the calls
+  made stay); then Yenile. 'Təsdiq Et' :338 = the Yes / No / Cancel / Yes to all loop with transaction_multi + 'Əməliyyatlar günün sənədlərinə göndərildi!'.
+  DBGrid1TitleClick :168 appends 'ORDER BY F' and never removes it (a second click: ORA-00933 as in Delphi). DBGrid1KeyPress :163: any key selects all.
+  TXMLDocument ChildNodes['X'] auto-creates a missing node (Text ''); whitespace text is not a node; a DOCTYPE is refused.
+- **cards_fileops.py** (`/api/cards/fo/<form>/*`, UI `cards_files.js` fileop): the Tcfile-shaped forms. 'Yenilə' and 'Bazaya Göndər' run the unit's own code verbatim
+  (delphi_src/cards_unitdxxx.pas, cards_sms.pas, cards_unitintfile.pas, cards_unitrvisa.pas, cards_unitdfile.pas, cards_exchange_file.pas, cards_rbsdofiles.pas,
+  cards_taxrbs.pas) in pascal.py; ToolButton.Click calls the other handler of the unit (e.g. Dxxx ToolButton3 -> ToolButton2Click); DBGrid<n>.DataSource.DataSet is the
+  grid's dataset. The DataMod_CARDS grid datasets are not Active at design time: a grid is empty until the form opens it, and stays open for later visits in the
+  same session (the web re-reads it). 'Təsdiq Et' (per form proc / texts), Excel (ExportDataset sheet), TitleClick only where the grid's Options has dgTitleClick.
+
+| Form | Yenilə / Bazaya Göndər | Təsdiq Et | Notes |
+|---|---|---|---|
+| Dxxx (UnitDxxx.pas) | :76 -> :82 / :217 (delete_dxxx, Insert_dxxx ×13 args, dxxarxiv; 'All records send to base!') | :469 transaction_dxxx, 'Əməliyyat günün sənədlərinə göndərildi!' | file 'D'+settings.bankname+'_XXX' (copy(..,0,8)); no dgTitleClick |
+| SMS (sms.pas, ANSI unit) | :76 / :199 -> empty_sms_messages + ToolButton2Click :469 (empty_sms_messages again, Insert_SMS_Messages ×10, smsarxiv(FileListBox1.Items[i])) | :287 transaction_sms, smsfiles2 reopened per row, DBGrid1 Refresh, no message | 'SMS*'; lines > 100 chars; rows with empty post date skipped |
+| Int.Retail (Unitintfile.pas) | :77 / :210 -> empty_intretail + ToolButton2Click :522 (Insert_IntRetail ×15, intarxiv(FileListBox1.Items[i])) | :341 transaction_int, '..göndərildi!!' | 'INT_I_*' |
+| R.Visa (UnitRvisa.pas) | :63 / :233 (rvisa_delete, insert_rvisa) | – (ToolButton1 Visible = False) | FormPaint :449 (rvisa_delete, REFiles.Clear, rvisa reopen) runs at open |
+| D File (UnitDfile.pas) | :76 -> :83 / :365 (delete_dfiles, insert_dfiles ×28, darxiv) | :600 one question 'Əməliyyatlar təsdiq edilsin?' -> transaction_d() (No -> Exit) | copy(name, 0, 5) <> 'D'+settings.bankid: with a 6-digit BANKID every file is skipped (as Delphi) |
+| Exchange file (card_Exchange_file.pas) | :327 / :152 (delete_exchangefile; 'already exits' question; UMUMI Append / Post per line (CommitOnPost); exchangearxiv) | :251 transaction_exchange | 'E*'/'e*'; the replace branch deletes '.. where file_name = ..' while the select uses filename (ORA-00904 if the column does not exist; mock shows the error); STATUS column carries the icon (DataCol 1) |
+| RbsDoFile (Rbsdofiles.pas) | :250 (RichEdit1.Lines.LoadFromFile, kept for the next step) / :89 (delete_rbsdofile, rbsdofile_insert ×30 read from RichEdit1 lines, rbsdoarxiv, rbsdopart) | – (Visible = False) | 'RBSDO*'; Bazaya Göndər reads the hidden RichEdit1 the preview loaded (EStringListError when Yenilə was not run) |
+| RbsTax (Taxrbs.pas) | :378 / :150 (delete_rbstaxfile, rbsTAX_insert, rbstaxarxiv) | :300 transaction_rbstax, both grids Close / Open | 'RBSTR*' |
+
+Unverified (4b/4c): every card_main body used here (mock: delete_<x> drops status 1 (exchange / tax: 0) rows, insert_<x> adds a status-1 row with the arguments,
+transaction_<x> -> STATUS 2 (exchange / tax: 1), *arxiv / rbsdopart no-ops, multi_del / multi_ins / transaction_multi on card_messages_c_additional); the table
+DDL (mock columns from the grids; insert_dfiles / rbsdofile_insert / rbsTAX_insert argument -> column mapping unknown); **FileListBox1.Items[i] in sms / Int.Retail
+'Bazaya Göndər'**: FileListBox1's Directory is never set, so Delphi passes the i-th file name of the client's working folder to smsarxiv / intarxiv (looks like a
+bug); the web passes the uploaded file name. Questions asked after a card_main call: the probe run does not call procedures, so the browser may be asked a
+question the real run then does not need (the answer is unused). R.Visa FormPaint also runs on every repaint in Delphi (clearing the preview); the web runs it
+at open. The ANSI sms.pas MessageDlg texts are Azl Sans Serif code points (Cyrillic on screen in Delphi); the web shows the translated question.
+pascal.py: a while loop that passes 500 000 times stops with an error (Delphi would hang, e.g. Dxxx waiting for a 'Total' line past Eof).
+
+## Step 4d: Kliring, Limitlər, Excel yükləmələr list – done
+`api/app/cards_misc.py`, tests `api/tests/test_cards_misc.py`. Kliring: open (card_klirinq) reopens kliring1 / kliring2; 'Bazaya Göndər' kliring_delete +
+insert_kliring; 'Təsdiq Et' asks once, Yes -> kliring, both grids reopened after Yes and No; 'Sil' and closing the form -> kliring_delete; Excel dropdown
+'1-ci / 2-ci pəncərə' (sheet 'kliring'); TitleClick ORDER BY for that refresh. Limitlər: card_main.limits + 'Limitlər daxil edildi!'. Excel yükləmələr:
+card_excelform list; 'Aç' / double click picks the sub form by Id (1 Salary, 2 new cards, 3 prolongation, 4 account close) – the sub forms are not ported yet.
+Unverified (4d): kliring / insert_kliring / kliring_delete / limits bodies (mock); card_limits / card_excelform columns (the grids have no Columns).
+Screenshots 227-234 (e2e/cards_fileops.py).
+
 ## Resume point
-Step 4 continues: cfile_addi.pas (C File ▸ XML Göndər), then Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file, RbsDoFile (+ rbsstate, card_states), RbsTax (Taxrbs), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission. Reports (Hesabatlar rezform, FileReport.bpl 'REZ'), XÖHKS prints and SWIFT are on hold by user.
+Step 4 continues: Excel yükləmələr sub forms (Unitsalary TSalary, EXCELNEWCARD Tnewcardex, PROLONGATIONUNIT TProlongationxls, accountcloseunit Taccountclose),
+Card Number Change (cardnumbersource.pas, 830 lines), Commission Our POS-ONUS (PostCommisionOnusImpl.pas), then check TFormSearch (F3, ActiveFormKeyUp :670)
+and mark Cards complete. Reports (Hesabatlar rezform + rbsstate / card_states, FileReport.bpl 'REZ'), XÖHKS prints and SWIFT are on hold by user.

@@ -94,6 +94,8 @@ def _pats():
             if n.startswith("LINES_"):
                 L = list(getattr(Q, n))
                 t = re.escape(Q.text(L))
+                if n in ("LINES_KLIRING1", "LINES_KLIRING2"):
+                    t += r"(?:ORDER BY \w+\r\n)?"
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
@@ -102,7 +104,8 @@ def _pats():
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
         from .. import cards_app_file as F
-        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2):
+        from .. import cards_misc as M
+        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2, M.LINES_LIM1, M.LINES_LIM2):
             _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
         from .. import cards_files as CF                                       # SQL.Clear / Add texts of the file operations
         from .. import cards_cfile, cards_fileops  # noqa: F401 - register their statements
@@ -293,6 +296,17 @@ class CardsMixin:
                 db.execute(f"update {t} set STATUS = ? where id = ?", [new, int(a[0])])
             else:                                                              # transaction_d: no argument, every loaded row
                 db.execute(f"update {t} set STATUS = ? where status in (1, 3)", [new])
+        elif k == "kliring_delete":                                          # klirinqUnit: bodies not in the repo
+            db.execute("delete from CARD_KLIRING where status in (1, 3)")
+        elif k == "insert_kliring":
+            nid = (db.execute("select max(id) from CARD_KLIRING").fetchone()[0] or 0) + 1
+            for i, (bid, name, h, kl, amt) in enumerate([("NBAZ", "KAPITAL BANK", 9001, 9002, 150.0), ("PAHA", "PASHA BANK", 9001, 9002, 25.5)]):
+                db.execute("insert into CARD_KLIRING (ID, BANKID, BANKNAME, HESAB, KLIRINQ, MEBLEQ, INFO, STATUS) values (?,?,?,?,?,?,?,1)",
+                           [nid + i, bid, name, h, kl, amt, None])
+        elif k == "kliring":
+            db.execute("update CARD_KLIRING set STATUS = 2 where status = 1")
+        elif k == "limits":
+            db.execute("update card_limits set STATUS = 2 where status = 1")
         elif k in FO_NOOP:
             pass
         else:
