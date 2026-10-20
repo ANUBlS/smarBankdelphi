@@ -67,3 +67,13 @@ def dfile():
     L = [line((1, "FH"), (54, "944"), width=60), rec("KAPITAL BANK", "AZ12LORO0001", "150000", "D", "CNT-1", "20261019", "101500"),
          rec("PASHA BANK", "AZ34LORO0002", "2500", "C", "CNT-2", "20261019", "111500"), "FT"]
     return ("\r\n".join(L) + "\r\n").encode("cp1254")
+
+
+def exchange():
+    """card_Exchange_file.pas isertbtnClick :152: line 1 is skipped, then one record per line."""
+    rec = lambda c, dev, name, d, amt, cur, rate, ra, rc, rnd, rndc, rrn: line((1, c), (22, dev), (33, name), (65, d), (83, amt), (96, cur), (101, rate),  # noqa: E731
+                                                                            (105, ra), (126, rc), (130, rnd), (143, rndc), (147, rrn))
+    L = ["EXCHANGE HEADER",
+         rec("ATM-0007", "A007", "28 MAY ATM", "19.10.2026 09:10", "50.00", "USD", "1.70", "85.00", "AZN", "0.00", "AZN", "998877665544"),
+         rec("ATM-0008", "A008", "GENCLIK ATM", "19.10.2026 11:40", "20.00", "EUR", "1.85", "37.00", "AZN", "0.00", "AZN", "112233445566")]
+    return ("\r\n".join(L) + "\r\n").encode("cp1254")

@@ -129,7 +129,10 @@ class Strings(P.PObj):
     p_count = property(lambda s: len(s.lines))
 
     def index(self, i):
-        return self.lines[int(i)]
+        i = int(i)
+        if i < 0 or i >= len(self.lines):
+            raise P.PascalError(f"List index out of bounds ({i})")      # EStringListError
+        return self.lines[i]
 
     @property
     def p_text(self):
@@ -349,7 +352,7 @@ class Runtime(AF.Runtime):
 
         b.update({
             "reset": reset, "readln": readln, "messagedlg": messagedlg, "insert": _insert, "encodedate": _encodedate, "extractfileext": _extractfileext, "inc": _inc,
-            "strtofloat": _strtofloat, "abs": abs, "pos": lambda sub, s: str(s).find(str(sub)) + 1,
+            "now": lambda: serial(rt.now), "strtofloat": _strtofloat, "abs": abs, "pos": lambda sub, s: str(s).find(str(sub)) + 1,
             "getcurrentdir": lambda: "C:\\SmartBank", "sendmessage": lambda *a: 0, "em_linescroll": 0xB6,
             "decimalseparator": DEC, "mtinformation": "mtInformation", "mtconfirmation": "mtConfirmation",
             "mbok": MR["mrok"], "mbcancel": MR["mrcancel"], "mbyestoall": MR["mryestoall"], "mrok": MR["mrok"],

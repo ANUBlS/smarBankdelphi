@@ -23,6 +23,11 @@ from .azips_files import Module
 from .cards import CLSID
 from .customers import row
 
+# card_Exchange_file.pas isertbtnClick :173-189 SQL.Clear / Add texts (the quoted file name is sent as a bind)
+CF.EXTRA_SELECTS += ["select card_exchange_FILES.rowid,card_exchange_FILES.* from card_exchange_FILES\r\n",
+                     "select * from card_exchange_FILES where filename = :b0\r\n"]
+CF.DML_TABLES.add("card_exchange_files")
+
 FORMS: dict[str, dict] = {
     # MAINFORMImpl1 MenuItem2Click :1110 (card_dxxxfile) -> TDxxx UnitDxxx.pas
     "dxxx": dict(
@@ -87,6 +92,36 @@ FORMS: dict[str, dict] = {
         confirm=dict(mode="single", proc="transaction_d", ask="Əməliyyatlar təsdiq edilsin?", refresh=("grid1", "grid2")),   # ToolButton1Click :600
         excel=("grid1", "DFILES"), icons=("grid1", "grid2"),                              # ToolButton7Click :593
     ),
+    # E1Click :398 (no right check) -> Texchange_files card_Exchange_file.pas
+    "exchange": dict(
+        right=None, src="cards_exchange_file.pas", cls="texchange_files", rich="ctinboxrich", routines=("checkfileext", "directoryexists"),
+        filelists=("filelistbox1",), sinks=("toolbar1", "animate1"),
+        preview="texchange_files.toolbutton3click", tobase="texchange_files.isertbtnclick",          # :327, :152
+        datasets={"UMUMI": Q.LINES_UMUMI, "UMUMI1": Q.LINES_UMUMI1},
+        grids={"grid1": ("atm_exchange", Q.LINES_ATM_EXCHANGE), "grid2": ("atm_exchange2", Q.LINES_ATM_EXCHANGE2)},
+        sort={},                                        # DBGrid1/2 Options have no dgTitleClick (and no OnTitleClick)
+        confirm=dict(proc="transaction_exchange", done="Əməliyyatlar günün sənədlərinə göndərildi!", refresh=("grid1", "grid2")),   # :251
+        excel=("grid1", "ExchangeFiles"), icons=("grid1", "grid2"), icon_col=1,                    # :411; DrawColumnCell :75/:111 DataCol 1 = STATUS
+    ),
+    # R1Click :1117 (no right check) -> Tdorbsfile Rbsdofiles.pas; ToolButton1 is Visible = False (no OnClick)
+    "rbsdo": dict(
+        right=None, src="cards_rbsdofiles.pas", cls="tdorbsfile", rich="rbsdorich", routines=("checkfileext",),
+        filelists=("filelistrbsbox",), sinks=("toolbar1", "animate1"), keep_rich=("richedit1",),
+        preview="tdorbsfile.toolbutton3click", tobase="tdorbsfile.isertbtnclick",                  # :250, :89
+        grids={"grid1": ("rbsdofile", Q.LINES_RBSDOFILE)},
+        sort={},                                        # DBGrid1 Options have no dgTitleClick: TitleClick :63 never runs
+        confirm=None, excel=("grid1", "RbsDoFile"), icons=(),                                       # :394 ExportDataset(DBGrid1.DataSource.DataSet)
+    ),
+    # T1Click :647 (no right check) -> TRbsdoTax Taxrbs.pas
+    "rbstax": dict(
+        right=None, src="cards_taxrbs.pas", cls="trbsdotax", rich="rbsdorich", routines=("checkfileext",),
+        filelists=("filelistrbsbox",), sinks=("toolbar1", "animate1"), keep_rich=("richedit1",),
+        preview="trbsdotax.toolbutton3click", tobase="trbsdotax.isertbtnclick",                    # :378, :150
+        grids={"grid1": ("rbs_tax", Q.LINES_RBS_TAX), "grid2": ("rbs_taxcommited", Q.LINES_RBS_TAXCOMMITED)},
+        sort={},
+        confirm=dict(proc="transaction_rbstax", done="Əməliyyatlar günün sənədlərinə göndərildi!", refresh=("grid1", "grid2")),     # :300
+        excel=("grid1", "RbsTaxFile"), icons=("grid1", "grid2"),                                    # :503
+    ),
 }
 
 
@@ -138,7 +173,7 @@ def open_form(ws, form) -> dict:
     c = _cfg(form)
     if c.get("right"):
         ws.conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", [c["right"]], commit=False)
-    ws.module_state["cards_fo_" + form] = {"rows": {g: None for g in c["grids"]}, "rich": [], "spans": []}
+    ws.module_state["cards_fo_" + form] = {"rows": {g: None for g in c["grids"]}, "rich": [], "spans": [], "keep": {}}
     for g in c["grids"]:
         if c["grids"][g][0].lower() in _dm_open(ws):      # opened by an earlier visit (Delphi shows its cached rows; the web re-reads)
             _open(ws, form, g)
@@ -153,6 +188,29 @@ class TrackedDataSet(CF.DataSet):
     def m_close(self):
         super().m_close()
         self.closed = True
+
+
+class LoadStrings(CF.Strings):
+    def __init__(self, lines, files):
+        super().__init__(lines)
+        self.files = files
+
+    def m_loadfromfile(self, name):
+        """TStrings.LoadFromFile(FileListrbsbox.items[i]): a relative name, resolved in C:\\AZCARD\\IN (TFileListBox.Directory := .. does ChDir)."""
+        base = str(name).replace("/", "\\").rsplit("\\", 1)[-1]
+        if base not in self.files:
+            raise CF.P.PascalError(f"Cannot open file \"{name}\". The system cannot find the file specified")
+        self.lines[:] = CF.split_lines(self.files[base])
+
+
+class LoadRich(CF.RichEdit):
+    def __init__(self, lines, files):
+        super().__init__(lines)
+        self.files = files
+
+    @property
+    def p_lines(self):
+        return LoadStrings(self.lines, self.files)
 
 
 class GridRef(CF.P.PObj):
@@ -208,9 +266,13 @@ def _run(ws, form, method, answers=None) -> dict:
             comps[n] = CwdListBox(rt.in_files)
         for n in c.get("sinks", ()):
             comps[n] = CF.P.Sink(n)
+        keep = {}
+        for n in c.get("keep_rich", ()):                 # hidden RichEdit1: Lines.LoadFromFile in the preview, read by Bazaya Göndər
+            keep[n] = comps[n] = LoadRich(list(s["keep"].get(n, [])), rt.in_files)
         form_m = Module(comps)
         b = rt.builtins({})
         b["datamod_cards"] = Module(dm)
+        b.update(getfileattributes=lambda n: 16, pchar=lambda x: x, file_attribute_directory=16)   # C:\\AZCARD\\IN is a directory
         for n, m in c.get("clicks", {}).items():
             r = CF.P.Routine(u, m, form_m, b); r.factories = {"textfile": CF.TextFile}
             comps[n] = Clicker(r)
@@ -226,6 +288,8 @@ def _run(ws, form, method, answers=None) -> dict:
         if probe:
             continue
         s["rich"], s["spans"] = rich.lines, rich.spans
+        for n, r_ in keep.items():
+            s["keep"][n] = r_.lines
         for g, ds in grid_ds.items():                   # the grids after the routine: open ones are re-read, closed ones are empty
             if ds.rows is not None or ((s["rows"].get(g) is not None) and not ds.closed):
                 _open(ws, form, g)

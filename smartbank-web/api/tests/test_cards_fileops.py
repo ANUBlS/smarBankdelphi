@@ -117,3 +117,38 @@ def test_dfile():
     assert n["confirmed"] == [] and len(n["grid1"]) == 2
     y = P("/dfile/confirm", {"answers": ["yes"]})
     assert len(y["grid1"]) == 0 and len(y["grid2"]) == 3
+
+
+def test_exchange():
+    login("exchange")
+    up("exchange", "E0002.293", FF.exchange())
+    r = P("/exchange/refresh")
+    assert r["error"] is None
+    r = P("/exchange/tobase")
+    assert r["error"] is None and r["posts"] == 2 and r["messages"] == ["All messages are sent in base!"]
+    assert r["calls"][0] == ["card_main", "delete_exchangefile", []] and ["card_main", "exchangearxiv", ["E0002.293"]] in r["calls"]
+    new = [x for x in r["grid1"] if x["filename"] == "E0002.293"]
+    assert [x["contract_number"] for x in new] == ["ATM-0007", "ATM-0008"] and new[0]["status"] in (0, "0") and new[0]["rrn"] == "998877665544"
+    c = P("/exchange/confirm", {"ids": [new[0]["id"]], "answers": ["yes"]})
+    assert c["messages"] == ["Əməliyyatlar günün sənədlərinə göndərildi!"] and len(c["grid2"]) == 2
+    q = P("/exchange/tobase")              # mock delete_exchangefile drops the unconfirmed rows; the confirmed one makes the file 'loaded'
+    assert q["ask"] == 'The file "E0002.293" already exits, do you want replace it!? '
+    n = P("/exchange/tobase", {"answers": ["mrno"]})
+    assert n["posts"] == 0
+    y = P("/exchange/tobase", {"answers": ["mryes"]})                 # delete .. where file_name = : the column the select calls filename
+    assert y["error"] and "file_name" in y["error"]
+
+
+def test_rbsdo_and_rbstax_no_file():
+    v = login("rbsdo")
+    assert v["grid1"] is None
+    r = P("/rbsdo/tobase")
+    assert r["calls"][0] == ["card_main", "delete_rbsdofile", []] and r["error"] is None
+    up("rbsdo", "XRBS.293", b"x\r\n")                                # not RBSDO*: skipped
+    r = P("/rbsdo/refresh")
+    assert r["error"] is None
+    login("rbstax")
+    r = P("/rbstax/tobase")
+    assert r["calls"][0] == ["card_main", "delete_rbstaxfile", []]
+    assert len(r["grid1"]) == 0 and r["error"] is None
+    P("/rbstax/excel")

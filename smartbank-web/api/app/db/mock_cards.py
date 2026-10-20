@@ -105,7 +105,7 @@ def _pats():
         for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2):
             _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
         from .. import cards_files as CF                                       # SQL.Clear / Add texts of the file operations
-        from .. import cards_cfile  # noqa: F401 - registers its statements
+        from .. import cards_cfile, cards_fileops  # noqa: F401 - register their statements
         for t in CF.EXTRA_SELECTS:
             _PATS.append(re.compile(re.escape(t) + r"\Z", re.S))
     return _PATS
@@ -132,11 +132,15 @@ FO_INSERT = {"insert_dxxx": ("card_dxxxfiles", ["INSTITUTION", "CURRENCY", "TRAN
              "insert_dfiles": ("card_dfiles", ["F1", "F2", "F3", "F4", "F5", "BANKNAME", "F7", "LOROACCOUNT", "F9", "F10", "PAYMENTORDERAMMOUNT",
                                                "PAYMENTDIRECTION", "F13", "F14", "F15", "F16", "F17", "SOURCECONTRACT", "TRANSACTIONDATE",
                                                "TRANSACTIONTIME", "F21", "F22", "F23", "F24", "F25", "CURRENCY", "FILENAME", "F28"])}
-FO_DELETE = {"delete_dxxx": "card_dxxxfiles", "empty_sms_messages": "card_smsfiles", "empty_intretail": "card_intretalifiles",
+FO_INSERT.update({                                                             # argument columns unknown (DDL not in the repo): A1..An
+    "rbsdofile_insert": ("card_rbsdofile_t", ["FILENAME"] + ["A%d" % i for i in range(2, 31)]),
+    "rbstax_insert": ("card_rbstaxfiles", ["A%d" % i for i in range(1, 40)])})
+FO_DELETE = {"delete_rbsdofile": "card_rbsdofile_t", "delete_rbstaxfile": "card_rbstaxfiles", "delete_exchangefile": "card_exchange_files",
+             "delete_dxxx": "card_dxxxfiles", "empty_sms_messages": "card_smsfiles", "empty_intretail": "card_intretalifiles",
              "delete_dfiles": "card_dfiles", "rvisa_delete": "card_rvisafiles"}
 FO_TRANS = {"transaction_dxxx": "card_dxxxfiles", "transaction_sms": "card_smsfiles", "transaction_int": "card_intretalifiles",
-            "transaction_d": "card_dfiles"}
-FO_NOOP = {"dxxarxiv", "smsarxiv", "intarxiv", "darxiv"}
+            "transaction_d": "card_dfiles", "transaction_exchange": ("card_exchange_files", 1), "transaction_rbstax": ("card_rbstaxfiles", 1)}
+FO_NOOP = {"dxxarxiv", "smsarxiv", "intarxiv", "darxiv", "exchangearxiv", "rbsdoarxiv", "rbstaxarxiv", "rbsdopart"}
 
 
 def _num(v):
@@ -281,12 +285,14 @@ class CardsMixin:
             db.execute(f"insert into {t} ({', '.join(rec)}) values ({', '.join('?' * len(rec))})",
                        [v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v for v in rec.values()])
         elif k in FO_DELETE:
-            db.execute(f"delete from {FO_DELETE[k]}" + ("" if k == "rvisa_delete" else " where status = 1"))
+            db.execute(f"delete from {FO_DELETE[k]}" + ("" if k in ("rvisa_delete", "delete_rbsdofile") else
+                                                          " where status = 0" if k in ("delete_exchangefile", "delete_rbstaxfile") else " where status = 1"))
         elif k in FO_TRANS:
+            t, new = FO_TRANS[k] if isinstance(FO_TRANS[k], tuple) else (FO_TRANS[k], 2)
             if a:
-                db.execute(f"update {FO_TRANS[k]} set STATUS = 2 where id = ?", [int(a[0])])
+                db.execute(f"update {t} set STATUS = ? where id = ?", [new, int(a[0])])
             else:                                                              # transaction_d: no argument, every loaded row
-                db.execute(f"update {FO_TRANS[k]} set STATUS = 2 where status in (1, 3)")
+                db.execute(f"update {t} set STATUS = ? where status in (1, 3)", [new])
         elif k in FO_NOOP:
             pass
         else:
@@ -355,11 +361,17 @@ class CardsMixin:
             return False
         p = {k.lower(): (v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v) for k, v in b.items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
-        if m and sql.lower().startswith("insert") and m.group(1).lower() == "card_messages_c" and not re.search(r"\bID\b", sql.split(")")[0]):
-            # card_messages_c.ID is not set by cfilepas (trigger / sequence on the real table, not in the repo): max + 1
-            nid = (_db().execute("select max(id) from card_messages_c").fetchone()[0] or 0) + 1
-            s = s.replace("card_messages_c (", "card_messages_c (ID, ", 1).replace("values (", "values (:nid__, ", 1)
+        if m and sql.lower().startswith("insert") and m.group(1).lower() in CF.DML_TABLES and not re.search(r"\bID\b", sql.split(")")[0], re.I):
+            # ID is not set by the Delphi Append / Post (trigger / sequence on the real table, not in the repo): max + 1
+            t = m.group(1)
+            nid = (_db().execute(f"select max(id) from {t}").fetchone()[0] or 0) + 1
+            s = s.replace(f"{t} (", f"{t} (ID, ", 1).replace("values (", "values (:nid__, ", 1)
             p["nid__"] = nid
+        mi = re.match(r"\s*insert\s+into\s+\w+\s*\(([^)]*)\)\s*values\s*\(([^)]*)\)", s, re.I)
+        if mi:                                                                 # Oracle NUMBER column bound with AsString '0': stored as a number
+            for col, ph in zip(mi.group(1).split(","), mi.group(2).split(",")):
+                if col.strip().upper() == "STATUS" and ph.strip().startswith(":"):
+                    p[ph.strip()[1:]] = _num(p[ph.strip()[1:]])
         _db().execute(s, p)
         return True
 

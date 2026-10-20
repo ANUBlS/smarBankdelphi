@@ -44,7 +44,7 @@
     const cell = (r, f) => { const v = r[f.toLowerCase()]; return v == null ? '' : (opts.fmt ? opts.fmt(f, v) : /^\d{4}-\d\d-\d\d/.test(String(v)) ? String(v).slice(0, 10).split('-').reverse().join('.') : String(v)); };
     if (rows == null) rows = [];
     return `<div class="tablewrap" style="max-height:${opts.h || '32vh'}"><table class="grid" id="${id}" tabindex="0"><thead><tr>${C.map(([f, t]) => `<th data-f="${esc(f || '')}" style="${f && opts.sortable ? 'cursor:pointer' : ''}">${esc(t)}</th>`).join('')}</tr></thead><tbody>
-      ${rows.map((r, i) => `<tr data-id="${esc(r[key] ?? i)}" data-i="${i}" class="${sel.has(r[key]) ? 'sel' : ''}">${C.map(([f]) => f == null ? `<td>${opts.icon ? opts.icon(r) : ''}</td>` : `<td>${esc(cell(r, f))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${C.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
+      ${rows.map((r, i) => `<tr data-id="${esc(r[key] ?? i)}" data-i="${i}" class="${sel.has(r[key]) ? 'sel' : ''}">${C.map(([f], ix) => f == null ? `<td>${opts.icon ? opts.icon(r) : ''}</td>` : (opts.iconAt === ix && ICON[r.status] != null) ? `<td>${icon(r.status)}</td>` : `<td>${esc(cell(r, f))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${C.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;
   }
   const icon = (st) => ICON[st] != null ? `<img src="/img/cards/app_status_${ICON[st]}.png" alt="">` : '';
   // multi-select wiring (dgMultiSelect): click = one row, Ctrl/Shift-click toggles; right-click -> SELECT ALL popup
@@ -118,6 +118,16 @@
       confirm: false, excel: true, sort: ['grid1'], noSel: true },
     dfile: { title: 'D File', grid1: [null, 'BANKNAME', 'LOROACCOUNT', 'PAYMENTORDERAMMOUNT', 'PAYMENTDIRECTION', 'SOURCECONTRACT', 'TRANSACTIONDATE', 'TRANSACTIONTIME', 'FILENAME', 'INFO'],
       grid2: [null, 'BANKNAME', 'LOROACCOUNT', 'PAYMENTORDERAMMOUNT', 'PAYMENTDIRECTION', 'SOURCECONTRACT', 'TRANSACTIONDATE', 'TRANSACTIONTIME', 'FILENAME'], confirm: 'single', excel: true, sort: ['grid1', 'grid2'] },
+    exchange: { title: 'Exchange file', grid1: ['CONTRACT_NUMBER', 'STATUS', 'DEVICE_NO', 'DEVICE_NAME', 'TRANS_DATE', 'DAT', 'TRANS_AMNT', 'TRANS_CURR', 'RATE', 'RECVD_AMNT', 'RECVD_CURR', 'ROUND_AMNT', 'ROUND_CURR', 'RRN'],
+      grid2: ['CONTRACT_NUMBER', 'STATUS', 'DEVICE_NO', 'DEVICE_NAME', 'TRANS_DATE', 'DAT', 'TRANS_AMNT', 'TRANS_CURR', 'RATE', 'RECVD_AMNT', 'RECVD_CURR', 'ROUND_AMNT', 'ROUND_CURR', 'RRN'],
+      confirm: true, excel: true, sort: [], iconAt: 1 },                                       // DrawColumnCell DataCol 1 = the STATUS column
+    rbsdo: { title: 'RbsDoFile', grid1: ['ID', 'CARDNUMBER', 'TRANTIME', 'TRAN_AMOUNT', 'A_CODE', 'MERCHANT_CONTRACT', 'MERCHANT_NAME', 'MCC', 'DEVICE', 'CYCLEN', 'REFERENCE', 'MEMBERS', 'TRANS_CONDITION',
+      'ACQREFNUMBER', 'ACCOUTCURR', 'ACCOUNTAMOUNT', 'ACCOUNTFEE', 'AC_FEE', 'DUE_DATE', 'BRANCH', 'COUNTRY', 'FILENAME', 'SYSTEMDATE', 'PAY_SYSTEM_TYPE', 'TARGET_CONTRACT', 'TRANSACTION_TYPE',
+      'TRANSACTION_CURR', 'OUTWARD_STATUS', 'REQUEST_CATEGORY', 'BATCH_AMOUNT', 'BATCH_COUNT'], confirm: false, excel: true, sort: [] },
+    rbstax: { title: 'RbsTax', grid1: ['ID', null, 'RBSNUM', 'CARDHOLDER', 'SYSTEM_DATE', 'ACCOUNT_AMOUNT', 'FEE', 'MCC', 'MERCHANT', 'TRAN_CURR', 'TRAN_AMOUNT', 'TRAN_TYPE', 'TRAN_DATE', 'RRN', 'TAX_FEE',
+      'SEP_FEE', 'SETTL_CURR', 'SETTL_AMOUNT', 'PAYMENT_SYSTEM', 'SOURCE_CHANNEL', 'TRANSACTION_TYPE', 'REQUEST_CATEGORY', 'ACCOUNT_CURRENCY', 'TOTAL_AMOUNT', 'TOTAL_FEE', 'TOTAL_TAX_FEE', 'TOTAL_SEP_FEE', 'TRANS_COUNT'],
+      grid2: ['ID', null, 'RBSNUM', 'CARDHOLDER', 'SYSTEM_DATE', 'ACCOUNT_AMOUNT', 'FEE', 'MCC', 'MERCHANT', 'TRAN_CURR', 'TRAN_AMOUNT', 'TRAN_TYPE', 'TRAN_DATE', 'RRN', 'TAX_FEE', 'SEP_FEE', 'SETTL_CURR', 'SETTL_AMOUNT'],
+      confirm: true, excel: true, sort: [] },
   };
   async function fileop(box, form) {
     const S = FO[form], call = caller('/api/cards/fo/' + form);
@@ -131,8 +141,8 @@
           ${S.noPreview ? '' : `<button class="btn" id="fo_r">${esc(K('cf_refresh'))}</button>`}<button class="btn" id="fo_b">${esc(K('cf_tobase'))}</button>
           ${S.confirm ? `<button class="btn" id="fo_c">${esc(K('cf_confirm'))}</button>` : ''}${S.excel ? '<button class="btn secondary" id="fo_x">Excel</button>' : ''}</div>
         ${S.noPreview ? '' : `<pre id="fo_rich" style="max-height:28vh;overflow:auto;background:#fff;border:1px solid #ccd;padding:6px;font:12px/1.35 monospace;margin:6px 0">${rich(d.rich)}</pre>`}
-        ${gridHtml('fo_g1', S.grid1, d.grid1, { sel, sortable: S.sort.includes('grid1'), icon: r => icon(r.status) })}
-        ${S.grid2 ? `<h4 style="margin:8px 0 4px">${esc(K('cf_posted'))}</h4>${gridHtml('fo_g2', S.grid2, d.grid2, { sortable: S.sort.includes('grid2'), icon: r => icon(r.status) })}` : ''}`;
+        ${gridHtml('fo_g1', S.grid1, d.grid1, { sel, sortable: S.sort.includes('grid1'), icon: r => icon(r.status), iconAt: S.iconAt })}
+        ${S.grid2 ? `<h4 style="margin:8px 0 4px">${esc(K('cf_posted'))}</h4>${gridHtml('fo_g2', S.grid2, d.grid2, { sortable: S.sort.includes('grid2'), icon: r => icon(r.status), iconAt: S.iconAt })}` : ''}`;
       const q = (id) => box.querySelector('#' + id);
       q('fo_f').onchange = async () => { const f = q('fo_f').files[0]; if (!f) return; const r = await call('/upload', { name: f.name, b64: await readB64(f) }); if (r) { d = r; draw(); } };
       const done = (r) => { d = r; draw(); say(r.messages); saveFiles(r.files); if (r.error) toast(r.error, 'error'); };
