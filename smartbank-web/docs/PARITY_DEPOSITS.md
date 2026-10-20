@@ -42,7 +42,7 @@ All are called via `LoadPlugin(bpl, param)` (CommonDeclsImpl_new.pas:30-40; no c
 | Əmanətin ödənilməsi (miWithdraw, N25 Ctrl+M) | NEW_SBCM_PEYMENT | SBDM_ExtractMoney_new.bpl | Packages/SBDM_ExtractMoney_new (3 / 1518) | **ported** – api/app/dep_ops.py, deposits_ops.js |
 | Əmanətin qismən ödənilməsi (N15) | NEW_SBCM_PARTIAL_PEYMENT | SBDM_PartialPayment_new.bpl | Packages/SBDM_PartialPayment_new (3 / 1392) | todo |
 | Kapitallaşdırma (miCapitalization, N24 Ctrl+T) | NEW_SBCM_CAPITALIZATION | SBDM_Capitalize_new.bpl | Packages/SBDM_Capitalize_new (2 / 1130) | todo |
-| Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | todo |
+| Əmanətin vaxtsız ödənilməsi (N26 Ctrl+U) | NEW_SBCM_UNTIMELY | SBDM_UntimelyEtMoney_new.bpl | Packages/SBDM_UntimelyEtMoney_new (1 unit in dpk / 1971) | **ported** – api/app/dep_untimely.py, deposits_ops.js |
 | Faizlərin hesablanması (N12, N27 Ctrl+P) | NEW_SBCM_CALC_PERCENT | SBDM_PercentConverting_new.bpl | **source not in the repo** (only referenced by NewDepositsManager/NewDepositsExtractMoney/NewDepositsPercentConverting.dpk as `..\SBDM_PercentConverting_new\`, folder missing) | blocked – needs the source. Re-searched the whole repo: only the classic-schema SBDM_PercentConverting / SBDM_Filter exist (DepositsManager/, DepositTeze/ – sbcm_* classic tables, DepozitAqroinvest_neftfondu/, NewDepositsManager/NewDepositsFilter); none is the _new source |
 | Prolonqasiya (N9, N8) | NEW_SBCM_PROLONGATION | SBDM_Prolongation_new.bpl | Packages/SBDM_Prolongation_new (2 / 800) | **ported** – api/app/dep_prolong.py, deposits_ops.js |
 | Ödəmə planı (N36; N14 invisible) | – | Sbdm_Shedule_new.bpl | Packages/Sbdm_Shedule_new (3 / 1577) | **ported** – api/app/dep_shedule.py, deposits_ops.js |
@@ -144,6 +144,18 @@ No Commit is issued by the plugin after AddProlongation / DelLastProlongation, a
 | Button1Click 'Qəbul': SBCM_PAYMENT_SCHEDULE1_new.sbcmperiod(deposid, PaymentDate incl. time, per_amount, period => StrToInt, perc => StrToCurr(DBEdit2)); Refresh; form stays open; İmtina closes | `/shedule/plan/accept`; StrToInt error -> s_err_int |
 
 No right check (N36Click), no Commit in the plugin; ActionClose has no handler, so the web form closes with the title-bar ✕ (the Delphi window close box). Mock assumptions: getdateinterval = whole months, getconverteddebt = amount × rate / 100 × months / 12 rounded, sbcmperiod replaces the rows with <period> monthly rows of per_amount / period.
+
+## SBDM_UntimelyEtMoney_new.bpl (vaxtından əvvəl ödəmə)
+
+| Delphi | Web |
+|---|---|
+| exportproc: DepositInfo (SbcmOpenDate, SBCMGetOldDate, GetpercentCollection, sbcm_payment_new.GetOverduePercent_new, the three accounts, FACTICALDEBT / FACTICALINTERESTDEBT), CreditAccs (opened, unused), DepositAccno (outComeAccForDeposit per currency and category); caption '<no> nömrəli depozitin vaxtından əvvəl ödənilməsi' | `/api/deposits/untimely/open` |
+| 'Kredit Hesabın №': AccountListCB has no ListSource; DBEditEh8 (DepositAccno.ACC_NO) lies on top of it | read-only DepositAccno.ACC_NO |
+| FormShow: DTPCalcPercent := OpenDate, DTPBankDate := Get_BankDate (editable, unused) | same |
+| Button1Click: UntimeWithDrawMoney(ContractID, Trunc(DTPCalcPercent), p_CreditAccID => DepositAccno.ID, p_checdpercentpeyment => checkbox 1/0, p_FACTICALINTDEBT) outside the try; TrDelayed_Show 'Depozitin vaxtından əvvəl ödənilməsi ...'; CommitWithDrawMoney(DoCommit); OK closes the form | `/untimely/run` + `/delayed/finish` |
+| Button2Click İmtina: Session.Rollback; Close. Esc: Close only | `/untimely/cancel`; Esc closes without the call |
+
+Right NEW_SBCM_UNTIMELY is re-checked by the API (the manager checks it before LoadPlugin). The manager grid is not refreshed afterwards (as in Delphi). frmUntimelyEtMoneyImpl.pas (no _new suffix) in the same folder is a dead older copy. Mock assumptions: UntimeWithDrawMoney pays the whole principal plus either the accrued interest (checkbox) or the principal × untimely rate (fixture `_rates[type][1]`) × days(calc date → bank date) / 365; commit zeroes the state.
 
 ## Differences from NewDepositsManager (the previous, non-production port)
 

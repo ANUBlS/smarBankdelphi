@@ -40,6 +40,13 @@ def _db():
         acc = lambda col: (lambda i: None if i is None else (c.execute(f"select {col} from account where id = ?", [i]).fetchone() or [None])[0])  # noqa: E731
         c.create_function("sp_get_contractaccount", 1, acc("acc_no"))
         c.create_function("sp_get_contractaccountname", 1, acc("name"))
+        col = lambda q: (lambda i: None if i is None else (c.execute(q, [i]).fetchone() or [None])[0])  # noqa: E731
+        c.create_function("sp_sbcmopendate", 1, col("select opendate from sbcm_contracts_new where id = ?"))
+        # assumed: the closing date before any prolongation (first OLDDATE), else CLOSEDATE
+        c.create_function("sp_sbcmgetolddate", 1, col('select coalesce((select olddate from sbcm_prolongations_new p where p."id#" = s.id '
+                                                       'order by hdate, id limit 1), s.closedate) from sbcm_contracts_new s where s.id = ?'))
+        c.create_function("sp_getoverduepercent_new", 1, lambda i: None if i is None else float(
+            (D.get("_rates", {}).get(str((c.execute("select contracttype from sbcm_contracts_new where id = ?", [i]).fetchone() or [0])[0])) or [0, 0])[1]))
         c.create_function("sp_getpercentcollection", 1, lambda i: None if i is None else pc.get(str(int(i))))
         for t, rows in D.items():
             if t.startswith("_"):
@@ -94,6 +101,11 @@ def _save_deposit(db, update: bool, n: dict, user: dict):
 
 
 _PEND: dict = {}
+_CTX: dict = {}
+
+
+def _bank_date():
+    return dt.datetime.fromisoformat(_CTX.get("tek_dat", "2026-10-12"))
 
 
 def _delayed(db, rows, date):
@@ -128,6 +140,24 @@ def _ops(key, n, db):
         rows += [(a[2], n["P_AccID"], n["InterestDebtWithdraw"], "Faizin ödənilməsi")] if n["InterestDebtWithdraw"] else []
         _delayed(db, rows, d(n["HDate"]))
         return {}
+    if key == "SBCM_PAYMENT_NEW.UNTIMEWITHDRAWMONEY":      # assumed: principal + interest (full or recalculated at the untimely rate)
+        cid = int(n["ContractID"]); a = accs(cid)
+        cs = db.execute('select sum(facticaldebt) from sbcm_contract_state_new where "id#" = ?', [cid]).fetchone()
+        main = float(cs[0] or 0)
+        if not main:
+            raise DBError("ORA-20104: mock: the deposit has no balance", 20104)
+        if n["p_checdpercentpeyment"]:
+            intr = float(n["p_FACTICALINTDEBT"])
+        else:
+            t = db.execute("select contracttype from sbcm_contracts_new where id = ?", [cid]).fetchone()[0]
+            rate = float((_FX.get("_rates", {}).get(str(t)) or [0, 0])[1])
+            days = (_bank_date() - n["p_CalcPercentDate"]).days
+            intr = round(main * rate / 100 * max(days, 0) / 365, 2)
+        _PEND.clear(); _PEND.update(op="untimely", cid=cid, main=main, int=intr, date=_bank_date().date().isoformat())
+        rows = [(a[1], n["p_CreditAccID"], main, "Depozitin vaxtından əvvəl ödənilməsi")]
+        rows += [(a[2], n["p_CreditAccID"], intr, "Faizin ödənilməsi")] if intr else []
+        _delayed(db, rows, _PEND["date"])
+        return {}
     if key in ("SBCM_CREDIT_TRANCHES_NEW.COMMITDEPOSITMONEY", "SBCM_PAYMENT_NEW.COMMITWITHDRAWMONEY"):
         p = dict(_PEND); _PEND.clear()
         if not n["DoCommit"]:
@@ -137,6 +167,10 @@ def _ops(key, n, db):
             db.execute('insert into sbcm_tranches_new ("id#", ID, HDATE, TOTAL, RESERVE, TRID, DESCRIPTION) values (?,?,?,?,?,?,?)',
                        [p["cid"], nid("sbcm_tranches_new"), p["date"], p["total"], p["pct"], 800000 + nid("sbcm_tranches_new"), None])
             db.execute('update sbcm_contract_state_new set facticaldebt = facticaldebt + ? where "id#" = ?', [p["total"], p["cid"]])
+        elif p.get("op") == "untimely":
+            db.execute('insert into sbcm_payments_new ("id#", ID, HDATE, FACTICALDEBT, INTERESTDEBT, TRID, INTTRID) values (?,?,?,?,?,?,?)',
+                       [p["cid"], nid("sbcm_payments_new"), p["date"], p["main"], p["int"], 820000, 820001])
+            db.execute('update sbcm_contract_state_new set facticaldebt = 0, facticalinterestdebt = 0, calculationenabled = 0 where "id#" = ?', [p["cid"]])
         elif p.get("op") == "extract":
             db.execute('insert into sbcm_payments_new ("id#", ID, HDATE, FACTICALDEBT, INTERESTDEBT, TRID, INTTRID) values (?,?,?,?,?,?,?)',
                        [p["cid"], nid("sbcm_payments_new"), p["date"], p["main"], p["int"], 810000, 810001])
@@ -167,8 +201,9 @@ def _ops_func(key, n, db):
 
 
 def _sqlite(sql: str) -> str:
-    s = re.sub(r"sbcm_stored_programs(?:_new)?\.(Get_ContractAccountName|Get_ContractAccount|GetpercentCollection)\(",
+    s = re.sub(r"sbcm_stored_programs(?:_new)?\.(Get_ContractAccountName|Get_ContractAccount|GetpercentCollection|SbcmOpenDate|SBCMGetOldDate)\(",
                lambda m: "sp_" + m.group(1).lower() + "(", sql)
+    s = s.replace("sbcm_payment_new.GetOverduePercent_new(", "sp_getoverduepercent_new(")
     s = s.replace("user$", '"user$"')
     return re.sub(r"\b(sid|id|type)#", r'"\1#"', s)
 
@@ -259,6 +294,7 @@ class DepMixin:
     def _dep_proc(self, key, named, args=()):
         n = named or {}
         db = _db()
+        _CTX["tek_dat"] = self.st["sys"]["tek_dat"][:10]
         if key == "SBCM_PAYMENT_SCHEDULE1_NEW.SBCMPERIOD":          # assumed: <period> monthly rows from PaymentDate, equal parts
             cid, start, amount, period = int(n["deposid"]), n["PaymentDate"], float(n["per_amount"]), int(n["period"])
             if period <= 0:

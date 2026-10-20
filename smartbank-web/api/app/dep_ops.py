@@ -24,7 +24,8 @@ PKG_PAY = "sbcm_payment_new"          # DMExtractMoneyImpl_new.dfm:105-108 sbcm_
 XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 # kind -> (package, commit procedure, TrDelayed_Show caption = rsTransactionsWillProcessed)
 DELAYED = {"apply": (PKG_TR, "CommitDepositMoney", "Depozit yatrımı ..."),
-           "extract": (PKG_PAY, "CommitWithDrawMoney", "Depozitin ödənilməsi ...")}
+           "extract": (PKG_PAY, "CommitWithDrawMoney", "Depozitin ödənilməsi ..."),
+           "untimely": (PKG_PAY, "CommitWithDrawMoney", "Depozitin vaxtından əvvəl ödənilməsi ...")}
 # CMExcelExport: visible TFields in field order (field, DisplayName, kind)
 A_EXPORT = [("TOTAL", "Məbləğ", "f"), ("RESERVE", "Faiz", "f"), ("HDATE", "Tarix", "d"), ("DESCRIPTION", "Qeyd", "s")]
 E_EXPORT = [("ID", "№", "f"), ("HDATE", "Tarix", "d"), ("FACTICALDEBT", "Əsas məbləğdən", "f"), ("INTERESTDEBT", "Faiz məbləğindən", "f")]

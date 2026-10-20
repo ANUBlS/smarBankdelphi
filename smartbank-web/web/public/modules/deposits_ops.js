@@ -240,6 +240,39 @@
     }, 'dep-sub dep-contract');
   }
 
+  // ---------------------------------------------------------------- SBDM_UntimelyEtMoney_new (frmUntimelyEtMoney_new)
+  async function untimelyForm(sel) {
+    const body = { contract_id: sel.id, contract_no: sel.no };
+    let o; try { o = await api('/api/deposits/untimely/open', { method: 'POST', body }); } catch (e) { toast(D().errText(e), 'error'); return; }
+    const I = o.info;
+    const f = (lab, v, id = '') => `<div class="dc-row"><label>${esc(K(lab))}</label><input class="ro" readonly ${id ? `id="${id}"` : ''} value="${esc(v ?? '')}"></div>`;
+    D().modal(`<h3>${esc(o.caption)}</h3><div id="unErr"></div>
+      <fieldset class="dgrp"><div class="dc-form">${f('o_customer', I.name)}
+        <div class="dc-row"><label>${esc(K('u_open'))}</label><input type="date" class="ro" readonly value="${esc(String(I.opendate ?? '').slice(0, 10))}"></div>
+        <div class="dc-row"><label>${esc(K('u_close'))}</label><input type="date" class="ro" readonly value="${esc(String(I.closedate ?? '').slice(0, 10))}"></div>
+        ${f('u_rate', I.annualint)}${f('u_overdue', I.overdueannualint)}</div></fieldset>
+      <div class="dc-cols" style="margin-top:8px"><fieldset class="dgrp"><div class="dc-form">
+        ${f('u_credit', o.depositacc.acc_no, 'unCred')}
+        <div class="dc-row"><label>${esc(K('u_opdate'))}</label><input type="date" id="unBank" value="${esc(o.bankdate)}"></div>
+        ${f('u_clientacc', I.clientaccno)}
+        <div class="dc-row"><label>${esc(K('u_calcdate'))}</label><input type="date" id="unCalc" value="${esc(o.calcdate)}"></div></div></fieldset>
+      <fieldset class="dgrp"><div class="dc-form">${f('u_depacc', I.contractaccno)}${f('o_rest', money(I.facticaldebt))}${f('u_intacc', I.interestaccno)}${f('o_rest', money(I.facticalinterestdebt))}</div></fieldset></div>
+      <label class="dc-pair" style="margin-top:8px;font-weight:bold"><input type="checkbox" id="unFull"> ${esc(K('u_full'))}</label>
+      <div class="actions"><button class="btn" id="unOk">${esc(K('o_accept'))}</button><button class="btn secondary" id="unNo">${esc(K('o_refuse'))}</button></div>`, (m, close) => {
+      const q = (s) => m.querySelector(s);
+      q('#unNo').onclick = async () => { try { await api('/api/deposits/untimely/cancel', { method: 'POST' }); } catch (e) { toast(D().errText(e), 'error'); } close(); };   // Session.Rollback; Close
+      m.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !document.querySelector('.modal.dep-tt')) { e.preventDefault(); close(); } });   // FormKeyPress: Close only
+      q('#unOk').onclick = async () => {
+        q('#unErr').innerHTML = '';
+        try {
+          const r = await api('/api/deposits/untimely/run', { method: 'POST', body: { contract_id: sel.id, calcdate: q('#unCalc').value, full: q('#unFull').checked } });
+          if (await delayed(r)) close();                                 // ModalResult := mrOk
+        } catch (e) { q('#unErr').innerHTML = `<div class="alert error">${D().errHtmlInner(e)}</div>`; }
+      };
+      q('#unOk').focus();
+    }, 'dep-contract dc-wide');
+  }
+
   const APPLY = { url: '/api/deposits/apply', rows: 'tranches', caption: 'o_a_caption', group: 'o_about', delLabel: 'o_delete', delRight: 'DELETE_SBCM_TRANSH',
     delNeedsRows: false, xls: 'Depozit_yatrimlari.xlsx', add: addMoney,
     cols: [['id', '№'], ['hdate', 'o_date', 'd'], ['total', 'o_total', 'm'], ['reserve', 'o_reserve'], ['description', 'o_descr']] };
@@ -252,5 +285,6 @@
   window.SB.depForms.apply_money = needSel(APPLY);
   window.SB.depForms.extract_money = needSel(EXTRACT);
   window.SB.depForms.shedule = (sel) => sel ? sheduleForm(sel) : toast(K('err_no_deposit'), 'error');
+  window.SB.depForms.untimely = (sel) => sel ? untimelyForm(sel) : toast(K('err_no_deposit'), 'error');
   window.SB.depForms.prolongation = (sel) => sel ? prolongForm(sel) : toast(K('err_no_deposit'), 'error');
 })();
