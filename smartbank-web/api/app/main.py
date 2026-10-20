@@ -385,3 +385,5 @@ from . import cashsymbols  # noqa: E402
 app.include_router(cashsymbols.make_router(current, require_module, err))
 from . import exchange  # noqa: E402
 app.include_router(exchange.make_router(current, require_module, err))
+from . import currencyposition  # noqa: E402
+app.include_router(currencyposition.make_router(current, require_module, err))

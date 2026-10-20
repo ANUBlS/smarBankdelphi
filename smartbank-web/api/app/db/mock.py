@@ -42,6 +42,8 @@ from .mock_dep import DepMixin
 from . import mock_cd
 from .mock_cd import CdMixin
 from . import mock_ex
+from . import mock_cp
+from .mock_cp import CpMixin
 from .mock_ex import ExMixin
 from . import mock_cards
 from . import mock_xohks
@@ -73,6 +75,7 @@ def reset():
     mock_dep.reset()
     mock_cd.reset()
     mock_ex.reset()
+    mock_cp.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -86,7 +89,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -100,7 +103,9 @@ class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsIn
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._ex_func(key, args)              # Packages/Exchange (SB_Exchange, SB_MTOUTVIEW)
+        r = self._cp_func(key, args)              # Packages/CurrencyPosition (sb_currencyposition, SB_CAPITAL)
+        if r is NotImplemented:
+            r = self._ex_func(key, args)          # Packages/Exchange (SB_Exchange, SB_MTOUTVIEW)
         if r is NotImplemented:
             r = self._cd_func(key, args)          # Packages/CashDeskLast (SB_CASHREPORT)
         if r is NotImplemented:
@@ -195,7 +200,9 @@ class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsIn
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._ex_proc(key, args)             # Packages/Exchange (SB_Exchange)
+        r = self._cp_proc(key, args)             # Packages/CurrencyPosition (sb_currencyposition)
+        if r is NotImplemented:
+            r = self._ex_proc(key, args)         # Packages/Exchange (SB_Exchange)
         if r is NotImplemented:
             r = self._cd_proc(key, args)         # Packages/CashDeskLast + CashSymbols (SB_CASHREPORT)
         if r is NotImplemented:
@@ -250,7 +257,9 @@ class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsIn
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._ex_query(sql, b)  # Packages/Exchange (exact verbatim SQL text only)
+        r = self._cp_query(sql, b)  # Packages/CurrencyPosition (cp_sql texts / per-user tables)
+        if r is NotImplemented:
+            r = self._ex_query(sql, b)  # Packages/Exchange (exact verbatim SQL text only)
         if r is NotImplemented:
             r = self._cd_query(sql, b)  # Packages/CashDeskLast + CashSymbols (exact verbatim SQL text only)
         if r is NotImplemented:
@@ -333,6 +342,8 @@ class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsIn
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._cp_execute(sql, binds or {}):
+            return
         if self._ex_execute(sql, binds or {}):
             return
         if self._cd_execute(sql, binds or {}):
@@ -403,6 +414,7 @@ class MockConnection(ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsIn
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._cp_commit()
         self._ex_commit()
         self._cd_commit()
         self._dep_commit()
