@@ -60,13 +60,13 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 | 14 | RateDifference / TRateDifferenceForm | `Packages/RateDifference` | 1 | 1 | 1 | 336 |  |  | **ported** (route `/m/ratedifference`, see PARITY_RATEDIFFERENCE.md): the Delphi form never opens its dataset, so it is an empty grid + disabled navigator; no other copies |
 | 15 | RateDifferenceReport / TRateDifferenceReportX | `Packages/RateDifferenceReport` | 3 | 3 | 4 | 848 |  | SBOP | **ported** (route `/m/ratedifferencereport`, see PARITY_RATEDIFFERENCEREPORT.md); Hesabat (QuickReport) on hold; no other copies |
 | 16 | RateManagement / TRateManagementForm | `Packages/RateManagement-NBC` | 2 | 2 | 9 | 1171 |  | SBRM, SBSYS, EXCH_MGR, SB_ACA | **waiting for the user's choice of production folder** (same CLSID in both): `Packages/RateManagement` (rates grid with SELL_RATE_CASHLESS / BUY_RATE_CASHLESS 'nağdsız' columns) vs `Packages/RateManagement-NBC` (BUY_RATE_END / SELL_RATE_END 'baş./son' range columns + DBNavigator Post checks 'Alış məzənnəsi(son.) … kiçik ola bilməz'). RateManagementRecalculate.pas/.dfm are identical in both |
-| 17 | RatesViewer / TFrmRates | `Packages/RatesViewer` | 1 | 1 | 0 | 343 |  |  |  |
+| 17 | RatesViewer / TFrmRates | `Packages/RatesViewer` | 1 | 1 | 0 | 343 |  |  | **ported** (route `/m/ratesviewer`, see PARITY_RATESVIEWER.md): empty filter panel + grid (dataset has no SQL), Ctrl+F; no other copies |
 
 ### Tier 1 – Memorial orders & payment orders
 
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
-| 18 | MemorialOrder / TfrmMemorialOrder | `Packages/MemorialOrder` | 3 | 3 | 7 | 521 |  |  |  |
+| 18 | MemorialOrder / TfrmMemorialOrder | `Packages/MemorialOrder` | 3 | 3 | 7 | 521 |  |  | **ported** (route `/m/memorialorder`, see PARITY_MEMORIALORDER.md): filter panel, combos, Sazlama (Memorial table edit, CommitOnPost); Transactions never opened and Yeniləmək / Hesabat have no handler in Delphi; no other copies |
 | 19 | MemorialProject / TMemorial | `Packages/Memorial` | 15 | 15 | 14 | 2363 |  | SB_MEMORIAL | copies: Packages/Memorial_yeni (tam hazir deyil) |
 | 20 | Order / TOrderForm | `Packages/Order` | 6 | 4 | 6 | 962 |  |  |  |
 | 21 | PaymentDecreeX / TPaymentDecree | `Packages/PaymentDecree` | 8 | 7 | 16 | 2974 |  | SB_PAYMENTDECREE | copies: Packages/PaymentDecree29112012 |
