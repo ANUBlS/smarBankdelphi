@@ -70,8 +70,10 @@ PLUGINS = {
     "rep_control": (None, "NewDepositsControl.bpl", ""),                                  # Kontrol1Click :778
     "rep_logs": (None, "NewDepositsLogs.bpl", ""),                                        # Loqlar1Click :532
 }
+# Advanced rights the ported plugin forms check before a confirmation (the action endpoints check them again)
+FORM_RIGHTS = {"DELETE_DM_TRANSH", "DELETE_SBCM_PEYMENT"}
 # Plugin keys whose BPL form is ported: the browser opens the web form, which runs the same right check itself.
-MIGRATED = {"contract_insert", "contract_edit", "contract_look"}
+MIGRATED = {"contract_insert", "contract_edit", "contract_look", "apply_money", "extract_money"}
 # DM_ADMIN: ToolButton9MouseActivate :1094 checks it when the Sazlamalar button is pressed (before its drop-down opens).
 DATE_SEPARATOR = "."   # FormatDateTime('dd/MM/yyyy'): '/' = Windows DateSeparator (az-AZ '.', unverified on the bank PCs)
 
@@ -261,6 +263,15 @@ def make_router(current, require_module, err):
         if right:
             check_right(ws.conn, right)
         return {"ok": key in MIGRATED, "migrated": key in MIGRATED, "bpl": bpl, "param": param}
+
+    @r.post("/right")
+    def _right(body: dict, ws=Depends(g)):
+        """The plugin forms call sb_aca.checkadvancedobjectaccess before their confirmation dialogs (e.g. ActnDelExecute)."""
+        code = str(body.get("code") or "")
+        if code not in FORM_RIGHTS:
+            err(404, "error.generic")
+        check_right(ws.conn, code)
+        return {"ok": True}
 
     @r.post("/settings-menu")
     def _settings(ws=Depends(g)):

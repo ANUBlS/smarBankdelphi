@@ -37,8 +37,8 @@ All of these are called via `LoadPlugin(bpl, param)` (NewCommonDeclsImpl.pas:31-
 | Menu | BPL / param | Delphi folder (units / lines) | Status |
 |---|---|---|---|
 | Yeni / Redaktə / dbl-click | NewDepositsContract.bpl InsertContract / EditContract / LookContract | NewDepositsContract (6 / 1550) | **ported** (see below) |
-| Yatırım | NewDepositsApplyMoney.bpl | NewDepositsApplyMoney (6 / 1367) | todo |
-| Əmanətin ödənilməsi | NewDepositsExtractMoney.bpl | NewDepositsExtractMoney (3 / 548) | todo |
+| Yatırım | NewDepositsApplyMoney.bpl | NewDepositsApplyMoney (6 / 1367) | **ported** (`dep_money.py`, `deposits_money.js`) |
+| Əmanətin ödənilməsi | NewDepositsExtractMoney.bpl | NewDepositsExtractMoney (3 / 548) | **ported** (`dep_money.py`, `deposits_money.js`) |
 | Kapitallaşdırma (toolbar) | NewDepositsCapitalize.bpl | NewDepositsCapitalize (2 / 362) | todo |
 | Əmanətin vaxtsız ödənilməsi | NewDepositsUntimelyEtMoney.bpl (REPAYMENT) | SBDM_UntimelyEtMoney_new (3 / 558) | todo |
 | Faizlərin hesablanması | NewDepositsPercentConverting.bpl | NewDepositsPercentConverting (5 / 1219) | todo |
@@ -111,3 +111,22 @@ Contract-form unverified items:
   - IsCalculationEnabled = stopcalcdate is null.
 - The real SmartBankIni tree node for deposits (the mock uses Action #9).
 - Production lineage (see the top table).
+
+
+## Yatırım / Əmanətin ödənilməsi (NewDepositsApplyMoney, NewDepositsExtractMoney)
+
+| Delphi | Web | Source |
+|---|---|---|
+| FrmApplyMoney: Tranches grid (Məbləğ/Tarix/Qeyd), contract header, Yeni / Sil / Excel / Çıxış | apply modal; SQL verbatim in `dep_money_sql.py` | FrmApplyMoney.dfm, DMApplyMoney.dfm |
+| Yeni → right INSERT_DM_TRANSH → FrmAddMoney (Debit acc, % from DBEdit text, client accs + "Seçilməyib", Qalıq) | `/apply/add`, `/apply/ostat` | FrmApplyMoney.pas, FrmAddMoney.pas |
+| % text = 0 → 'Yatrımın % dərəcəsi 0 ola bilməz.' | `deposits.m_err_percent0` | FrmAddMoney.pas |
+| DepositMoney(Usetransaction) → TrDelayed_Show (DM_DELAYED_TRANSACTIONS) → CommitDepositMoney(DoCommit) | `/apply/run` → confirm modal → `/delayed/finish` (same Oracle session; package commits) | DMApplyMoney.pas, NewTemporaryTransactionsFormImpl.pas |
+| Sil → DELETE_DM_TRANSH → confirm → DeleteDepositMoney (no commit); Sil always enabled (ActnDelUpdate not wired) | `/right` pre-check, `/apply/delete` | FrmApplyMoney.pas |
+| Excel → EXCEL_DM_TRANSH, sheet 'Depozit yatrımları' | `/apply/export.xlsx` | FrmApplyMoney.pas |
+| FrmExtractMoney: payments grid incl. TRID/INTTRID/TRANCHESID; Yeni (INSERT_SBCM_PEYMENT; SetResiduaryAmount default), Ləğv (DELETE_SBCM_PEYMENT, disabled when empty), Excel (EXCEL_SBCM_PEYMENT, 'Ödənilmiş əməliyyat') | `/extract/*` | FrmExtractMoney.pas, FrmAddExtractMoney.pas, DMExtractMoney.pas |
+
+Quirks kept: checkedtranch checks are commented out in Delphi (not ported); Extract N1 handler body is commented out; CreditAccs is opened but unused.
+Web-only: if a confirmation is left open (page reload), the next Run first dismisses it with Commit(False) — Delphi's modal cannot reach that state.
+Not migrated: Apply N1 "Əməliyyata baxmaq" opens SBDM_TransactionViewer.bpl (shows the not-migrated notice).
+Unverified: DM_DELAYED_TRANSACTIONS semantics and PL/SQL BOOLEAN binds (Usetransaction/DoCommit) in python-oracledb thin mode; dm_credit_tranches / dm_payment package bodies are not in the sources.
+Screenshots 255–259. Tests `api/tests/test_dep_money.py` (DEPOSITOR opens the forms but is denied INSERT_DM_TRANSH / DELETE_DM_TRANSH).

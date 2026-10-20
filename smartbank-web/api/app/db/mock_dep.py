@@ -12,11 +12,13 @@ import sqlite3
 
 from .. import dep_sql as Q
 from .. import dep_contract_sql as QC
+from .. import dep_money_sql as QM
 from .base import DBError
 
 _DB = None
 DATE_COLS = {"OPENDATE", "CLOSEDATE", "PROLONGATIONDATE", "STOPCALCDATE", "HDATE", "FIRSTINTERESTPAYDAT", "DATEOFCONCLUSION",
-             "DUEDATEFIRSTCONTRACT", "OPENDAT", "CLOSE_DAT"}
+             "DUEDATEFIRSTCONTRACT", "OPENDAT", "CLOSE_DAT", "OPDATE", "TRDATE"}
+_PEND: dict = {}
 _SEQ: dict = {}
 _LAST: dict = {}
 
@@ -35,6 +37,9 @@ def _db():
         cust = D.get("_customers", {})
         c.create_function("dm_stored_programs_getcustomername", 1, lambda i: None if i is None else cust.get(str(int(i))))
         c.create_function("nvl", 2, lambda a, b: b if a is None else a)
+        c.create_function("dm_sp_getcontractaccount", 1, lambda i: None if i is None else
+                          (c.execute("select acc_no from account where id = ?", [i]).fetchone() or [None])[0])
+        _PEND.clear()
         _SEQ.clear(); _SEQ.update(D.get("_seq", {})); _LAST.clear()
         schema = D.get("_schema", {})
         for t, rows in D.items():
@@ -51,6 +56,7 @@ def _db():
 
 def _sqlite(sql: str) -> str:
     s = sql.replace("dm_stored_programs.getcustomername(", "dm_stored_programs_getcustomername(")
+    s = s.replace("dm_stored_programs.GetContractAccount(", "dm_sp_getcontractaccount(").replace("trunc(sysdate)", "date('now')")
     s = s.replace("smart.user$", "user$").replace("user$", '"user$"')
     s = re.sub(r"\b(sid|id|type)#", r'"\1#"', s)
     return s
@@ -59,6 +65,28 @@ def _sqlite(sql: str) -> str:
 _MAIN = re.compile(re.escape(Q.SQL_DMDATASET.split("order by :OrderField")[0]) + r"order by (cont\.id|\w+ (?:ASC|DESC))     \Z", re.S)
 _OWN = {Q.SQL_DM_TYPES, Q.SQL_DM_CATEGORIES, Q.SQL_DM_PERSONS, Q.SQL_USERS, Q.SQL_DM_TRANCHES, Q.SQL_FILIALS, Q.SQL_VALUTES}
 _OWN |= {v for k, v in vars(QC).items() if k.startswith("SQL_") and k != "SQL_SEQ_DM_CONTRACTS"}
+_OWN |= {v for k, v in vars(QM).items() if "SQL_" in k}
+
+
+def _nextval(name):
+    _SEQ[name] += 1
+    return _SEQ[name]
+
+
+def _acc(db, accid):
+    r = db.execute("select acc_no, (select val_name from avalute where valute = (select currency from dm_contracts c, dm_contract_accounts a "
+                   "where a.\"id#\" = c.id and ? in (a.clientaccid, a.contractaccid, a.interestaccid))) from account where id = ?", [accid, accid]).fetchone()
+    return (r[0], r[1]) if r else (None, None)
+
+
+def _delayed(db, rows):
+    """Assumed: the package writes its proposed postings to DM_DELAYED_TRANSACTIONS (temporary table)."""
+    db.execute("delete from dm_delayed_transactions")
+    for d, c, amt, txt, can in rows:
+        (dn, dc), (cn, cc) = _acc(db, d), _acc(db, c)
+        db.execute('insert into dm_delayed_transactions ("DEBITACCNO","DEBITCURRENCY","CREDITACCNO","CREDITCURRENCY","TRDATE","INBALANCECHAR",'
+                   '"FLAGS","DEBITAMOUNT","CREDITAMOUNT","NATAMOUNT","TRDESCRIPTION","CANPROCESS","PARENTID") values (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                   [dn, dc, cn, cc, _PEND.get("date"), "+", 0, amt, None, amt, txt, can, None])
 
 
 def _bind(v):
@@ -94,6 +122,55 @@ class DepMixin:
             return [{"NEXTVAL": _SEQ[m.group(1).upper()]}]
         return NotImplemented
 
+    def _dep_money(self, key, n, db):
+        """dm_credit_tranches / dm_payment (bodies not in the repo): delayed postings, then Commit*(DoCommit)."""
+        def accs(cid):
+            r = db.execute('select clientaccid, contractaccid, interestaccid from dm_contract_accounts where "id#" = ?', [cid]).fetchone()
+            if not r:
+                raise DBError("ORA-01403: no data found", 1403)
+            return r
+        if key == "DM_CREDIT_TRANCHES.DEPOSITMONEY":
+            cid = int(n["Contractid"]); cl, ct, _ = accs(cid)
+            debit = n["PAccID"] if int(n["PAccID"]) != -1 else (n["ClientAccID"] or cl)
+            _PEND.clear(); _PEND.update(op="apply", cid=cid, total=n["Total"], descr=n["Descript"], date=_bind(n["Hdate"]))
+            _delayed(db, [(debit, ct, n["Total"], n["Descript"], 1)])
+            return {}
+        if key == "DM_PAYMENT.WITHDRAWMONEY":
+            cid = int(n["ContractID"]); cl, ct, it = accs(cid)
+            cs = db.execute('select facticaldebt, facticalinterestdebt from dm_history_currstate where "id#" = ?', [cid]).fetchone() or (0, 0)
+            if n["FacticalDebtWithdraw"] > (cs[0] or 0) or n["InterestDebtWithdraw"] > (cs[1] or 0):
+                raise DBError("ORA-20103: mock: amount exceeds the deposit balance", 20103)
+            _PEND.clear(); _PEND.update(op="extract", cid=cid, main=n["FacticalDebtWithdraw"], int=n["InterestDebtWithdraw"],
+                                        client=n["ClientDebtWithdraw"], date=_bind(n["HDate"]))
+            rows = [(ct, cl, n["FacticalDebtWithdraw"], "Əsas məbləğin ödənilməsi", 1)] if n["FacticalDebtWithdraw"] else []
+            rows += [(it, cl, n["InterestDebtWithdraw"], "Faizin ödənilməsi", 1)] if n["InterestDebtWithdraw"] else []
+            rows += [(cl, cl, n["ClientDebtWithdraw"], "Cari hesabdan ödəniş", 0)] if n["ClientDebtWithdraw"] else []
+            _delayed(db, rows)
+            return {}
+        if key in ("DM_CREDIT_TRANCHES.COMMITDEPOSITMONEY", "DM_PAYMENT.COMMITWITHDRAWMONEY"):
+            if not n["DoCommit"]:
+                _PEND.clear(); db.rollback(); return {}
+            p = dict(_PEND); _PEND.clear()
+            if p.get("op") == "apply":
+                db.execute('insert into dm_tranches ("id#","ID","HDATE","TOTAL","TRID","DESCRIPTION") values (?,?,?,?,?,?)',
+                           [p["cid"], _nextval("SEG_DM_TRANCHES"), p["date"], p["total"], _nextval("SEG_TRID"), p["descr"]])
+                db.execute('update dm_history_currstate set facticaldebt = facticaldebt + ? where "id#" = ?', [p["total"], p["cid"]])
+            elif p.get("op") == "extract":
+                db.execute('insert into dm_payments ("id#","ID","HDATE","FACTICALDEBT","INTERESTDEBT","CLIENTDEBT","TRID","INTTRID","TRANCHESID","DESCRIPTION") '
+                           'values (?,?,?,?,?,?,?,?,?,?)', [p["cid"], _nextval("SEG_DM_PAYMENTS"), p["date"], p["main"], p["int"], p["client"],
+                                                            _nextval("SEG_TRID"), _nextval("SEG_TRID"), None, "Depozitin ödənilməsi"])
+                db.execute('update dm_history_currstate set facticaldebt = facticaldebt - ?, facticalinterestdebt = facticalinterestdebt - ? '
+                           'where "id#" = ?', [p["main"], p["int"], p["cid"]])
+            db.execute("delete from dm_delayed_transactions")
+            db.commit()
+            return {}
+        if key in ("DM_CREDIT_TRANCHES.DELETEDEPOSITMONEY", "DM_PAYMENT.DELETEWITHDRAWMONEY"):
+            t, k = ("dm_tranches", "P_DepMoneyID") if "TRANCHES" in key else ("dm_payments", "P_DepWMoneyID")
+            if db.execute(f"delete from {t} where id = ?", [int(n[k])]).rowcount == 0:
+                raise DBError("ORA-20102: mock: operation not found", 20102)
+            return {}
+        return NotImplemented
+
     def _dep_contract(self, key, n):
         db = _db()
         cols = {"ID": n["p_ContractID"], "OPENDATE": _bind(n["p_OpenDate"]), "CLOSEDATE": _bind(n["p_CloseDate"]), "AMOUNT": n["p_Amount"],
@@ -124,6 +201,10 @@ class DepMixin:
             db = _db()
             k = db.execute("select count(*) from dm_contracts where contracttype = ?", [int(n["dtid"])]).fetchone()[0] + 1
             return "DM%s-%s-%04d%s" % (n["dtid"], n["filialid"], k, "-P%s" % n["przid"] if int(n["przid"] or 0) else "")
+        if key == "DM_PAYMENT.SETRESIDUARYAMOUNT":          # assumed: the client account balance
+            r = _db().execute("select ostat from tenostat where acc_id = (select clientaccid from dm_contract_accounts where \"id#\" = ?)",
+                              [int(n["ContractID"])]).fetchone()
+            return float(r[0]) if r and r[0] is not None else 0.0
         if key == "DM_CONTRACT.GETADDACCOUNT":
             _db().execute('insert into dm_contract_accno ("CONTRACTID","P_ID","ACCNO","FIELDNAME","NAMEACCNO") values (?,?,?,?,?)',
                           [n["v_contractid"], n["p_id"], n["v_accno"], n["v_fieldname"], n["v_nameaccno"]])
@@ -161,6 +242,9 @@ class DepMixin:
             for t in ("dm_active_contracts", "dm_contracts"):
                 db.execute(f"update {t} set stopcalcdate = ? where id = ?", [v, cid])
             return {}
+        r = self._dep_money(key, n, db)
+        if r is not NotImplemented:
+            return r
         if key in ("DM_CONTRACT.DMADDCONTRACT", "DM_CONTRACT.DMUPDATECONTRACT"):
             return self._dep_contract(key, n)
         if key == "DM_CONTRACT.DMGENERATEACCOUNTNUMBER":   # assumed: fills dm_accno_columname for the new contract
