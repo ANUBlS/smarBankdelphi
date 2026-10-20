@@ -105,6 +105,7 @@ KW = {"begin", "end", "if", "then", "else", "for", "to", "downto", "do", "while"
 class Parser:
     def __init__(self, toks):
         self.t, self.i = toks, 0
+        self.rtypes = {}                                   # local record types (name -> {field: type})
 
     def peek(self, k=0):
         return self.t[self.i + k]
@@ -160,7 +161,27 @@ class Parser:
         self.expect_op(";")
         self.vars = {}
         nested = {}
-        while self.iskw("var") or self.iskw("const") or self.iskw("procedure") or self.iskw("function"):
+        while self.iskw("var") or self.iskw("const") or self.iskw("procedure") or self.iskw("function") or self.iskw("type"):
+            if self.iskw("type"):
+                # local 'type TName = record f1, f2: T; ... end;' (cfilepas.pas Tclient): fields -> PRec / 'array[..] of TName' -> PRecArray
+                self.next()
+                while self.peek()[0] == "id" and self.isop("=", 1) and self.iskw("record", 2):
+                    tn = self.next()[1]; self.next(); self.next()
+                    fields = {}
+                    while not self.iskw("end"):
+                        fn = [self.next()[1]]
+                        while self.isop(","):
+                            self.next(); fn.append(self.next()[1])
+                        self.expect_op(":")
+                        ft = self.next()[1]
+                        while not self.isop(";"):
+                            self.next()
+                        self.expect_op(";")
+                        for x in fn:
+                            fields[x] = ft
+                    self.expect_kw("end"); self.expect_op(";")
+                    self.rtypes[tn] = fields
+                continue
             if self.iskw("procedure") or self.iskw("function"):
                 # nested routine (ConvertToBase's FindMyText / FindLines / Replace): parsed with its own var section,
                 # run with access to the enclosing routine's locals (Delphi static scoping)
@@ -171,7 +192,7 @@ class Parser:
                 continue
             sect = self.next()[1]
             while not (self.iskw("begin") or self.iskw("var") or self.iskw("const") or self.iskw("procedure")
-                       or self.iskw("function")):
+                       or self.iskw("function") or self.iskw("type")):
                 if sect == "const":
                     n = self.next()[1]; self.expect_op("="); v = self.expr(); self.expect_op(";")
                     self.vars[n] = ("const", v); continue
@@ -180,15 +201,22 @@ class Parser:
                     self.next(); names.append(self.next()[1])
                 self.expect_op(":")
                 typ = self.next()[1]
+                last = typ
                 while not self.isop(";"):
-                    self.next()
+                    t = self.next()
+                    if t[0] == "id":
+                        last = t[1]
+                if typ == "array" and last in self.rtypes:
+                    typ = "recarray:" + last
+                elif typ in self.rtypes:
+                    typ = "rec:" + typ
                 self.expect_op(";")
                 for n in names:
                     self.vars[n] = typ
         body = self.compound()
         self.expect_op(";")
         return {"kind": kind, "name": name, "params": params, "rtype": rtype, "vars": self.vars, "body": body,
-                "nested": nested}
+                "nested": nested, "types": dict(self.rtypes)}
 
     # procedure: header, var section, begin..end;
     def procedure(self):
@@ -484,6 +512,47 @@ class PArray(PObj):
         self.d[int(i)] = v
 
 
+class PRec(PObj):
+    """A local record variable: fields start as init_locals gives them (string '' / number 0)."""
+
+    def __init__(self, fields):
+        self.f = init_locals(fields, {})
+
+    def has(self, name):
+        return name in self.f
+
+    def get(self, name):
+        if name not in self.f:
+            raise PascalUnsupported(f"record field {name}")
+        return self.f[name]
+
+    def set(self, name, v):
+        if name not in self.f:
+            raise PascalUnsupported(f"record field {name}")
+        self.f[name] = v
+
+
+class PRecArray(PObj):
+    """'array [lo..hi] of TRecord' local: each element is a record (created on first use)."""
+
+    def __init__(self, fields):
+        self.fields, self.d = fields, {}
+
+    def index(self, i):
+        i = int(i)
+        if i not in self.d:
+            self.d[i] = PRec(self.fields)
+        return self.d[i]
+
+
+def _type_factories(types: dict) -> dict:
+    out = {}
+    for tn, fields in (types or {}).items():
+        out["recarray:" + tn] = (lambda f=fields: PRecArray(f))
+        out["rec:" + tn] = (lambda f=fields: PRec(f))
+    return out
+
+
 TYPECASTS = {}
 
 
@@ -508,7 +577,8 @@ class Routine:
         for (pn, _byref, _t), v in zip(r["params"], vals):
             loc[pn] = v
         consts = {k: v for k, v in r["vars"].items() if isinstance(v, tuple)}
-        loc.update(init_locals({k: v for k, v in r["vars"].items() if not isinstance(v, tuple)}, {"array": PArray, **self.factories}))
+        loc.update(init_locals({k: v for k, v in r["vars"].items() if not isinstance(v, tuple)},
+                               {"array": PArray, **self.factories, **_type_factories(r.get("types"))}))
         if r["rtype"]:
             loc["result"] = init_locals({"result": r["rtype"]}, {})["result"]
         it = Interp(self.selfobj, self.builtins() if callable(self.builtins) else self.builtins, loc)

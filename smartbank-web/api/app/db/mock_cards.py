@@ -97,13 +97,17 @@ def _pats():
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
                 if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
-                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
         from .. import cards_app_file as F
         for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2):
             _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
+        from .. import cards_files as CF                                       # SQL.Clear / Add texts of the file operations
+        from .. import cards_cfile  # noqa: F401 - registers its statements
+        for t in CF.EXTRA_SELECTS:
+            _PATS.append(re.compile(re.escape(t) + r"\Z", re.S))
     return _PATS
 
 
@@ -115,6 +119,8 @@ DONE = {"CARD_MAIN." + n.upper() for n in ("donenewcard", "donesupcard", "donepr
 
 class CardsMixin:
     def _cards_query(self, sql, b):
+        if sql.startswith(Q.text(Q.LINES_MESSAGES)) and "ORDER BY" in sql[len(Q.text(Q.LINES_MESSAGES)):]:
+            raise DBError("ORA-00933: SQL command not properly ended", 933)       # cfilepas DBGrid1TitleClick after 'order by status'
         if sql.startswith(Q.text(Q.LINES_SAZLAMALAR)) and "ORDER BY" in sql[len(Q.text(Q.LINES_SAZLAMALAR)):]:
             # setac.pas DBGrid1TitleClick adds a second ORDER BY after 'order by id': Oracle rejects the statement
             raise DBError("ORA-00933: SQL command not properly ended", 933)
@@ -229,7 +235,11 @@ class CardsMixin:
         fil = lambda n: one("select id from filial_t where name = ?", [n])  # noqa: E731
         nid = lambda t: (one(f"select max(id) from {t}", []) or 0) + 1  # noqa: E731
         ins = lambda t, r: db.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))  # noqa: E731
-        if key == "CARD_MAIN.NEW_CARTTYPE":
+        if key in ("CARD_MAIN.DELETE_TRANCACTION_C", "CARD_MAIN.CARXIV"):
+            pass                                                               # bodies not in the repo: no-op (recorded)
+        elif key == "CARD_MAIN.TRANSACTION_C":
+            db.execute("update card_messages_c set STATUS = 2 where id = ?", [int(a[0])])   # posted -> messages2 (status 2)
+        elif key == "CARD_MAIN.NEW_CARTTYPE":
             ins("CARD_CARDTYPE", dict(ID=nid("CARD_CARDTYPE"), NAME=a[0], CODE=a[1], CURRENCY=a[2], SERVICE=a[3], SCHEME=a[4], BIN=a[5]))
         elif key == "CARD_MAIN.FILIALACOUNT":
             ins("filialaccounts", dict(ID=nid("filialaccounts"), FILIALID=fil(a[0]), VALID=val(a[1]), ACCID28=acc(a[2]), ACCID48=acc(a[3]),
@@ -262,10 +272,17 @@ class CardsMixin:
         """DOA DML of the Sazlama forms (cards_sett.SQL / cards_sett2.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
         from .. import cards_sett as S
         from .. import cards_sett2 as S2
-        if sql not in S.SQL.values() and sql not in S2.SQL.values():
+        from .. import cards_files as CF
+        m = re.match(r"\s*(?:insert\s+into|delete\s+from)\s+(\w+)", sql, re.I)
+        if sql not in S.SQL.values() and sql not in S2.SQL.values() and not (m and m.group(1).lower() in CF.DML_TABLES):
             return False
-        p = {k.lower(): v for k, v in b.items()}
+        p = {k.lower(): (v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v) for k, v in b.items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
+        if m and sql.lower().startswith("insert") and m.group(1).lower() == "card_messages_c" and not re.search(r"\bID\b", sql.split(")")[0]):
+            # card_messages_c.ID is not set by cfilepas (trigger / sequence on the real table, not in the repo): max + 1
+            nid = (_db().execute("select max(id) from card_messages_c").fetchone()[0] or 0) + 1
+            s = s.replace("card_messages_c (", "card_messages_c (ID, ", 1).replace("values (", "values (:nid__, ", 1)
+            p["nid__"] = nid
         _db().execute(s, p)
         return True
 

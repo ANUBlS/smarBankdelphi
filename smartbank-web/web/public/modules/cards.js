@@ -32,6 +32,7 @@
       if (i === 'online') return online(el.querySelector('#cbody'));
       if (i === 'k1') return ufx(el.querySelector('#cbody'));
       if (i === 'payment') return payment(el.querySelector('#cbody'));
+      if (i === 'cfile') return window.SBCardsFiles.cfile(el.querySelector('#cbody'));   // cards_files.js (step 4)
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)

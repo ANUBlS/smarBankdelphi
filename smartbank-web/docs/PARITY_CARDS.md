@@ -282,5 +282,19 @@ FieldByName finds the first) – this applies to every module's queries.
 5. Online Cards, Karta Mədaxil. (FileReport.bpl 'REZ' and every other report screen: **on hold by user**.)
 Then the later logic-update phase for cards, once the user shares the new rules.
 
+## Step 4a: C File (cfilepas.pas Tcfile), done except XML Göndər
+| Delphi | Web |
+|---|---|
+| C:\AZCARD\IN file list (FileListBox) | one file uploaded by hand (`/api/cards/cfile/upload`, base64), kept in the session |
+| ToolButton3Click 'Yenilə' (cfilepas.pas) | `/refresh`: routine run through app/pascal.py on the verbatim source app/delphi_src/cards_cfilepas.pas; RichEdit text + SelAttributes.Color spans (red/blue) |
+| isertbtnClick 'Bazaya Göndər' | `/tobase`: probe run first (no DML/proc/file), MessageDlg questions go back to the browser, then the real run; Post inserts card_messages_c with binds, CommitOnPost |
+| ToolButton1Click 'Təsdiq Et' | `/confirm`: per selected row Yes/No/Cancel/Yes to all + "%d  sayda əməliyyat təsdiq edildi?"; Cancel = Break |
+| DBGrid1 (status 1/3, ImageList icons) / DBGrid2 (status 2) | grid1 / grid2; multiselect, PopupMenu1 SELECT ALL; RefwithSel hidden and no dgTitleClick, so no sorting |
+| ToolButton7 Excel | `/excel` -> CFILES.xlsx |
+| ToolButton2 'XML Göndər' (cfile_addi.pas TAdditional_cfile, 436 lines) | **not ported yet**: button shows "not ported" |
+
+Interpreter: local `type X = record … end;` and `array of X` were added (PRec / PRecArray). Tests: api/tests/test_cards_cfile.py (4). Screenshots 224-226 (e2e/cards_cfile.py).
+Unverified: delete_trancaction_c / carxiv / transaction_c bodies (mock: no-op, no-op, STATUS=2), card_messages_c.ID source (trigger/sequence? mock uses max+1), RichEdit colour positions (1 char per line break assumed), DecimalSeparator for StrToFloat, cfilepas ImageList1 images assumed equal to applicationpas ImageList1 (app_status_N.png reused).
+
 ## Resume point
-Plan step 4 (file operations), in order: C File (cfilepas + cfile_addi), Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file, RbsDoFile (+ rbsstate, card_states), RbsTax (Taxrbs), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission. Reports (Hesabatlar rezform, FileReport.bpl 'REZ') are on hold by user.
+Step 4 continues: cfile_addi.pas (C File ▸ XML Göndər), then Dxxx, SMS, Int.Retail, R.Visa, D File, Exchange file, RbsDoFile (+ rbsstate, card_states), RbsTax (Taxrbs), Kliring, Excel uploads, Card Number Change, Limits, POS ON-US commission. Reports (Hesabatlar rezform, FileReport.bpl 'REZ'), XÖHKS prints and SWIFT are on hold by user.
