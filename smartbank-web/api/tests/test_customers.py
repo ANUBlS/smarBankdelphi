@@ -106,7 +106,7 @@ def test_accounts_transactions_and_account_search():
     c = cl()
     accs = c.get("/api/customers/1/accounts").json(); assert [a["id"] for a in accs] == [1001, 1002]
     r = c.get("/api/customers/search-account?acc_no=AZ12SMRT3301").json()
-    assert r["customer_id"] == 3 and [a["id"] for a in r["accounts"]] == [1005, 1006]
+    assert r["customer_id"] == 3 and [a["id"] for a in r["accounts"]] == [1005, 1006, 1008]
     assert c.get("/api/customers/search-account-name?name=trade").json()["customer_id"] == 3
     tr = c.get("/api/customers/accounts/1001/transactions").json()
     assert [t["id"] for t in tr] == [5001, 5002, 5003, 5004, 6003, 6004]

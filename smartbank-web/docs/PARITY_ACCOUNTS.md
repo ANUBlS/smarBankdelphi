@@ -40,3 +40,38 @@ Status: ✅ ported identically · 🟡 ported with a documented difference · �
 | 34 | LTimeShow (query timing label) | Debug | Not ported | ⛔ |
 | 35 | Insider field | Commented out in Delphi (`IsInsider` not sent) | Not sent either | ✅ |
 | 36 | SAccsDataAfterScroll (balance-account name label) | Shows BALNAME | The dropdown shows "code – name" | ✅ |
+
+## Re-audit 2026-10-20 (user report: "some fields and filters not in place")
+
+Every reachable form was re-read from the .dfm/.pas (AccountMainForm, AccountDataModule, AccountPropertiesForm, AccFlagsForm,
+AccTransactionsForm, AccStatesForm, StartEndDateInputForm). Gaps found and their status:
+
+| # | Item | Delphi (unit:line) | Before | Now |
+|---|---|---|---|---|
+| G1 | Filter defaults: ApplyFilter checked, "Açıq hesablar" (active) selected | AccountMainFormImpl.dfm ActionList1 `ApplyFilter.Checked`, `ActiveAccounts.Checked` | Web started with filter off and *all* accounts (closed ones visible) | ✅ Defaults as in Delphi (8 of 10 mock accounts on open) |
+| G2 | Each Use* filter takes the current row of its list dataset (combo never empty; first row on start, CBAccSymbols.ItemIndex := 0) | :576-585, ActiveFormCreate :793-797 | Empty option allowed → filter silently skipped | ✅ Combos have no empty item; first row preselected |
+| G3 | Customer filter "Müştərinin kodu:" edit (Locate ID, partial, case-insens.) | dfm CustomerIDSearchEdit, CustomerIDSearchEditChange :677-686 | Missing | ✅ Code edit drives the customer combo |
+| G4 | BALNAME label under the balance combo | SAccsDataAfterScroll :671-675 | Missing | ✅ |
+| G5 | Filter panel captions/groups (Hesab açılmasına görə, Balans hesabına görə, Müştəriyə görə, Valyutaya görə, Filiallar görə, Hesabın növləri) and combo texts (BAL_CN; customer NAME; VALU_NAME; filial NAME; SYMBOL+DESCRIPTION) | dfm FilterGB | Generic captions, "code – name" texts | ✅ Delphi groups and list fields; en/az/ru |
+| G6 | ResetFilter action | dfm ResetFilter → ToggleAndRefresh | Missing | ✅ Shown as a toggle; like Delphi it only flips its own check (no effect on SQL). The sidebar "Clear" button is a web addition that restores the Delphi start state |
+| G7 | Toggling a filter / status radio does **not** refresh; Refresh rebuilds the SQL; changing the order refreshes at once | ToggleAndRefresh :665, ActiveAccountsExecute :653, OrderAccNoExecute :781 | Apply button only | ✅ Same (sidebar Refresh = RefreshExecute) |
+| G8 | Grid captions from Title.Caption / TField.DisplayLabel: Hesabın nömrəsi, Balans, $, Hesabın adı, Qalıq, Ekvivalent, Plan.-mış qalıq, Plan.-mış ekvivalent, Açılma tarixi, Bağlanma tarixi | AccountMainFormImpl.dfm:18-144, AccountDataModuleImpl.dfm fields | "Account", "Delayed", "Opened"… | ✅ |
+| G9 | Currency fields (`currency = True`) → thousands separator + 2 decimals; TDateTimeField → dd.mm.yyyy; ACCNO and $ columns clSilver | dfm | Locale "12 Oct 2026" dates; no silver | ✅ `SB.fmtN` / `SB.fmtD`; silver cells |
+| G10 | Closed rows had a strike-through style | (no OnDrawColumnCell in Delphi) | Web-only styling | ✅ Removed |
+| G11 | Per-column search edits (AccNo, SAcc, CurrencySName, AccName, Amount, LAmount, OpenDate, CloseDate) + Find (Enter) with İrəli/Geri axtarış, srFromBeginning after leaving an edit, "Hesab tapılmayıb: %s=%s" | dfm Panel1 edits, FindAccountExecute :716-748, AccNoSearchEditExit :693-714 | One free-text filter over 4 fields | ✅ Ported; searches the whole result set (fetches the remaining pages first, as SearchRecord does) |
+| G12 | Grid popup menu (Add, Edit [default], Bağlamaq, Filter ▸ {panel, apply, reset, use balance/client/currency, all/closed/active}, Hesabın sənədləri Ctrl+F5, Hesabdakı qalıqları Alt+F5) and shortcuts Ins / Ctrl+F5 / Alt+F5 | AccGridPopupMenu dfm:610-696, ActionList ShortCut | Missing | ✅ Right-click menu + shortcuts |
+| G13 | Properties form: code edits next to every lookup (CurencyIDEdit, SAccEdit, CustomerIDEdit, DBEdit4 filial, DBEdit1-3 SAcc2-4) | AccountPropertiesForm_Unit.dfm | Lookups only | ✅ |
+| G14 | AccNoEdit CharCase = ecUpperCase | dfm AccNoEdit | Lower case kept | ✅ Upper-cased (typing and on save) |
+| G15 | PairAccCB shows the ACCNO of the pair account | dfm PairAccCB | Showed only "ID: n" | ✅ `pair_accno` from the same AccountsData SQL (`/api/accounts/{id}`) |
+| G16 | DBText1 shows the raw ACCFLAGS string; "Simvollar ..." opens AccFlagsForm; AccFlags is replaced only when OK was pressed **and** a box was clicked | Button1Click :269-276, AccFlagsChangingImpl.pas:30-53 | Inline checkboxes, flags string always rebuilt on save | ✅ Separate dialog; unchanged flags are sent back as the original string |
+| G17 | "Cari qalıq" / "Günün əvvəlinə qalıq" groups (also visible on insert) | dfm DayStartStateGB / AccountStateGB | Only on edit | ✅ |
+| G18 | "Digər..." button shows "Əlavə balans hesabları" | SpeedButton1Click :258 | details block | ✅ (caption Digər...) |
+| G19 | ViewTransactions opens StartEndDateInputForm first (Start/End = Sb_GetSystemDate) | :831-847 | Skipped | ✅ Dates dialog |
+| G20 | AccTransactionsForm columns `# , Tarix, Debit, Kredit, D.Məbləğ, K.Məbləğ, Ekvivalent`; Destination is a DBEdit under the grid (current row); totals "Cəmi: Debit üzrə / Kredit üzrə, Ekvivalent" | AccTransactionsFormImpl.dfm | No ID column, one amount column, destination as a column | ✅ |
+| G21 | AccStatesForm has two pages: "Hesabdakı qalıqları" (Tarix, Qalıq, Ekvivalent) and "Hesabdakı dövriyyələri" (Tarix, D.Dövriyyə, D.Dövriyyə(man), K.Dövriyyə, K.Dövriyyə(man)) | AccStatesImpl.dfm | One combined grid | ✅ Two tabs |
+| G22 | F3 export key in both child forms | FormKeyDown | Button only | ✅ F3 + button (CSV, see #28) |
+| G23 | Filter panel position | FilterGB `Align = alLeft` | Collapsible top form | ✅ Shared left sidebar (`web/public/ui/filterlayout.js`), collapsible, state per user in localStorage, stacks on top below 900 px |
+
+Not ported / unchanged: TESTTT button + Memo1 SQL editor (#32), LTimeShow (#34), mouse-wheel row stepping, MainMenu1 File/Edit placeholders (empty).
+Tests: `api/tests/test_accounts.py::test_each_filter_narrows_like_buildaccsquery`, `::test_detail_fields_pair_accno_and_flags_kept`.
+Screenshots: `docs/screenshots/190-201-*.png` (e2e `e2e/accounts_parity_screens.py`).

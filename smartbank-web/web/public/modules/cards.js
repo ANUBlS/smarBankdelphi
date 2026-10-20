@@ -32,6 +32,10 @@
       if (i === 'online') return online(el.querySelector('#cbody'));
       if (i === 'k1') return ufx(el.querySelector('#cbody'));
       if (i === 'payment') return payment(el.querySelector('#cbody'));
+      if (i === 'cfile') return window.SBCardsFiles.cfile(el.querySelector('#cbody'));   // cards_files.js (step 4)
+      if (window.SBCardsFiles.FO[i]) return window.SBCardsFiles.fileop(el.querySelector('#cbody'), i);
+      if (window.SBCardsFiles.OTHER && window.SBCardsFiles.OTHER[i]) return window.SBCardsFiles.OTHER[i](el.querySelector('#cbody'));
+      if (i === 'rez') return toast(K('on_hold'));                                       // Möhkəməndirmə (FileReport.bpl 'REZ'): on hold by user
       toast(K('not_ported'));
     }
     clients(el.querySelector('#cbody'));                 // the web opens straight on the list (Delphi shows an empty form + logo)
@@ -322,7 +326,7 @@
     draw();
   }
 
-  // Sazlama (setac.pas TForm10 + balhs / comp / datclose / paymentsett), api/app/cards_sett.py
+  // Sazlama (setac.pas TForm10 + balhs / comp / datclose / paymentsett; the other ten forms in cards_sett2.js), api/app/cards_sett.py / cards_sett2.py
   async function settings(box) {
     const S = P + '/sett';
     const call = async (path, body) => { try { return await api(S + path, { method: 'POST', body }); } catch (e) { toast(errT(e), 'error'); return null; } };
@@ -352,7 +356,9 @@
     function openSub(id, dbl) {
       const f = d.forms[String(id)]; if (!f || (dbl && !f.dblclick)) return;          // DBGrid1DblClick knows ids 1-10 only
       if (!f.ported) return toast(K('not_ported'));
-      ({ balhs, comp, datclose, paymentsett })[f.form]();
+      const local = { balhs, comp, datclose, paymentsett };
+      if (local[f.form]) return local[f.form]();
+      window.SBCardsSett2.open(f.form, yesno);                                     // forms 3, 5-11, 13, 14: cards_sett2.js
     }
     const tbl = (cols, rows, id) => `<div class="tablewrap" style="max-height:45vh"><table class="grid" id="${id}"><thead><tr>${cols.map(c => `<th>${esc(c[1])}</th>`).join('')}</tr></thead>
       <tbody>${rows.map(r => `<tr data-rid="${esc(r.rowid)}">${cols.map(c => `<td>${esc(r[c[0]] ?? '')}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="muted">${esc(K('empty'))}</td></tr>`}</tbody></table></div>`;

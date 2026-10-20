@@ -55,3 +55,16 @@ def get_backend(mode: str) -> Backend:
 
 
 RET_TYPES = (str, int, float, datetime.datetime)
+
+
+def dedupe(names):
+    """Duplicate select-list names get the DOA / TDataSet field names NAME, NAME_1, NAME_2 (domestic: three acc_no columns)."""
+    seen, out = {}, []
+    for n in names:
+        if n in seen:
+            seen[n] += 1
+            out.append(f"{n}_{seen[n]}")
+        else:
+            seen[n] = 0
+            out.append(n)
+    return out

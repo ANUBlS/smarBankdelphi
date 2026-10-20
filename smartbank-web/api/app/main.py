@@ -344,3 +344,71 @@ from . import cards_online  # noqa: E402
 app.include_router(cards_online.make_router(current, require_module, err))
 from . import cards_sett  # noqa: E402
 app.include_router(cards_sett.make_router(current, require_module, err))
+from . import cards_sett2  # noqa: E402
+app.include_router(cards_sett2.make_router(current, require_module, err))
+from . import cards_cfile  # noqa: E402
+app.include_router(cards_cfile.make_router(current, require_module, err))
+from . import cards_caddi  # noqa: E402
+app.include_router(cards_caddi.make_router(current, require_module, err))
+from . import cards_fileops  # noqa: E402
+app.include_router(cards_fileops.make_router(current, require_module, err))
+from . import cards_misc  # noqa: E402
+app.include_router(cards_misc.make_router(current, require_module, err))
+from . import cards_xls  # noqa: E402
+app.include_router(cards_xls.make_router(current, require_module, err))
+from . import cards_cardnum, cards_posonus  # noqa: E402
+app.include_router(cards_cardnum.make_router(current, require_module, err))
+app.include_router(cards_posonus.make_router(current, require_module, err))
+from . import deposits  # noqa: E402
+app.include_router(deposits.make_router(current, require_module, err))
+from . import dep_contract  # noqa: E402
+app.include_router(dep_contract.make_router(current, require_module, err))
+from . import dep_ops  # noqa: E402
+app.include_router(dep_ops.make_router(current, require_module, err))
+from . import dep_prolong  # noqa: E402
+app.include_router(dep_prolong.make_router(current, require_module, err))
+from . import dep_shedule  # noqa: E402
+app.include_router(dep_shedule.make_router(current, require_module, err))
+from . import dep_untimely  # noqa: E402
+app.include_router(dep_untimely.make_router(current, require_module, err))
+from . import dep_partial  # noqa: E402
+app.include_router(dep_partial.make_router(current, require_module, err))
+from . import dep_capitalize  # noqa: E402
+app.include_router(dep_capitalize.make_router(current, require_module, err))
+from . import dep_settings  # noqa: E402
+app.include_router(dep_settings.make_router(current, require_module, err))
+from . import dep_pct  # noqa: E402
+app.include_router(dep_pct.make_router(current, require_module, err))
+from . import cashdesk  # noqa: E402
+app.include_router(cashdesk.make_router(current, require_module, err))
+from . import cashsymbols  # noqa: E402
+app.include_router(cashsymbols.make_router(current, require_module, err))
+from . import exchange  # noqa: E402
+app.include_router(exchange.make_router(current, require_module, err))
+from . import currencyposition  # noqa: E402
+app.include_router(currencyposition.make_router(current, require_module, err))
+from . import cp_capital  # noqa: E402
+app.include_router(cp_capital.make_router(current, require_module, err))
+from . import exchangemgr  # noqa: E402
+app.include_router(exchangemgr.make_router(current, require_module, err))
+from . import em_trans  # noqa: E402
+app.include_router(em_trans.make_router(current, require_module, err))
+from . import em_setup  # noqa: E402
+app.include_router(em_setup.make_router(current, require_module, err))
+from . import em_turnover  # noqa: E402
+app.include_router(em_turnover.make_router(current, require_module, err))
+from . import oldrates, ratedifference, ratedifferencereport  # noqa: E402
+app.include_router(oldrates.make_router(current, require_module, err))
+app.include_router(ratedifference.make_router(current, require_module, err))
+app.include_router(ratedifferencereport.make_router(current, require_module, err))
+from . import ratesviewer, memorialorder  # noqa: E402
+app.include_router(ratesviewer.make_router(current, require_module, err))
+app.include_router(memorialorder.make_router(current, require_module, err))
+from . import order  # noqa: E402
+app.include_router(order.make_router(current, require_module, err))
+from . import payments  # noqa: E402
+app.include_router(payments.make_router(current, require_module, err))
+from . import asanfinance  # noqa: E402
+app.include_router(asanfinance.make_router(current, require_module, err))
+from . import bbpayings  # noqa: E402
+app.include_router(bbpayings.make_router(current, require_module, err))

@@ -1,4 +1,4 @@
-"""XÖHKS step 3b - TTransCodeForm tree, PrepareFile (TPrepareFile_Form) and 'Gedən fayl' (TSendFileForm).
+r"""XÖHKS step 3b - TTransCodeForm tree, PrepareFile (TPrepareFile_Form) and 'Gedən fayl' (TSendFileForm).
 
 Ported: LVPCSSImpl.pas createTransCodeTree :1114 (built in Mt102InsertExecute :2640 only), TransTypeUnit.pas (But_OkClick,
 TreeView1Changing, DblClick), Payment_Det.pas SpeedButton1Click :205; ToolButton11Click :2105 'Faylı Hazırla' ->

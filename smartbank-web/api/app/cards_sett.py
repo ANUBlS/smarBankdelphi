@@ -21,7 +21,7 @@ from .customers import row
 
 FORMS = {1: "balhs", 2: "comp", 3: "crdtype", 4: "datclose", 5: "filialaccounts", 6: "domesticbank", 7: "banksettings", 8: "atmendpos",
          9: "poscomission", 10: "unit155", 11: "cardbranch", 12: "paymentsett", 13: "excsett", 14: "taxfilessettings"}
-PORTED = {"balhs", "comp", "datclose", "paymentsett"}
+PORTED = set(FORMS.values())                               # all 14 (3, 5-11, 13, 14: cards_sett2)
 DBLCLICK_IDS = set(range(1, 11))
 SAZ_FIELDS = {"ID", "SAZLAMALAR"}
 MSG_DEL = "Seçilmiş sətir silinsin?"

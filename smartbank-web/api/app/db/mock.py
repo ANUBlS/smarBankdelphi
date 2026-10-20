@@ -15,6 +15,7 @@ from .base import DBError
 from . import mock_azips_new
 from .mock_azips_new import AzipsNewMixin
 from . import mock_cs
+from . import mock_em
 from .mock_cs import CsMixin
 from . import mock_cr
 from .mock_cr import CrMixin
@@ -37,7 +38,28 @@ from .mock_azips import AzipsMixin, AzipsEditMixin
 from .mock_azips_in import AzipsInMixin
 from .mock_xohks import XohksMixin
 from .mock_cards import CardsMixin
+from . import mock_dep
+from .mock_dep import DepMixin
+from . import mock_cd
+from .mock_cd import CdMixin
+from . import mock_ex
+from . import mock_cp
+from .mock_cp import CpMixin
+from .mock_ex import ExMixin
+from .mock_em import EmMixin
 from . import mock_cards
+from . import mock_rt
+from . import mock_mo
+from .mock_mo import MoMixin
+from . import mock_ord
+from . import mock_pay
+from . import mock_asan
+from . import mock_bb
+from .mock_bb import BbMixin
+from .mock_asan import AsanMixin
+from .mock_pay import PayMixin
+from .mock_ord import OrdMixin
+from .mock_rt import RtMixin
 from . import mock_xohks
 from ..config import settings
 
@@ -64,6 +86,17 @@ def reset():
     mock_azips.reset()
     mock_xohks.reset()
     mock_cards.reset()
+    mock_dep.reset()
+    mock_cd.reset()
+    mock_ex.reset()
+    mock_cp.reset()
+    mock_em.reset()
+    mock_rt.reset()
+    mock_mo.reset()
+    mock_ord.reset()
+    mock_pay.reset()
+    mock_asan.reset()
+    mock_bb.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -77,7 +110,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -91,7 +124,21 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._xs_func(key, args)
+        r = self._bb_func(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServAdd)
+        if r is NotImplemented:
+            r = self._asan_func(key, named)                # Packages/ASANFinance (asan_transaction.add_cust)
+        if r is NotImplemented:
+            r = self._em_func(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR, SBOP)
+        if r is NotImplemented:
+            r = self._cp_func(key, args)          # Packages/CurrencyPosition (sb_currencyposition, SB_CAPITAL)
+        if r is NotImplemented:
+            r = self._ex_func(key, args)          # Packages/Exchange (SB_Exchange, SB_MTOUTVIEW)
+        if r is NotImplemented:
+            r = self._cd_func(key, args)          # Packages/CashDeskLast (SB_CASHREPORT)
+        if r is NotImplemented:
+            r = self._dep_func(key, named, args)  # DepositsManager_New plugins
+        if r is NotImplemented:
+            r = self._xs_func(key, args)
         if r is NotImplemented:
             r = self._azi_func(key, args)
         if r is NotImplemented:
@@ -146,6 +193,12 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
 
     def call_bool(self, pkg, name, args, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._em_bool(key, args)              # Packages/ExchangeMGR-NBC (EXCH_MGR.Ex_Calendar)
+        if r is not NotImplemented:
+            return r
+        r = self._dep_bool(key, named)            # DepositsManager_New (sbcm_stored_programs_new)
+        if r is not NotImplemented:
+            return r
         r = self._oacc_bool(key, named)
         if r is not NotImplemented:
             return r
@@ -177,7 +230,21 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._cards_proc(key, args)    # Cards (card_main)
+        r = self._bb_proc(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServ*)
+        if r is NotImplemented:
+            r = self._pay_proc(key, args)                  # Packages/Payments (standalone Ibank_change_status)
+        if r is NotImplemented:
+            r = self._em_proc(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR)
+        if r is NotImplemented:
+            r = self._cp_proc(key, args)         # Packages/CurrencyPosition (sb_currencyposition)
+        if r is NotImplemented:
+            r = self._ex_proc(key, args)         # Packages/Exchange (SB_Exchange)
+        if r is NotImplemented:
+            r = self._cd_proc(key, args)         # Packages/CashDeskLast + CashSymbols (SB_CASHREPORT)
+        if r is NotImplemented:
+            r = self._dep_proc(key, named, args)  # DepositsManager_New (sbcm_stored_programs_new)
+        if r is NotImplemented:
+            r = self._cards_proc(key, args)    # Cards (card_main)
         if r is NotImplemented:
             r = self._xs_proc(key, args)       # XÖHKS step 2 (XS_CONTROL)
         if r is NotImplemented:
@@ -226,7 +293,29 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
+        r = self._bb_query(sql, b)  # Packages/BBPayings (own texts only)
+        if r is NotImplemented:
+            r = self._asan_query(sql, b)  # Packages/ASANFinance (own texts only)
+        if r is NotImplemented:
+            r = self._pay_query(sql, b)  # Packages/Payments (own texts only)
+        if r is NotImplemented:
+            r = self._ord_query(sql, b)  # Packages/Order (own texts only)
+        if r is NotImplemented:
+            r = self._mo_query(sql, b)  # Packages/MemorialOrder (own texts only)
+        if r is NotImplemented:
+            r = self._rt_query(sql, b)  # Packages/LastRates + RateDifferenceReport (own texts only)
+        if r is NotImplemented:
+            r = self._em_query(sql, b)  # Packages/ExchangeMGR-NBC (em_sql texts)
+        if r is NotImplemented:
+            r = self._cp_query(sql, b)  # Packages/CurrencyPosition (cp_sql texts / per-user tables)
+        if r is NotImplemented:
+            r = self._ex_query(sql, b)  # Packages/Exchange (exact verbatim SQL text only)
+        if r is NotImplemented:
+            r = self._cd_query(sql, b)  # Packages/CashDeskLast + CashSymbols (exact verbatim SQL text only)
+        if r is NotImplemented:
+            r = self._dep_query(sql, b)  # DepositsManager_New (exact verbatim SQL text only)
+        if r is NotImplemented:
+            r = self._xs_query(sql, b)  # Packages/LVPCSSManager_Turan (XÖHKS)
         if r is NotImplemented:
             r = self._azi_query(sql, b)  # AZIPS part 4b-2
         if r is NotImplemented:
@@ -300,9 +389,26 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
             return [{"GET_APP_HEADER": f"{self.username} ({self.user.get('full_name', '')})"}]
         if "from dual" in s:
             return [{"CONNECTION": "TRUE"}]
+        r = self._em_query_late(sql, b)  # generic ExchangeMGR dm texts (filial, avalute ...)
+        if r is not NotImplemented:
+            return r
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._asan_execute(sql, binds or {}):
+            return
+        if self._mo_execute(sql, binds or {}):
+            return
+        if self._em_execute(sql, binds or {}):
+            return
+        if self._cp_execute(sql, binds or {}):
+            return
+        if self._ex_execute(sql, binds or {}):
+            return
+        if self._cd_execute(sql, binds or {}):
+            return
+        if self._dep_execute(sql, binds or {}):
+            return
         if self._azi_execute(sql, binds or {}):
             return
         if self._aze_execute(sql, binds or {}):
@@ -333,7 +439,13 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
-        r = self._cs_plsql(sql, binds or {})
+        r = self._em_plsql(sql, binds or {})          # Packages/ExchangeMGR-NBC (EXCH_TRANS.ex_transaction*)
+        if r is NotImplemented:
+            r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
+        if r is NotImplemented:
+            r = self._dep_plsql(sql, binds or {})     # DepositsManager_New plugins
+        if r is NotImplemented:
+            r = self._cs_plsql(sql, binds or {})
         if r is NotImplemented:
             r = self._cr_plsql(sql, binds or {})
         if r is NotImplemented:
@@ -341,7 +453,9 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
         return r
 
     def plsql_out(self, sql, binds=None):
-        r = self._azi_plsql_out(sql, binds or {})
+        r = self._em_plsql_out(sql, binds or {})      # Packages/ExchangeMGR-NBC (get_ex_office_out_params)
+        if r is NotImplemented:
+            r = self._azi_plsql_out(sql, binds or {})
         if r is NotImplemented:
             r = self._omem_plsql_out(sql, binds or {})
         if r is NotImplemented:
@@ -351,6 +465,12 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
         return r
 
     def cursor_block(self, sql, cursor_bind, binds=None):
+        r = self._em_cursor(sql, cursor_bind, binds or {})
+        if r is not NotImplemented:
+            return r
+        r = self._cd_cursor(sql, cursor_bind, binds or {})
+        if r is not NotImplemented:
+            return r
         r = self._oacc_cursor(sql, cursor_bind, binds or {})
         if r is not NotImplemented:
             return r
@@ -360,10 +480,22 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._asan_commit()
+        self._mo_commit()
+        self._em_commit()
+        self._cp_commit()
+        self._ex_commit()
+        self._cd_commit()
+        self._dep_commit()
         self._cr_commit()
         self._xs_commit()
 
     def rollback(self):
+        if mock_asan._S is not None:
+            mock_asan._S["pending"].clear()
+        self._mo_rollback()
+        self._em_rollback()
+        self._dep_rollback()
         self._cr_rollback()
         self._xs_rollback()
 
@@ -428,6 +560,8 @@ class MockConnection(CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsM
             return A["account_flags"]
         if "from account acc order by acc.acc_no" in s:
             rows = sorted(A["accounts"], key=lambda a: a["ACC_NO"])
+            if "pair_id" in b:
+                return [{"ACCID": a["ID"], "ACCNO": a["ACC_NO"]} for a in rows if a["ID"] == b["pair_id"]]
             rows = [{"ACCID": a["ID"], "ACCNO": a["ACC_NO"]} for a in rows if a["ACC_NO"].startswith(b.get("q", "%").rstrip("%"))]
             return page(rows)
         if "from archost arc where arc.acc_id = :accid" in s:

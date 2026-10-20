@@ -42,14 +42,52 @@ def test_module_right_enforced():
 
 def test_list_filter_order_paging():
     c = cl()
-    r = c.get("/api/accounts").json(); assert len(r["rows"]) == 7 and r["rows"][0]["accno"].startswith("AZ12SMRT3001")
+    r = c.get("/api/accounts").json(); assert len(r["rows"]) == 10 and r["rows"][0]["accno"].startswith("AZ12SMRT3001")
     r = c.get("/api/accounts?apply_filter=true&status=active").json(); assert all(x["closedate"] is None for x in r["rows"])
-    r = c.get("/api/accounts?apply_filter=true&status=closed").json(); assert [x["accid"] for x in r["rows"]] == [1004]
+    r = c.get("/api/accounts?apply_filter=true&status=closed").json(); assert [x["accid"] for x in r["rows"]] == [1009, 1004]
     r = c.get("/api/accounts?apply_filter=true&customer_id=3&currency_id=840").json(); assert [x["accid"] for x in r["rows"]] == [1006]
     r = c.get("/api/accounts?apply_filter=true&flag=O").json(); assert {x["accid"] for x in r["rows"]} == {1001, 1005}
-    r = c.get("/api/accounts?status=active&customer_id=3").json(); assert len(r["rows"]) == 7  # no ApplyFilter
+    r = c.get("/api/accounts?status=active&customer_id=3").json(); assert len(r["rows"]) == 10  # no ApplyFilter
     r = c.get("/api/accounts?order=name&limit=3").json(); assert r["more"] and len(r["rows"]) == 3
-    r2 = c.get("/api/accounts?order=name&limit=3&offset=6").json(); assert not r2["more"] and len(r2["rows"]) == 1
+    r2 = c.get("/api/accounts?order=name&limit=3&offset=9").json(); assert not r2["more"] and len(r2["rows"]) == 1
+
+
+def ids(c, qs):
+    return [x["accid"] for x in c.get("/api/accounts?" + qs).json()["rows"]]
+
+
+def test_each_filter_narrows_like_buildaccsquery():
+    """AccountMainFormImpl.pas:559-603: every Use* filter adds its own AND line only while ApplyFilter is checked."""
+    c = cl()
+    every = ids(c, "apply_filter=true&status=all")
+    assert len(every) == 10
+    active = ids(c, "apply_filter=true&status=active")                       # :564 CLOSE_DAT IS NULL (Delphi default)
+    assert 1004 not in active and 1009 not in active and len(active) == 8
+    assert ids(c, "apply_filter=true&status=closed") == [1009, 1004]         # :570
+    assert set(ids(c, "apply_filter=true&status=all&bal_cn=3301")) == {1005, 1006, 1008}      # :576 BAL_CN1
+    assert set(ids(c, "apply_filter=true&status=all&customer_id=1")) == {1001, 1002, 1009}    # :578 KLI_ID
+    assert set(ids(c, "apply_filter=true&status=all&currency_id=978")) == {1004, 1008}        # :580 VAL_ACC
+    assert set(ids(c, "apply_filter=true&status=all&filial_id=102")) == {1007, 1008, 1009}   # :582 FILIAL
+    assert set(ids(c, "apply_filter=true&status=all&flag=I")) == {1008}                       # :584 tipacc like '%I%'
+    assert set(ids(c, "apply_filter=true&status=all&flag=A")) == {1001, 1006, 1010}
+    assert set(ids(c, "apply_filter=true&status=active&filial_id=102")) == {1007, 1008}      # combined with AND
+    assert len(ids(c, "apply_filter=false&status=active&filial_id=102&flag=I")) == 10         # ApplyFilter off: ignored
+    by_cur = c.get("/api/accounts?apply_filter=true&status=all&order=currency").json()["rows"]
+    assert [x["currencyid"] for x in by_cur] == sorted(x["currencyid"] for x in by_cur)       # :594 ORDER BY acc.VAL_ACC
+    assert c.get("/api/accounts?status=bogus").status_code == 400 and c.get("/api/accounts?order=x;drop").status_code == 400
+
+
+def test_detail_fields_pair_accno_and_flags_kept():
+    c = cl()
+    a = c.get("/api/accounts/1008").json()
+    assert a["pair_accno"] == "AZ12SMRT33010084000000000006" and a["accflags"] == "I" and a["acc_flags_checked"] == ["I"]
+    assert a["delayedamount"] == 500.0 and a["daystartlamount"] == 14356.0
+    assert c.get("/api/accounts/1001").json()["pair_accno"] is None
+    # edit without opening the flags dialog sends the raw AccFlags string unchanged
+    body = dict(acc_no=a["accno"], acc_name=a["accname"], customer_id=3, currency_id=978, sacc=3301, open_date="2025-06-01",
+                filial_id=102, pair_acc=1006, acc_flags="I")
+    assert c.put("/api/accounts/1008", json=body).status_code == 200
+    assert mock._load()["acc"]["accounts"][-3]["TIPACC"] == "I"
 
 
 def test_lookups_and_defaults():
