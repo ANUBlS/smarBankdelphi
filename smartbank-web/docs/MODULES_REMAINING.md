@@ -86,7 +86,7 @@ Tier 1 = daily banking (front office, cash, payments, day close). Tier 2 = admin
 | # | module (CLSID name / class) | likely production folder | units | forms | SQL | lines | built | main Oracle packages | other copies / notes |
 |---|---|---|---|---|---|---|---|---|---|
 | 27 | AIFPAYMENTS / TAIFPAYMENT | `Packages/AIFPAYMENTS---------` | 8 | 8 | 15 | 1510 | 2014-06-02 | AIF_PAYMENTS, SB_ACA | **folder name ends with dashes (usually means retired) – confirm** |
-| 28 | ASANFinance / TASANFinanceForm | `Packages/ASANFinance` | 7 | 7 | 14 | 1729 |  | ASAN_TRANSACTION |  |
+| 28 | ASANFinance / TASANFinanceForm | `Packages/ASANFinance` | 7 | 7 | 14 | 1729 |  | ASAN_TRANSACTION | **ported** (route `/m/asanfinance`, see PARITY_ASANFINANCE.md); HTTP client behind ASAN_MODE; five QuickReport prints on hold; no other copies |
 | 29 | BBPayings / TBBPayingsForm | `Packages/BBPayings` | 3 | 3 | 3 | 637 |  | CABLE_MANAGER, SBOP |  |
 | 30 | Emanat_view / TEmwanat_view | `Packages/EmanatViews` | 2 | 2 | 6 | 749 | 2017-09-29 | PG_WSPAYMENT |  |
 | 31 | EmanetSH / TEmanet | `Packages/Emanet` | 2 | 2 | 6 | 3769 |  | SB_EMANET |  |

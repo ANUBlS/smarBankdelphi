@@ -408,3 +408,5 @@ from . import order  # noqa: E402
 app.include_router(order.make_router(current, require_module, err))
 from . import payments  # noqa: E402
 app.include_router(payments.make_router(current, require_module, err))
+from . import asanfinance  # noqa: E402
+app.include_router(asanfinance.make_router(current, require_module, err))

@@ -53,6 +53,8 @@ from . import mock_mo
 from .mock_mo import MoMixin
 from . import mock_ord
 from . import mock_pay
+from . import mock_asan
+from .mock_asan import AsanMixin
 from .mock_pay import PayMixin
 from .mock_ord import OrdMixin
 from .mock_rt import RtMixin
@@ -91,6 +93,7 @@ def reset():
     mock_mo.reset()
     mock_ord.reset()
     mock_pay.reset()
+    mock_asan.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -104,7 +107,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -118,7 +121,9 @@ class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExM
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._em_func(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR, SBOP)
+        r = self._asan_func(key, named)                # Packages/ASANFinance (asan_transaction.add_cust)
+        if r is NotImplemented:
+            r = self._em_func(key, args, named)            # Packages/ExchangeMGR-NBC (EXCH_MGR, SBOP)
         if r is NotImplemented:
             r = self._cp_func(key, args)          # Packages/CurrencyPosition (sb_currencyposition, SB_CAPITAL)
         if r is NotImplemented:
@@ -281,7 +286,9 @@ class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExM
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._pay_query(sql, b)  # Packages/Payments (own texts only)
+        r = self._asan_query(sql, b)  # Packages/ASANFinance (own texts only)
+        if r is NotImplemented:
+            r = self._pay_query(sql, b)  # Packages/Payments (own texts only)
         if r is NotImplemented:
             r = self._ord_query(sql, b)  # Packages/Order (own texts only)
         if r is NotImplemented:
@@ -379,6 +386,8 @@ class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExM
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._asan_execute(sql, binds or {}):
+            return
         if self._mo_execute(sql, binds or {}):
             return
         if self._em_execute(sql, binds or {}):
@@ -462,6 +471,7 @@ class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExM
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._asan_commit()
         self._mo_commit()
         self._em_commit()
         self._cp_commit()
@@ -472,6 +482,8 @@ class MockConnection(PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExM
         self._xs_commit()
 
     def rollback(self):
+        if mock_asan._S is not None:
+            mock_asan._S["pending"].clear()
         self._mo_rollback()
         self._em_rollback()
         self._dep_rollback()
