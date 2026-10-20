@@ -49,6 +49,8 @@ from .mock_ex import ExMixin
 from .mock_em import EmMixin
 from . import mock_cards
 from . import mock_rt
+from . import mock_mo
+from .mock_mo import MoMixin
 from .mock_rt import RtMixin
 from . import mock_xohks
 from ..config import settings
@@ -82,6 +84,7 @@ def reset():
     mock_cp.reset()
     mock_em.reset()
     mock_rt.reset()
+    mock_mo.reset()
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
@@ -95,7 +98,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -270,7 +273,9 @@ class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, Card
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._rt_query(sql, b)  # Packages/LastRates + RateDifferenceReport (own texts only)
+        r = self._mo_query(sql, b)  # Packages/MemorialOrder (own texts only)
+        if r is NotImplemented:
+            r = self._rt_query(sql, b)  # Packages/LastRates + RateDifferenceReport (own texts only)
         if r is NotImplemented:
             r = self._em_query(sql, b)  # Packages/ExchangeMGR-NBC (em_sql texts)
         if r is NotImplemented:
@@ -362,6 +367,8 @@ class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, Card
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._mo_execute(sql, binds or {}):
+            return
         if self._em_execute(sql, binds or {}):
             return
         if self._cp_execute(sql, binds or {}):
@@ -443,6 +450,7 @@ class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, Card
         raise DBError("ORA-06550: mock: cursor block not emulated")
 
     def commit(self):
+        self._mo_commit()
         self._em_commit()
         self._cp_commit()
         self._ex_commit()
@@ -452,6 +460,7 @@ class MockConnection(RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, Card
         self._xs_commit()
 
     def rollback(self):
+        self._mo_rollback()
         self._em_rollback()
         self._dep_rollback()
         self._cr_rollback()

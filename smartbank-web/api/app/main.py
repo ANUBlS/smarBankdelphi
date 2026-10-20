@@ -401,3 +401,6 @@ from . import oldrates, ratedifference, ratedifferencereport  # noqa: E402
 app.include_router(oldrates.make_router(current, require_module, err))
 app.include_router(ratedifference.make_router(current, require_module, err))
 app.include_router(ratedifferencereport.make_router(current, require_module, err))
+from . import ratesviewer, memorialorder  # noqa: E402
+app.include_router(ratesviewer.make_router(current, require_module, err))
+app.include_router(memorialorder.make_router(current, require_module, err))
