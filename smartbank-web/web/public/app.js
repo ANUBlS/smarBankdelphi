@@ -213,7 +213,57 @@
   const pages = {};  // future migrated modules register here: pages['/m/accounts'] = (ctx) => {...}
   window.SB = { pages, api, t, esc, toast, modal, fmtDate, fmtDT, state: S };
 
+  function closeAllModals() {
+    const mr = document.getElementById('modal-root');
+    if (mr) mr.innerHTML = '';
+    document.querySelectorAll('.backdrop').forEach(b => b.remove());
+  }
+
+  (function installModalExitGuard() {
+    if (window.__sbModalGuard) return;
+    window.__sbModalGuard = true;
+    const closeBackdrop = (bd) => {
+      if (!bd) return;
+      if (bd.parentElement && bd.parentElement.id === 'modal-root') bd.parentElement.innerHTML = '';
+      else bd.remove();
+    };
+    const enhance = (bd) => {
+      if (!bd || bd.dataset.sbEnhanced) return;
+      bd.dataset.sbEnhanced = '1';
+      const m = bd.querySelector('.modal');
+      if (m && !m.querySelector('.modal-close-x')) {
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'modal-close-x';
+        x.title = 'Bağla (Esc)';
+        x.textContent = '✕';
+        x.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeBackdrop(bd);
+        });
+        m.insertBefore(x, m.firstChild);
+      }
+      bd.addEventListener('click', (e) => {
+        if (e.target === bd) closeBackdrop(bd);
+      });
+    };
+    const mo = new MutationObserver(() => {
+      document.querySelectorAll('.backdrop').forEach(enhance);
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const bds = document.querySelectorAll('.backdrop');
+        if (bds.length) {
+          e.stopPropagation();
+          closeBackdrop(bds[bds.length - 1]);
+        }
+      }
+    });
+  })();
+
   function route() {
+    closeAllModals();
     if (!S.session) return;
     const h = location.hash.replace(/^#/, '') || '/home';
     const [path, qs] = h.split('?');

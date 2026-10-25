@@ -221,8 +221,15 @@ def build_tree(ws) -> list[dict]:
     return tree
 
 
+def _dedup_credits(nodes: list[dict]) -> list[dict]:
+    clsids = {n.get("clsid") for n in nodes if n.get("clsid")}
+    drop = {"{8F34DD46-F566-4FD1-B534-F16C0ADCE284}", "{41D53F48-4A53-4CD1-98AD-82E1BE97C033}", "{02878282-54DE-44C6-9D21-30CBE95D7331}"} if "{B361BF28-9D86-4D92-A06F-3661B9B2B9CD}" in clsids else set()
+    return [{**n, "children": _dedup_credits(n.get("children", []))} for n in nodes if n.get("clsid") not in drop]
+
+
 def visible_tree(tree: list[dict]) -> list[dict]:
     """Optional HIDE_DENIED_NODES: drop denied leaves and folders left empty."""
+    tree = _dedup_credits(tree)
     if not settings.hide_denied_nodes:
         return tree
     out = []
