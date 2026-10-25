@@ -645,7 +645,7 @@ def make_router(current, require_module, err):
         return ws
 
     @r.get("/ocx/init")
-    def _ocx_init(ws=Depends(require_session)):
+    def _ocx_init(ws=Depends(current)):
         _ocx_guard(ws)
         conn = ws.conn
         return {
@@ -665,7 +665,7 @@ def make_router(current, require_module, err):
     @r.get("/ocx/list")
     def _ocx_list(sort: str = "ID", filial: int | None = None, cust_type: int | None = None,
                   include_closed: bool = False, q_id: str = "", q_inn: str = "", q_name: str = "",
-                  q_date: str = "", ws=Depends(require_session)):
+                  q_date: str = "", ws=Depends(current)):
         _ocx_guard(ws)
         if sort not in OCX_CUST_SORT:
             err(400, "error.generic")
@@ -688,7 +688,7 @@ def make_router(current, require_module, err):
 
     @r.get("/ocx/{cust_id}/accounts")
     def _ocx_accs(cust_id: int, sort: str = "AccNo", currency_id: int | None = None,
-                  q_accno: str = "", q_accname: str = "", ws=Depends(require_session)):
+                  q_accno: str = "", q_accname: str = "", ws=Depends(current)):
         _ocx_guard(ws)
         if sort not in OCX_ACC_SORT:
             sort = "AccNo"
@@ -705,7 +705,7 @@ def make_router(current, require_module, err):
         return rows
 
     @r.post("/ocx/customers")
-    def _ocx_add(body: OcxCustomerIn, ws=Depends(require_session)):
+    def _ocx_add(body: OcxCustomerIn, ws=Depends(current)):
         _ocx_guard(ws)
         if not (body.name or "").strip():
             err(400, "customers.err_name", field="name")
@@ -725,7 +725,7 @@ def make_router(current, require_module, err):
         return {"status": "saved", "id": cid}
 
     @r.put("/ocx/customers/{cust_id}")
-    def _ocx_upd(cust_id: int, body: OcxCustomerIn, ws=Depends(require_session)):
+    def _ocx_upd(cust_id: int, body: OcxCustomerIn, ws=Depends(current)):
         _ocx_guard(ws)
         if not (body.name or "").strip():
             err(400, "customers.err_name", field="name")
@@ -745,7 +745,7 @@ def make_router(current, require_module, err):
         return {"status": "saved", "id": cust_id}
 
     @r.post("/ocx/customers/{cust_id}/close")
-    def _ocx_close(cust_id: int, ws=Depends(require_session)):
+    def _ocx_close(cust_id: int, ws=Depends(current)):
         _ocx_guard(ws)
         try:
             close_customer(ws.conn, cust_id)
@@ -754,7 +754,7 @@ def make_router(current, require_module, err):
         return {"ok": True}
 
     @r.get("/ocx/customers/{cust_id}/info")
-    def _ocx_info_get(cust_id: int, ws=Depends(require_session)):
+    def _ocx_info_get(cust_id: int, ws=Depends(current)):
         _ocx_guard(ws)
         cards = [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]
         ip_cards = {}
@@ -766,7 +766,7 @@ def make_router(current, require_module, err):
         return {"cards": cards, "ip_info": ip_cards}
 
     @r.post("/ocx/customers/{cust_id}/info")
-    def _ocx_info_save(cust_id: int, body: OcxCustInfoIn, ws=Depends(require_session)):
+    def _ocx_info_save(cust_id: int, body: OcxCustInfoIn, ws=Depends(current)):
         _ocx_guard(ws)
         named = {
             "v_ID": cust_id, "v_CARD_NO": body.card_no, "v_PASP_TYPE": body.pasp_type,
@@ -781,13 +781,13 @@ def make_router(current, require_module, err):
         return {"ok": True, "cards": [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]}
 
     @r.delete("/ocx/customers/{cust_id}/info/{card_no}")
-    def _ocx_info_del(cust_id: int, card_no: int, ws=Depends(require_session)):
+    def _ocx_info_del(cust_id: int, card_no: int, ws=Depends(current)):
         _ocx_guard(ws)
         ws.conn.call_proc("SB_CUSTINFO", "DEL_CUSTINFO", [], named={"v_ID": cust_id, "v_CARD_NO": card_no})
         return {"ok": True, "cards": [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]}
 
     @r.post("/ocx/customers/{cust_id}/ipinfo")
-    def _ocx_ip_save(cust_id: int, body: OcxIpInfoIn, ws=Depends(require_session)):
+    def _ocx_ip_save(cust_id: int, body: OcxIpInfoIn, ws=Depends(current)):
         _ocx_guard(ws)
         ws.conn.call_proc("SB_CUSTINFO", "UPD_CUSTIPINFO", [], named={
             "v_CUSTID": cust_id, "v_CARD_NO": body.card_no, "v_FAMILYSTATUS": body.familystatus,
@@ -799,7 +799,7 @@ def make_router(current, require_module, err):
         return {"ok": True, "ip_info": ip[0] if ip else {}}
 
     @r.get("/ocx/settings/{table_name}")
-    def _ocx_settings_get(table_name: str, ws=Depends(require_session)):
+    def _ocx_settings_get(table_name: str, ws=Depends(current)):
         _ocx_guard(ws)
         allowed = {"prinad": LOOKUPS["prinad"], "qrp_klie": LOOKUPS["qrp_klie"], "vid_sob": SQL_OCX_VID_SOB_ALL,
                    "org_prav": LOOKUPS["org_prav"], "sferadey": LOOKUPS["sferadey"], "otrasli": LOOKUPS["otrasli"],
@@ -812,7 +812,7 @@ def make_router(current, require_module, err):
     def _info_ocx_analyze(mode: str = "customers", filial: int | None = None, currency_id: int | None = None,
                           cust_type: int | None = None, status: str = "open", min_bal: float | None = None,
                           max_bal: float | None = None, start_date: str = "", end_date: str = "",
-                          ws=Depends(require_session)):
+                          ws=Depends(current)):
         _ocx_guard(ws)
         conn = ws.conn
         if mode == "customers":
