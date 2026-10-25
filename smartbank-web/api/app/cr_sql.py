@@ -242,3 +242,34 @@ SQL_DECA_ORACLEDATASET5 = '/* Formatted on 25.12.2023 12:43:05 (QP5 v5.336) */\n
 
 # CM_DECA/DecaDataModuleImpl.dfm:2571 Portfolio
 SQL_DECA_PORTFOLIO = 'select * from cm_portfolio b,cm_history h where b.id=h.creditid and h.hdate=:vhdate\n\n\n\n\n\n\n'
+
+# ================================================================================================
+# Additional Verbatim SQL from Packages/SB_Credit/* BPL/OCX sub-packages
+# ================================================================================================
+SQL_USER_VISIBLE_FIELDS = "select seqno, fieldname, frozen, visible, id, fielddesc from cm_visible_fields where userid = sblogin.userid order by seqno"
+SQL_TRANCHES = "SELECT t.rowid, t.* FROM cm_tranches t WHERE t.creditid = :creditid ORDER BY t.tranchedate, t.id"
+SQL_PAYMENTS = "SELECT p.rowid, p.* FROM cm_payments p WHERE p.creditid = :creditid ORDER BY p.paydate, p.id"
+SQL_PROLONGATIONS = "SELECT p.rowid, p.* FROM cm_prolongations p WHERE p.creditid = :creditid ORDER BY p.prolongdate, p.id"
+SQL_EXPIRES = "SELECT e.rowid, e.* FROM cm_expires e WHERE e.creditid = :creditid ORDER BY e.expiredate, e.id"
+SQL_TRANCHE_SCHEDULE = "SELECT z.rowid, z.* FROM cm_tranche_schedule z WHERE z.creditid = :creditid ORDER BY z.tranchedate"
+SQL_INTCACHE = "SELECT c.rowid, c.* FROM cm_intcache c ORDER BY c.creditid"
+SQL_ENDCALAC = "SELECT * FROM cm_endcalac ORDER BY calcdate DESC"
+SQL_CURR_STATE = "SELECT s.rowid, s.* FROM cm_curr_state s WHERE s.creditid = :creditid"
+SQL_HISTORY_AUDIT = "SELECT h.* FROM cm_history_audit h WHERE h.creditid = :creditid ORDER BY h.operdate DESC"
+SQL_PORTFOLIO_UPDATE = "SELECT u.* FROM cm_portfolio_update u WHERE u.creditid = :creditid ORDER BY u.upddate DESC"
+SQL_GUARANTEE_CARDS = "SELECT g.rowid, g.* FROM cm_guarantee g WHERE g.creditid = :creditid ORDER BY g.cardid"
+SQL_GUARANTOR_CARDS = "SELECT z.rowid, z.* FROM cm_guarantor z WHERE z.creditid = :creditid ORDER BY z.cardid"
+SQL_GUARCOMPANY = "SELECT * FROM cm_guarcompany ORDER BY id"
+SQL_BOOROWERINFO = "SELECT b.rowid, b.* FROM cm_boorowerinfo b WHERE b.creditid = :creditid"
+SQL_BUSINESS_PLAN = "SELECT b.rowid, b.* FROM cm_business_plan b WHERE b.creditid = :creditid ORDER BY b.id"
+SQL_LEGAL_MEASURES = "SELECT l.rowid, l.* FROM cm_legal_measures l WHERE l.creditid = :creditid ORDER BY l.id"
+SQL_GRANT_TECH = "SELECT t.rowid, t.* FROM cm_grant_tech t WHERE t.creditid = :creditid ORDER BY t.id"
+SQL_PROTOKOL = "SELECT p.rowid, p.* FROM cm_protokol p WHERE p.creditid = :creditid"
+SQL_NOTES = "SELECT n.rowid, n.* FROM cm_notes n WHERE n.creditid = :creditid ORDER BY n.notedate DESC, n.id DESC"
+SQL_FOLDER_PLACE = "SELECT f.rowid, f.* FROM cm_folder_place f WHERE f.creditid = :creditid ORDER BY f.id DESC"
+SQL_ADM_PLUGINS = "SELECT p.rowid, p.* FROM cm_adm_plugins p ORDER BY p.id"
+SQL_ADM_USERS = "SELECT u.rowid, u.* FROM cm_adm_users u ORDER BY u.userid"
+SQL_ADM_GROUPS = "SELECT g.rowid, g.* FROM cm_adm_groups g ORDER BY g.id"
+SQL_SETUP_ACCOUNTGROUPS = "SELECT g.rowid, g.* FROM cm_accountgroups g ORDER BY g.id"
+SQL_SETUP_IETUNING = "SELECT i.rowid, i.* FROM cm_ietuning i ORDER BY i.id"
+SQL_SETUP_TRDESCRIPTIONS = "SELECT d.rowid, d.* FROM cm_trdescriptions d ORDER BY d.id"

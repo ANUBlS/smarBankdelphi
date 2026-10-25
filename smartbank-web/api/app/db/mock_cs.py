@@ -247,6 +247,73 @@ class CsMixin:
                 r["CREDITCURRENCYID"] = (accno.get(c["CREDIT"]) or {}).get("VAL_ACC")
                 out.append(r)
             return out
+        if "decode(cust_type,0,'huquqi',1,'fiziki',2,'f.s.') tip" in s:
+            tips = {0: "huquqi", 1: "fiziki", 2: "f.s."}
+            rows = []
+            for c in C["customers"]:
+                if c.get("CLOSE_DAT") is not None:
+                    continue
+                if "c.filial = :filial" in s and (c.get("FILIAL") or 101) != b.get("filial"):
+                    continue
+                ct = c.get("CUST_TYPE", 0)
+                rows.append({**c, "ROWID": f"AAC{c['ID']}", "OPEN_DAT": _d(c["OPEN_DAT"]),
+                             "DAT_NAL": _d(c.get("DAT_NAL")), "DAT_USTAV": _d(c.get("DAT_USTAV")),
+                             "FILIAL": c.get("FILIAL") or 101, "TIP": tips.get(ct, "huquqi"),
+                             "NAME1": c.get("NAME") or ""})
+            return _sorted(rows, _order_key(s))
+        if "from out_account account, avalute" in s:
+            cur_map = {c["VALUTE"]: c for c in A["avalute"]}
+            cid = b.get("ID")
+            curr_filter = b.get("curr")
+            out = []
+            for a in A["accounts"]:
+                if a.get("CLOSE_DAT") is not None or a.get("KLI_ID") != cid:
+                    continue
+                if curr_filter is not None and a.get("VAL_ACC") != curr_filter:
+                    continue
+                cv = cur_map.get(a.get("VAL_ACC"), {})
+                out.append({
+                    "ID": a["ID"], "CUSTOMERID": a["KLI_ID"], "ACCNO": a["ACC_NO"],
+                    "ACCNAME": a["NAME"], "CURRENCYID": a["VAL_ACC"],
+                    "CURRENCYSNAME": cv.get("VAL_NAME", "AZN"), "CURRENCYNAME": cv.get("VALU_NAME", "Manat"),
+                    "BALANCE": a.get("OSTAT", 0), "LBALANCE": a.get("POK_OSTAT", 0),
+                    "OPENDATE": _d(a.get("OPEN_DAT")), "CLOSEDATE": _d(a.get("CLOSE_DAT")),
+                    "PAIRACCOUNTID": a.get("PAIR_ACC", 0), "FILIAL": a.get("FILIAL", 101),
+                    "REPORTSYMBOL": a.get("SIM_OTCET", 0), "ISOUTBALANCE": 0,
+                })
+            return _sorted(out, _order_key(s))
+        if s == "select c.rowid, c.* from cust_info c where c.id = :id order by c.card_no":
+            ci = C.setdefault("cust_info", {})
+            cards = ci.get(str(b["ID"]), [])
+            if not cards:
+                c = next((x for x in C["customers"] if x["ID"] == b["ID"]), None)
+                if c:
+                    cards = [{
+                        "ROWID": f"AACI{b['ID']}_0", "ID": b["ID"], "CARD_NO": 0,
+                        "PASP_TYPE": "Şəxsiyyət vəsiqəsi", "PASPORT": c.get("INCORPORATION_NUMBER") or "AZE0123456",
+                        "KEM_VIDAN": "ASAN 1", "PASP_DATE": _d(c.get("OPEN_DAT")),
+                        "DOG_YER": "Bakı", "DOG_TAR": _d("1985-05-15"), "CINS": "Kişi",
+                        "MILLIYET": "Azərbaycanlı", "GRAJDAN": "Azərbaycan",
+                        "WORK_PLACE": c.get("NAME"), "DOLJNOST": "Direktor",
+                        "PARTNER": "-", "FATHER": "Əli", "ADRESS": c.get("ADDRESS") or "Bakı ş.",
+                        "STRANA": "Azərbaycan", "TEL": c.get("TPH_NUMBER") or "012-400-00-00",
+                        "TEL_MOB": "050-200-00-00", "FAKS": "-", "E_MAIL": c.get("EMAIL") or "info@bank.az",
+                    }]
+                    ci[str(b["ID"])] = cards
+            return sorted(cards, key=lambda x: x["CARD_NO"])
+        if s == "select t.*, t.rowid from custipinfo t where t.custid = :custid and t.card_no = :card_no":
+            ip = C.setdefault("cust_ipinfo", {})
+            rec = ip.get(f"{b['CUSTID']}_{b['CARD_NO']}")
+            if not rec:
+                rec = {"ROWID": f"AAIP{b['CUSTID']}_{b['CARD_NO']}", "CUSTID": b["CUSTID"], "CARD_NO": b["CARD_NO"],
+                       "FAMILYSTATUS": 1, "EDUCATION": 1, "PLACE1": 1, "WORK1": 1, "WORK2": 1, "VERIFY": 1,
+                       "FAMILYMEMBERS": 3, "MONTHLYINCOME": 2500.0, "MONTHLYEXPENSE": 900.0}
+                ip[f"{b['CUSTID']}_{b['CARD_NO']}"] = rec
+            return [rec]
+        if s == "select * from vid_sob":
+            return C["lookups"]["vid_sob"]
+        if s == "select * from avalute order by valute":
+            return sorted(A["avalute"], key=lambda r: r["VALUTE"])
         return None
 
     def _cs_execute(self, sql, b):
@@ -294,6 +361,21 @@ class CsMixin:
                 raise DBError("ORA-20101: Transaction is already committed", 20101)
             t.update(STATUS=3, REJECT_REASON=n["RejectReason"])
             return 1
+        if key == "SBOP.SB_ADDCUSTOMER":
+            self._check_access("Customers", "insert")
+            nid = max(c["ID"] for c in C["customers"]) + 1
+            rec = dict(ID=nid, OP_ID=0, OPEN_DAT=_iso(n.get("OPEN_DAT")), CLOSE_DAT=None,
+                       NAME=n.get("NAME"), SHORT_NAME=n.get("SHORT_NAME"), NEREZIDENT=n.get("NEREZIDENT", 0),
+                       PRINAD_KOD=n.get("PRINAD_KOD", 1), GROUP_KLIE=n.get("GROUP_KLIE", 1),
+                       VID_SOB=n.get("VID_SOB", 1), ORG_SOB=n.get("ORG_SOB", 1),
+                       SFERA_DEY=n.get("SFERA_DEY", 1), OTRASL=n.get("OTRASL", 1),
+                       NALOG_KOD=n.get("NALOG_KOD", 1), KOD_OKPRO=n.get("KOD_OKPRO"),
+                       INN=n.get("INN"), DAT_NAL=_iso(n.get("DAT_NAL")), DAT_USTAV=_iso(n.get("DAT_USTAV")),
+                       BIK=n.get("BIK"), CUST_TYPE=n.get("CUST_TYPE", 0), FILIAL=n.get("FILIAL", 101),
+                       DIRECTOR_ID=None, ADDRESS=None, EMAIL=None, TPH_NUMBER=None)
+            C["customers"].append(rec)
+            self.st["acc"]["customers"].append({"ID": nid, "NAME": rec["NAME"], "CLOSE_DAT": None})
+            return nid
         return NotImplemented
 
     def _cs_proc(self, key, args, named):
@@ -349,6 +431,59 @@ class CsMixin:
             self._tr_add({"TransactionDate": n["TransDate"], "DebitID": com["DEBT"], "CreditID": com["CREDIT"],
                           "DebitAmount": 0, "CreditAmount": 0, "LAmount": 0, "TrName": com["COMMISIONASSIGNMENT"],
                           "OperationType": 0})
+            return {}
+        if key == "SBOP.SB_EDITCUSTOMER":
+            self._check_access("Customers", "update")
+            c = next((c for c in C["customers"] if c["ID"] == n["v_ID"]), None)
+            if not c:
+                raise DBError("ORA-01403: no data found", 1403)
+            for k in ("OPEN_DAT", "DAT_NAL", "DAT_USTAV"):
+                if k in n:
+                    c[k] = _iso(n[k])
+            for k in ("NAME", "SHORT_NAME", "NEREZIDENT", "PRINAD_KOD", "GROUP_KLIE", "VID_SOB", "ORG_SOB",
+                      "SFERA_DEY", "OTRASL", "NALOG_KOD", "KOD_OKPRO", "INN", "BIK", "CUST_TYPE", "FILIAL"):
+                if k in n and n[k] is not None:
+                    c[k] = n[k]
+            return {}
+        if key == "SB_CUSTINFO.UPD_CUSTINFO":
+            ci = C.setdefault("cust_info", {})
+            cid = str(n["v_ID"])
+            cno = int(n.get("v_CARD_NO") or 0)
+            cards = ci.setdefault(cid, [])
+            rec = next((x for x in cards if x["CARD_NO"] == cno), None)
+            payload = {
+                "ROWID": f"AACI{cid}_{cno}", "ID": int(cid), "CARD_NO": cno,
+                "PASP_TYPE": n.get("v_PASP_TYPE"), "PASPORT": n.get("v_PASPORT"),
+                "KEM_VIDAN": n.get("v_KEM_VIDAN"), "PASP_DATE": _d(n.get("v_PASP_DATE")),
+                "DOG_YER": n.get("v_DOG_YER"), "DOG_TAR": _d(n.get("v_DOG_TAR")),
+                "CINS": n.get("v_CINS"), "MILLIYET": n.get("v_MILLIYET"), "GRAJDAN": n.get("v_GRAJDAN"),
+                "WORK_PLACE": n.get("v_WORK_PLACE"), "DOLJNOST": n.get("v_DOLJNOST"),
+                "PARTNER": n.get("v_PARTNER"), "FATHER": n.get("v_FATHER"),
+                "ADRESS": n.get("v_ADRESS"), "STRANA": n.get("v_STRANA"),
+                "TEL": n.get("v_TEL"), "TEL_MOB": n.get("v_TEL_MOB"),
+                "FAKS": n.get("v_FAKS"), "E_MAIL": n.get("v_E_MAIL"),
+            }
+            if rec:
+                rec.update(payload)
+            else:
+                cards.append(payload)
+            return {}
+        if key == "SB_CUSTINFO.DEL_CUSTINFO":
+            ci = C.setdefault("cust_info", {})
+            cid = str(n["v_ID"])
+            cno = int(n.get("v_CARD_NO") or 0)
+            ci[cid] = [x for x in ci.get(cid, []) if x["CARD_NO"] != cno]
+            return {}
+        if key == "SB_CUSTINFO.UPD_CUSTIPINFO":
+            ip = C.setdefault("cust_ipinfo", {})
+            k = f"{n['v_CUSTID']}_{n['v_CARD_NO']}"
+            ip[k] = {
+                "ROWID": f"AAIP{k}", "CUSTID": n["v_CUSTID"], "CARD_NO": n["v_CARD_NO"],
+                "FAMILYSTATUS": n.get("v_FAMILYSTATUS"), "EDUCATION": n.get("v_EDUCATION"),
+                "PLACE1": n.get("v_PLACE1"), "WORK1": n.get("v_WORK1"), "WORK2": n.get("v_WORK2"),
+                "VERIFY": n.get("v_VERIFY"), "FAMILYMEMBERS": n.get("v_FAMILYMEMBERS"),
+                "MONTHLYINCOME": n.get("v_MONTHLYINCOME"), "MONTHLYEXPENSE": n.get("v_MONTHLYEXPENSE"),
+            }
             return {}
         return NotImplemented
 
