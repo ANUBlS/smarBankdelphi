@@ -250,6 +250,156 @@ class CrMixin:
             return sorted([dict(x, ROWID=f"T{x['NUM']}") for x in C["deca_tags"]], key=lambda x: x["NUM"])
         if key == "SQL_DECA_DECADATA_CLOS":
             return self._deca_rows(s, b)
+        if key == "SQL_FILTER_EXPERTDAET":
+            return g("experts")
+        if key == "SQL_TRANCHES":
+            cid = str(b["creditid"])
+            return C.setdefault("tranches", {}).get(cid, [
+                {"ROWID": f"AATR{cid}_1", "ID": 1, "CREDITID": int(cid), "TRANCHEDATE": _dt("2026-01-15"),
+                 "AMOUNT": Decimal("10000.00"), "PURPOSE": "İlkin tranş verilişi", "IS_CASH": 0, "STATUS": 1}
+            ])
+        if key == "SQL_PAYMENTS":
+            cid = str(b["creditid"])
+            return C.setdefault("payments", {}).get(cid, [
+                {"ROWID": f"AAPY{cid}_1", "ID": 1, "CREDITID": int(cid), "PAYDATE": _dt("2026-02-15"),
+                 "TOTAL": Decimal("950.00"), "MAIN_AMOUNT": Decimal("800.00"), "DUEMAIN_AMOUNT": Decimal("0.00"),
+                 "INTEREST_AMOUNT": Decimal("150.00"), "DUEINTEREST_AMOUNT": Decimal("0.00"),
+                 "PENALTY_AMOUNT": Decimal("0.00"), "STATUS": 1, "NOTES": "Aylıq ödəniş"}
+            ])
+        if key == "SQL_PROLONGATIONS":
+            cid = str(b["creditid"])
+            return C.setdefault("prolongations", {}).get(cid, [])
+        if key == "SQL_EXPIRES":
+            cid = str(b["creditid"])
+            return C.setdefault("expires", {}).get(cid, [])
+        if key == "SQL_TRANCHE_SCHEDULE":
+            cid = str(b["creditid"])
+            return C.setdefault("tranche_schedule", {}).get(cid, [
+                {"ROWID": f"AATS{cid}_1", "ID": 1, "CREDITID": int(cid), "TRANCHEDATE": _dt("2026-01-15"),
+                 "AMOUNT": Decimal("10000.00"), "NOTES": "Plan üzrə 1-ci tranş"}
+            ])
+        if key == "SQL_INTCACHE":
+            return C.setdefault("intcache", [
+                {"ROWID": f"AAIC{c['ID']}", "CREDITID": c["ID"], "NUMBEROFCREDIT": c["NUMBEROFCREDIT"],
+                 "NAME": c["NAME"], "CALCDATE": _dt("2026-10-25"), "MAININT": Decimal("45.20"),
+                 "OVERDUEINT": Decimal("0.00"), "PENALTY": Decimal("0.00"), "STATUS": 0}
+                for c in C["credits"]
+            ])
+        if key == "SQL_ENDCALAC":
+            return C.setdefault("endcalac", [
+                {"CALCDATE": _dt("2026-10-24"), "CREDITS_COUNT": len(C["credits"]), "TOTAL_INT": Decimal("135.60"), "USERNAME": "ADMIN"}
+            ])
+        if key == "SQL_CURR_STATE":
+            c = self._credit(b["creditid"])
+            return [{
+                "ROWID": f"AACS{c['ID']}", "CREDITID": c["ID"],
+                "REST": Decimal(str(c.get("REST") or 0)),
+                "INTERESTREST": Decimal(str(c.get("INTERESTREST") or 0)),
+                "DUEREST": Decimal(str(c.get("DUEREST") or 0)),
+                "DUEINTERESTREST": Decimal(str(c.get("DUEINTERESTREST") or 0)),
+                "PENALTYREST": Decimal(str(c.get("PENALTYREST") or 0)),
+                "PLEDGEPRICE": Decimal(str(c.get("PLEDGEPRICE") or 0)),
+                "OBLIGATION": Decimal(str(c.get("OBLIGATION") or 0)),
+                "BOOROWERREST": Decimal(str(c.get("BOOROWERREST") or 0)),
+                "RESERVEID": c.get("RESERVEID", 1),
+                "DUERESERVEID": c.get("DUERESERVEID", 1),
+            }]
+        if key == "SQL_HISTORY_AUDIT":
+            cid = str(b["creditid"])
+            return C.setdefault("history_audit", {}).get(cid, [])
+        if key == "SQL_PORTFOLIO_UPDATE":
+            cid = str(b["creditid"])
+            return C.setdefault("portfolio_update", {}).get(cid, [
+                {"CREDITID": int(cid), "UPDDATE": _dt("2026-01-15"), "USERNAME": "ADMIN", "FIELDNAME": "STATUS", "OLDVAL": "2", "NEWVAL": "1"}
+            ])
+        if key == "SQL_GUARANTEE_CARDS":
+            cid = str(b["creditid"])
+            c = self._credit(b["creditid"])
+            return C.setdefault("guarantee_cards", {}).get(cid, [
+                {"ROWID": f"AAGC{cid}_1", "CREDITID": int(cid), "CARDID": 1, "PLEDGEID": c.get("PLEDGEID_P") or 1,
+                 "PLEDGEPRICE": Decimal(str(c.get("PLEDGEPRICE") or 15000)), "CURRENCY": c.get("CURRENCY", 0),
+                 "ANYINFOTODISTING": "Daşınmaz əmlak girovu", "REGISTRYNO": "REG-001",
+                 "REGISTRYDATE": _dt("2026-01-10"), "REGISTRYAGENCY": "DƏDRX", "OWNERNAME": c.get("NAME")}
+            ])
+        if key == "SQL_GUARANTOR_CARDS":
+            cid = str(b["creditid"])
+            c = self._credit(b["creditid"])
+            return C.setdefault("guarantor_cards", {}).get(cid, [
+                {"ROWID": f"AAGZ{cid}_1", "CREDITID": int(cid), "CARDID": 1,
+                 "GUARANTORID": c.get("GUARANTORID") or "101", "GUARANTORNAME": c.get("GUARANTORNAME") or "Zamin Şəxs",
+                 "GUARANTORSALARY": c.get("GUARANTORSALARY") or "1500", "PINCODE": "1234567",
+                 "CUNTRYCODE": "AZE", "CUNTRY": "Azərbaycan", "CITY": "Bakı", "DATEOFBIRTH": _dt("1982-03-10")}
+            ])
+        if key == "SQL_GUARCOMPANY":
+            return C.setdefault("guar_companies", [{"ID": 1, "NAME": "İpoteka və Kredit Zəmanət Fondu"}, {"ID": 2, "NAME": "Aqrar Kredit və İnkişaf Agentliyi"}])
+        if key == "SQL_BOOROWERINFO":
+            c = self._credit(b["creditid"])
+            return [{
+                "ROWID": f"AABI{c['ID']}", "CREDITID": c["ID"], "BOOROWERID": c.get("BOOROWERID"),
+                "NAME": c.get("NAME"), "COUNTRYCODE": c.get("COUNTRYCODE", "AZE"),
+                "BANKRUPTEYSTATUS": c.get("BANKRUPTEYSTATUS", 0), "PHONENUMBER": c.get("PHONENUMBER", ""),
+                "ADDRESS": c.get("ADDRESS", ""), "PINCODE": c.get("PINCODE", ""), "SALARY": c.get("SALARY", ""),
+                "FIRSTOWNERID": c.get("FIRSTOWNERID", ""), "FIRSTOWNERNAME": c.get("FIRSTOWNERNAME", ""),
+                "SECONDOWNERID": c.get("SECONDOWNERID", ""), "SECONDOWNERNAME": c.get("SECONDOWNERNAME", ""),
+                "THIRDOWNERID": c.get("THIRDOWNERID", ""), "THIRDOWNERNAME": c.get("THIRDOWNERNAME", ""),
+                "GUARANTORNAME": c.get("GUARANTORNAME", ""), "GUARANTORID": c.get("GUARANTORID", ""),
+                "GUARANTORSALARY": c.get("GUARANTORSALARY", ""),
+            }]
+        if key == "SQL_BUSINESS_PLAN":
+            cid = str(b["creditid"])
+            return C.setdefault("business_plan", {}).get(cid, [
+                {"ROWID": f"AABP{cid}_1", "ID": 1, "CREDITID": int(cid), "STAGE": "I mərhələ", "PLANDATE": _dt("2026-06-01"),
+                 "EXPECTED_INCOME": Decimal("25000.00"), "EXPECTED_EXPENSE": Decimal("14000.00"), "NOTES": "Biznes plan icrası"}
+            ])
+        if key == "SQL_LEGAL_MEASURES":
+            cid = str(b["creditid"])
+            return C.setdefault("legal_measures", {}).get(cid, [])
+        if key == "SQL_GRANT_TECH":
+            cid = str(b["creditid"])
+            return C.setdefault("grant_tech", {}).get(cid, [])
+        if key == "SQL_PROTOKOL":
+            cid = str(b["creditid"])
+            c = self._credit(b["creditid"])
+            return [C.setdefault("protokol", {}).get(cid, {
+                "ROWID": f"AAPR{cid}", "CREDITID": int(cid), "PROTOKOL_NO": f"PR-{cid}/2026",
+                "PROTOKOL_DATE": _dt(c.get("DATEOFCONCLUSION") or "2026-01-10"),
+                "CHAIRMAN": "Kredit Komitəsi Sədri", "MEMBERS": "Üzv 1, Üzv 2, Üzv 3",
+                "DECISION": "Kreditin ayrılması təsdiq edilsin", "CONDITIONS": c.get("PURPOSEOFCREDIT") or "Standart şərtlərlə"
+            })]
+        if key == "SQL_NOTES":
+            cid = str(b["creditid"])
+            return C.setdefault("notes", {}).get(cid, [
+                {"ROWID": f"AANT{cid}_1", "ID": 1, "CREDITID": int(cid), "NOTEDATE": _dt("2026-02-01"),
+                 "USERNAME": "ADMIN", "NOTE": "Müştəri ilə əlaqə saxlanıldı, ödəniş vaxtında ediləcək."}
+            ])
+        if key == "SQL_FOLDER_PLACE":
+            cid = str(b["creditid"])
+            return C.setdefault("folder_place", {}).get(cid, [
+                {"ROWID": f"AAFP{cid}_1", "ID": 1, "CREDITID": int(cid), "FOLDER_NO": f"D-{cid}",
+                 "LOCATION": "Kredit departamenti arxivi", "STAGE": "Normal", "COURT_NAME": "",
+                 "EXEC_OFFICER": "", "SEND_DATE": _dt("2026-01-15"), "RECEIVE_DATE": _dt("2026-01-16"), "BONUS_AMT": Decimal("0.00")}
+            ])
+        if key == "SQL_ADM_PLUGINS":
+            return [{"ROWID": f"AAPL{i}", "ID": v, "PLUGINNAME": k.split("/")[0], "PARAM": k.split("/")[1], "DESCRIPTION": k}
+                    for i, (k, v) in enumerate(C["plugins"].items(), 1)]
+        if key == "SQL_ADM_USERS":
+            return [{"ROWID": f"AAUS{i}", "USERID": i, "USERNAME": u, "GROUPNAME": "Kredit Administratorları",
+                     "ADDITIONS": ",".join(C["adm_additions"].get(u, []))}
+                    for i, u in enumerate(C["user_plugins"].keys(), 1)]
+        if key == "SQL_ADM_GROUPS":
+            return [{"ROWID": "AAGR1", "ID": 1, "NAME": "Kredit Administratorları", "DESCRIPTION": "Tam səlahiyyətli qrup"},
+                    {"ROWID": "AAGR2", "ID": 2, "NAME": "Kredit Mütəxəssisləri", "DESCRIPTION": "Əməliyyat qrupu"}]
+        if key == "SQL_SETUP_ACCOUNTGROUPS":
+            return [{"ROWID": f"AAAG{i}", "ID": i, "INAME": gname, "DESCRIPTION": f"{gname} hesab qrupu"}
+                    for i, gname in enumerate(["LoanAccs", "ClientAccs", "InterestAccs", "PReserveAccs", "DueLoanAccs", "OutInterestAccs", "ObligationAccs"], 1)]
+        if key == "SQL_SETUP_IETUNING":
+            return [{"ROWID": "AAIE1", "ID": 1, "OPERATION": "TRANCHE", "DEBIT_GROUP": "LoanAccs", "CREDIT_GROUP": "ClientAccs", "DESCRIPTION": "Kreditin verilməsi müxabirləşməsi"},
+                    {"ROWID": "AAIE2", "ID": 2, "OPERATION": "PAYMENT_MAIN", "DEBIT_GROUP": "ClientAccs", "CREDIT_GROUP": "LoanAccs", "DESCRIPTION": "Əsas borcun ödənilməsi"},
+                    {"ROWID": "AAIE3", "ID": 3, "OPERATION": "PAYMENT_INT", "DEBIT_GROUP": "ClientAccs", "CREDIT_GROUP": "InterestAccs", "DESCRIPTION": "Faiz borcunun ödənilməsi"}]
+        if key == "SQL_SETUP_TRDESCRIPTIONS":
+            return [{"ROWID": "AATD1", "ID": 1, "CODE": "TR_GRANT", "TEXT": "Müqavilə üzrə kreditin verilməsi"},
+                    {"ROWID": "AATD2", "ID": 2, "CODE": "TR_PAY_MAIN", "TEXT": "Kredit üzrə əsas borcun ödənişi"},
+                    {"ROWID": "AATD3", "ID": 3, "CODE": "TR_PAY_INT", "TEXT": "Kredit üzrə hesablanmış faizin ödənişi"}]
         return None
 
     def _deca_rows(self, s, b):
@@ -333,6 +483,86 @@ class CrMixin:
             return datetime.datetime.combine(d, datetime.time())
         if key in ("CM_CREDIT.CONTRACT_ADD", "CM_CREDIT.CONTRACT_EDIT"):
             return self._contract(key.endswith("ADD"), n)
+        if key == "CM_CREDIT.ADD_CM_CUSTOMER":
+            custs = C["lookups"]["customers"]
+            nid = max(x["ID"] for x in custs) + 1
+            custs.append({"ID": nid, "NAME": n.get("NAME") or f"Müştəri {nid}"})
+            return nid
+        if key == "CM_CREDIT.ADDCREDITACCOUNTS":
+            cid = int(n.get("p_custid") or 1)
+            val = int(n.get("p_currency") or 0)
+            cname = next((x["NAME"] for x in C["lookups"]["customers"] if x["ID"] == cid), f"Cust {cid}")
+            created = {}
+            for grp, bal, out_flag in [
+                ("ClientAccs", "4101", False), ("LoanAccs", "2020", False), ("DueLoanAccs", "2050", False),
+                ("InterestAccs", "2501", False), ("PReserveAccs", "2090", False),
+                ("ObligationAccs", "9920", True), ("OutInterestAccs", "9950", True),
+            ]:
+                aid = max(a["ID"] for a in C["accounts"]) + 1
+                accno = f"AZ00SMRT{bal}{val:03d}{cid:05d}{aid:04d}"[:24]
+                C["accounts"].append({"ID": aid, "CUSTID": cid, "ACCNO": accno, "CLIENTNAME": cname,
+                                      "VAL_ACC": val if grp != "PReserveAccs" else 0, "GROUP": grp, "OUT": out_flag})
+                created[grp] = aid
+            return created
+        if key == "CM_TRANCHE.TRANCHE_ADD":
+            cid = str(n["p_creditid"])
+            lst = C.setdefault("tranches", {}).setdefault(cid, [])
+            tid = max([x["ID"] for x in lst] + [0]) + 1
+            amt = Decimal(str(n.get("p_amount") or 0))
+            lst.append({"ROWID": f"AATR{cid}_{tid}", "ID": tid, "CREDITID": int(cid), "TRANCHEDATE": _dt(n.get("p_date")),
+                        "AMOUNT": amt, "PURPOSE": n.get("p_purpose"), "IS_CASH": n.get("p_cash", 0), "STATUS": 0})
+            return tid
+        if key == "CM_PAYMENT.GET_PLANPAYMENT":
+            c = self._credit(args[0])
+            return {
+                "main_plan": float(Decimal(str(c.get("REST") or 0)) * Decimal("0.1")),
+                "interest_plan": float(c.get("INTERESTREST") or 0),
+                "duemain_plan": float(c.get("DUEREST") or 0),
+                "dueinterest_plan": float(c.get("DUEINTERESTREST") or 0),
+                "penalty_plan": float(c.get("PENALTYREST") or 0),
+            }
+        if key == "CM_PAYMENT.PAYMENTADD":
+            cid = str(n["p_creditid"])
+            lst = C.setdefault("payments", {}).setdefault(cid, [])
+            pid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.append({
+                "ROWID": f"AAPY{cid}_{pid}", "ID": pid, "CREDITID": int(cid), "PAYDATE": _dt(n.get("p_date")),
+                "TOTAL": Decimal(str(n.get("p_total") or 0)),
+                "MAIN_AMOUNT": Decimal(str(n.get("p_main") or 0)),
+                "DUEMAIN_AMOUNT": Decimal(str(n.get("p_duemain") or 0)),
+                "INTEREST_AMOUNT": Decimal(str(n.get("p_interest") or 0)),
+                "DUEINTEREST_AMOUNT": Decimal(str(n.get("p_dueinterest") or 0)),
+                "PENALTY_AMOUNT": Decimal(str(n.get("p_penalty") or 0)),
+                "STATUS": 0, "NOTES": n.get("p_notes") or "Kredit ödənişi",
+            })
+            return pid
+        if key == "CM_PROLONGATION.PROLONGATION_ADD":
+            cid = str(n["p_creditid"])
+            lst = C.setdefault("prolongations", {}).setdefault(cid, [])
+            pid = max([x["ID"] for x in lst] + [0]) + 1
+            c = self._credit(int(cid))
+            old_due = c.get("DUEDATELASTCONTRACT") or c.get("DUEDATEFIRSTCONTRACT")
+            new_due = n.get("p_newduedate")
+            c["DUEDATELASTCONTRACT"] = new_due.date().isoformat() if isinstance(new_due, datetime.datetime) else str(new_due)[:10]
+            lst.append({
+                "ROWID": f"AAPR{cid}_{pid}", "ID": pid, "CREDITID": int(cid),
+                "PROLONGDATE": _dt(n.get("p_date")), "OLDDUEDATE": _dt(old_due), "NEWDUEDATE": _dt(new_due),
+                "NEWRATE": Decimal(str(n.get("p_rate") or c.get("ANNUALYINTERESTRATE") or 0)),
+                "AMOUNT": Decimal(str(n.get("p_amount") or c.get("REST") or 0)),
+                "NOTES": n.get("p_notes") or "Müddətin uzadılması",
+            })
+            return pid
+        if key == "CM_EXPIRE.EXPIRE_ADD":
+            cid = str(n["p_creditid"])
+            lst = C.setdefault("expires", {}).setdefault(cid, [])
+            eid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.append({
+                "ROWID": f"AAEX{cid}_{eid}", "ID": eid, "CREDITID": int(cid), "EXPIREDATE": _dt(n.get("p_date")),
+                "MAIN_AMOUNT": Decimal(str(n.get("p_main") or 0)),
+                "INTEREST_AMOUNT": Decimal(str(n.get("p_interest") or 0)),
+                "STATUS": 0, "NOTES": n.get("p_notes") or "Vaxtı keçmişə köçürmə",
+            })
+            return eid
         return NotImplemented
 
     def _cr_bool(self, key, args, named):
@@ -343,6 +573,8 @@ class CrMixin:
             return int(args[0]) in self.cr["user_plugins"].get(self.username, [])
         if key == "CM_CREDIT.CHECKPERSON":
             return int(n.get("P_ID") or 0) in self.cr["check_person_true"]
+        if key == "CM_TRANCHE.FINDACCFLAG":
+            return False
         return NotImplemented
 
     def _cr_proc(self, key, args, named):
@@ -375,6 +607,190 @@ class CrMixin:
         if key == "CM_AK_REPORTS.INSINFOF1":
             if int(n["p_id"]) in self.cr["coef_fail_ids"]:
                 raise DBError("ORA-01476: divisor is equal to zero", 1476)
+            return {}
+        if key == "CM_TRANCHE.COMMITTRANCHE":
+            cid = str(n["p_creditid"])
+            c = self._credit(int(cid))
+            for t in self.cr.setdefault("tranches", {}).get(cid, []):
+                if t["ID"] == int(n["p_id"]):
+                    t["STATUS"] = 1
+                    c["REST"] = float(Decimal(str(c.get("REST") or 0)) + Decimal(str(t["AMOUNT"])))
+                    c["INITIALAMOUNT"] = max(float(c.get("INITIALAMOUNT") or 0), c["REST"])
+                    c["STATUS"] = 1
+            return {}
+        if key == "CM_TRANCHE.TRANCHE_DELETE":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("tranches", {}).get(cid, [])
+            lst[:] = [t for t in lst if t["ID"] != int(n["p_id"])]
+            return {}
+        if key == "CM_PAYMENT.COMMITPAYMENT":
+            cid = str(n["p_creditid"])
+            c = self._credit(int(cid))
+            for p in self.cr.setdefault("payments", {}).get(cid, []):
+                if p["ID"] == int(n["p_id"]):
+                    p["STATUS"] = 1
+                    c["REST"] = max(0.0, float(Decimal(str(c.get("REST") or 0)) - Decimal(str(p["MAIN_AMOUNT"]))))
+                    c["DUEREST"] = max(0.0, float(Decimal(str(c.get("DUEREST") or 0)) - Decimal(str(p["DUEMAIN_AMOUNT"]))))
+                    c["INTERESTREST"] = max(0.0, float(Decimal(str(c.get("INTERESTREST") or 0)) - Decimal(str(p["INTEREST_AMOUNT"]))))
+                    c["DUEINTERESTREST"] = max(0.0, float(Decimal(str(c.get("DUEINTERESTREST") or 0)) - Decimal(str(p["DUEINTEREST_AMOUNT"]))))
+                    c["PENALTYREST"] = max(0.0, float(Decimal(str(c.get("PENALTYREST") or 0)) - Decimal(str(p["PENALTY_AMOUNT"]))))
+            return {}
+        if key == "CM_PAYMENT.PAYMENTDEL":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("payments", {}).get(cid, [])
+            lst[:] = [p for p in lst if p["ID"] != int(n["p_id"])]
+            return {}
+        if key == "CM_PROLONGATION.DELLASTPROLONGATION":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("prolongations", {}).get(cid, [])
+            if lst:
+                lst.pop()
+            return {}
+        if key == "CM_EXPIRE.COMMITEXPIRE":
+            cid = str(n["p_creditid"])
+            c = self._credit(int(cid))
+            for e in self.cr.setdefault("expires", {}).get(cid, []):
+                if e["ID"] == int(n["p_id"]):
+                    e["STATUS"] = 1
+                    m_amt = float(e["MAIN_AMOUNT"])
+                    i_amt = float(e["INTEREST_AMOUNT"])
+                    c["REST"] = max(0.0, float(c.get("REST") or 0) - m_amt)
+                    c["DUEREST"] = float(c.get("DUEREST") or 0) + m_amt
+                    c["INTERESTREST"] = max(0.0, float(c.get("INTERESTREST") or 0) - i_amt)
+                    c["DUEINTERESTREST"] = float(c.get("DUEINTERESTREST") or 0) + i_amt
+            return {}
+        if key == "CM_EXPIRE.EXPIRE_DELETE":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("expires", {}).get(cid, [])
+            lst[:] = [e for e in lst if e["ID"] != int(n["p_id"])]
+            return {}
+        if key in ("CM_ACTIVATION.ACTIVATECREDIT", "CM_ACTIVATION.COMMITACTIVATION"):
+            c = self._credit(int(n["p_creditid"]))
+            c["STATUS"] = 1
+            return {}
+        if key in ("CM_CALCULATOR.CALCPERCENTS", "CM_CALCULATOR.ACCEPTCALCEDPERCENTS", "CM_CALCULATOR.CANCELCALCULATION", "CM_CALCULATOR.STOPCREDITINTEREST"):
+            if key == "CM_CALCULATOR.STOPCREDITINTEREST" and n.get("p_creditid"):
+                c = self._credit(int(n["p_creditid"]))
+                c["KR_STATUS"] = 1
+                c["STOPCALCDATE"] = _dt(n.get("p_date")).date().isoformat()
+            return {}
+        if key == "CM_CREDIT.UPDATECURRSTATE":
+            cid = int(n["p_creditid"])
+            c = self._credit(cid)
+            for k, pk in [("REST", "p_rest"), ("INTERESTREST", "p_interestrest"), ("DUEREST", "p_duerest"),
+                          ("DUEINTERESTREST", "p_dueinterestrest"), ("PENALTYREST", "p_penaltyrest"),
+                          ("PLEDGEPRICE", "p_pledgeprice"), ("OBLIGATION", "p_obligation")]:
+                if pk in n:
+                    c[k] = float(n[pk])
+            aud = self.cr.setdefault("history_audit", {}).setdefault(str(cid), [])
+            aud.insert(0, {"CREDITID": cid, "OPERDATE": datetime.datetime.now(), "USERNAME": self.username, "REASON": n.get("p_reason")})
+            return {}
+        if key == "CM_CREDIT.SAVEGUARANTEECARD":
+            cid = str(n["p_creditid"])
+            if n.get("p_kind") == "guarantor":
+                lst = self.cr.setdefault("guarantor_cards", {}).setdefault(cid, [])
+                card_id = int(n.get("cardid") or (max([x["CARDID"] for x in lst] + [0]) + 1))
+                rec = next((x for x in lst if x["CARDID"] == card_id), None)
+                payload = {"ROWID": f"AAGZ{cid}_{card_id}", "CREDITID": int(cid), "CARDID": card_id,
+                           "GUARANTORID": n.get("guarantorid", "101"), "GUARANTORNAME": n.get("guarantorname", ""),
+                           "GUARANTORSALARY": n.get("guarantorsalary", "0"), "PINCODE": n.get("pincode", ""),
+                           "CUNTRYCODE": n.get("cuntrycode", "AZE"), "CUNTRY": n.get("cuntry", "Azərbaycan"),
+                           "CITY": n.get("city", "Bakı"), "DATEOFBIRTH": _dt(n.get("dateofbirth") or "1985-01-01")}
+                if rec:
+                    rec.update(payload)
+                else:
+                    lst.append(payload)
+            else:
+                lst = self.cr.setdefault("guarantee_cards", {}).setdefault(cid, [])
+                card_id = int(n.get("cardid") or (max([x["CARDID"] for x in lst] + [0]) + 1))
+                rec = next((x for x in lst if x["CARDID"] == card_id), None)
+                payload = {"ROWID": f"AAGC{cid}_{card_id}", "CREDITID": int(cid), "CARDID": card_id,
+                           "PLEDGEID": int(n.get("pledgeid") or 1), "PLEDGEPRICE": Decimal(str(n.get("pledgeprice") or 0)),
+                           "CURRENCY": int(n.get("currency") or 0), "ANYINFOTODISTING": n.get("anyinfotodisting", ""),
+                           "REGISTRYNO": n.get("registryno", ""), "REGISTRYDATE": _dt(n.get("registrydate") or "2026-01-10"),
+                           "REGISTRYAGENCY": n.get("registryagency", ""), "OWNERNAME": n.get("ownername", "")}
+                if rec:
+                    rec.update(payload)
+                else:
+                    lst.append(payload)
+            return {}
+        if key == "CM_CREDIT.DELETEGUARANTEECARD":
+            cid = str(n["p_creditid"])
+            k = "guarantor_cards" if n.get("p_kind") == "guarantor" else "guarantee_cards"
+            lst = self.cr.setdefault(k, {}).get(cid, [])
+            lst[:] = [x for x in lst if x["CARDID"] != int(n["p_cardid"])]
+            return {}
+        if key == "CM_CREDIT.SAVEADVANCEDINFO":
+            c = self._credit(int(n["p_creditid"]))
+            for k in ("ADDRESS", "PHONENUMBER", "PINCODE", "SALARY", "FIRSTOWNERNAME", "SECONDOWNERNAME", "THIRDOWNERNAME", "GUARANTORNAME"):
+                if k.lower() in n:
+                    c[k] = n[k.lower()]
+            return {}
+        if key == "CM_CREDIT.SAVEBUSINESSPLANITEM":
+            cid = str(n["p_creditid"])
+            tab = n.get("tab") or "business_plan"
+            lst = self.cr.setdefault(tab, {}).setdefault(cid, [])
+            nid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.append({"ROWID": f"AABP{cid}_{nid}", "ID": nid, "CREDITID": int(cid),
+                        "STAGE": n.get("stage") or "Yeni mərhələ", "PLANDATE": _dt(n.get("plandate") or "2026-10-25"),
+                        "EXPECTED_INCOME": Decimal(str(n.get("expected_income") or 0)),
+                        "EXPECTED_EXPENSE": Decimal(str(n.get("expected_expense") or 0)),
+                        "NOTES": n.get("notes") or ""})
+            return {}
+        if key == "CM_CREDIT.UP_PORT_PROTOKOL":
+            cid = str(n["p_creditid"])
+            pr = self.cr.setdefault("protokol", {}).setdefault(cid, {"CREDITID": int(cid)})
+            for k in ("protokol_no", "chairman", "members", "decision", "conditions"):
+                if k in n:
+                    pr[k.upper()] = n[k]
+            if "protokol_date" in n:
+                pr["PROTOKOL_DATE"] = _dt(n["protokol_date"])
+            return {}
+        if key == "CM_CREDIT.ADDCM_NOTES":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("notes", {}).setdefault(cid, [])
+            nid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.insert(0, {"ROWID": f"AANT{cid}_{nid}", "ID": nid, "CREDITID": int(cid),
+                           "NOTEDATE": _dt(n.get("p_date") or "2026-10-25"), "USERNAME": n.get("p_user") or "ADMIN",
+                           "NOTE": n.get("p_note") or ""})
+            return {}
+        if key == "CM_CREDIT.DELETE_NOTES":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("notes", {}).get(cid, [])
+            lst[:] = [x for x in lst if x["ID"] != int(n["p_id"])]
+            return {}
+        if key == "CM_CREDIT.SAVEFOLDERPLACE":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("folder_place", {}).setdefault(cid, [])
+            nid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.insert(0, {"ROWID": f"AAFP{cid}_{nid}", "ID": nid, "CREDITID": int(cid),
+                           "FOLDER_NO": n.get("folder_no") or f"D-{cid}",
+                           "LOCATION": n.get("location") or "Kredit departamenti",
+                           "STAGE": n.get("stage") or "Normal",
+                           "COURT_NAME": n.get("court_name") or "",
+                           "EXEC_OFFICER": n.get("exec_officer") or "",
+                           "SEND_DATE": _dt(n.get("send_date") or "2026-10-25"),
+                           "RECEIVE_DATE": _dt(n.get("receive_date") or "2026-10-25"),
+                           "BONUS_AMT": Decimal(str(n.get("bonus_amt") or 0))})
+            return {}
+        if key == "CM_SCHEDULE.SAVETRANCHESCHEDULE":
+            cid = str(n["p_creditid"])
+            lst = self.cr.setdefault("tranche_schedule", {}).setdefault(cid, [])
+            nid = max([x["ID"] for x in lst] + [0]) + 1
+            lst.append({"ROWID": f"AATS{cid}_{nid}", "ID": nid, "CREDITID": int(cid),
+                        "TRANCHEDATE": _dt(n.get("tranchedate") or "2026-10-25"),
+                        "AMOUNT": Decimal(str(n.get("amount") or 0)),
+                        "NOTES": n.get("notes") or "Tranş qrafiki"})
+            return {}
+        if key == "CM_SCHEDULE.SHIFTSCHEDULEDATES":
+            cid = int(n["p_creditid"])
+            months = int(n.get("p_months") or 0)
+            days = int(n.get("p_days") or 0)
+            for r in self._sched(cid):
+                d = _d(r["PAYMENTDATE"]) + datetime.timedelta(days=months * 30 + days)
+                r["PAYMENTDATE"] = d.isoformat()
+            return {}
+        if key in ("CM_ADMINISTRATION.SAVEADMITEM", "CM_ADMINISTRATION.SAVESETUPITEM"):
             return {}
         return NotImplemented
 
