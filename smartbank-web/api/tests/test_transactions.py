@@ -62,7 +62,7 @@ def test_list_title_status_order_and_filter():
     i = c.get("/api/transactions/init").json()
     assert i["date"] == D and not i["status_first"] and [o["id"] for o in i["operations"]] == [0, 1, 2, 9]
     r = c.post("/api/transactions/list", json={"date": D}).json()
-    assert [x["id"] for x in r["rows"]] == [5001, 5002, 5003, 6001, 6002, 6003, 6004, 6005] and r["total"] == 8
+    assert [x["id"] for x in r["rows"]] == [5001, 5002, 5003, 6001, 6002, 6003, 6004, 6005, 6006, 6007] and r["total"] == 10
     r = c.post("/api/transactions/list", json={"date": D, "title": "LAMOUNT"}).json()
     assert [x["lamount"] for x in r["rows"]] == sorted(x["lamount"] for x in r["rows"])
     r2 = c.post("/api/transactions/list", json={"date": D, "title": ""}).json()          # icon column -> keeps last title
@@ -72,12 +72,47 @@ def test_list_title_status_order_and_filter():
     r = c.post("/api/transactions/list", json={"date": D, "title": "ID"}).json()
     assert [x["status"] for x in r["rows"]][:1] == [3] and r["rows"][-1]["status"] == 1
     r = c.post("/api/transactions/list", json={"date": D, "currencies_off": [840], "committed": False}).json()
-    assert [x["id"] for x in r["rows"]] == [6003, 6002, 6004]      # Status desc, ID; USD rows and committed filtered out
+    assert [x["id"] for x in r["rows"]] == [6003, 6002, 6004, 6006]      # Status desc, ID; USD rows and committed filtered out
     assert r["filter"].startswith("((DebitCurrencyID<>840)")
     r = c.post("/api/transactions/list", json={"date": D, "operator": 2}).json()
     assert {x["operatorid"] for x in r["rows"]} == {2}
     mock._load()["users"]["TELLER"]["rights"].remove(tm.CLSID)
     assert c.post("/api/transactions/list", json={"date": D}).status_code == 403
+
+
+def test_each_filter_narrows_like_actionfilter():
+    """TransactionManagerImpl.pas ActionFilterExecute: every sidebar control narrows the fixture rows."""
+    c = cl()
+    ids = lambda **f: [x["id"] for x in c.post("/api/transactions/list", json={"date": D, **f}).json()["rows"]]
+    full = ids()
+    assert len(full) == 10
+    cases = {
+        "currency 978 off": dict(currencies_off=[978]),
+        "currency 840 off": dict(currencies_off=[840]),
+        "op type 1 off": dict(op_types_off=[1]),
+        "op type 2 off": dict(op_types_off=[2]),
+        "debit branch 102": dict(debit_branch=102),
+        "credit branch 102": dict(credit_branch=102),
+        "operator 1": dict(operator=1),
+        "no delayed": dict(delayed=False),
+        "no committed": dict(committed=False),
+        "no rejected": dict(rejected=False),
+    }
+    for name, f in cases.items():
+        got = ids(**f)
+        assert got and len(got) < len(full) and set(got) <= set(full), name
+    assert 6006 not in ids(currencies_off=[978]) and 6006 not in ids(op_types_off=[1])
+    assert 6007 not in ids(op_types_off=[2]) and ids(debit_branch=102) == [6006]
+    assert 6006 in ids(credit_branch=102) and 6003 not in ids(rejected=False)
+    assert c.post("/api/transactions/list", json={"date": D, "debit_branch": "1 or 1=1"}).status_code == 422   # bound int
+
+
+def test_commission_list_columns():
+    c = cl()
+    rows = c.get("/api/transactions/commissions").json()
+    r = next(x for x in rows if x["id"] == 2)
+    assert r["adebitaccount"] and r["acreditaccount"] and r["adebitcurrency"] and r["commisionassignment"]
+    assert [x["name"] for x in rows] == sorted(x["name"] for x in rows)    # order by name
 
 
 def test_reject_commit_delete():

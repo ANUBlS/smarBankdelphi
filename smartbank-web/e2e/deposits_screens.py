@@ -1,0 +1,50 @@
+"""Deposits manager (DepositsManager_New, production) E2E + screenshots 250-257 (mock mode, fresh API process)."""
+import os, sys
+from playwright.sync_api import sync_playwright, expect
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3000"
+OUT = os.path.join(os.path.dirname(__file__), "..", "docs", "screenshots")
+CHROME = os.getenv("CHROME_PATH", "/usr/bin/google-chrome")
+shot = lambda pg, n: (pg.screenshot(path=os.path.join(OUT, n)), print("saved", n))
+
+
+def login(b, u, p):
+    pg = b.new_page(viewport={"width": 1440, "height": 900}, accept_downloads=True)
+    pg.on("dialog", lambda d: d.accept())
+    pg.goto(BASE); pg.wait_for_selector("#loginForm")
+    pg.fill("#u", u); pg.fill("#p", p); pg.click("#loginBtn"); pg.wait_for_selector("#tree .node")
+    pg.locator("#tree .node", has_text="Deposits").first.click(); pg.wait_for_timeout(200)
+    pg.locator("#tree .node", has_text="Deposits").last.click()
+    pg.wait_for_selector("#dGrid tbody tr[data-id]"); pg.wait_for_timeout(300)
+    return pg
+
+
+with sync_playwright() as p:
+    b = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else None, args=["--no-sandbox"])
+    pg = login(b, "ADMIN", "Admin#2026")
+    rows = pg.locator("#dGrid tbody tr[data-id]")
+    expect(rows).to_have_count(8); shot(pg, "250-deposits-main.png")
+    pg.click("#dFilter"); pg.wait_for_selector("#dFilterPanel fieldset")
+    pg.check("#cb_currency"); pg.wait_for_timeout(300)
+    expect(rows).to_have_count(8)                                 # a check box alone does not filter (no OnClick)
+    pg.select_option("#dCur", "840"); pg.wait_for_timeout(200); pg.select_option("#dCur", "944"); pg.wait_for_timeout(500)
+    expect(rows).to_have_count(5); shot(pg, "251-deposits-filter.png")
+    with pg.expect_download() as dl: pg.click("#dExp")
+    assert dl.value.suggested_filename.endswith(".xlsx")
+    pg.uncheck("#cb_currency"); pg.select_option("#dCur", "840"); pg.wait_for_timeout(400); pg.click("#dFilter")
+    expect(rows).to_have_count(8)
+    pg.locator("#dGrid tr[data-id='5002']").click(button="right"); pg.wait_for_selector(".ctx-menu")
+    pg.locator(".ctx-menu .ctx-item", has_text=pg.evaluate("SB.t('deposits.m_contract')")).first.hover(); pg.wait_for_timeout(200); shot(pg, "252-deposits-popup.png")
+    pg.keyboard.press("Escape")
+    pg.click("#dOps"); pg.wait_for_selector(".ctx-menu"); shot(pg, "253-deposits-operations.png"); pg.keyboard.press("Escape")
+    pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("Control+Alt+s"); pg.wait_for_selector("#dSearch input")
+    pg.fill("#dSearch input[data-sf='CUSTOMERNAME']", "məm"); pg.press("#dSearch input[data-sf='CUSTOMERNAME']", "Enter"); pg.wait_for_timeout(300)
+    assert pg.locator("#dGrid tr.cur").get_attribute("data-id") == "5005"; shot(pg, "254-deposits-search.png")
+    pg.locator("#dGrid tr[data-id='5002']").click(); pg.locator("#dGrid tr[data-id='5004']").click(modifiers=["Control"])
+    pg.keyboard.press("F8"); pg.wait_for_timeout(700)
+    shot(pg, "255-deposits-closed.png")
+    pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("Control+p"); pg.wait_for_selector(".toast"); shot(pg, "256-deposits-not-migrated.png")
+    pg.close()
+    pg = login(b, "DEPOSITOR", "Depositor#2026")
+    pg.locator("#dGrid tr[data-id='5001']").click(); pg.keyboard.press("F8"); pg.wait_for_selector(".toast")
+    expect(pg.locator(".toast").last).to_contain_text("SBCM_CLOSE_CONTRACT"); shot(pg, "257-deposits-close-denied.png")
+    b.close()

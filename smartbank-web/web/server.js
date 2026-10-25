@@ -12,7 +12,15 @@ const DEFAULT_LANG = process.env.DEFAULT_LANG || 'en';
 
 const app = express();
 app.disable('x-powered-by');
-app.use(helmet({ contentSecurityPolicy: { directives: { 'script-src': ["'self'"], 'img-src': ["'self'", 'data:'] } } }));
+// Plain-HTTP installs (http://<ip>:8080): helmet's default upgrade-insecure-requests and HSTS make the
+// browser fetch scripts/CSS over https, which fails and leaves a white page. Only enable them behind HTTPS.
+const HTTPS_ON = String(process.env.COOKIE_SECURE || '').toLowerCase() === 'true';
+app.use(helmet({
+  contentSecurityPolicy: { directives: { 'script-src': ["'self'"], 'img-src': ["'self'", 'data:'], 'upgrade-insecure-requests': HTTPS_ON ? [] : null } },
+  hsts: HTTPS_ON,
+  crossOriginOpenerPolicy: HTTPS_ON ? { policy: 'same-origin' } : false,
+  originAgentCluster: HTTPS_ON,
+}));
 
 app.get('/healthz', (_req, res) => res.json({ status: 'ok' }));
 

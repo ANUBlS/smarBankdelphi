@@ -11,11 +11,11 @@ import re
 import sqlite3
 
 from .. import cards_sql as Q
-from .base import DBError
+from .base import DBError, dedupe
 
 _DB = None
 _PATS = None
-DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE", "OP_DATE"}
+DATE_COLS = {"DATEOPEN", "EXPIRY", "DATECLOSE", "DAT", "CRDAT", "TRANDATE", "OP_DATE", "BEGDAT"}
 
 
 def reset():
@@ -94,15 +94,24 @@ def _pats():
             if n.startswith("LINES_"):
                 L = list(getattr(Q, n))
                 t = re.escape(Q.text(L))
+                if n in ("LINES_KLIRING1", "LINES_KLIRING2"):
+                    t += r"(?:ORDER BY \w+\r\n)?"
                 if n == "LINES_CLIENTS":
                     t += r"(ORDER BY \w+(  desc)?\r\n)?"
-                if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
+                if n in ("LINES_URGENT", "LINES_SIMPLE", "LINES_BALANS", "LINES_PAYMENT", "LINES_CARDTYPES", "LINES_FILIALACCOUNT",
+                         "LINES_DOMESTIC", "LINES_BANKOMATS", "LINES_POSCOMISSION", "LINES_MESSAGES2", "LINES_CADDI",
+                         "LINES_SALARYBASE", "LINES_SALARYBASE2"):                         # TApplications SQL.Add('ORDER BY ..') / SQL[pos] := ''
                     t += r"(?:(?:ORDER BY \w+)?\r\n)*"
                 _PATS.append(re.compile(t + r"\Z", re.S))
         from .. import cards as C                                              # Tkrinfo / TMultiCurrency datasets (not in Unit18)
         from .. import cards_app_file as F
-        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2):
+        from .. import cards_misc as M
+        for L in (C.LINES_CM_ACTIVE, C.LINES_MULTI_ACC, F.LINES_UMUMI1_BOUND, F.LINES_UMUMI1_BOUND2, M.LINES_LIM1, M.LINES_LIM2):
             _PATS.append(re.compile(re.escape(Q.text(L)) + r"\Z", re.S))
+        from .. import cards_files as CF                                       # SQL.Clear / Add texts of the file operations
+        from .. import cards_cfile, cards_fileops  # noqa: F401 - register their statements
+        for t in CF.EXTRA_SELECTS:
+            _PATS.append(re.compile(re.escape(t) + r"\Z", re.S))
     return _PATS
 
 
@@ -112,13 +121,65 @@ DONE = {"CARD_MAIN." + n.upper() for n in ("donenewcard", "donesupcard", "donepr
                                            "DONESECURE", "cardnamechange")}
 
 
+# file operation forms (cards_fileops): procedure -> (table, argument columns) / table
+FO_INSERT = {"insert_dxxx": ("card_dxxxfiles", ["INSTITUTION", "CURRENCY", "TRANDATE", "MERCHANT", "AMOUNT", "FEE", "TERMINAL", "TYPES", "TR_TYPE",
+                                                "FILENAME", "BANK_KODE", "MERCH_NAME", "AUTH_CODE"]),
+             "insert_sms_messages": ("card_smsfiles", ["TERMINALNAME", "CARDNUMBER", "TERMINAL", "AUTH_CODE", "AMOUNT_TR", "TRANDATE", "CURRENCY",
+                                                      "POST_DATE", "AMOUNTSET", "FILENAME"]),
+             "insert_intretail": ("card_intretalifiles", ["CHANELL", "TR_TYPE", "OUTWORDSTATUS", "TR_CURRENCY", "ACC_CURRENCY", "MERCHANT", "CARDNUMBER",
+                                                         "TR_DATE", "AUTH", "TR_AMOUNT", "ACC_AMOUNT", "FEE", "CLEAR_AMOUNT", "TERMINAL", "FILENAME"]),
+             "insert_rvisa": ("card_rvisafiles", ["REPORTING_FOR", "REPORTING_CODE", "REPORTING_DATE", "ROLLUP_TO", "ROLLUP_TO_CODE", "PROC_DATE",
+                                                  "FUNDS_XFER_ENTITY", "FUNDS_XFER_CODE", "SETTLEMENT_CURRENCY", "INTERCHANGE_TOTAL_AMMOUNT",
+                                                  "INTERCHANGE_ISDEBET", "REIMBURSEMENT_FEES_AMOUNT", "REIMBURSEMENT_FEES_ISDEBET", "VISA_CHARGES_AMMOUNT",
+                                                  "VISA_CHARGES_ISDEBET", "SETTLEMENT_AMOUNT", "SETTLEMENT_AMOUNT_ISDEBET", "FILENAME"]),
+             # insert_dfiles: 25 fixed-width fields + currency + file + 1; named where UnitDfile's commented preview names them (:483-490)
+             "insert_dfiles": ("card_dfiles", ["F1", "F2", "F3", "F4", "F5", "BANKNAME", "F7", "LOROACCOUNT", "F9", "F10", "PAYMENTORDERAMMOUNT",
+                                               "PAYMENTDIRECTION", "F13", "F14", "F15", "F16", "F17", "SOURCECONTRACT", "TRANSACTIONDATE",
+                                               "TRANSACTIONTIME", "F21", "F22", "F23", "F24", "F25", "CURRENCY", "FILENAME", "F28"])}
+FO_INSERT.update({                                                             # argument columns unknown (DDL not in the repo): A1..An
+    "rbsdofile_insert": ("card_rbsdofile_t", ["FILENAME"] + ["A%d" % i for i in range(2, 31)]),
+    "rbstax_insert": ("card_rbstaxfiles", ["A%d" % i for i in range(1, 40)])})
+FO_DELETE = {"delete_rbsdofile": "card_rbsdofile_t", "delete_rbstaxfile": "card_rbstaxfiles", "delete_exchangefile": "card_exchange_files",
+             "delete_dxxx": "card_dxxxfiles", "empty_sms_messages": "card_smsfiles", "empty_intretail": "card_intretalifiles",
+             "delete_dfiles": "card_dfiles", "rvisa_delete": "card_rvisafiles"}
+FO_TRANS = {"transaction_dxxx": "card_dxxxfiles", "transaction_sms": "card_smsfiles", "transaction_int": "card_intretalifiles",
+            "transaction_d": "card_dfiles", "transaction_exchange": ("card_exchange_files", 1), "transaction_rbstax": ("card_rbstaxfiles", 1)}
+FO_NOOP = {"dxxarxiv", "smsarxiv", "intarxiv", "darxiv", "exchangearxiv", "rbsdoarxiv", "rbstaxarxiv", "rbsdopart"}
+
+
+def _num(v):
+    """Oracle's implicit VARCHAR2 -> NUMBER conversion for a NUMBER column bound with a string."""
+    try:
+        return int(str(v).strip())
+    except ValueError:
+        return v
+
+
 class CardsMixin:
     def _cards_query(self, sql, b):
+        if sql == Q.text(Q.LINES_DSSYSDAT):
+            return NotImplemented                                             # DSSysdat: the shared sysdat of the main mock
+        if sql.startswith(Q.text(Q.LINES_MESSAGES)) and "ORDER BY" in sql[len(Q.text(Q.LINES_MESSAGES)):]:
+            raise DBError("ORA-00933: SQL command not properly ended", 933)       # cfilepas DBGrid1TitleClick after 'order by status'
         if sql.startswith(Q.text(Q.LINES_SAZLAMALAR)) and "ORDER BY" in sql[len(Q.text(Q.LINES_SAZLAMALAR)):]:
             # setac.pas DBGrid1TitleClick adds a second ORDER BY after 'order by id': Oracle rejects the statement
             raise DBError("ORA-00933: SQL command not properly ended", 933)
         if not any(p.match(sql) for p in _pats()):
             return NotImplemented
+        if sql.startswith(Q.text(Q.LINES_CADDI)) and sql.count("ORDER BY") > 1:
+            raise DBError("ORA-00933: SQL command not properly ended", 933)       # cfile_addi DBGrid1TitleClick: the lines accumulate
+        if "trunc(sysdate)" in sql:
+            sql = sql.replace("trunc(sysdate)", "'" + dt.datetime.combine(dt.date.today(), dt.time()).isoformat() + "'")
+        if sql.startswith(Q.text(Q.LINES_DOMESTIC)):
+            # domesticbank.pas TitleClick on the three acc_no columns: 'ORDER BY ACC_NO' is ambiguous, ACC_NO_1 / _2 are only DOA field names
+            m = re.search(r"ORDER BY (ACC_NO(?:_\d)?)\r\n", sql[len(Q.text(Q.LINES_DOMESTIC)):])
+            if m:
+                raise DBError("ORA-00918: column ambiguously defined" if m.group(1) == "ACC_NO" else
+                              f'ORA-00904: "{m.group(1)}": invalid identifier', 918 if m.group(1) == "ACC_NO" else 904)
+        if "SYSDATE" in sql:                                                   # cardbr_upd: TO_CHAR(SYSDATE, fmt) with Oracle format codes
+            now = dt.datetime.now()
+            sql = sql.replace("TO_CHAR(SYSDATE, 'HH:MM:SS')", "'" + now.strftime("%I:%m:%S") + "'")   # HH = 12-hour, MM = month (as written)
+            sql = sql.replace("TO_CHAR(SYSDATE, 'YYYY-mm-dd')", "'" + now.strftime("%Y-%m-%d") + "'")
         s = re.sub(r"\bsmart\.", "", sql)
         s = re.sub(r"card_main\.findfilial", "card_main_findfilial", s, flags=re.I)
         s = re.sub(r"sb_aca\.getuserbyid", "sb_aca_getuserbyid", s, flags=re.I)
@@ -129,19 +190,22 @@ class CardsMixin:
         s = re.sub(r"card_main\.filialkod", "card_main_filialkod", s, flags=re.I)
         s = re.sub(r"convertpack\.convert_int", "convertpack_convert_int", s, flags=re.I)
         s = s.replace("(SELECT USER FROM DUAL)", ":user__")
-        params = {k.lower(): (v.isoformat() if type(v) is dt.date else v) for k, v in (b or {}).items()}
+        params = {k.lower(): (v.isoformat() if type(v) in (dt.date, dt.datetime) else v) for k, v in (b or {}).items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower() if m.group(1).lower() in params else m.group(0), s)
         if ":user__" in s:
             params["user__"] = self.username
         s = re.sub(r"--[^\r\n]*", "", s)
         cur = _db().execute(s, params)
-        names = [d[0].upper() for d in cur.description]
+        names = dedupe([d[0].upper() for d in cur.description])
         out = []
         for r in cur.fetchall():
             o = {}
             for k, v in zip(names, r):
                 if (k in DATE_COLS or (k == "BIRTHDAY" and re.match(r"\d{4}-\d\d-\d\dT", str(v)))) and isinstance(v, str):
-                    v = dt.datetime.fromisoformat(v)
+                    try:
+                        v = dt.datetime.fromisoformat(v)
+                    except ValueError:
+                        pass                                                   # a VARCHAR2 date column (e.g. card_dxxxfiles.TRANDATE)
                 o[k] = v
             out.append(o)
         return out
@@ -199,19 +263,193 @@ class CardsMixin:
             _db().execute("update card_client_app set STATUS = 1 where id = ?", [int(args[0])])
             self.cards_calls = getattr(self, "cards_calls", []) + [(key, list(args))]
             return {}
+        r = self._fo_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
+        r = self._sett_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
+        r = self._xls_proc(key, list(args))
+        if r is not NotImplemented:
+            return r
         if key == "CARD_MAIN.DELETE_APPLICATION":
             # card_main body not in the repo: emulated as a delete of the card_client_app row (no commit, as the Delphi caller)
             _db().execute("delete from card_client_app where id = ?", [int(args[0])])
             return {}
         return NotImplemented
 
+    def _fo_proc(self, key, a):
+        """File operation forms (cards_fileops): card_main bodies not in the repo. delete_<x> drops the not yet posted rows (status 1),
+        insert_<x> adds one status-1 row with the arguments in FO_INSERT order, <x>arxiv is a no-op, transaction_<x> sets STATUS 2."""
+        db = _db()
+        k = key.split(".", 1)[-1].lower()
+        if k in FO_INSERT:
+            t, cols = FO_INSERT[k]
+            nid = (db.execute(f"select max(id) from {t}").fetchone()[0] or 0) + 1
+            rec = dict(zip(cols, a), ID=nid, STATUS=1)
+            have = {r[1].upper() for r in db.execute(f"pragma table_info({t})")}
+            for col in rec:
+                if col.upper() not in have:
+                    db.execute(f"alter table {t} add column {col}")              # the real DDL is not in the repo
+            db.execute(f"insert into {t} ({', '.join(rec)}) values ({', '.join('?' * len(rec))})",
+                       [v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v for v in rec.values()])
+        elif k in FO_DELETE:
+            db.execute(f"delete from {FO_DELETE[k]}" + ("" if k in ("rvisa_delete", "delete_rbsdofile") else
+                                                          " where status = 0" if k in ("delete_exchangefile", "delete_rbstaxfile") else " where status = 1"))
+        elif k in FO_TRANS:
+            t, new = FO_TRANS[k] if isinstance(FO_TRANS[k], tuple) else (FO_TRANS[k], 2)
+            if a:
+                db.execute(f"update {t} set STATUS = ? where id = ?", [new, int(a[0])])
+            else:                                                              # transaction_d: no argument, every loaded row
+                db.execute(f"update {t} set STATUS = ? where status in (1, 3)", [new])
+        elif k == "kliring_delete":                                          # klirinqUnit: bodies not in the repo
+            db.execute("delete from CARD_KLIRING where status in (1, 3)")
+        elif k == "insert_kliring":
+            nid = (db.execute("select max(id) from CARD_KLIRING").fetchone()[0] or 0) + 1
+            for i, (bid, name, h, kl, amt) in enumerate([("NBAZ", "KAPITAL BANK", 9001, 9002, 150.0), ("PAHA", "PASHA BANK", 9001, 9002, 25.5)]):
+                db.execute("insert into CARD_KLIRING (ID, BANKID, BANKNAME, HESAB, KLIRINQ, MEBLEQ, INFO, STATUS) values (?,?,?,?,?,?,?,1)",
+                           [nid + i, bid, name, h, kl, amt, None])
+        elif k == "kliring":
+            db.execute("update CARD_KLIRING set STATUS = 2 where status = 1")
+        elif k == "limits":
+            db.execute("update card_limits set STATUS = 2 where status = 1")
+        elif k in FO_NOOP:
+            pass
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
+
+    def _sett_proc(self, key, a):
+        """Sazlama sub forms (cards_sett2): the card_main bodies are not in the repo; emulated as one insert / delete on the table the
+        form's grid shows (names / ids resolved from the lookup texts). No commit, as the Delphi callers."""
+        db = _db()
+        one = lambda q, p: (db.execute(q, p).fetchone() or [None])[0]  # noqa: E731
+        acc = lambda n: one("select id from account where acc_no = ?", [n]) if n else None  # noqa: E731
+        val = lambda n: one("select valute from avalute_t where val_name = ?", [n])  # noqa: E731
+        fil = lambda n: one("select id from filial_t where name = ?", [n])  # noqa: E731
+        nid = lambda t: (one(f"select max(id) from {t}", []) or 0) + 1  # noqa: E731
+        ins = lambda t, r: db.execute(f"insert into {t} ({', '.join(r)}) values ({', '.join('?' * len(r))})", list(r.values()))  # noqa: E731
+        if key in ("CARD_MAIN.DELETE_TRANCACTION_C", "CARD_MAIN.CARXIV"):
+            pass                                                               # bodies not in the repo: no-op (recorded)
+        elif key == "CARD_MAIN.MULTI_DEL":                                    # cfile_addi Button1Click: body not in the repo
+            db.execute("delete from card_messages_c_additional where docid = ? and status = 1", [_num(a[0])])
+        elif key == "CARD_MAIN.MULTI_INS":
+            ins("card_messages_c_additional", dict(ID=nid("card_messages_c_additional"), DOCID=_num(a[0]), AMMOUNT=float(str(a[1]).replace(",", ".") or 0),
+                                                   VALUTE=a[2], CURRENCYNAME=one("select val_name from avalute_t where valute = ?", [a[2]]),
+                                                   STATUS=1, BEGDAT=dt.datetime.combine(dt.date.today(), dt.time()).isoformat()))
+        elif key == "CARD_MAIN.TRANSACTION_MULTI":
+            db.execute("update card_messages_c_additional set STATUS = 2, TRANID = id + 9000 where id = ?", [int(a[0])])
+        elif key == "CARD_MAIN.TRANSACTION_C":
+            db.execute("update card_messages_c set STATUS = 2 where id = ?", [int(a[0])])   # posted -> messages2 (status 2)
+        elif key == "CARD_MAIN.NEW_CARTTYPE":
+            ins("CARD_CARDTYPE", dict(ID=nid("CARD_CARDTYPE"), NAME=a[0], CODE=a[1], CURRENCY=a[2], SERVICE=a[3], SCHEME=a[4], BIN=a[5]))
+        elif key == "CARD_MAIN.FILIALACOUNT":
+            ins("filialaccounts", dict(ID=nid("filialaccounts"), FILIALID=fil(a[0]), VALID=val(a[1]), ACCID28=acc(a[2]), ACCID48=acc(a[3]),
+                                       ACCID64=acc(a[4]), DILING_GELIR=a[5], DILING_XERC=a[6], KOD=a[7], REZ28=a[8], REZ48=a[9]))
+        elif key == "CARD_MAIN.INSERT_DOMESTIC":
+            ins("card_domestic", dict(ID=nid("card_domestic"), BANKID=a[0], BANKNAME=a[1], VALID=val(a[2]), H25ID=acc(a[3]), H45ID=acc(a[4]),
+                                      H64ID=acc(a[5])))
+        elif key == "CARD_MAIN.NEW_BANKOMAT":
+            ins("card_bankomats", dict(ID=nid("card_bankomats"), ATMPOS=a[0], ATMID=a[1], ATMNAME=a[2], FILIAL=fil(a[3]), VAL=val(a[4]),
+                                       MAINACOUNT=acc(a[5]), INTERACCOUNT=acc(a[6]), PROFITACOUNT=acc(a[7]), CONTRACTNUMBER=a[8]))
+        elif key == "CARD_MAIN.ATM_DELETE":
+            db.execute("delete from card_bankomats where id = ?", [a[0]])
+        elif key == "CARD_MAIN.INSERT_NOPROVS":
+            ins("card_noprov", dict(STR=a[0]))
+        elif key == "CARD_MAIN.ADDBRANCHESCODE":
+            ins("card_branch_codes", dict(ID=nid("card_branch_codes"), BRANCHID=a[0], BRANCH_NAME=a[1], BRANCH_CODE=a[2]))
+        elif key == "CARD_MAIN.DEL_BRANCHESCODE":
+            db.execute("delete from card_branch_codes where branchid = ?", [a[0]])
+        elif key == "CARD_MAIN.ADDEXCHANGEACC":
+            ins("card_exchange_sett", dict(ID=nid("card_exchange_sett"), ATMAZN=a[0], VDMAZN=a[1], ATMUSD=a[2], VDMUSD=a[3], ATMEUR=a[4],
+                                           VDMEUR=a[5], BRANCH=a[6], MIDDLEACC=a[7], AZNINCOME=a[8], CONTRACTNUM=a[9], ATMNAME=a[10]))
+        elif key == "CARD_MAIN.RBS_TAX_ACC_SETTINGS":
+            ins("rbstax_acc_settings", dict(ID=nid("rbstax_acc_settings"), BRANCH=a[0], VALUTE=a[1], TAX1=a[2], TAX10=a[3], TAX18=a[4]))
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
+
+    def _xls_proc(self, key, a):
+        """Excel yükləmələr sub forms (cards_xls), Card Number Change (cards_cardnum), POS ON-US commission (cards_posonus): the card_main /
+        card_commission_our_pos_onus bodies are not in the repo. Emulation: <x>delete drops the not yet posted rows (status 1 / 3 / NULL),
+        <x>update / saltr mark the new rows 1 (3 + INFO when the key column is empty), <x>commit / transaction_salary set 1 -> 2."""
+        db = _db()
+        k = key.split(".", 1)[-1].lower()
+        XT = {"salary": ("CARD_XLSSALARY", "RBSNUMBER"), "new": ("card_xlsnewcard", "NAME"), "pro": ("card_xlsprolongation", "CARDNUMBER"),
+              "acc": ("card_xlsaccountclose", "CARDNUMBER")}
+        dele = {"delete_salary": "salary", "newdelet": "new", "prodelet": "pro", "accdelete": "acc", "accdelet": "acc"}
+        upd = {"saltr": "salary", "newupdate": "new", "proupdate": "pro", "accupdate": "acc"}
+        com = {"transaction_salary": "salary", "newcommit": "new", "procommit": "pro", "acccommit": "acc"}
+        if key.startswith("CARD_MAIN.") and k in dele:
+            db.execute(f"delete from {XT[dele[k]][0]} where status is null or status in (1, 3)")
+        elif key.startswith("CARD_MAIN.") and k in upd:
+            t, c = XT[upd[k]]
+            db.execute(f"update {t} set STATUS = case when {c} is null then 3 else 1 end, INFO = case when {c} is null then '{c} boşdur' end "
+                       "where status is null")
+        elif key.startswith("CARD_MAIN.") and k in com:
+            db.execute(f"update {XT[com[k]][0]} set STATUS = 2 where status = 1")
+        elif key == "CARD_MAIN.UPDATEDATE":
+            pass
+        elif key == "CARD_MAIN.DELETCARDNUM":                                # cardnumbersource.pas
+            db.execute("delete from card_cardnumber where status in (1, 3)")
+        elif key == "CARD_MAIN.EDITCARDNUMBER":
+            card, name, card2, acc, ref = (list(a) + [None] * 5)[:5]
+            known = db.execute("select count(*) from card_clients where reference = ?", [ref]).fetchone()[0]
+            nid = (db.execute("select max(id) from card_cardnumber").fetchone()[0] or 0) + 1
+            db.execute("insert into card_cardnumber (ID, REFERANCE, CARDNUMBER, OLDCARDNUMBER, NAME, RBSNUMBER, INFO, STATUS) values (?,?,?,?,?,?,?,?)",
+                       [nid, ref, card2, card, name, acc, None if known else "Referans tapılmadı", 1 if known else 3])
+        elif key == "CARD_MAIN.CARDNUMDELETE":
+            db.execute("delete from card_cardnumber where id = ?", [int(a[0])])
+        elif key == "CARD_MAIN.CARDNUMCHANGE":
+            r = db.execute("select referance, cardnumber from card_cardnumber where id = ? and status = 1", [int(a[0])]).fetchone()
+            if r:
+                db.execute("update card_clients set cardnumber = ? where reference = ?", [r[1], r[0]])
+                db.execute("update card_cardnumber set STATUS = 2 where id = ?", [int(a[0])])
+        elif key == "CARD_MAIN.CARDNUMBER":
+            db.execute("update card_clients set cardnumber = ? where reference = ?", [a[1], a[0]])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.INS_CARD_MESSAGES_C_COMMISION":
+            n = (db.execute("select max(id) from card_messages_c_commision").fetchone()[0] or 0)
+            for i, (card, fee) in enumerate([("4169730000001111", 0.35), ("4169730000002222", 1.2)], 1):
+                db.execute("insert into card_messages_c_commision (ID, CARDNUMBER, RBSNUMBER, FEEAMOUNT, TRANDATE, CURRENCY, FILE_NAME, STATUS, "
+                           "INFO_COMMISION, SYSDAT) values (?,?,?,?,?,?,?,?,?,?)",
+                           [n + i, card, "3811001944000000000" + str(i), fee, self._tek(), "944", "C0002.285", 1, "ON-US POS", self._tek()])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.CARD_MERCHAND_C_COMISSION":
+            db.execute("update card_messages_c_commision set TRID1 = id + 70000, TRID2 = id + 80000, STATUS = 2 where id = ?", [int(a[0])])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.DEL_CARD_MESSAGES_C_COMMISION":
+            db.execute("delete from card_messages_c_commision where id = ? and trid1 is null and trid2 is null", [int(a[0])])
+        elif key == "CARD_COMMISSION_OUR_POS_ONUS.DEL_CARD_MESSAGES_COMM_COMMIT":
+            db.execute("delete from card_messages_c_commision where id = ? and (trid1 is not null or trid2 is not null)", [int(a[0])])
+        else:
+            return NotImplemented
+        self.cards_calls = getattr(self, "cards_calls", []) + [(key, a)]
+        return {}
+
+    def _tek(self):
+        return self.st["sys"]["tek_dat"]
+
     def _cards_execute(self, sql, b):
-        """DOA DML of the Sazlama forms (cards_sett.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
+        """DOA DML of the Sazlama forms (cards_sett.SQL / cards_sett2.SQL) on the SQLite tables; ROWID = the SQLite rowid the selects return."""
         from .. import cards_sett as S
-        if sql not in S.SQL.values():
+        from .. import cards_sett2 as S2
+        from .. import cards_files as CF
+        m = re.match(r"\s*(?:insert\s+into|delete\s+from)\s+(\w+)", sql, re.I)
+        if sql not in S.SQL.values() and sql not in S2.SQL.values() and not (m and m.group(1).lower() in CF.DML_TABLES):
             return False
-        p = {k.lower(): v for k, v in b.items()}
+        p = {k.lower(): (v.isoformat() if isinstance(v, (dt.date, dt.datetime)) else v) for k, v in b.items()}
         s = re.sub(r":(\w+)", lambda m: ":" + m.group(1).lower(), sql)
+        if m and sql.lower().startswith("insert") and m.group(1).lower() in CF.DML_TABLES and not re.search(r"\bID\b", sql.split(")")[0], re.I):
+            # ID is not set by the Delphi Append / Post (trigger / sequence on the real table, not in the repo): max + 1
+            t = m.group(1)
+            nid = (_db().execute(f"select max(id) from {t}").fetchone()[0] or 0) + 1
+            s = s.replace(f"{t} (", f"{t} (ID, ", 1).replace("values (", "values (:nid__, ", 1)
+            p["nid__"] = nid
+        mi = re.match(r"\s*insert\s+into\s+\w+\s*\(([^)]*)\)\s*values\s*\(([^)]*)\)", s, re.I)
+        if mi:                                                                 # Oracle NUMBER column bound with AsString '0': stored as a number
+            for col, ph in zip(mi.group(1).split(","), mi.group(2).split(",")):
+                if col.strip().upper() == "STATUS" and ph.strip().startswith(":"):
+                    p[ph.strip()[1:]] = _num(p[ph.strip()[1:]])
         _db().execute(s, p)
         return True
 

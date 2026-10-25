@@ -13,15 +13,15 @@ with sync_playwright() as p:
     pg.locator("#tree .node", has_text="Transactions").first.click()
     pg.locator("#tree .node", has_text="Transaction manager").first.click()
     pg.wait_for_selector("#trGrid tbody tr[data-id]"); pg.wait_for_timeout(300)
-    expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(8)
-    expect(pg.locator("#trGrid tr.sel")).to_have_attribute("data-id", "6005")     # Refresh ends on the last row
+    expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(10)
+    expect(pg.locator("#trGrid tr.sel")).to_have_attribute("data-id", "6007")     # Refresh ends on the last row
     shot(pg, "40-transactions-main.png")
     # filter panel: untick USD and committed
-    pg.click("[data-a=filter]"); pg.locator("#trFilter [data-cur='840']").uncheck(); pg.wait_for_timeout(300)
-    pg.locator("#trFilter [data-st=committed]").uncheck(); pg.wait_for_timeout(400)
-    expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(3); shot(pg, "41-transactions-filter.png")
-    pg.locator("#trFilter [data-cur='840']").check(); pg.locator("#trFilter [data-st=committed]").check(); pg.wait_for_timeout(400)
-    pg.click("[data-a=filter]")
+    pg.locator(".flt-body [data-cur='840']").uncheck(); pg.wait_for_timeout(300)
+    pg.locator(".flt-body [data-st=committed]").uncheck(); pg.wait_for_timeout(400)
+    expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(4); shot(pg, "41-transactions-filter.png")
+    pg.locator(".flt-body [data-cur='840']").check(); pg.locator(".flt-body [data-st=committed]").check(); pg.wait_for_timeout(400)
+    pass  # sidebar stays open (filter panel is the left sidebar now)
     # speed search on the debit account
     pg.fill("[data-ss=debitaccno]", "AZ12SMRT3801001944"); pg.press("[data-ss=debitaccno]", "Enter"); pg.wait_for_selector("#qy"); pg.click("#qy")
     pg.wait_for_timeout(200); expect(pg.locator("#trGrid tr.sel")).to_have_attribute("data-id", "5001")
@@ -44,9 +44,9 @@ with sync_playwright() as p:
     pg.click("#ts"); pg.wait_for_timeout(600); expect(pg.locator("#tf [name=lamount]")).to_have_value("0")   # ResetTransaction
     pg.keyboard.press("F3"); pg.wait_for_timeout(300); shot(pg, "46-transaction-destination-picker.png"); pg.keyboard.press("Escape")
     pg.wait_for_timeout(300)
-    pg.click("#tx"); pg.wait_for_timeout(600); expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(9)
+    pg.click("#tx"); pg.wait_for_timeout(600); expect(pg.locator("#trGrid tbody tr[data-id]")).to_have_count(11)
     # step commit of the new + a too-large one -> 1 error message
-    pg.click("[data-a=commission]"); pg.wait_for_selector(".modal tr[data-id]"); shot(pg, "47-transactions-commission.png"); pg.click("#cc")
+    pg.click("[data-a=commission]"); pg.wait_for_selector(".modal tr[data-i]"); shot(pg, "47-transactions-commission.png"); pg.click("#cc")
     pg.wait_for_timeout(400)
     pg.locator("#trGrid [data-chk='6003']").check(); pg.locator("#trGrid [data-chk='6001']").check()
     pg.click("[data-a=commit]"); pg.click("#qy"); pg.wait_for_selector("#ok"); shot(pg, "48-transactions-commit-result.png"); pg.click("#ok")

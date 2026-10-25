@@ -252,6 +252,14 @@ def pair_accounts(conn, q: str = "", limit: int = 50) -> list[dict]:
     return [{"accid": r["ACCID"], "accno": r["ACCNO"]} for r in rows]
 
 
+def pair_accno(conn, pair_id) -> str | None:
+    """PairAccCB (AccountPropertiesForm_Unit.dfm:185 KeyField ACCID, ListField ACCNO over AccountsData :311): text of the current key."""
+    if not pair_id:
+        return None
+    rows = conn.query(f"select * from (\r\n{SQL_PAIR_ACCOUNTS}) where AccID = :pair_id", {"pair_id": int(pair_id)})
+    return rows[0]["ACCNO"] if rows else None
+
+
 def flags_of(conn, acc_type: str, symbols: list[str]) -> list[str]:
     """FillCBL (AccountPropertiesForm_Unit.pas:208-226): checked if FlagExsist(AccFlags, Symbol[1]),
     SBAccount.pas:70-78 -> SBUTIL.FlagExsist(AccountType=>, FlagChar=>)."""
@@ -364,6 +372,7 @@ def make_router(current, require_module, err):
             err(404, "error.not_found")
         syms = [f["symbol"] for f in lookups_flags(ws.conn)]
         a["acc_flags_checked"] = flags_of(ws.conn, a.get("accflags") or "", syms)
+        a["pair_accno"] = pair_accno(ws.conn, a.get("pairacc"))   # PairAccCB shows ACCNO of KeyField ACCID = PAIRACC
         return a
 
     @r.post("")

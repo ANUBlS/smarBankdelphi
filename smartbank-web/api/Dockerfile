@@ -5,6 +5,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 COPY fixtures ./fixtures
+COPY templates ./templates
 RUN useradd -r -u 10001 sb && mkdir -p /data && chown sb /data
 USER sb
 ENV AUDIT_DB_PATH=/data/smartbank-web.sqlite
