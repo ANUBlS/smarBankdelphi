@@ -199,409 +199,6 @@ def open_card(conn, credit_id: int) -> dict:
                 rec[k] = loc[0][k]
     rec["PERIODCONTRACTS"] = period(conn, rec.get("DATEOFCONCLUSION"), rec.get("DUEDATEFIRSTCONTRACT"))
 
-    # ==============================================================================================
-    # Additional Packages/SB_Credit BPL/OCX Sub-Plugin Endpoints
-    # ==============================================================================================
-    @r.post("/customers/quick-add")
-    def _quick_cust(body: dict, ws=Depends(guard)):
-        """CM_Customer.bpl (CustomerFormU.pas): quick customer creation inside Credits via cm_credit.add_cm_customer."""
-        name = (body.get("name") or "").strip()
-        short_name = (body.get("short_name") or name).strip()
-        if not name:
-            err(400, "customers.err_name")
-        d_open = datetime.datetime.fromisoformat(str(body.get("open_dat") or "2026-10-25")[:10])
-        cid = ws.conn.call_func("CM_CREDIT", "add_cm_customer", [], int, named={
-            "OPEN_DAT": d_open, "NAME": name, "SHORT_NAME": short_name,
-            "NEREZIDENT": int(body.get("nerezident") or 0),
-            "CUST_TYPE": int(body.get("cust_type") or 1),
-            "INN": body.get("inn") or "",
-            "PASPORT": body.get("pasport") or "",
-            "ADDRESS": body.get("address") or "",
-            "PHONE": body.get("phone") or "",
-        })
-        return {"id": cid, "name": name, "customers": [row(x) for x in ws.conn.query(Q.SQL_CUSTOMER)]}
-
-    @r.post("/accounts/auto-create")
-    def _create_cm_accounts(body: dict, ws=Depends(guard)):
-        """CM_Conclusion/CreateAccsUnit.pas (FormCreateCMAccounts): calls CM_CREDIT.AddCreditAccounts."""
-        cust_id = int(body.get("cust_id") or 0)
-        currency = int(body.get("currency") or 0)
-        credit_type = int(body.get("credit_type") or 1)
-        term_type = int(body.get("term_type") or 1)
-        if not cust_id:
-            err(400, "credits.err_borrower")
-        res = ws.conn.call_func("CM_CREDIT", "AddCreditAccounts", [], dict, named={
-            "p_custid": cust_id, "p_currency": currency, "p_credittype": credit_type, "p_termtype": term_type
-        })
-        return {"created": res, "accounts": account_lists(ws.conn, currency, cust_id)}
-
-    @r.get("/{credit_id}/tranches")
-    def _tranches_get(credit_id: int, ws=Depends(guard)):
-        """CM_Tranche.bpl (TrancheMainUnitImpl.pas): tranches list + credit info + DebitArested flag check."""
-        rows = [row(x) for x in ws.conn.query(Q.SQL_TRANCHES, {"creditid": credit_id})]
-        ci = [row(x) for x in ws.conn.query(Q.SQL_SCHEDULE_CREDITINFO, {"ID": credit_id})]
-        arrested = ws.conn.call_bool("CM_TRANCHE", "FindAccFlag", [credit_id, "DebitArested"])
-        return {"rows": rows, "credit": ci[0] if ci else {}, "debit_arrested": arrested}
-
-    @r.post("/{credit_id}/tranches")
-    def _tranches_add(credit_id: int, body: dict, ws=Depends(guard)):
-        """CM_Tranche.bpl: CM_TRANCHE.Tranche_Add + CommitTranche."""
-        if not plugin_access(ws.conn, "CM_Tranche.bpl", "NONE"):
-            err(403, "credits.err_plugin")
-        amt = float(body.get("amount") or 0)
-        if amt <= 0:
-            err(400, "error.generic")
-        dt = datetime.datetime.fromisoformat(str(body.get("tranchedate") or "2026-10-25")[:10])
-        tid = ws.conn.call_func("CM_TRANCHE", "Tranche_Add", [], int, named={
-            "p_creditid": credit_id, "p_date": dt, "p_amount": amt,
-            "p_purpose": body.get("purpose") or "Kredit verilişi (Tranş)",
-            "p_cash": int(body.get("is_cash") or 0),
-        })
-        if body.get("commit", True):
-            ws.conn.call_proc("CM_TRANCHE", "CommitTranche", [], named={"p_id": tid, "p_creditid": credit_id})
-        return {"ok": True, "id": tid, "rows": [row(x) for x in ws.conn.query(Q.SQL_TRANCHES, {"creditid": credit_id})]}
-
-    @r.delete("/{credit_id}/tranches/{tranche_id}")
-    def _tranches_del(credit_id: int, tranche_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_TRANCHE", "Tranche_Delete", [], named={"p_id": tranche_id, "p_creditid": credit_id})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_TRANCHES, {"creditid": credit_id})]}
-
-    @r.get("/{credit_id}/payments")
-    def _payments_get(credit_id: int, ws=Depends(guard)):
-        """CM_Payment.bpl (PaymentMainFormImpl.pas): payments list + current rests + planned payment."""
-        rows = [row(x) for x in ws.conn.query(Q.SQL_PAYMENTS, {"creditid": credit_id})]
-        st = [row(x) for x in ws.conn.query(Q.SQL_CURR_STATE, {"creditid": credit_id})]
-        plan = ws.conn.call_func("CM_PAYMENT", "Get_PlanPayment", [credit_id], dict)
-        return {"rows": rows, "state": st[0] if st else {}, "plan": plan}
-
-    @r.post("/{credit_id}/payments")
-    def _payments_add(credit_id: int, body: dict, ws=Depends(guard)):
-        """CM_Payment.bpl: CM_PAYMENT.PaymentAdd + CommitPayment (supports CBFullPay full payoff & partial distribution)."""
-        if not plugin_access(ws.conn, "CM_Payment.bpl", "NONE"):
-            err(403, "credits.err_plugin")
-        dt = datetime.datetime.fromisoformat(str(body.get("paydate") or "2026-10-25")[:10])
-        pid = ws.conn.call_func("CM_PAYMENT", "PaymentAdd", [], int, named={
-            "p_creditid": credit_id, "p_date": dt,
-            "p_total": float(body.get("total") or 0),
-            "p_main": float(body.get("main_amount") or 0),
-            "p_duemain": float(body.get("duemain_amount") or 0),
-            "p_interest": float(body.get("interest_amount") or 0),
-            "p_dueinterest": float(body.get("dueinterest_amount") or 0),
-            "p_penalty": float(body.get("penalty_amount") or 0),
-            "p_fullpay": 1 if body.get("full_pay") else 0,
-            "p_notes": body.get("notes") or "Kredit ödənişi",
-        })
-        if body.get("commit", True):
-            ws.conn.call_proc("CM_PAYMENT", "CommitPayment", [], named={"p_id": pid, "p_creditid": credit_id})
-        return {"ok": True, "id": pid, "rows": [row(x) for x in ws.conn.query(Q.SQL_PAYMENTS, {"creditid": credit_id})]}
-
-    @r.delete("/{credit_id}/payments/{pay_id}")
-    def _payments_del(credit_id: int, pay_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_PAYMENT", "PaymentDel", [], named={"p_id": pay_id, "p_creditid": credit_id})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_PAYMENTS, {"creditid": credit_id})]}
-
-    @r.get("/{credit_id}/prolongations")
-    def _prolong_get(credit_id: int, ws=Depends(guard)):
-        """CM_Prolongation.bpl (ProlongationMainFormImpl.pas)."""
-        return {"rows": [row(x) for x in ws.conn.query(Q.SQL_PROLONGATIONS, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/prolongations")
-    def _prolong_add(credit_id: int, body: dict, ws=Depends(guard)):
-        dt = datetime.datetime.fromisoformat(str(body.get("prolongdate") or "2026-10-25")[:10])
-        new_due = datetime.datetime.fromisoformat(str(body.get("newduedate") or "2027-10-25")[:10])
-        pid = ws.conn.call_func("CM_PROLONGATION", "Prolongation_Add", [], int, named={
-            "p_creditid": credit_id, "p_date": dt, "p_newduedate": new_due,
-            "p_rate": float(body.get("newrate") or 0),
-            "p_amount": float(body.get("amount") or 0),
-            "p_notes": body.get("notes") or "Müddətin uzadılması",
-        })
-        return {"ok": True, "id": pid, "rows": [row(x) for x in ws.conn.query(Q.SQL_PROLONGATIONS, {"creditid": credit_id})]}
-
-    @r.delete("/{credit_id}/prolongations/last")
-    def _prolong_del_last(credit_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_PROLONGATION", "DelLastProlongation", [], named={"p_creditid": credit_id})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_PROLONGATIONS, {"creditid": credit_id})]}
-
-    @r.get("/{credit_id}/expires")
-    def _expires_get(credit_id: int, ws=Depends(guard)):
-        """CM_Expire.bpl (ExpireMainUnitImpl.pas): overdue principal/interest transfers."""
-        return {"rows": [row(x) for x in ws.conn.query(Q.SQL_EXPIRES, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/expires")
-    def _expires_add(credit_id: int, body: dict, ws=Depends(guard)):
-        dt = datetime.datetime.fromisoformat(str(body.get("expiredate") or "2026-10-25")[:10])
-        eid = ws.conn.call_func("CM_EXPIRE", "Expire_Add", [], int, named={
-            "p_creditid": credit_id, "p_date": dt,
-            "p_main": float(body.get("main_amount") or 0),
-            "p_interest": float(body.get("interest_amount") or 0),
-            "p_notes": body.get("notes") or "Vaxtı keçmiş hesabata köçürmə",
-        })
-        if body.get("commit", True):
-            ws.conn.call_proc("CM_EXPIRE", "CommitExpire", [], named={"p_id": eid, "p_creditid": credit_id})
-        return {"ok": True, "id": eid, "rows": [row(x) for x in ws.conn.query(Q.SQL_EXPIRES, {"creditid": credit_id})]}
-
-    @r.delete("/{credit_id}/expires/{exp_id}")
-    def _expires_del(credit_id: int, exp_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_EXPIRE", "Expire_Delete", [], named={"p_id": exp_id, "p_creditid": credit_id})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_EXPIRES, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/activate")
-    def _activate_credit(credit_id: int, body: dict, ws=Depends(guard)):
-        """CM_Activate.bpl (ActivateMainFormImpl.pas): CM_ACTIVATION.ActivateCredit + CommitActivation."""
-        dt = datetime.datetime.fromisoformat(str(body.get("actdate") or "2026-10-25")[:10])
-        ws.conn.call_proc("CM_ACTIVATION", "ActivateCredit", [], named={
-            "p_creditid": credit_id, "p_date": dt, "p_notes": body.get("notes") or "Kreditin aktivləşdirilməsi"
-        })
-        if body.get("commit", True):
-            ws.conn.call_proc("CM_ACTIVATION", "CommitActivation", [], named={"p_creditid": credit_id})
-        return {"ok": True, "status": get_status(ws.conn, credit_id)}
-
-    @r.get("/interest-calc")
-    def _intcalc_get(ws=Depends(guard)):
-        """CM_InterestCalculation.bpl (IntCalcMainUnitImpl.pas): CM_INTCACHE & cm_endcalac."""
-        return {
-            "cache": [row(x) for x in ws.conn.query(Q.SQL_INTCACHE)],
-            "history": [row(x) for x in ws.conn.query(Q.SQL_ENDCALAC)],
-        }
-
-    @r.post("/interest-calc")
-    def _intcalc_run(body: dict, ws=Depends(guard)):
-        action = body.get("action") or "calc"
-        dt = datetime.datetime.fromisoformat(str(body.get("calcdate") or "2026-10-25")[:10])
-        cid = body.get("credit_id")
-        if action == "calc":
-            ws.conn.call_proc("CM_CALCULATOR", "CalcPercents", [], named={"p_date": dt, "p_creditid": cid})
-        elif action == "accept":
-            ws.conn.call_proc("CM_CALCULATOR", "AcceptCalcedPercents", [], named={"p_date": dt, "p_creditid": cid})
-        elif action == "cancel":
-            ws.conn.call_proc("CM_CALCULATOR", "CancelCalculation", [], named={"p_creditid": cid})
-        elif action == "stop":
-            ws.conn.call_proc("CM_CALCULATOR", "StopCreditInterest", [], named={"p_creditid": cid, "p_date": dt})
-        return {
-            "ok": True,
-            "cache": [row(x) for x in ws.conn.query(Q.SQL_INTCACHE)],
-            "history": [row(x) for x in ws.conn.query(Q.SQL_ENDCALAC)],
-        }
-
-    @r.get("/{credit_id}/corrector")
-    def _corrector_get(credit_id: int, ws=Depends(guard)):
-        """CM_Corrector.bpl (CorrectorMainUnitImpl.pas): cm_curr_state + cm_history_audit."""
-        st = [row(x) for x in ws.conn.query(Q.SQL_CURR_STATE, {"creditid": credit_id})]
-        aud = [row(x) for x in ws.conn.query(Q.SQL_HISTORY_AUDIT, {"creditid": credit_id})]
-        return {"state": st[0] if st else {}, "audit": aud}
-
-    @r.post("/{credit_id}/corrector")
-    def _corrector_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "UpdateCurrState", [], named={
-            "p_creditid": credit_id,
-            "p_rest": float(body.get("rest") or 0),
-            "p_interestrest": float(body.get("interestrest") or 0),
-            "p_duerest": float(body.get("duerest") or 0),
-            "p_dueinterestrest": float(body.get("dueinterestrest") or 0),
-            "p_penaltyrest": float(body.get("penaltyrest") or 0),
-            "p_pledgeprice": float(body.get("pledgeprice") or 0),
-            "p_obligation": float(body.get("obligation") or 0),
-            "p_reason": body.get("reason") or "Korrektor vasitəsilə düzəliş",
-        })
-        st = [row(x) for x in ws.conn.query(Q.SQL_CURR_STATE, {"creditid": credit_id})]
-        aud = [row(x) for x in ws.conn.query(Q.SQL_HISTORY_AUDIT, {"creditid": credit_id})]
-        return {"ok": True, "state": st[0] if st else {}, "audit": aud}
-
-    @r.get("/{credit_id}/statement")
-    def _statement_get(credit_id: int, bdate: str = "", edate: str = "", ws=Depends(guard)):
-        """CM_Statement.bpl (StatementMainUnitImpl.pas): 6-tab Credit Statement & Payoff Calculator."""
-        card = run(open_card, ws.conn, credit_id)
-        st = [row(x) for x in ws.conn.query(Q.SQL_CURR_STATE, {"creditid": credit_id})]
-        tr = [row(x) for x in ws.conn.query(Q.SQL_TRANCHES, {"creditid": credit_id})]
-        py = [row(x) for x in ws.conn.query(Q.SQL_PAYMENTS, {"creditid": credit_id})]
-        sc = [row(x) for x in ws.conn.query(Q.SQL_SCHEDULE_SCHEDULEDATA, {"CREDITID": credit_id})]
-        ex = [row(x) for x in ws.conn.query(Q.SQL_EXPIRES, {"creditid": credit_id})]
-        pu = [row(x) for x in ws.conn.query(Q.SQL_PORTFOLIO_UPDATE, {"creditid": credit_id})]
-        cur_st = st[0] if st else {}
-        full_payoff = sum(float(cur_st.get(k) or 0) for k in ("rest", "duerest", "interestrest", "dueinterestrest", "penaltyrest"))
-        return {
-            "card": _ser(card),
-            "state": cur_st,
-            "tranches": tr,
-            "payments": py,
-            "schedule": sc,
-            "expires": ex,
-            "portfolio_updates": pu,
-            "full_payoff": round(full_payoff, 2),
-        }
-
-    @r.get("/{credit_id}/guarantees")
-    def _guar_get(credit_id: int, ws=Depends(guard)):
-        """Cm_NewGuarantee.bpl (GuaranteeMainUnitImpl.pas): multi-card Girov (CM_GUARANTEE) & Zamin (CM_GUARANTOR)."""
-        return {
-            "collaterals": [row(x) for x in ws.conn.query(Q.SQL_GUARANTEE_CARDS, {"creditid": credit_id})],
-            "guarantors": [row(x) for x in ws.conn.query(Q.SQL_GUARANTOR_CARDS, {"creditid": credit_id})],
-            "companies": [row(x) for x in ws.conn.query(Q.SQL_GUARCOMPANY)],
-            "pledge_types": [row(x) for x in ws.conn.query(Q.SQL_PLEDGES)],
-        }
-
-    @r.post("/{credit_id}/guarantees")
-    def _guar_save(credit_id: int, body: dict, ws=Depends(guard)):
-        kind = body.get("kind") or "collateral"
-        ws.conn.call_proc("CM_CREDIT", "SaveGuaranteeCard", [], named={"p_creditid": credit_id, "p_kind": kind, **body})
-        return _guar_get(credit_id, ws)
-
-    @r.delete("/{credit_id}/guarantees/{kind}/{card_id}")
-    def _guar_del(credit_id: int, kind: str, card_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "DeleteGuaranteeCard", [], named={"p_creditid": credit_id, "p_kind": kind, "p_cardid": card_id})
-        return _guar_get(credit_id, ws)
-
-    @r.get("/{credit_id}/advanced-info")
-    def _adv_get(credit_id: int, ws=Depends(guard)):
-        """CM_AdvencedInfo.bpl (AdvInfoMainUnitImpl.pas): 3-tab cm_boorowerinfo."""
-        b = [row(x) for x in ws.conn.query(Q.SQL_BOOROWERINFO, {"creditid": credit_id})]
-        return {"info": b[0] if b else {}}
-
-    @r.post("/{credit_id}/advanced-info")
-    def _adv_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "SaveAdvancedInfo", [], named={"p_creditid": credit_id, **body})
-        b = [row(x) for x in ws.conn.query(Q.SQL_BOOROWERINFO, {"creditid": credit_id})]
-        return {"ok": True, "info": b[0] if b else {}}
-
-    @r.get("/{credit_id}/business-plan")
-    def _bp_get(credit_id: int, ws=Depends(guard)):
-        """CM_BUSINESS_PLAN.bpl (BPMainUnitImpl.pas): Business Plan (tsBP), Legal Measures (tsLM), Machinery (tsGrantT)."""
-        return {
-            "business_plan": [row(x) for x in ws.conn.query(Q.SQL_BUSINESS_PLAN, {"creditid": credit_id})],
-            "legal_measures": [row(x) for x in ws.conn.query(Q.SQL_LEGAL_MEASURES, {"creditid": credit_id})],
-            "grant_tech": [row(x) for x in ws.conn.query(Q.SQL_GRANT_TECH, {"creditid": credit_id})],
-        }
-
-    @r.post("/{credit_id}/business-plan")
-    def _bp_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "SaveBusinessPlanItem", [], named={"p_creditid": credit_id, **body})
-        return _bp_get(credit_id, ws)
-
-    @r.get("/{credit_id}/protokol")
-    def _prot_get(credit_id: int, ws=Depends(guard)):
-        """CM_Protokol.bpl (ProtokolMainUnitImpl.pas): Credit Committee Protocol & Application."""
-        p = [row(x) for x in ws.conn.query(Q.SQL_PROTOKOL, {"creditid": credit_id})]
-        card = run(open_card, ws.conn, credit_id)
-        return {"protokol": p[0] if p else {}, "card": _ser(card)}
-
-    @r.post("/{credit_id}/protokol")
-    def _prot_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "up_port_protokol", [], named={"p_creditid": credit_id, **body})
-        p = [row(x) for x in ws.conn.query(Q.SQL_PROTOKOL, {"creditid": credit_id})]
-        return {"ok": True, "protokol": p[0] if p else {}}
-
-    @r.get("/{credit_id}/notes")
-    def _notes_get(credit_id: int, ws=Depends(guard)):
-        """cm_notes.bpl (NotesMainUnitImpl.pas): Credit notes & reminders."""
-        return {"rows": [row(x) for x in ws.conn.query(Q.SQL_NOTES, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/notes")
-    def _notes_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "Addcm_notes", [], named={
-            "p_creditid": credit_id, "p_id": body.get("id"),
-            "p_note": body.get("note") or "", "p_date": body.get("notedate") or "2026-10-25",
-            "p_user": ws.user,
-        })
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_NOTES, {"creditid": credit_id})]}
-
-    @r.delete("/{credit_id}/notes/{note_id}")
-    def _notes_del(credit_id: int, note_id: int, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "delete_notes", [], named={"p_creditid": credit_id, "p_id": note_id})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_NOTES, {"creditid": credit_id})]}
-
-    @r.get("/{credit_id}/folder-place")
-    def _fp_get(credit_id: int, ws=Depends(guard)):
-        """CM_FolderPlace.bpl (FolderPlaceMainUnitImpl.pas): Problem credit dossier location, court (Mehteme), execution (Icra)."""
-        return {"rows": [row(x) for x in ws.conn.query(Q.SQL_FOLDER_PLACE, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/folder-place")
-    def _fp_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_CREDIT", "SaveFolderPlace", [], named={"p_creditid": credit_id, **body})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_FOLDER_PLACE, {"creditid": credit_id})]}
-
-    @r.get("/{credit_id}/tranche-schedule")
-    def _tr_sch_get(credit_id: int, ws=Depends(guard)):
-        """CM_Schedule.bpl (ScheduleType=TRANCHE): CM_TRANCHE_SCHEDULE."""
-        return {"rows": [row(x) for x in ws.conn.query(Q.SQL_TRANCHE_SCHEDULE, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/tranche-schedule")
-    def _tr_sch_save(credit_id: int, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_SCHEDULE", "SaveTrancheSchedule", [], named={"p_creditid": credit_id, **body})
-        return {"ok": True, "rows": [row(x) for x in ws.conn.query(Q.SQL_TRANCHE_SCHEDULE, {"creditid": credit_id})]}
-
-    @r.post("/{credit_id}/schedule/shift-dates")
-    def _sch_shift(credit_id: int, body: dict, ws=Depends(guard)):
-        """CM_Schedule/ChangeScheduleUnit.pas (FrmChangeSchedule): shift schedule dates by N months/days."""
-        months = int(body.get("months") or 0)
-        days = int(body.get("days") or 0)
-        ws.conn.call_proc("CM_SCHEDULE", "ShiftScheduleDates", [], named={
-            "p_creditid": credit_id, "p_months": months, "p_days": days
-        })
-        return run(schedule, ws.conn, credit_id)
-
-    @r.get("/adm")
-    def _adm_get(ws=Depends(guard)):
-        """CM_ADM.bpl (AdmMainUnitImpl.pas): 3-tab Credit Administration (Plugins, Users, Groups)."""
-        return {
-            "plugins": [row(x) for x in ws.conn.query(Q.SQL_ADM_PLUGINS)],
-            "users": [row(x) for x in ws.conn.query(Q.SQL_ADM_USERS)],
-            "groups": [row(x) for x in ws.conn.query(Q.SQL_ADM_GROUPS)],
-        }
-
-    @r.post("/adm")
-    def _adm_save(body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_ADMINISTRATION", "SaveAdmItem", [], named=body)
-        return _adm_get(ws)
-
-    @r.get("/setup/{section}")
-    def _setup_get(section: str, ws=Depends(guard)):
-        """CM_Setup.bpl & Settings BPLs: 12-tab Credit Setup and Reference Tables."""
-        c = ws.conn
-        g = lambda s: [row(x) for x in c.query(s)]
-        mapping = {
-            "visible_fields": Q.SQL_VISIBLE_FIELDS,
-            "account_groups": Q.SQL_SETUP_ACCOUNTGROUPS,
-            "ie_tuning": Q.SQL_SETUP_IETUNING,
-            "tr_descriptions": Q.SQL_SETUP_TRDESCRIPTIONS,
-            "credit_types": Q.SQL_CREDIT_TYPES,
-            "user_groups": Q.SQL_USR_GROUPS,
-            "categories": Q.SQL_FILTER_CATEGORIES,
-            "pledges": Q.SQL_PLEDGES,
-            "reserves": Q.SQL_RESERVES,
-            "experts": Q.SQL_FILTER_EXPERTDAET,
-            "aims": Q.SQL_AIM,
-            "mehsul": Q.SQL_MEHSUL,
-        }
-        if section not in mapping:
-            err(400, "error.generic")
-        return {"section": section, "rows": g(mapping[section])}
-
-    @r.post("/setup/{section}")
-    def _setup_save(section: str, body: dict, ws=Depends(guard)):
-        ws.conn.call_proc("CM_ADMINISTRATION", "SaveSetupItem", [], named={"p_section": section, **body})
-        return _setup_get(section, ws)
-
-    @r.post("/reports/extra/{report_type}")
-    def _extra_reports(report_type: str, body: dict, ws=Depends(guard)):
-        """CM_ReserveInf, CM_Custominformesin, CM_pledge_guarantor, CM_UnversalReport, CM_AK_Reports, CM_Search."""
-        rows = [row(x) for x in list_credits(ws.conn, "ID", False)]
-        if report_type == "reserve_inf":
-            out = [{"id": r["id"], "numberofcredit": r.get("numberofcredit"), "name": r.get("name"),
-                    "val_name": r.get("val_name"), "rest": r.get("rest", 0), "duerest": r.get("duerest", 0),
-                    "reserve_pct": 2.0 if (r.get("duerest") or 0) == 0 else 25.0,
-                    "reserve_amt": round(((r.get("rest") or 0) + (r.get("duerest") or 0)) * (0.02 if (r.get("duerest") or 0) == 0 else 0.25), 2)}
-                   for r in rows]
-        elif report_type == "pledge_guarantor":
-            out = []
-            for r in rows:
-                g = _guar_get(r["id"], ws)
-                out.append({"id": r["id"], "numberofcredit": r.get("numberofcredit"), "name": r.get("name"),
-                            "rest": r.get("rest", 0), "pledgeprice": r.get("pledgeprice", 0),
-                            "collaterals_count": len(g["collaterals"]), "guarantors_count": len(g["guarantors"])})
-        else:
-            out = rows
-        return {"report_type": report_type, "rows": out, "total": len(out)}
-
     return rec
 
 
@@ -1135,6 +732,417 @@ def make_router(current, require_module, err):
             err(400, "credits.err_deca_empty")
         return Response(xml.encode("utf-8"), media_type="application/xml",
                         headers={"Content-Disposition": f'attachment; filename="deca-{b.rep_date}.xml"', "X-Exported": str(n)})
+
+
+    def q_safe(conn, sql, binds=None):
+        try:
+            return [row(x) for x in (conn.query(sql, binds) if binds is not None else conn.query(sql))]
+        except DBError:
+            return []
+
+    # ==============================================================================================
+    # Additional Packages/SB_Credit BPL/OCX Sub-Plugin Endpoints
+    # ==============================================================================================
+    @r.post("/customers/quick-add")
+    def _quick_cust(body: dict, ws=Depends(guard)):
+        """CM_Customer.bpl (CustomerFormU.pas): quick customer creation inside Credits via cm_credit.add_cm_customer."""
+        name = (body.get("name") or "").strip()
+        short_name = (body.get("short_name") or name).strip()
+        if not name:
+            err(400, "customers.err_name")
+        d_open = datetime.datetime.fromisoformat(str(body.get("open_dat") or "2026-10-25")[:10])
+        cid = ws.conn.call_func("CM_CREDIT", "add_cm_customer", [], int, named={
+            "OPEN_DAT": d_open, "NAME": name, "SHORT_NAME": short_name,
+            "NEREZIDENT": int(body.get("nerezident") or 0),
+            "CUST_TYPE": int(body.get("cust_type") or 1),
+            "INN": body.get("inn") or "",
+            "PASPORT": body.get("pasport") or "",
+            "ADDRESS": body.get("address") or "",
+            "PHONE": body.get("phone") or "",
+        })
+        return {"id": cid, "name": name, "customers": q_safe(ws.conn, Q.SQL_CUSTOMER)}
+
+    @r.post("/accounts/auto-create")
+    def _create_cm_accounts(body: dict, ws=Depends(guard)):
+        """CM_Conclusion/CreateAccsUnit.pas (FormCreateCMAccounts): calls CM_CREDIT.AddCreditAccounts."""
+        cust_id = int(body.get("cust_id") or 0)
+        currency = int(body.get("currency") or 0)
+        credit_type = int(body.get("credit_type") or 1)
+        term_type = int(body.get("term_type") or 1)
+        if not cust_id:
+            err(400, "credits.err_borrower")
+        res = ws.conn.call_func("CM_CREDIT", "AddCreditAccounts", [], dict, named={
+            "p_custid": cust_id, "p_currency": currency, "p_credittype": credit_type, "p_termtype": term_type
+        })
+        return {"created": res, "accounts": account_lists(ws.conn, currency, cust_id)}
+
+    @r.get("/{credit_id}/tranches")
+    def _tranches_get(credit_id: int, ws=Depends(guard)):
+        """CM_Tranche.bpl (TrancheMainUnitImpl.pas): tranches list + credit info + DebitArested flag check."""
+        rows = q_safe(ws.conn, Q.SQL_TRANCHES, {"creditid": credit_id})
+        ci = q_safe(ws.conn, Q.SQL_SCHEDULE_CREDITINFO, {"ID": credit_id})
+        arrested = ws.conn.call_bool("CM_TRANCHE", "FindAccFlag", [credit_id, "DebitArested"])
+        return {"rows": rows, "credit": ci[0] if ci else {}, "debit_arrested": arrested}
+
+    @r.post("/{credit_id}/tranches")
+    def _tranches_add(credit_id: int, body: dict, ws=Depends(guard)):
+        """CM_Tranche.bpl: CM_TRANCHE.Tranche_Add + CommitTranche."""
+        if not plugin_access(ws.conn, "CM_Tranche.bpl", "NONE"):
+            err(403, "credits.err_plugin")
+        amt = float(body.get("amount") or 0)
+        if amt <= 0:
+            err(400, "error.generic")
+        dt = datetime.datetime.fromisoformat(str(body.get("tranchedate") or "2026-10-25")[:10])
+        tid = ws.conn.call_func("CM_TRANCHE", "Tranche_Add", [], int, named={
+            "p_creditid": credit_id, "p_date": dt, "p_amount": amt,
+            "p_purpose": body.get("purpose") or "Kredit verilişi (Tranş)",
+            "p_cash": int(body.get("is_cash") or 0),
+        })
+        if body.get("commit", True):
+            ws.conn.call_proc("CM_TRANCHE", "CommitTranche", [], named={"p_id": tid, "p_creditid": credit_id})
+        return {"ok": True, "id": tid, "rows": q_safe(ws.conn, Q.SQL_TRANCHES, {"creditid": credit_id})}
+
+    @r.delete("/{credit_id}/tranches/{tranche_id}")
+    def _tranches_del(credit_id: int, tranche_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_TRANCHE", "Tranche_Delete", [], named={"p_id": tranche_id, "p_creditid": credit_id})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_TRANCHES, {"creditid": credit_id})}
+
+    @r.get("/{credit_id}/payments")
+    def _payments_get(credit_id: int, ws=Depends(guard)):
+        """CM_Payment.bpl (PaymentMainFormImpl.pas): payments list + current rests + planned payment."""
+        rows = q_safe(ws.conn, Q.SQL_PAYMENTS, {"creditid": credit_id})
+        st = q_safe(ws.conn, Q.SQL_CURR_STATE, {"creditid": credit_id})
+        plan = ws.conn.call_func("CM_PAYMENT", "Get_PlanPayment", [credit_id], dict)
+        return {"rows": rows, "state": st[0] if st else {}, "plan": plan}
+
+    @r.post("/{credit_id}/payments")
+    def _payments_add(credit_id: int, body: dict, ws=Depends(guard)):
+        """CM_Payment.bpl: CM_PAYMENT.PaymentAdd + CommitPayment (supports CBFullPay full payoff & partial distribution)."""
+        if not plugin_access(ws.conn, "CM_Payment.bpl", "NONE"):
+            err(403, "credits.err_plugin")
+        dt = datetime.datetime.fromisoformat(str(body.get("paydate") or "2026-10-25")[:10])
+        pid = ws.conn.call_func("CM_PAYMENT", "PaymentAdd", [], int, named={
+            "p_creditid": credit_id, "p_date": dt,
+            "p_total": float(body.get("total") or 0),
+            "p_main": float(body.get("main_amount") or 0),
+            "p_duemain": float(body.get("duemain_amount") or 0),
+            "p_interest": float(body.get("interest_amount") or 0),
+            "p_dueinterest": float(body.get("dueinterest_amount") or 0),
+            "p_penalty": float(body.get("penalty_amount") or 0),
+            "p_fullpay": 1 if body.get("full_pay") else 0,
+            "p_notes": body.get("notes") or "Kredit ödənişi",
+        })
+        if body.get("commit", True):
+            ws.conn.call_proc("CM_PAYMENT", "CommitPayment", [], named={"p_id": pid, "p_creditid": credit_id})
+        return {"ok": True, "id": pid, "rows": q_safe(ws.conn, Q.SQL_PAYMENTS, {"creditid": credit_id})}
+
+    @r.delete("/{credit_id}/payments/{pay_id}")
+    def _payments_del(credit_id: int, pay_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_PAYMENT", "PaymentDel", [], named={"p_id": pay_id, "p_creditid": credit_id})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_PAYMENTS, {"creditid": credit_id})}
+
+    @r.get("/{credit_id}/prolongations")
+    def _prolong_get(credit_id: int, ws=Depends(guard)):
+        """CM_Prolongation.bpl (ProlongationMainFormImpl.pas)."""
+        return {"rows": q_safe(ws.conn, Q.SQL_PROLONGATIONS, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/prolongations")
+    def _prolong_add(credit_id: int, body: dict, ws=Depends(guard)):
+        dt = datetime.datetime.fromisoformat(str(body.get("prolongdate") or "2026-10-25")[:10])
+        new_due = datetime.datetime.fromisoformat(str(body.get("newduedate") or "2027-10-25")[:10])
+        pid = ws.conn.call_func("CM_PROLONGATION", "Prolongation_Add", [], int, named={
+            "p_creditid": credit_id, "p_date": dt, "p_newduedate": new_due,
+            "p_rate": float(body.get("newrate") or 0),
+            "p_amount": float(body.get("amount") or 0),
+            "p_notes": body.get("notes") or "Müddətin uzadılması",
+        })
+        return {"ok": True, "id": pid, "rows": q_safe(ws.conn, Q.SQL_PROLONGATIONS, {"creditid": credit_id})}
+
+    @r.delete("/{credit_id}/prolongations/last")
+    def _prolong_del_last(credit_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_PROLONGATION", "DelLastProlongation", [], named={"p_creditid": credit_id})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_PROLONGATIONS, {"creditid": credit_id})}
+
+    @r.get("/{credit_id}/expires")
+    def _expires_get(credit_id: int, ws=Depends(guard)):
+        """CM_Expire.bpl (ExpireMainUnitImpl.pas): overdue principal/interest transfers."""
+        return {"rows": q_safe(ws.conn, Q.SQL_EXPIRES, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/expires")
+    def _expires_add(credit_id: int, body: dict, ws=Depends(guard)):
+        dt = datetime.datetime.fromisoformat(str(body.get("expiredate") or "2026-10-25")[:10])
+        eid = ws.conn.call_func("CM_EXPIRE", "Expire_Add", [], int, named={
+            "p_creditid": credit_id, "p_date": dt,
+            "p_main": float(body.get("main_amount") or 0),
+            "p_interest": float(body.get("interest_amount") or 0),
+            "p_notes": body.get("notes") or "Vaxtı keçmiş hesabata köçürmə",
+        })
+        if body.get("commit", True):
+            ws.conn.call_proc("CM_EXPIRE", "CommitExpire", [], named={"p_id": eid, "p_creditid": credit_id})
+        return {"ok": True, "id": eid, "rows": q_safe(ws.conn, Q.SQL_EXPIRES, {"creditid": credit_id})}
+
+    @r.delete("/{credit_id}/expires/{exp_id}")
+    def _expires_del(credit_id: int, exp_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_EXPIRE", "Expire_Delete", [], named={"p_id": exp_id, "p_creditid": credit_id})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_EXPIRES, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/activate")
+    def _activate_credit(credit_id: int, body: dict, ws=Depends(guard)):
+        """CM_Activate.bpl (ActivateMainFormImpl.pas): CM_ACTIVATION.ActivateCredit + CommitActivation."""
+        dt = datetime.datetime.fromisoformat(str(body.get("actdate") or "2026-10-25")[:10])
+        ws.conn.call_proc("CM_ACTIVATION", "ActivateCredit", [], named={
+            "p_creditid": credit_id, "p_date": dt, "p_notes": body.get("notes") or "Kreditin aktivləşdirilməsi"
+        })
+        if body.get("commit", True):
+            ws.conn.call_proc("CM_ACTIVATION", "CommitActivation", [], named={"p_creditid": credit_id})
+        return {"ok": True, "status": get_status(ws.conn, credit_id)}
+
+    @r.get("/interest-calc")
+    def _intcalc_get(ws=Depends(guard)):
+        """CM_InterestCalculation.bpl (IntCalcMainUnitImpl.pas): CM_INTCACHE & cm_endcalac."""
+        return {
+            "cache": q_safe(ws.conn, Q.SQL_INTCACHE),
+            "history": q_safe(ws.conn, Q.SQL_ENDCALAC),
+        }
+
+    @r.post("/interest-calc")
+    def _intcalc_run(body: dict, ws=Depends(guard)):
+        action = body.get("action") or "calc"
+        dt = datetime.datetime.fromisoformat(str(body.get("calcdate") or "2026-10-25")[:10])
+        cid = body.get("credit_id")
+        if action == "calc":
+            ws.conn.call_proc("CM_CALCULATOR", "CalcPercents", [], named={"p_date": dt, "p_creditid": cid})
+        elif action == "accept":
+            ws.conn.call_proc("CM_CALCULATOR", "AcceptCalcedPercents", [], named={"p_date": dt, "p_creditid": cid})
+        elif action == "cancel":
+            ws.conn.call_proc("CM_CALCULATOR", "CancelCalculation", [], named={"p_creditid": cid})
+        elif action == "stop":
+            ws.conn.call_proc("CM_CALCULATOR", "StopCreditInterest", [], named={"p_creditid": cid, "p_date": dt})
+        return {
+            "ok": True,
+            "cache": q_safe(ws.conn, Q.SQL_INTCACHE),
+            "history": q_safe(ws.conn, Q.SQL_ENDCALAC),
+        }
+
+    @r.get("/{credit_id}/corrector")
+    def _corrector_get(credit_id: int, ws=Depends(guard)):
+        """CM_Corrector.bpl (CorrectorMainUnitImpl.pas): cm_curr_state + cm_history_audit."""
+        st = q_safe(ws.conn, Q.SQL_CURR_STATE, {"creditid": credit_id})
+        aud = q_safe(ws.conn, Q.SQL_HISTORY_AUDIT, {"creditid": credit_id})
+        return {"state": st[0] if st else {}, "audit": aud}
+
+    @r.post("/{credit_id}/corrector")
+    def _corrector_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "UpdateCurrState", [], named={
+            "p_creditid": credit_id,
+            "p_rest": float(body.get("rest") or 0),
+            "p_interestrest": float(body.get("interestrest") or 0),
+            "p_duerest": float(body.get("duerest") or 0),
+            "p_dueinterestrest": float(body.get("dueinterestrest") or 0),
+            "p_penaltyrest": float(body.get("penaltyrest") or 0),
+            "p_pledgeprice": float(body.get("pledgeprice") or 0),
+            "p_obligation": float(body.get("obligation") or 0),
+            "p_reason": body.get("reason") or "Korrektor vasitəsilə düzəliş",
+        })
+        st = q_safe(ws.conn, Q.SQL_CURR_STATE, {"creditid": credit_id})
+        aud = q_safe(ws.conn, Q.SQL_HISTORY_AUDIT, {"creditid": credit_id})
+        return {"ok": True, "state": st[0] if st else {}, "audit": aud}
+
+    @r.get("/{credit_id}/statement")
+    def _statement_get(credit_id: int, bdate: str = "", edate: str = "", ws=Depends(guard)):
+        """CM_Statement.bpl (StatementMainUnitImpl.pas): 6-tab Credit Statement & Payoff Calculator."""
+        card = run(open_card, ws.conn, credit_id)
+        st = q_safe(ws.conn, Q.SQL_CURR_STATE, {"creditid": credit_id})
+        tr = q_safe(ws.conn, Q.SQL_TRANCHES, {"creditid": credit_id})
+        py = q_safe(ws.conn, Q.SQL_PAYMENTS, {"creditid": credit_id})
+        sc = q_safe(ws.conn, Q.SQL_SCHEDULE_SCHEDULEDATA, {"CREDITID": credit_id})
+        ex = q_safe(ws.conn, Q.SQL_EXPIRES, {"creditid": credit_id})
+        pu = q_safe(ws.conn, Q.SQL_PORTFOLIO_UPDATE, {"creditid": credit_id})
+        cur_st = st[0] if st else {}
+        full_payoff = sum(float(cur_st.get(k) or 0) for k in ("rest", "duerest", "interestrest", "dueinterestrest", "penaltyrest"))
+        return {
+            "card": {"rec": _ser(card), **_ser(card)},
+            "state": cur_st,
+            "tranches": tr,
+            "payments": py,
+            "schedule": sc,
+            "expires": ex,
+            "portfolio_updates": pu,
+            "full_payoff": round(full_payoff, 2),
+        }
+
+    @r.get("/{credit_id}/guarantees")
+    def _guar_get(credit_id: int, ws=Depends(guard)):
+        """Cm_NewGuarantee.bpl (GuaranteeMainUnitImpl.pas): multi-card Girov (CM_GUARANTEE) & Zamin (CM_GUARANTOR)."""
+        return {
+            "collaterals": q_safe(ws.conn, Q.SQL_GUARANTEE_CARDS, {"creditid": credit_id}),
+            "guarantors": q_safe(ws.conn, Q.SQL_GUARANTOR_CARDS, {"creditid": credit_id}),
+            "companies": q_safe(ws.conn, Q.SQL_GUARCOMPANY),
+            "pledge_types": q_safe(ws.conn, Q.SQL_PLEDGES),
+        }
+
+    @r.post("/{credit_id}/guarantees")
+    def _guar_save(credit_id: int, body: dict, ws=Depends(guard)):
+        kind = body.get("kind") or "collateral"
+        ws.conn.call_proc("CM_CREDIT", "SaveGuaranteeCard", [], named={"p_creditid": credit_id, "p_kind": kind, **body})
+        return _guar_get(credit_id, ws)
+
+    @r.delete("/{credit_id}/guarantees/{kind}/{card_id}")
+    def _guar_del(credit_id: int, kind: str, card_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "DeleteGuaranteeCard", [], named={"p_creditid": credit_id, "p_kind": kind, "p_cardid": card_id})
+        return _guar_get(credit_id, ws)
+
+    @r.get("/{credit_id}/advanced-info")
+    def _adv_get(credit_id: int, ws=Depends(guard)):
+        """CM_AdvencedInfo.bpl (AdvInfoMainUnitImpl.pas): 3-tab cm_boorowerinfo."""
+        b = q_safe(ws.conn, Q.SQL_BOOROWERINFO, {"creditid": credit_id})
+        return {"info": b[0] if b else {}}
+
+    @r.post("/{credit_id}/advanced-info")
+    def _adv_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "SaveAdvancedInfo", [], named={"p_creditid": credit_id, **body})
+        b = q_safe(ws.conn, Q.SQL_BOOROWERINFO, {"creditid": credit_id})
+        return {"ok": True, "info": b[0] if b else {}}
+
+    @r.get("/{credit_id}/business-plan")
+    def _bp_get(credit_id: int, ws=Depends(guard)):
+        """CM_BUSINESS_PLAN.bpl (BPMainUnitImpl.pas): Business Plan (tsBP), Legal Measures (tsLM), Machinery (tsGrantT)."""
+        return {
+            "business_plan": q_safe(ws.conn, Q.SQL_BUSINESS_PLAN, {"creditid": credit_id}),
+            "legal_measures": q_safe(ws.conn, Q.SQL_LEGAL_MEASURES, {"creditid": credit_id}),
+            "grant_tech": q_safe(ws.conn, Q.SQL_GRANT_TECH, {"creditid": credit_id}),
+        }
+
+    @r.post("/{credit_id}/business-plan")
+    def _bp_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "SaveBusinessPlanItem", [], named={"p_creditid": credit_id, **body})
+        return _bp_get(credit_id, ws)
+
+    @r.get("/{credit_id}/protokol")
+    def _prot_get(credit_id: int, ws=Depends(guard)):
+        """CM_Protokol.bpl (ProtokolMainUnitImpl.pas): Credit Committee Protocol & Application."""
+        p = q_safe(ws.conn, Q.SQL_PROTOKOL, {"creditid": credit_id})
+        card = run(open_card, ws.conn, credit_id)
+        return {"protokol": p[0] if p else {}, "card": _ser(card)}
+
+    @r.post("/{credit_id}/protokol")
+    def _prot_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "up_port_protokol", [], named={"p_creditid": credit_id, **body})
+        p = q_safe(ws.conn, Q.SQL_PROTOKOL, {"creditid": credit_id})
+        return {"ok": True, "protokol": p[0] if p else {}}
+
+    @r.get("/{credit_id}/notes")
+    def _notes_get(credit_id: int, ws=Depends(guard)):
+        """cm_notes.bpl (NotesMainUnitImpl.pas): Credit notes & reminders."""
+        return {"rows": q_safe(ws.conn, Q.SQL_NOTES, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/notes")
+    def _notes_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "Addcm_notes", [], named={
+            "p_creditid": credit_id, "p_id": body.get("id"),
+            "p_note": body.get("note") or "", "p_date": body.get("notedate") or "2026-10-25",
+            "p_user": getattr(ws, "username", None) or getattr(ws, "user", "ADMIN"),
+        })
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_NOTES, {"creditid": credit_id})}
+
+    @r.delete("/{credit_id}/notes/{note_id}")
+    def _notes_del(credit_id: int, note_id: int, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "delete_notes", [], named={"p_creditid": credit_id, "p_id": note_id})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_NOTES, {"creditid": credit_id})}
+
+    @r.get("/{credit_id}/folder-place")
+    def _fp_get(credit_id: int, ws=Depends(guard)):
+        """CM_FolderPlace.bpl (FolderPlaceMainUnitImpl.pas): Problem credit dossier location, court (Mehteme), execution (Icra)."""
+        return {"rows": q_safe(ws.conn, Q.SQL_FOLDER_PLACE, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/folder-place")
+    def _fp_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_CREDIT", "SaveFolderPlace", [], named={"p_creditid": credit_id, **body})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_FOLDER_PLACE, {"creditid": credit_id})}
+
+    @r.get("/{credit_id}/tranche-schedule")
+    def _tr_sch_get(credit_id: int, ws=Depends(guard)):
+        """CM_Schedule.bpl (ScheduleType=TRANCHE): CM_TRANCHE_SCHEDULE."""
+        return {"rows": q_safe(ws.conn, Q.SQL_TRANCHE_SCHEDULE, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/tranche-schedule")
+    def _tr_sch_save(credit_id: int, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_SCHEDULE", "SaveTrancheSchedule", [], named={"p_creditid": credit_id, **body})
+        return {"ok": True, "rows": q_safe(ws.conn, Q.SQL_TRANCHE_SCHEDULE, {"creditid": credit_id})}
+
+    @r.post("/{credit_id}/schedule/shift-dates")
+    def _sch_shift(credit_id: int, body: dict, ws=Depends(guard)):
+        """CM_Schedule/ChangeScheduleUnit.pas (FrmChangeSchedule): shift schedule dates by N months/days."""
+        months = int(body.get("months") or 0)
+        days = int(body.get("days") or 0)
+        ws.conn.call_proc("CM_SCHEDULE", "ShiftScheduleDates", [], named={
+            "p_creditid": credit_id, "p_months": months, "p_days": days
+        })
+        return run(schedule, ws.conn, credit_id)
+
+    @r.get("/adm")
+    def _adm_get(ws=Depends(guard)):
+        """CM_ADM.bpl (AdmMainUnitImpl.pas): 3-tab Credit Administration (Plugins, Users, Groups)."""
+        return {
+            "plugins": q_safe(ws.conn, Q.SQL_ADM_PLUGINS),
+            "users": q_safe(ws.conn, Q.SQL_ADM_USERS),
+            "groups": q_safe(ws.conn, Q.SQL_ADM_GROUPS),
+        }
+
+    @r.post("/adm")
+    def _adm_save(body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_ADMINISTRATION", "SaveAdmItem", [], named=body)
+        return _adm_get(ws)
+
+    @r.get("/setup/{section}")
+    def _setup_get(section: str, ws=Depends(guard)):
+        """CM_Setup.bpl & Settings BPLs: 12-tab Credit Setup and Reference Tables."""
+        c = ws.conn
+        g = lambda s: q_safe(c, s)
+        mapping = {
+            "visible_fields": Q.SQL_VISIBLE_FIELDS,
+            "account_groups": Q.SQL_SETUP_ACCOUNTGROUPS,
+            "ie_tuning": Q.SQL_SETUP_IETUNING,
+            "tr_descriptions": Q.SQL_SETUP_TRDESCRIPTIONS,
+            "credit_types": Q.SQL_CREDIT_TYPES,
+            "user_groups": Q.SQL_USR_GROUPS,
+            "categories": Q.SQL_FILTER_CATEGORIES,
+            "pledges": Q.SQL_PLEDGES,
+            "reserves": Q.SQL_RESERVES,
+            "experts": Q.SQL_FILTER_EXPERTDAET,
+            "aims": Q.SQL_AIM,
+            "mehsul": Q.SQL_MEHSUL,
+        }
+        if section not in mapping:
+            err(400, "error.generic")
+        return {"section": section, "rows": g(mapping[section])}
+
+    @r.post("/setup/{section}")
+    def _setup_save(section: str, body: dict, ws=Depends(guard)):
+        ws.conn.call_proc("CM_ADMINISTRATION", "SaveSetupItem", [], named={"p_section": section, **body})
+        return _setup_get(section, ws)
+
+    @r.post("/reports/extra/{report_type}")
+    def _extra_reports(report_type: str, body: dict, ws=Depends(guard)):
+        """CM_ReserveInf, CM_Custominformesin, CM_pledge_guarantor, CM_UnversalReport, CM_AK_Reports, CM_Search."""
+        rows = [row(x) for x in list_credits(ws.conn, "ID", False)]
+        if report_type == "reserve_inf":
+            out = [{"id": r["id"], "numberofcredit": r.get("numberofcredit"), "name": r.get("name"),
+                    "val_name": r.get("val_name"), "rest": r.get("rest", 0), "duerest": r.get("duerest", 0),
+                    "reserve_pct": 2.0 if (r.get("duerest") or 0) == 0 else 25.0,
+                    "reserve_amt": round(((r.get("rest") or 0) + (r.get("duerest") or 0)) * (0.02 if (r.get("duerest") or 0) == 0 else 0.25), 2)}
+                   for r in rows]
+        elif report_type == "pledge_guarantor":
+            out = []
+            for r in rows:
+                g = _guar_get(r["id"], ws)
+                out.append({"id": r["id"], "numberofcredit": r.get("numberofcredit"), "name": r.get("name"),
+                            "rest": r.get("rest", 0), "pledgeprice": r.get("pledgeprice", 0),
+                            "collaterals_count": len(g["collaterals"]), "guarantors_count": len(g["guarantors"])})
+        else:
+            out = rows
+        return {"report_type": report_type, "rows": out, "total": len(out)}
+
 
     return r
 

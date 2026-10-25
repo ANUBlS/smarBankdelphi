@@ -7,8 +7,15 @@
   const money = (v) => v === null || v === undefined || v === '' ? '' : Number(v).toLocaleString(window.I18N.lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   function modal(html, onMount, wide) {
     const d = document.createElement('div'); d.className = 'backdrop stacked';
-    d.innerHTML = `<div class="modal ${wide ? 'wide' : ''}" role="dialog">${html}</div>`; document.body.appendChild(d);
-    const close = () => d.remove(); onMount && onMount(d.querySelector('.modal'), close); return close;
+    d.innerHTML = `<div class="modal ${wide ? 'wide' : ''}" role="dialog"><button type="button" class="modal-close-x" title="Bağla (Esc)">✕</button>${html}</div>`;
+    document.body.appendChild(d);
+    const m = d.querySelector('.modal');
+    const close = () => d.remove();
+    m.querySelector('.modal-close-x').onclick = close;
+    d.addEventListener('click', (e) => { if (e.target === d) close(); });
+    m.querySelectorAll('#cx,#qcx,#sclose,#tsx,#trx,#pyx,#opx,#icx,#corx,#stmx,#dosx,#admx,#rcl').forEach(b => { b.onclick = close; });
+    onMount && onMount(m, close);
+    return close;
   }
   const errText = (e) => e.field ? t(e.key, { field: t('credits.f_' + e.field) }) : t(e.key, e);
   const errHtml = (e) => `<div class="alert error">${esc(errText(e))}${e.ora ? `<span class="ora">${esc(e.ora)}</span>` : ''}</div>`;
@@ -415,7 +422,7 @@
   async function statementModal(id) {
     if (!id) return;
     const r = await api(`/api/credits/${id}/statement`);
-    const rec = r.card.rec || {}, s = r.state || {};
+    const rec = (r.card && (r.card.rec || r.card)) || {}, s = r.state || {};
     modal(`<h2>Kredit Çıxarışı və Tam Bağlama Hesablayıcısı (CM_Statement.bpl) #${id}</h2>
       <div class="toolbar" style="gap:14px;flex-wrap:wrap;background:#f0fdf4;padding:10px;border-radius:6px">
         <span>Müqavilə: <b>${esc(rec.NUMBEROFCREDIT)}</b></span>
@@ -614,21 +621,27 @@
       <div id="crGrid" style="margin-top:10px"><div class="spinner"></div></div></div>`;
     const fv = (id, k) => el.querySelector(id).onchange = (e) => { const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value; if (v === '' || v === false) delete st.filter[k]; else st.filter[k] = v === true ? true : +v; refresh(el); };
     fv('#fcur', 'CURRENCY'); fv('#fbr', 'BRANCHID'); fv('#fst', 'KR_STATUS'); fv('#ftp', 'TODAY_PAYMENTS');
-    el.querySelector('#bnew').onclick = () => card(el, 'insert');
-    el.querySelector('#bedit').onclick = () => st.cur && card(el, 'edit', st.cur);
-    el.querySelector('#blook').onclick = () => st.cur && card(el, 'look', st.cur);
-    el.querySelector('#bpost').onclick = () => st.cur && card(el, 'post', st.cur);
-    el.querySelector('#bsch').onclick = () => schedule(el, st.cur);
-    el.querySelector('#brep').onclick = reports;
-    el.querySelector('#bref').onclick = () => refresh(el);
-    el.querySelector('#btranche').onclick = () => tranchesModal(el, st.cur);
-    el.querySelector('#bpay').onclick = () => paymentsModal(el, st.cur);
-    el.querySelector('#bops').onclick = () => operationsModal(el, st.cur);
-    el.querySelector('#bint').onclick = () => intCalcModal(el);
-    el.querySelector('#bcor').onclick = () => correctorModal(el, st.cur);
-    el.querySelector('#bstm').onclick = () => statementModal(st.cur);
-    el.querySelector('#bdos').onclick = () => dossierModal(el, st.cur);
-    el.querySelector('#badm').onclick = () => admSetupModal();
+    const curId = () => {
+      if (!st.cur && st.rows.length) st.cur = st.rows[0].id;
+      if (!st.cur) toast('Siyahıdan kredit seçin', 'error');
+      return st.cur;
+    };
+    const run = (fn) => async () => { try { await fn(); } catch (e) { toast(errText(e), 'error'); } };
+    el.querySelector('#bnew').onclick = run(() => card(el, 'insert'));
+    el.querySelector('#bedit').onclick = run(() => { const id = curId(); if (id) return card(el, 'edit', id); });
+    el.querySelector('#blook').onclick = run(() => { const id = curId(); if (id) return card(el, 'look', id); });
+    el.querySelector('#bpost').onclick = run(() => { const id = curId(); if (id) return card(el, 'post', id); });
+    el.querySelector('#bsch').onclick = run(() => { const id = curId(); if (id) return schedule(el, id); });
+    el.querySelector('#brep').onclick = run(async () => reports());
+    el.querySelector('#bref').onclick = run(() => refresh(el));
+    el.querySelector('#btranche').onclick = run(() => { const id = curId(); if (id) return tranchesModal(el, id); });
+    el.querySelector('#bpay').onclick = run(() => { const id = curId(); if (id) return paymentsModal(el, id); });
+    el.querySelector('#bops').onclick = run(() => { const id = curId(); if (id) return operationsModal(el, id); });
+    el.querySelector('#bint').onclick = run(() => intCalcModal(el));
+    el.querySelector('#bcor').onclick = run(() => { const id = curId(); if (id) return correctorModal(el, id); });
+    el.querySelector('#bstm').onclick = run(() => { const id = curId(); if (id) return statementModal(id); });
+    el.querySelector('#bdos').onclick = run(() => { const id = curId(); if (id) return dossierModal(el, id); });
+    el.querySelector('#badm').onclick = run(() => admSetupModal());
     refresh(el);
   }
 

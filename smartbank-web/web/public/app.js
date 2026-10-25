@@ -213,7 +213,66 @@
   const pages = {};  // future migrated modules register here: pages['/m/accounts'] = (ctx) => {...}
   window.SB = { pages, api, t, esc, toast, modal, fmtDate, fmtDT, state: S };
 
+  function closeAllModals() {
+    const mr = document.getElementById('modal-root');
+    if (mr) mr.innerHTML = '';
+    document.querySelectorAll('.backdrop').forEach(b => b.remove());
+  }
+
+  (function installModalExitGuard() {
+    if (window.__sbModalGuard) return;
+    window.__sbModalGuard = true;
+    if (!document.getElementById('sb-modal-guard-css')) {
+      const st = document.createElement('style');
+      st.id = 'sb-modal-guard-css';
+      st.textContent = `.backdrop { overflow: auto !important; padding: 16px !important; }
+.modal { max-height: 90vh !important; overflow: auto !important; position: relative !important; }
+.modal-close-x { position: sticky; top: 0; float: right; margin: -6px -6px 6px 8px; width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; z-index: 50; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+.modal-close-x:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }`;
+      document.head.appendChild(st);
+    }
+    const closeBackdrop = (bd) => {
+      if (!bd) return;
+      if (bd.parentElement && bd.parentElement.id === 'modal-root') bd.parentElement.innerHTML = '';
+      else bd.remove();
+    };
+    const enhance = (bd) => {
+      if (!bd || bd.dataset.sbEnhanced) return;
+      bd.dataset.sbEnhanced = '1';
+      const m = bd.querySelector('.modal');
+      if (m && !m.querySelector('.modal-close-x')) {
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'modal-close-x';
+        x.title = 'Bağla (Esc)';
+        x.textContent = '✕';
+        x.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeBackdrop(bd);
+        });
+        m.insertBefore(x, m.firstChild);
+      }
+      bd.addEventListener('click', (e) => {
+        if (e.target === bd) closeBackdrop(bd);
+      });
+    };
+    const mo = new MutationObserver(() => {
+      document.querySelectorAll('.backdrop').forEach(enhance);
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const bds = document.querySelectorAll('.backdrop');
+        if (bds.length) {
+          e.stopPropagation();
+          closeBackdrop(bds[bds.length - 1]);
+        }
+      }
+    });
+  })();
+
   function route() {
+    closeAllModals();
     if (!S.session) return;
     const h = location.hash.replace(/^#/, '') || '/home';
     const [path, qs] = h.split('?');
