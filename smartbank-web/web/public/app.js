@@ -222,6 +222,15 @@
   (function installModalExitGuard() {
     if (window.__sbModalGuard) return;
     window.__sbModalGuard = true;
+    if (!document.getElementById('sb-modal-guard-css')) {
+      const st = document.createElement('style');
+      st.id = 'sb-modal-guard-css';
+      st.textContent = `.backdrop { overflow: auto !important; padding: 16px !important; }
+.modal { max-height: 90vh !important; overflow: auto !important; position: relative !important; }
+.modal-close-x { position: sticky; top: 0; float: right; margin: -6px -6px 6px 8px; width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; z-index: 50; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+.modal-close-x:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }`;
+      document.head.appendChild(st);
+    }
     const closeBackdrop = (bd) => {
       if (!bd) return;
       if (bd.parentElement && bd.parentElement.id === 'modal-root') bd.parentElement.innerHTML = '';
