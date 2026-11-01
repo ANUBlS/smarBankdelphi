@@ -210,7 +210,7 @@ class CsMixin:
             return [{"ID": c["VALUTE"], "SNAME": c["VAL_NAME"], "NAME": c["VALU_NAME"], "RATE": rate[c["VALUTE"]]}
                     for c in sorted(A["avalute"], key=lambda c: c["VALUTE"]) if c["VALUTE"] in rate]
         if "substr(acc_no,:src_pos,30) as acc_no_search" in s:
-            p = int(b["src_pos"])
+            p = max(int(b["src_pos"]), 1)   # Oracle substr: position 0 is treated as 1
             rows = [{"ID": a["ID"], "ACC_NO": a["ACC_NO"], "ACC_NO_SEARCH": a["ACC_NO"][p - 1:p - 1 + 30], "VAL_ACC": a["VAL_ACC"],
                      "NAME": a["NAME"], "ISCACHEACCOUNT": C["cashincoming"].get(str(a["BAL_CN1"]), 0)}
                     for a in A["accounts"] if not a["CLOSE_DAT"]]
@@ -224,6 +224,12 @@ class CsMixin:
             return C["convert_assignments"]
         if s == "select valute from avalute":
             return [{"VALUTE": c["VALUTE"]} for c in A["avalute"]]
+        if s == "select * from settings where rowid = :doa__rowid for update nowait":   # TM ODS_StatusT DOA lock
+            return [{"NAME": "TRANSACTION_STATUST", "VALUE": C["settings"]["TRANSACTION_STATUST"]}] if b["doa__rowid"] == "AAS1" else []
+        if s == "select rowid as doa__rowid from trdestination where id = :id":
+            return [{"DOA__ROWID": f"AAT{r['ID']}"} for r in C["trdestination"] if r["ID"] == b["id"]]
+        if s == "select * from trdestination where rowid = :doa__rowid for update nowait":
+            return [r for r in C["trdestination"] if f"AAT{r['ID']}" == b["doa__rowid"]]
         if "from trdestination d order by id" in s:
             return sorted(C["trdestination"], key=lambda r: r["ID"])
         if "from trdestination d order by name" in s:
@@ -328,6 +334,23 @@ class CsMixin:
                 rec = {"CUSTID": b["custid"], "CARDID": b["cardid"]}
                 L.append(rec)
             rec.update({k: (_d(v) if isinstance(v, datetime.date) else v) for k, v in b.items() if k.isupper()})
+            return True
+        if s == "update settings set value = :value where rowid = :doa__rowid":   # TM ODS_StatusT DOA update
+            if b["doa__rowid"] == "AAS1":
+                self.cs["settings"]["TRANSACTION_STATUST"] = str(b["VALUE"])
+            return True
+        if s == "insert into trdestination (id, name) values (:id, :name)":
+            if b["ID"] is None or any(r["ID"] == b["ID"] for r in self.cs["trdestination"]):
+                raise DBError("ORA-00001: unique constraint violated" if b["ID"] is not None else "ORA-01400: cannot insert NULL", 1 if b["ID"] is not None else 1400)
+            self.cs["trdestination"].append({"ID": b["ID"], "NAME": b["NAME"]})
+            return True
+        if s.startswith("update trdestination set ") and s.endswith("where rowid = :doa__rowid"):
+            for r in self.cs["trdestination"]:
+                if f"AAT{r['ID']}" == b["doa__rowid"]:
+                    r.update({k: v for k, v in b.items() if k in ("ID", "NAME")})
+            return True
+        if s == "delete from trdestination where rowid = :doa__rowid":
+            self.cs["trdestination"][:] = [r for r in self.cs["trdestination"] if f"AAT{r['ID']}" != b["doa__rowid"]]
             return True
         if s.startswith("update settings s set s.value = :value where upper(s.name)='transaction_statust'"):
             self.cs["settings"]["TRANSACTION_STATUST"] = str(b["Value"])

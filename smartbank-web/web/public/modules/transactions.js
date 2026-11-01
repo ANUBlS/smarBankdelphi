@@ -100,7 +100,7 @@
   async function deleteTr(el) {
     // ActionDeleteExecute :962-1024
     const ids = selectedIds(); if (!ids.length) return;
-    const multi = ids.length > 1; let wait = true, any = false;
+    const multi = ids.length > 1; let wait = true, any = false, first = true;   // CheckObjectAccess once per action (:969)
     for (let i = 0; i < ids.length; i++) {
       if (wait) {
         const a = await ask4(t('transactions.confirm_delete', { id: ids[i] }));
@@ -108,7 +108,8 @@
         if (a === 'all') { if (await ask(t('transactions.confirm_delete_n', { n: ids.length - i }))) wait = false; else continue; }
       }
       try {
-        const r = await api('/api/transactions/delete', { method: 'POST', body: { date: st.date, id: ids[i], multi } });
+        const r = await api('/api/transactions/delete', { method: 'POST', body: { date: st.date, id: ids[i], multi, first } });
+        first = false;
         if (r.blocked) { await info(t('transactions.err_trdelete')); continue; }
         any = true;
       } catch (e) { await info(errText(e)); break; }
@@ -265,6 +266,8 @@
   let LK = null;
   async function editor(el, mode, row, com) {
     try { LK = await api('/api/transactions/editor-lookups'); } catch (e) { return info(errText(e)); }
+    // ActionInsertExecute :661 / ActionEditExecute :708: CheckObjectAccess before the editor opens (none for commission)
+    try { await api('/api/transactions/editor-open', { method: 'POST', body: { mode } }); } catch (e) { return info(errText(e)); }
     const cur = (id) => LK.currencies.find(c => c.id === id) || {};
     const v = mode === 'edit' ? { id: row.id, transaction_date: row.transactiondate, operation_no: row.operationno, operation_code: row.operationcode, debit_currency_id: row.debitcurrencyid, credit_currency_id: row.creditcurrencyid,
         debit_rate: row.debitrate, credit_rate: row.creditrate, debit_id: row.debitid, credit_id: row.creditid, debit_amount: row.debitamount, credit_amount: row.creditamount, lamount: row.lamount,
@@ -365,15 +368,41 @@
       });
       const destPicker = () => modal(`<h3>${esc(t('transactions.dest_title'))}</h3><div class="tablewrap" style="max-height:50vh"><table class="grid acc-grid"><thead><tr><th class="silver" style="width:50px">${esc(t('transactions.c_id'))}</th><th>${esc(t('transactions.dest_title'))}</th></tr></thead>
         <tbody>${LK.trdest.map((d, k) => `<tr data-id="${d.id}" class="${k ? '' : 'sel'}"><td class="silver">${d.id}</td><td>${esc(d.name)}</td></tr>`).join('')}</tbody></table></div>
+        <div class="actions" id="dnav" style="justify-content:flex-start"><button class="btn secondary" data-n="add" title="${esc(t('transactions.dest_add'))}">＋</button><button class="btn secondary" data-n="edit" title="${esc(t('transactions.dest_edit'))}">✎</button><button class="btn secondary" data-n="del" title="${esc(t('transactions.dest_del'))}">−</button>
+        <span id="dform" hidden><input id="did" type="number" style="width:70px"><input id="dname" style="width:260px"><button class="btn" id="dpost">${esc(t('transactions.dest_post'))}</button></span></div>
+        <div id="derr"></div>
         <div class="actions"><button class="btn secondary" id="dc">${esc(t('transactions.cancel'))}</button><button class="btn" id="dok">${esc(t('transactions.apply'))}</button></div>`,
         (pm, pc) => {
           const take = (id) => { const d = LK.trdest.find(x => x.id === id); if (!d) return; fm.name.value = d.name; fm.destno.value = d.id; pc(); modified = true; upd(); fm.name.focus(); };   // ModalResult = mrOk
           const cur = () => +(pm.querySelector('tr.sel') || {}).dataset?.id;
           pm.querySelectorAll('tbody tr').forEach(tr => { tr.onclick = () => { pm.querySelectorAll('tr.sel').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); }; tr.ondblclick = () => take(+tr.dataset.id); });
           pm.querySelector('#dok').onclick = () => take(cur());
+          // DBNavigator1 (TransactionDestinationImpl.dfm:88) on TrDest: insert / edit / delete, each posted + committed
+          let nav = null; const dform = pm.querySelector('#dform');
+          const reopen = async () => { LK.trdest = (await api('/api/transactions/editor-lookups')).trdest; pc(); destPicker(); };
+          pm.querySelectorAll('[data-n]').forEach(b => b.onclick = async () => {
+            pm.querySelector('#derr').innerHTML = '';
+            const d = LK.trdest.find(x => x.id === cur());
+            if (b.dataset.n === 'del') {
+              if (!d || !(await ask(t('transactions.dest_confirm_del')))) return;
+              try { await api('/api/transactions/trdest/' + d.id, { method: 'DELETE' }); await reopen(); } catch (e) { pm.querySelector('#derr').innerHTML = errHtml(e); }
+              return;
+            }
+            if (b.dataset.n === 'edit' && !d) return;
+            nav = b.dataset.n === 'edit' ? d : 'add'; dform.hidden = false;
+            pm.querySelector('#did').value = nav === 'add' ? '' : d.id; pm.querySelector('#dname').value = nav === 'add' ? '' : (d.name || ''); pm.querySelector('#dname').focus();
+          });
+          pm.querySelector('#dpost').onclick = async () => {
+            const body = { id: pm.querySelector('#did').value === '' ? null : +pm.querySelector('#did').value, name: pm.querySelector('#dname').value };
+            try {
+              if (nav === 'add') await api('/api/transactions/trdest', { method: 'POST', body });
+              else await api('/api/transactions/trdest/' + nav.id, { method: 'PUT', body });
+              await reopen();
+            } catch (e) { pm.querySelector('#derr').innerHTML = errHtml(e); }
+          };
           pm.querySelector('#dc').onclick = () => { pc(); fm.name.focus(); };
           pm.tabIndex = -1; pm.focus();
-          pm.onkeydown = (e) => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); take(cur()); } if (e.key === 'Escape') { e.preventDefault(); pc(); fm.name.focus(); } };
+          pm.onkeydown = (e) => { e.stopPropagation(); if (e.key === 'Enter' && !dform.hidden && dform.contains(e.target)) { e.preventDefault(); pm.querySelector('#dpost').click(); return; } if (e.key === 'Enter') { e.preventDefault(); take(cur()); } if (e.key === 'Escape') { e.preventDefault(); pc(); fm.name.focus(); } };
         });
       m.addEventListener('keydown', (e) => {
         if (e.key === 'F3') { e.preventDefault(); destPicker(); }                       // FormKeyDown VK_F3
