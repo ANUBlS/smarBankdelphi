@@ -32,6 +32,15 @@
     const el = document.createElement('div'); el.className = 'toast ' + kind; el.textContent = msg;
     document.getElementById('toasts').appendChild(el); setTimeout(() => el.remove(), 6500);
   }
+  // Last-resort handler: an api() rejection is a plain {key, ora, status} object, which the browser would report
+  // as "Uncaught (in promise) Object" with no message. Show it as a readable toast instead.
+  function plainErr(e) {
+    if (e && e.key) return t(e.key, e) + (e.ora ? ' — ' + e.ora : '');
+    if (e && e.message) return e.message;
+    return String(e || 'Error');
+  }
+  window.addEventListener('unhandledrejection', ev => { ev.preventDefault(); toast(plainErr(ev.reason), 'error'); });
+  window.addEventListener('error', ev => { if (ev.error || ev.message) toast(plainErr(ev.error || ev.message), 'error'); });
   function modal(html, onMount) {
     const root = document.getElementById('modal-root');
     root.innerHTML = `<div class="backdrop"><div class="modal" role="dialog">${html}</div></div>`;
