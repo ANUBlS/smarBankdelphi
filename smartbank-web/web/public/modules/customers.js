@@ -134,22 +134,29 @@
 
   // ------------------------------------------------------------------ page
   function page(el) {
-    el.innerHTML = `<div class="card" style="max-width:none">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">${esc(t('customers.title'))}</h2><div style="flex:1"></div>
+    el.innerHTML = `<div class="card page">
+      <div class="page-head"><h2>${esc(t('customers.title'))}</h2><div class="spacer"></div>
         <button class="btn" data-a="new">＋ ${esc(t('customers.new'))}</button>
         <button class="btn secondary" data-a="edit">${esc(t('customers.edit'))}</button>
         <button class="btn secondary" data-a="close">${esc(t('customers.close'))}</button>
-        <button class="btn secondary" data-a="refresh">⟳ ${esc(t('accounts.refresh'))}</button></div>
-      <div class="acc-toolbar cs-search">
-        <label>${esc(t('customers.search'))}</label>
-        <input id="EditID" placeholder="${esc(t('customers.col_id'))}" style="width:90px">
-        <input id="EditINN" placeholder="${esc(t('customers.col_inn'))}" style="width:140px">
-        <input id="EditName" placeholder="${esc(t('customers.col_name'))}" style="min-width:220px">
-        <input id="DateEdit" type="date" title="${esc(t('customers.col_open'))}">
-        <span class="sep"></span>
-        <input id="SearchAcc" placeholder="${esc(t('customers.search_acc'))}" style="min-width:220px">
-        <input id="SearchName" placeholder="${esc(t('customers.search_accname'))}" style="min-width:200px">
-      </div>
+        <button class="btn secondary" data-a="refresh">⟳ ${esc(t('accounts.refresh'))}</button>
+        <button class="btn secondary" data-flt-toggle>${esc(t('accounts.filter_panel'))}</button></div>
+      <div id="cLayout"></div></div>`;
+    const lay = window.SB.filterLayout(el.querySelector('#cLayout'), { key: 'customer-operations', title: t('accounts.filter_title'),
+      applyLabel: t('accounts.refresh'), clearLabel: t('accounts.clear'),
+      onApply: () => el.querySelector('[data-a="refresh"]').click(),
+      onClear: () => { lay.body.querySelectorAll('input').forEach(i => { i.value = ''; }); } });
+    el.querySelector('[data-flt-toggle]').onclick = () => lay.toggle();
+    lay.body.innerHTML = `
+      <fieldset class="flt-group"><legend>${esc(t('customers.search'))}</legend>
+        <label>${esc(t('customers.col_id'))}<input id="EditID"></label>
+        <label>${esc(t('customers.col_inn'))}<input id="EditINN"></label>
+        <label>${esc(t('customers.col_name'))}<input id="EditName"></label>
+        <label>${esc(t('customers.col_open'))}<input id="DateEdit" type="date"></label></fieldset>
+      <fieldset class="flt-group"><legend>${esc(t('customers.accounts'))}</legend>
+        <label>${esc(t('customers.search_acc'))}<input id="SearchAcc"></label>
+        <label>${esc(t('customers.search_accname'))}<input id="SearchName"></label></fieldset>`;
+    lay.main.innerHTML = `
       <div id="cGrid"><div class="spinner"></div></div>
       <div class="cs-sec"><h3>${esc(t('customers.accounts'))}</h3><div style="flex:1"></div>
         <button class="btn secondary small" data-a="newacc">＋ ${esc(t('customers.new_account'))}</button>
@@ -157,9 +164,9 @@
         <button class="btn secondary small" data-acc data-a="docs">${esc(t('customers.acc_docs'))}</button></div>
       <div id="aGrid"></div>
       <div class="cs-sec"><h3>${esc(t('customers.transactions'))}</h3><div style="flex:1"></div>
-        <button class="btn secondary small" data-acc data-a="commit">✔ ${esc(t('customers.commit'))}</button>
-        <button class="btn secondary small" data-acc data-a="trdel">✖ ${esc(t('customers.delete_tr'))}</button></div>
-      <div id="tGrid"></div></div>`;
+        <button class="btn secondary small" data-acc data-a="commit">${esc(t('customers.commit'))}</button>
+        <button class="btn secondary small" data-acc data-a="trdel">${esc(t('customers.delete_tr'))}</button></div>
+      <div id="tGrid"></div>`;
     const $ = (s) => el.querySelector(s);
     // ActionSpeedSearchExecute: Enter in EditID/EditINN/EditName -> SearchRecord from current, forward
     const speed = async (field, input) => {
@@ -370,7 +377,11 @@
  * Packages/CustomersInformations (/m/customers-informations)
  * ============================================================================================== */
 (function(){
-  const {api, el, fmtNum, fmtDate, toast, showErr, esc} = window.SB;
+  const {api, t, fmtDate, toast, esc} = window.SB;
+  // fmtNum / showErr were destructured from SB but SB never exported them (TypeError -> accounts grid and every error path broke)
+  const fmtNum = (v) => (window.SB.fmtN ? window.SB.fmtN(v) : (v == null || v === '' ? '' : Number(v).toFixed(2)));
+  const showErr = (e) => toast(e && e.key ? t(e.key, e) + (e.ora ? ' — ' + e.ora : '') : String((e && e.message) || e || 'Xəta'), 'error');
+  const sel = (id, opts) => `<select id="${id}">${opts}</select>`;
 
   function renderCustomersOcx(host, isPCustomers){
     const st = {
@@ -384,97 +395,83 @@
     };
 
     host.innerHTML = `
-      <div class="sb-mod" id="custOcxMod">
-        <div class="sb-tb">
-          <span class="sb-tb-title">${isPCustomers ? 'Fiziki / Hüquqi Müştərilər (P_Customers)' : 'Bankın müştəriləri (Customers.ocx)'}</span>
-          <button class="sb-btn" id="coNew">+ Yeni müştəri (Ins)</button>
-          <button class="sb-btn" id="coEdit">Redaktə (F4)</button>
-          <button class="sb-btn" id="coInfo">Müştəri haqqında məlumat (CustInfo)</button>
-          <button class="sb-btn" id="coClose">Müştərini bağla (Del)</button>
-          <button class="sb-btn" id="coSettings">Soraqçalar (Settings)</button>
-          <span class="sb-sp"></span>
-          <label>Filial: <select id="coFilial" class="sb-sel" style="width:130px"><option value="">Hamısı</option></select></label>
-          <label>Tip: <select id="coType" class="sb-sel" style="width:110px">
+      <div class="card page" id="custOcxMod">
+        <div class="page-head"><h2>${isPCustomers ? 'Fiziki / Hüquqi Müştərilər (P_Customers)' : 'Bankın müştəriləri (Customers.ocx)'}</h2><div class="spacer"></div>
+          <button class="btn" id="coNew" title="Ins">＋ Yeni müştəri</button>
+          <button class="btn secondary" id="coEdit" title="F4">Redaktə</button>
+          <button class="btn secondary" id="coInfo">Müştəri haqqında məlumat</button>
+          <button class="btn secondary" id="coClose" title="Del">Müştərini bağla</button>
+          <button class="btn secondary" id="coSettings">Soraqçalar</button>
+          <button class="btn secondary" id="coRefresh">⟳ Yenilə</button>
+          <button class="btn secondary" data-flt-toggle>${esc(t('accounts.filter_panel'))}</button>
+        </div>
+        <div id="coLayout"></div>
+        <div id="coModalHost"></div>
+      </div>
+    `;
+    const lay = window.SB.filterLayout(host.querySelector('#coLayout'), { key: isPCustomers ? 'p-customers' : 'customers-ocx', title: t('accounts.filter_title'),
+      applyLabel: t('accounts.refresh'), clearLabel: t('accounts.clear'),
+      onApply: () => loadCustomers(),
+      onClear: () => {
+        st.filial = st.custType = st.currencyId = st.qId = st.qInn = st.qName = st.qDate = st.qAccNo = st.qAccName = '';
+        lay.body.querySelectorAll('input').forEach(i => { i.value = ''; });
+        lay.body.querySelectorAll('select').forEach(s => { if (s.id === 'coFilial' || s.id === 'coType' || s.id === 'coAccCurr') s.value = ''; });
+        loadCustomers();
+      } });
+    host.querySelector('[data-flt-toggle]').onclick = () => lay.toggle();
+    lay.body.innerHTML = `
+      <fieldset class="flt-group"><legend>Filial</legend>${sel('coFilial', '<option value="">Hamısı</option>')}</fieldset>
+      <fieldset class="flt-group"><legend>Müştəri tipi</legend>${sel('coType', `
             <option value="">Hamısı</option>
             <option value="0">0 - hüquqi</option>
             <option value="1">1 - fiziki</option>
-            <option value="2">2 - f.s.</option>
-          </select></label>
-          <label>Sıralama: <select id="coSort" class="sb-sel" style="width:120px">
+            <option value="2">2 - f.s.</option>`)}</fieldset>
+      <fieldset class="flt-group"><legend>Sıralama</legend>${sel('coSort', `
             <option value="ID">Kodu (ID)</option>
             <option value="INN">VÖEN (INN)</option>
             <option value="NAME">Adı (NAME)</option>
             <option value="OPEN_DAT">Açılma tarixi</option>
-            <option value="CUST_TYPE">Müştəri tipi</option>
-          </select></label>
-          <button class="sb-btn" id="coRefresh">Yenilə</button>
-        </div>
-
-        <div class="sb-bar" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 10px;background:#f5f7fa;border-bottom:1px solid #d8dee9">
-          <b>Axtarış (Müştəri):</b>
-          <input class="sb-inp" id="coQId" placeholder="Kodu (ID)..." style="width:90px">
-          <input class="sb-inp" id="coQInn" placeholder="VÖEN (INN)..." style="width:120px">
-          <input class="sb-inp" id="coQName" placeholder="Müştəri adı..." style="width:200px">
-          <input class="sb-inp" id="coQDate" type="date" style="width:135px" title="Qeydiyyat tarixi">
-          <button class="sb-btn" id="coClearQ">Təmizlə</button>
-          <span class="sb-sp"></span>
-          <span id="coCount" style="font-weight:600;color:#2b4c7e">0 müştəri</span>
-        </div>
-
-        <div class="sb-grid-wrap" style="height:44%;overflow:auto;border-bottom:2px solid #cbd5e1">
-          <table class="sb-grid" id="coCustGrid">
-            <thead>
-              <tr>
-                <th style="width:80px">Kodu (ID)</th>
-                <th style="width:120px">VÖEN (INN)</th>
-                <th>Müştərinin adı (NAME)</th>
-                <th style="width:180px">Qısa adı (SHORT_NAME)</th>
-                <th style="width:105px">Qeydiyyat tarixi</th>
-                <th style="width:80px">Tipi</th>
-                <th style="width:75px">Filial</th>
-                <th style="width:85px">Qeyri-rez.</th>
-              </tr>
-            </thead>
-            <tbody id="coCustBody"></tbody>
-          </table>
-        </div>
-
-        <div class="sb-bar" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 10px;background:#eef2f7;border-bottom:1px solid #d8dee9">
-          <b>Müştərinin hesabları (Account UNION ALL Out_Account):</b>
-          <label>Valyuta: <select id="coAccCurr" class="sb-sel" style="width:110px"><option value="">Hamısı</option></select></label>
-          <label>Sıralama: <select id="coAccSort" class="sb-sel" style="width:125px">
+            <option value="CUST_TYPE">Müştəri tipi</option>`)}</fieldset>
+      <fieldset class="flt-group"><legend>Axtarış (Müştəri)</legend>
+        <label>Kodu (ID)<input id="coQId"></label>
+        <label>VÖEN (INN)<input id="coQInn"></label>
+        <label>Müştəri adı<input id="coQName"></label>
+        <label>Qeydiyyat tarixi<input id="coQDate" type="date"></label>
+        <button class="btn secondary small" id="coClearQ" type="button">Təmizlə</button></fieldset>
+      <fieldset class="flt-group"><legend>Müştərinin hesabları</legend>
+        <label>Valyuta${sel('coAccCurr', '<option value="">Hamısı</option>')}</label>
+        <label>Sıralama${sel('coAccSort', `
             <option value="AccNo">Hesab №</option>
             <option value="AccName">Hesab adı</option>
             <option value="CurrencyID">Valyuta</option>
             <option value="Balance">Qalıq</option>
             <option value="LBalance">Manat qalığı</option>
-            <option value="OpenDate">Açılma tarixi</option>
-          </select></label>
-          <input class="sb-inp" id="coQAccNo" placeholder="Hesab № axtar..." style="width:160px">
-          <input class="sb-inp" id="coQAccName" placeholder="Hesab adı axtar..." style="width:180px">
-          <span class="sb-sp"></span>
-          <span id="coAccCount" style="font-weight:600;color:#2b4c7e">0 hesab</span>
-        </div>
-
-        <div class="sb-grid-wrap" style="height:36%;overflow:auto">
-          <table class="sb-grid" id="coAccGrid">
-            <thead>
-              <tr>
-                <th style="width:190px">Hesab № (ACCNO)</th>
-                <th>Hesabın adı (ACCNAME)</th>
-                <th style="width:80px">Valyuta</th>
-                <th style="width:120px" class="num">Qalıq (BALANCE)</th>
-                <th style="width:120px" class="num">Milli val. qalığı</th>
-                <th style="width:105px">Açılma tarixi</th>
-                <th style="width:90px">Balans növü</th>
-              </tr>
-            </thead>
-            <tbody id="coAccBody"></tbody>
+            <option value="OpenDate">Açılma tarixi</option>`)}</label>
+        <label>Hesab №<input id="coQAccNo"></label>
+        <label>Hesab adı<input id="coQAccName"></label></fieldset>`;
+    lay.main.innerHTML = `
+        <div class="tablewrap" style="max-height:40vh">
+          <table class="grid acc-grid" id="coCustGrid">
+            <thead><tr>
+                <th style="width:80px">Kodu (ID)</th><th style="width:120px">VÖEN (INN)</th><th>Müştərinin adı (NAME)</th>
+                <th style="width:180px">Qısa adı (SHORT_NAME)</th><th style="width:105px">Qeydiyyat tarixi</th>
+                <th style="width:80px">Tipi</th><th style="width:75px">Filial</th><th style="width:85px">Qeyri-rez.</th>
+            </tr></thead>
+            <tbody id="coCustBody"></tbody>
           </table>
         </div>
-        <div id="coModalHost"></div>
-      </div>
-    `;
+        <div class="gridfoot"><span class="muted" id="coCount">0 müştəri</span></div>
+        <div class="cs-sec"><h3>Müştərinin hesabları (Account UNION ALL Out_Account)</h3><div class="spacer" style="flex:1"></div><span class="muted" id="coAccCount">0 hesab</span></div>
+        <div class="tablewrap" style="max-height:30vh">
+          <table class="grid acc-grid" id="coAccGrid">
+            <thead><tr>
+                <th style="width:190px">Hesab № (ACCNO)</th><th>Hesabın adı (ACCNAME)</th><th style="width:80px">Valyuta</th>
+                <th style="width:120px" class="num">Qalıq (BALANCE)</th><th style="width:120px" class="num">Milli val. qalığı</th>
+                <th style="width:105px">Açılma tarixi</th><th style="width:90px">Balans növü</th>
+            </tr></thead>
+            <tbody id="coAccBody"></tbody>
+          </table>
+        </div>`;
 
     const $ = sel => host.querySelector(sel);
 
@@ -510,7 +507,7 @@
     function renderCustRows(){
       const tb = $('#coCustBody');
       if (!st.rows.length){
-        tb.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:16px;color:#666">Məlumat tapılmadı</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center">Məlumat tapılmadı</td></tr>`;
         return;
       }
       tb.innerHTML = st.rows.map(r => `
@@ -520,7 +517,7 @@
           <td><b>${esc(r.name||'')}</b></td>
           <td>${esc(r.short_name||'')}</td>
           <td>${fmtDate(r.open_dat)}</td>
-          <td><span class="sb-badge">${esc(r.tip||'huquqi')}</span></td>
+          <td><span class="badge teal">${esc(r.tip||'huquqi')}</span></td>
           <td>${r.filial||101}</td>
           <td>${r.nerezident ? 'Qeyri-rez.' : 'Rezident'}</td>
         </tr>
@@ -552,7 +549,7 @@
         $('#coAccCount').textContent = `${st.accs.length} hesab`;
         const tb = $('#coAccBody');
         if (!st.accs.length){
-          tb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:12px;color:#666">Hesab yoxdur</td></tr>`;
+          tb.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">Hesab yoxdur</td></tr>`;
           return;
         }
         tb.innerHTML = st.accs.map(a => `
@@ -587,75 +584,56 @@
       const opts = (arr, val) => (arr||[]).map(x => `<option value="${x.id}" ${Number(x.id)===Number(val)?'selected':''}>${esc(x.name||x.id)}</option>`).join('');
       const mh = $('#coModalHost');
       mh.innerHTML = `
-        <div class="sb-modal-bg">
-          <div class="sb-modal" style="width:720px;max-width:95vw">
-            <div class="sb-modal-hd">
-              <span>${isEdit ? `Müştəri redaktəsi — ID ${c.id}` : 'Yeni müştəri (CustomerPropertiesForm)'}</span>
-              <button class="sb-btn" id="cpClose">✕</button>
-            </div>
-            <div class="sb-modal-bd" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px">
-              <label>Müştəri tipi (CUST_TYPE):
-                <select class="sb-sel" id="cpType">
+        <div class="backdrop stacked">
+          <div class="modal wide" role="dialog">
+            <h3>${isEdit ? `Müştəri redaktəsi — ID ${c.id}` : 'Yeni müştəri (CustomerPropertiesForm)'}</h3>
+            <button type="button" class="modal-close-x" id="cpClose" title="Bağla (Esc)">✕</button>
+            <div class="formgrid c2">
+              <label class="field"><span>Müştəri tipi (CUST_TYPE)</span><select id="cpType">
                   <option value="0" ${Number(c.cust_type)===0?'selected':''}>0 - Hüquqi şəxs</option>
                   <option value="1" ${Number(c.cust_type)===1?'selected':''}>1 - Fiziki şəxs</option>
                   <option value="2" ${Number(c.cust_type)===2?'selected':''}>2 - Fərdi sahibkar (f.s.)</option>
                 </select>
               </label>
-              <label>Qeydiyyat tarixi (OPEN_DAT):
-                <input type="date" class="sb-inp" id="cpOpenDat" value="${String(c.open_dat||'').slice(0,10)}">
+              <label class="field"><span>Qeydiyyat tarixi (OPEN_DAT)</span><input type="date" id="cpOpenDat" value="${String(c.open_dat||'').slice(0,10)}">
               </label>
-              <label style="grid-column:span 2">Tam adı (NAME) *:
-                <input class="sb-inp" id="cpName" value="${esc(c.name||'')}" style="width:100%">
+              <label class="field span2"><span>Tam adı (NAME) *</span><input id="cpName" value="${esc(c.name||'')}">
               </label>
-              <label>Qısa adı (SHORT_NAME) *:
-                <input class="sb-inp" id="cpShort" value="${esc(c.short_name||'')}" style="width:100%">
+              <label class="field"><span>Qısa adı (SHORT_NAME) *</span><input id="cpShort" value="${esc(c.short_name||'')}">
               </label>
-              <label>Filial (FILIAL):
-                <select class="sb-sel" id="cpFilial">${opts(st.init.filials, c.filial||101)}</select>
+              <label class="field"><span>Filial (FILIAL)</span><select id="cpFilial">${opts(st.init.filials, c.filial||101)}</select>
               </label>
-              <label>VÖEN (INN):
-                <input class="sb-inp" id="cpInn" value="${esc(c.inn||'')}">
+              <label class="field"><span>VÖEN (INN)</span><input id="cpInn" value="${esc(c.inn||'')}">
               </label>
-              <label>OKPO kodu (KOD_OKPRO):
-                <input class="sb-inp" id="cpOkpo" value="${esc(c.kod_okpro||'')}">
+              <label class="field"><span>OKPO kodu (KOD_OKPRO)</span><input id="cpOkpo" value="${esc(c.kod_okpro||'')}">
               </label>
-              <label>Mənsubiyyət (PRINAD_KOD):
-                <select class="sb-sel" id="cpPrinad">${opts(st.init.prinad, c.prinad_kod)}</select>
+              <label class="field"><span>Mənsubiyyət (PRINAD_KOD)</span><select id="cpPrinad">${opts(st.init.prinad, c.prinad_kod)}</select>
               </label>
-              <label>Müştəri qrupu (GROUP_KLIE):
-                <select class="sb-sel" id="cpGroup">${opts(st.init.qrp_klie, c.group_klie)}</select>
+              <label class="field"><span>Müştəri qrupu (GROUP_KLIE)</span><select id="cpGroup">${opts(st.init.qrp_klie, c.group_klie)}</select>
               </label>
-              <label>Mülkiyyət növü (VID_SOB):
-                <select class="sb-sel" id="cpVidSob">${opts(st.init.vid_sob, c.vid_sob)}</select>
+              <label class="field"><span>Mülkiyyət növü (VID_SOB)</span><select id="cpVidSob">${opts(st.init.vid_sob, c.vid_sob)}</select>
               </label>
-              <label>Təşkilati-hüquqi forma (ORG_SOB):
-                <select class="sb-sel" id="cpOrgSob">${opts(st.init.org_prav, c.org_sob)}</select>
+              <label class="field"><span>Təşkilati-hüquqi forma (ORG_SOB)</span><select id="cpOrgSob">${opts(st.init.org_prav, c.org_sob)}</select>
               </label>
-              <label>Fəaliyyət sahəsi (SFERA_DEY):
-                <select class="sb-sel" id="cpSfera">${opts(st.init.sferadey, c.sfera_dey)}</select>
+              <label class="field"><span>Fəaliyyət sahəsi (SFERA_DEY)</span><select id="cpSfera">${opts(st.init.sferadey, c.sfera_dey)}</select>
               </label>
-              <label>Sahə / Sektor (OTRASL):
-                <select class="sb-sel" id="cpOtrasl">${opts(st.init.otrasli, c.otrasl)}</select>
+              <label class="field"><span>Sahə / Sektor (OTRASL)</span><select id="cpOtrasl">${opts(st.init.otrasli, c.otrasl)}</select>
               </label>
-              <label>Vergi orqanı (NALOG_KOD):
-                <select class="sb-sel" id="cpNalog">${opts(st.init.nalog, c.nalog_kod)}</select>
+              <label class="field"><span>Vergi orqanı (NALOG_KOD)</span><select id="cpNalog">${opts(st.init.nalog, c.nalog_kod)}</select>
               </label>
-              <label>BİK (BIK):
-                <input class="sb-inp" id="cpBik" value="${esc(c.bik||'')}">
+              <label class="field"><span>BİK (BIK)</span><input id="cpBik" value="${esc(c.bik||'')}">
               </label>
-              <label>Vergi qeydiyyatı tarixi (DAT_NAL):
-                <input type="date" class="sb-inp" id="cpDatNal" value="${String(c.dat_nal||c.open_dat||'').slice(0,10)}">
+              <label class="field"><span>Vergi qeydiyyatı tarixi (DAT_NAL)</span><input type="date" id="cpDatNal" value="${String(c.dat_nal||c.open_dat||'').slice(0,10)}">
               </label>
-              <label>Nizamnamə tarixi (DAT_USTAV):
-                <input type="date" class="sb-inp" id="cpDatUstav" value="${String(c.dat_ustav||c.open_dat||'').slice(0,10)}">
+              <label class="field"><span>Nizamnamə tarixi (DAT_USTAV)</span><input type="date" id="cpDatUstav" value="${String(c.dat_ustav||c.open_dat||'').slice(0,10)}">
               </label>
-              <label style="display:flex;align-items:center;gap:6px">
+              <label class="field chk">
                 <input type="checkbox" id="cpNerez" ${c.nerezident ? 'checked' : ''}> Qeyri-rezident (NEREZIDENT)
               </label>
             </div>
-            <div class="sb-modal-ft">
-              <button class="sb-btn primary" id="cpSave">Yadda saxla (Sb_${isEdit?'Edit':'Add'}Customer)</button>
-              <button class="sb-btn" id="cpCancel">İmtina</button>
+            <div class="actions">
+              <button class="btn secondary" id="cpCancel">İmtina</button>
+              <button class="btn" id="cpSave">Yadda saxla (Sb_${isEdit?'Edit':'Add'}Customer)</button>
             </div>
           </div>
         </div>
@@ -685,7 +663,7 @@
           };
           const res = await api(isEdit ? `/api/customers/ocx/customers/${c.id}` : '/api/customers/ocx/customers', {
             method: isEdit ? 'PUT' : 'POST',
-            body: JSON.stringify(payload)
+            body: payload
           });
           mh.innerHTML = '';
           toast('Müştəri məlumatları yadda saxlanıldı');
@@ -713,59 +691,55 @@
           };
           const ip = ipMap[String(card.card_no)] || {familystatus:1, education:1, place1:1, work1:1, work2:1, verify:1, familymembers:3, monthlyincome:2000, monthlyexpense:800};
           mh.innerHTML = `
-            <div class="sb-modal-bg">
-              <div class="sb-modal" style="width:780px;max-width:96vw">
-                <div class="sb-modal-hd">
-                  <span>Müştəri haqqında məlumat (CustomerInfoForm) — ${esc(cust.name)} [Kart №${card.card_no}]</span>
-                  <button class="sb-btn" id="ciClose">✕</button>
-                </div>
-                <div class="sb-modal-bd" style="padding:12px">
-                  <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-                    <label>Kart seçimi:
-                      <select id="ciCardSel" class="sb-sel">
+            <div class="backdrop stacked">
+              <div class="modal wide" role="dialog">
+                <h3>Müştəri haqqında məlumat (CustomerInfoForm) — ${esc(cust.name)} [Kart №${card.card_no}]</h3>
+                <button type="button" class="modal-close-x" id="ciClose" title="Bağla (Esc)">✕</button>
+                <div>
+                  <div class="toolbar">
+                    <label class="field"><span>Kart seçimi</span><select id="ciCardSel">
                         ${cards.map((c,i) => `<option value="${i}" ${i===curIdx?'selected':''}>Kart №${c.card_no} (${esc(c.pasport||'yeni')})</option>`).join('')}
                       </select>
                     </label>
-                    <button class="sb-btn" id="ciAddCard">+ Yeni kart əlavə et</button>
-                    <button class="sb-btn" id="ciDelCard">Kartı sil (del_custinfo)</button>
+                    <button class="btn secondary small" id="ciAddCard">Yeni kart əlavə et</button>
+                    <button class="btn secondary small" id="ciDelCard">Kartı sil (del_custinfo)</button>
                   </div>
-                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-                    <label>Sənədin növü (PASP_TYPE): <input class="sb-inp" id="ciPaspType" value="${esc(card.pasp_type||'')}"></label>
-                    <label>Seriya və № (PASPORT): <input class="sb-inp" id="ciPasport" value="${esc(card.pasport||'')}"></label>
-                    <label>Verilmə tarixi (PASP_DATE): <input type="date" class="sb-inp" id="ciPaspDate" value="${String(card.pasp_date||'').slice(0,10)}"></label>
-                    <label>Kim tərəfindən verilib (KEM_VIDAN): <input class="sb-inp" id="ciKemVidan" value="${esc(card.kem_vidan||'')}"></label>
-                    <label>Doğum yeri (DOG_YER): <input class="sb-inp" id="ciDogYer" value="${esc(card.dog_yer||'')}"></label>
-                    <label>Doğum tarixi (DOG_TAR): <input type="date" class="sb-inp" id="ciDogTar" value="${String(card.dog_tar||'').slice(0,10)}"></label>
-                    <label>Cinsi (CINS):
-                      <select class="sb-sel" id="ciCins">
+                  <div class="formgrid">
+                    <label class="field"><span>Sənədin növü (PASP_TYPE)</span><input id="ciPaspType" value="${esc(card.pasp_type||'')}"></label>
+                    <label class="field"><span>Seriya və № (PASPORT)</span><input id="ciPasport" value="${esc(card.pasport||'')}"></label>
+                    <label class="field"><span>Verilmə tarixi (PASP_DATE)</span><input type="date" id="ciPaspDate" value="${String(card.pasp_date||'').slice(0,10)}"></label>
+                    <label class="field"><span>Kim tərəfindən verilib (KEM_VIDAN)</span><input id="ciKemVidan" value="${esc(card.kem_vidan||'')}"></label>
+                    <label class="field"><span>Doğum yeri (DOG_YER)</span><input id="ciDogYer" value="${esc(card.dog_yer||'')}"></label>
+                    <label class="field"><span>Doğum tarixi (DOG_TAR)</span><input type="date" id="ciDogTar" value="${String(card.dog_tar||'').slice(0,10)}"></label>
+                    <label class="field"><span>Cinsi (CINS)</span><select id="ciCins">
                         <option value="Kişi" ${card.cins==='Kişi'?'selected':''}>Kişi</option>
                         <option value="Qadın" ${card.cins==='Qadın'?'selected':''}>Qadın</option>
                       </select>
                     </label>
-                    <label>Milliyyəti (MILLIYET): <input class="sb-inp" id="ciMilliyet" value="${esc(card.milliyet||'')}"></label>
-                    <label>Vətəndaşlığı (GRAJDAN): <input class="sb-inp" id="ciGrajdan" value="${esc(card.grajdan||'')}"></label>
-                    <label>İş yeri (WORK_PLACE): <input class="sb-inp" id="ciWork" value="${esc(card.work_place||'')}"></label>
-                    <label>Vəzifəsi (DOLJNOST): <input class="sb-inp" id="ciDoljnost" value="${esc(card.doljnost||'')}"></label>
-                    <label>Ata adı (FATHER): <input class="sb-inp" id="ciFather" value="${esc(card.father||'')}"></label>
-                    <label>Həyat yoldaşı (PARTNER): <input class="sb-inp" id="ciPartner" value="${esc(card.partner||'')}"></label>
-                    <label>Ölkə (STRANA): <input class="sb-inp" id="ciStrana" value="${esc(card.strana||'')}"></label>
-                    <label>Ünvan (ADRESS): <input class="sb-inp" id="ciAdress" value="${esc(card.adress||'')}"></label>
-                    <label>Telefon (TEL): <input class="sb-inp" id="ciTel" value="${esc(card.tel||'')}"></label>
-                    <label>Mobil (TEL_MOB): <input class="sb-inp" id="ciTelMob" value="${esc(card.tel_mob||'')}"></label>
-                    <label>E-mail (E_MAIL): <input class="sb-inp" id="ciEmail" value="${esc(card.e_mail||'')}"></label>
+                    <label class="field"><span>Milliyyəti (MILLIYET)</span><input id="ciMilliyet" value="${esc(card.milliyet||'')}"></label>
+                    <label class="field"><span>Vətəndaşlığı (GRAJDAN)</span><input id="ciGrajdan" value="${esc(card.grajdan||'')}"></label>
+                    <label class="field"><span>İş yeri (WORK_PLACE)</span><input id="ciWork" value="${esc(card.work_place||'')}"></label>
+                    <label class="field"><span>Vəzifəsi (DOLJNOST)</span><input id="ciDoljnost" value="${esc(card.doljnost||'')}"></label>
+                    <label class="field"><span>Ata adı (FATHER)</span><input id="ciFather" value="${esc(card.father||'')}"></label>
+                    <label class="field"><span>Həyat yoldaşı (PARTNER)</span><input id="ciPartner" value="${esc(card.partner||'')}"></label>
+                    <label class="field"><span>Ölkə (STRANA)</span><input id="ciStrana" value="${esc(card.strana||'')}"></label>
+                    <label class="field"><span>Ünvan (ADRESS)</span><input id="ciAdress" value="${esc(card.adress||'')}"></label>
+                    <label class="field"><span>Telefon (TEL)</span><input id="ciTel" value="${esc(card.tel||'')}"></label>
+                    <label class="field"><span>Mobil (TEL_MOB)</span><input id="ciTelMob" value="${esc(card.tel_mob||'')}"></label>
+                    <label class="field"><span>E-mail (E_MAIL)</span><input id="ciEmail" value="${esc(card.e_mail||'')}"></label>
                   </div>
-                  <fieldset style="margin-top:10px;border:1px solid #cbd5e1;padding:8px;border-radius:4px">
-                    <legend style="font-weight:600;padding:0 6px">İpoteka əlavə məlumatları (frmIPINFO / CUSTIPINFO)</legend>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-                      <label>Ailə üzvləri sayı: <input type="number" class="sb-inp" id="ciFamMem" value="${ip.familymembers||1}"></label>
-                      <label>Aylıq gəlir (MONTHLYINCOME): <input type="number" step="0.01" class="sb-inp" id="ciIncome" value="${ip.monthlyincome||0}"></label>
-                      <label>Aylıq xərc (MONTHLYEXPENSE): <input type="number" step="0.01" class="sb-inp" id="ciExpense" value="${ip.monthlyexpense||0}"></label>
+                  <fieldset class="trside">
+                    <legend>İpoteka əlavə məlumatları (frmIPINFO / CUSTIPINFO)</legend>
+                    <div class="formgrid">
+                      <label class="field"><span>Ailə üzvləri sayı</span><input type="number" id="ciFamMem" value="${ip.familymembers||1}"></label>
+                      <label class="field"><span>Aylıq gəlir (MONTHLYINCOME)</span><input type="number" step="0.01" id="ciIncome" value="${ip.monthlyincome||0}"></label>
+                      <label class="field"><span>Aylıq xərc (MONTHLYEXPENSE)</span><input type="number" step="0.01" id="ciExpense" value="${ip.monthlyexpense||0}"></label>
                     </div>
                   </fieldset>
                 </div>
-                <div class="sb-modal-ft">
-                  <button class="sb-btn primary" id="ciSave">Yadda saxla (sb_custInfo.upd_custinfo)</button>
-                  <button class="sb-btn" id="ciCancel">Bağla</button>
+                <div class="actions">
+                  <button class="btn secondary" id="ciCancel">Bağla</button>
+                  <button class="btn" id="ciSave">Yadda saxla (sb_custInfo.upd_custinfo)</button>
                 </div>
               </div>
             </div>
@@ -792,7 +766,7 @@
             try {
               const res = await api(`/api/customers/ocx/customers/${cust.id}/info`, {
                 method: 'POST',
-                body: JSON.stringify({
+                body: ({
                   card_no: card.card_no,
                   pasp_type: $('#ciPaspType').value, pasport: $('#ciPasport').value,
                   pasp_date: $('#ciPaspDate').value || null, kem_vidan: $('#ciKemVidan').value,
@@ -807,7 +781,7 @@
               });
               await api(`/api/customers/ocx/customers/${cust.id}/ipinfo`, {
                 method: 'POST',
-                body: JSON.stringify({
+                body: ({
                   card_no: card.card_no,
                   familystatus: 1, education: 1, place1: 1, work1: 1, work2: 1, verify: 1,
                   familymembers: Number($('#ciFamMem').value || 1),
@@ -828,15 +802,12 @@
     function openSettingsModal(){
       const mh = $('#coModalHost');
       mh.innerHTML = `
-        <div class="sb-modal-bg">
-          <div class="sb-modal" style="width:600px">
-            <div class="sb-modal-hd">
-              <span>Soraqçalar (frmSettings — ODSSettings / ODSSets)</span>
-              <button class="sb-btn" id="csClose">✕</button>
-            </div>
-            <div class="sb-modal-bd" style="padding:12px">
-              <label>Soraqça cədvəli:
-                <select id="csTable" class="sb-sel">
+        <div class="backdrop stacked">
+          <div class="modal" role="dialog">
+            <h3>Soraqçalar (frmSettings — ODSSettings / ODSSets)</h3>
+            <button type="button" class="modal-close-x" id="csClose" title="Bağla (Esc)">✕</button>
+            <div>
+              <label class="field"><span>Soraqça cədvəli</span><select id="csTable">
                   <option value="prinad">PRINAD (Mənsubiyyət)</option>
                   <option value="qrp_klie">QRP_KLIE (Müştəri qrupları)</option>
                   <option value="vid_sob">VID_SOB (Mülkiyyət növləri)</option>
@@ -846,8 +817,8 @@
                   <option value="nalog">NALOG (Vergi orqanları)</option>
                 </select>
               </label>
-              <div style="max-height:300px;overflow:auto;margin-top:10px">
-                <table class="sb-grid"><thead><tr><th>ID</th><th>Adı (NAME)</th></tr></thead><tbody id="csBody"></tbody></table>
+              <div class="tablewrap" style="max-height:300px;margin-top:10px">
+                <table class="grid"><thead><tr><th>ID</th><th>Adı (NAME)</th></tr></thead><tbody id="csBody"></tbody></table>
               </div>
             </div>
           </div>
@@ -898,21 +869,24 @@
   function renderCustomersInfoOcx(host){
     let mode = 'customers';
     host.innerHTML = `
-      <div class="sb-mod" id="custInfoOcxMod">
-        <div class="sb-tb">
-          <span class="sb-tb-title">Müştəri Məlumatları Analizatoru (CustomersInformations.ocx)</span>
-          <label><input type="radio" name="ciMode" value="customers" checked> Müştərilər (RBtnCust)</label>
-          <label><input type="radio" name="ciMode" value="accounts"> Hesablar (RBtnAcc)</label>
-          <label><input type="radio" name="ciMode" value="documents"> Sənədlər (RBtnDocs)</label>
-          <span class="sb-sp"></span>
-          <button class="sb-btn primary" id="ciRun">Sorğunu icra et (F9)</button>
-          <span id="ciTotal" style="font-weight:600">0 sətir</span>
+      <div class="card page" id="custInfoOcxMod">
+        <div class="page-head"><h2>Müştəri Məlumatları Analizatoru (CustomersInformations.ocx)</h2><div class="spacer"></div>
+          <span class="muted" id="ciTotal">0 sətir</span>
+          <button class="btn" id="ciRun" title="F9">Sorğunu icra et</button>
+          <button class="btn secondary" data-flt-toggle>${esc(t('accounts.filter_panel'))}</button>
         </div>
-        <div class="sb-grid-wrap" style="height:calc(100% - 48px);overflow:auto">
-          <table class="sb-grid"><thead id="ciHead"></thead><tbody id="ciBody"></tbody></table>
-        </div>
+        <div id="ciLayout"></div>
       </div>
     `;
+    const lay = window.SB.filterLayout(host.querySelector('#ciLayout'), { key: 'customers-info', title: t('accounts.filter_title'),
+      applyLabel: t('accounts.refresh'), clearLabel: t('accounts.clear'),
+      onApply: () => run(), onClear: () => { mode = 'customers'; lay.body.querySelector('input[value="customers"]').checked = true; run(); } });
+    host.querySelector('[data-flt-toggle]').onclick = () => lay.toggle();
+    lay.body.innerHTML = `<fieldset class="flt-group"><legend>Rejim</legend>
+          <label class="chk-row"><input type="radio" name="ciMode" value="customers" checked> Müştərilər (RBtnCust)</label>
+          <label class="chk-row"><input type="radio" name="ciMode" value="accounts"> Hesablar (RBtnAcc)</label>
+          <label class="chk-row"><input type="radio" name="ciMode" value="documents"> Sənədlər (RBtnDocs)</label></fieldset>`;
+    lay.main.innerHTML = `<div class="tablewrap" style="max-height:70vh"><table class="grid acc-grid"><thead id="ciHead"></thead><tbody id="ciBody"></tbody></table></div>`;
     const run = async () => {
       try {
         const res = await api('/api/customers/info-ocx/analyze?mode=' + mode);
