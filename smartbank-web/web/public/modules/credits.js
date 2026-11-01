@@ -37,7 +37,7 @@
     if (!cols.length) {
       cols = ['ID', 'NUMBEROFCREDIT', 'CONTRACTACCNO', 'VAL_NAME', 'STATUS', 'NAME', 'ANNUALYINTERESTRATE', 'REST', 'INTERESTREST', 'DUEREST', 'DUEINTERESTREST', 'CREDITLINEAMOUNT', 'DATEOFCONCLUSION', 'DUEDATEFIRSTCONTRACT', 'FILIAL'].map(f => ({ field: f, visible: true }));
     }
-    el.querySelector('#crGrid').innerHTML = `<div class="tablewrap" style="max-height:55vh"><table class="grid acc-grid"><thead><tr>
+    el.querySelector('#crGrid').innerHTML = `<div class="tablewrap" style="max-height:62vh"><table class="grid acc-grid"><thead><tr>
       ${cols.map(c => `<th class="sortable" data-f="${c.field}" style="${MONEY.has(c.field) ? 'text-align:right' : ''}">${esc(t('credits.f_' + c.field))}${st.order === c.field ? (st.desc ? ' ▼' : ' ▲') : ''}</th>`).join('')}</tr></thead><tbody>
       ${st.rows.map(r => `<tr data-id="${r.id}" class="${r.id === st.cur ? 'sel' : ''}">${cols.map(c => {
         const v = r[c.field.toLowerCase()];
@@ -68,12 +68,12 @@
       if (!st.lk) st.lk = await api('/api/credits/lookups');
       const r = mode === 'insert' ? await api('/api/credits/card/new') : await api(`/api/credits/card/${id}?mode=${mode}`);
       const rec = r.rec, ro = mode === 'look' || mode === 'post';
-      modal(`<h2>${esc(t('credits.card_' + mode))}${id ? ' #' + id : ''}</h2><div id="cerr"></div>
-        ${!ro ? `<div class="toolbar" style="gap:6px;margin-bottom:8px">
-          <button type="button" class="btn secondary" id="cQuickCust">＋ Yeni Müştəri (CM_Customer)</button>
-          <button type="button" class="btn secondary" id="cAutoAcc">⚡ Kredit hesablarını yarat (AddCreditAccounts)</button>
+      modal(`<h3>${esc(t('credits.card_' + mode))}${id ? ' #' + id : ''}</h3><div id="cerr"></div>
+        ${!ro ? `<div class="toolbar">
+          <button type="button" class="btn secondary" id="cQuickCust">Yeni Müştəri (CM_Customer)</button>
+          <button type="button" class="btn secondary" id="cAutoAcc">Kredit hesablarını yarat (AddCreditAccounts)</button>
         </div>` : ''}
-        <form id="cf" class="formgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px 14px;max-height:62vh;overflow:auto">${CARD.map(([f, k]) => {
+        <form id="cf" class="formgrid">${CARD.map(([f, k]) => {
           const v = rec[f]; const lab = `<label class="field"><span>${esc(t('credits.f_' + f))}</span>`;
           if (LK[k]) return lab + `<select name="${f}" ${ro ? 'disabled' : ''}>${opt(st.lk[k], LK[k][0], LK[k][1], v)}</select></label>`;
           return lab + `<input name="${f}" type="${k === 'date' ? 'date' : k === 'num' ? 'number' : 'text'}" step="any" value="${esc(v ?? '')}" ${ro ? 'readonly' : ''}></label>`; }).join('')}</form>
@@ -116,8 +116,8 @@
   }
 
   function quickCustModal(parentModal) {
-    modal(`<h2>Yeni Müştəri (CM_Customer.bpl)</h2><div id="qcerr"></div>
-      <div class="formgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    modal(`<h3>Yeni Müştəri (CM_Customer.bpl)</h3><div id="qcerr"></div>
+      <div class="formgrid c2">
         <label class="field"><span>Adı (NAME)</span><input id="qcn"></label>
         <label class="field"><span>Qısa adı</span><input id="qcs"></label>
         <label class="field"><span>VÖEN (İNN)</span><input id="qci"></label>
@@ -148,10 +148,10 @@
     if (!id) return;
     const load = () => api(`/api/credits/${id}/schedule`);
     let rows = (await load()).rows; let sel = new Set();
-    modal(`<h2>${esc(t('credits.schedule'))} #${id}</h2><div id="serr"></div><div id="sbar" class="toolbar" style="gap:8px;flex-wrap:wrap"></div><div id="sg"></div>
+    modal(`<h3>${esc(t('credits.schedule'))} #${id}</h3><div id="serr"></div><div id="sbar" class="toolbar"></div><div id="sg"></div>
       <div class="actions">
-        <button class="btn secondary" id="sshift">📅 Tarixləri sürüşdür</button>
-        <button class="btn secondary" id="strsch">📋 Tranş Qrafiki</button>
+        <button class="btn secondary" id="sshift">Tarixləri sürüşdür</button>
+        <button class="btn secondary" id="strsch">Tranş Qrafiki</button>
         <button class="btn secondary" id="sdel">${esc(t('credits.sch_delete'))}</button>
         <button class="btn secondary" id="sclose">${esc(t('credits.sch_close'))}</button>
         <button class="btn" id="ssave">${esc(t('credits.sch_save'))}</button>
@@ -167,7 +167,7 @@
           <label class="field"><span>${esc(t('credits.sch_periods'))}</span><input id="snp" type="number" value="${esc(d.n_periods)}"></label>
           <label class="field"><span>${esc(t('credits.sch_dovr'))}</span><input id="sdv" type="number" value="0"></label>
           <label class="field"><span>${esc(t('credits.sch_kind'))}</span><select id="skd"><option value="1">${esc(t('credits.sch_annuity'))}</option><option value="0">${esc(t('credits.sch_equal'))}</option></select></label>
-          <button class="btn" id="sgen" style="align-self:end">${esc(t('credits.sch_generate'))}</button>`;
+          <button class="btn" id="sgen">${esc(t('credits.sch_generate'))}</button>`;
         m.querySelector('#sgen').onclick = async () => { try { await api(`/api/credits/${id}/schedule/annuty`, { method: 'POST', body: { first_pay_date: m.querySelector('#sfp').value, amount: +m.querySelector('#sam').value, n_periods: +m.querySelector('#snp').value, dovr: +m.querySelector('#sdv').value, annuity: m.querySelector('#skd').value === '1' } }); rows = (await load()).rows; m.querySelector('#serr').innerHTML = ''; draw(); } catch (e) { fail(e); } };
       } catch (e) { fail(e); }
       draw();
@@ -186,12 +186,12 @@
 
   async function trancheScheduleModal(id) {
     const r = await api(`/api/credits/${id}/tranche-schedule`);
-    modal(`<h2>Tranş Qrafiki (CM_TRANCHE_SCHEDULE) #${id}</h2>
-      <div class="toolbar" style="gap:8px"><input id="tsd" type="date" value="${st.init.date}"><input id="tsa" type="number" placeholder="Məbləğ"><input id="tsn" placeholder="Qeyd"><button class="btn" id="tsadd">＋ Əlavə et</button></div>
+    modal(`<h3>Tranş Qrafiki (CM_TRANCHE_SCHEDULE) #${id}</h3>
+      <div class="toolbar"><input id="tsd" type="date" value="${st.init.date}"><input id="tsa" type="number" placeholder="Məbləğ"><input id="tsn" placeholder="Qeyd"><button class="btn" id="tsadd">Əlavə et</button></div>
       <div id="tsg" style="margin-top:8px"></div>
       <div class="actions"><button class="btn secondary" id="tsx">${esc(t('common.close'))}</button></div>`, (m, close) => {
       const draw = (rows) => {
-        m.querySelector('#tsg').innerHTML = `<table class="grid"><thead><tr><th>Tarix</th><th style="text-align:right">Məbləğ</th><th>Qeyd</th></tr></thead><tbody>${rows.map(x => `<tr><td>${esc(fmtDate(x.tranchedate))}</td><td style="text-align:right">${money(x.amount)}</td><td>${esc(x.notes || '')}</td></tr>`).join('') || '<tr><td colspan="3" class="muted">Boşdur</td></tr>'}</tbody></table>`;
+        m.querySelector('#tsg').innerHTML = `<div class="tablewrap"><table class="grid"><thead><tr><th>Tarix</th><th style="text-align:right">Məbləğ</th><th>Qeyd</th></tr></thead><tbody>${rows.map(x => `<tr><td>${esc(fmtDate(x.tranchedate))}</td><td style="text-align:right">${money(x.amount)}</td><td>${esc(x.notes || '')}</td></tr>`).join('') || '<tr><td colspan="3" class="muted">Boşdur</td></tr>'}</tbody></table></div>`;
       };
       draw(r.rows);
       m.querySelector('#tsx').onclick = close;
@@ -206,20 +206,20 @@
   async function tranchesModal(el, id) {
     if (!id) return;
     const r = await api(`/api/credits/${id}/tranches`);
-    modal(`<h2>Tranşların Verilməsi (CM_Tranche.bpl) #${id}</h2><div id="terr"></div>
+    modal(`<h3>Tranşların Verilməsi (CM_Tranche.bpl) #${id}</h3><div id="terr"></div>
       ${r.debit_arrested ? `<div class="alert error">Diqqət: Müştəri hesabında həbs (DebitArested) var!</div>` : ''}
-      <div class="toolbar" style="gap:8px;flex-wrap:wrap">
+      <div class="toolbar">
         <label class="field"><span>Tarix</span><input id="trd" type="date" value="${st.init.date}"></label>
         <label class="field"><span>Məbləğ</span><input id="tra" type="number" step="any" value="${esc(r.credit.creditlineamount || 1000)}"></label>
         <label class="field"><span>Təyinat</span><input id="trp" value="Müqavilə üzrə tranş verilişi"></label>
-        <label style="align-self:end"><input type="checkbox" id="trc"> Nağd (Kassa)</label>
-        <button class="btn" id="tradd" style="align-self:end">＋ Tranş ver & Təsdiqlə</button>
+        <label class="field chk"><input type="checkbox" id="trc"> Nağd (Kassa)</label>
+        <button class="btn" id="tradd">Tranş ver & Təsdiqlə</button>
       </div>
       <div id="trg" style="margin-top:8px"></div>
       <div class="actions"><button class="btn secondary" id="trx">${esc(t('common.close'))}</button></div>`, (m, close) => {
       const draw = (rows) => {
-        m.querySelector('#trg').innerHTML = `<table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th style="text-align:right">Məbləğ</th><th>Təyinat</th><th>Status</th><th></th></tr></thead><tbody>
-          ${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.tranchedate))}</td><td style="text-align:right">${money(x.amount)}</td><td>${esc(x.purpose || '')}</td><td>${x.status ? '✔ Təsdiqlənib' : '⏳ Gözləyir'}</td><td><button class="btn secondary btn-sm" data-del="${x.id}">Sil</button></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Tranş yoxdur</td></tr>'}</tbody></table>`;
+        m.querySelector('#trg').innerHTML = `<div class="tablewrap"><table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th style="text-align:right">Məbləğ</th><th>Təyinat</th><th>Status</th><th></th></tr></thead><tbody>
+          ${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.tranchedate))}</td><td style="text-align:right">${money(x.amount)}</td><td>${esc(x.purpose || '')}</td><td>${x.status ? '<span class="badge teal">Təsdiqlənib</span>' : '<span class="badge amber">Gözləyir</span>'}</td><td><button class="btn secondary small" data-del="${x.id}">Sil</button></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Tranş yoxdur</td></tr>'}</tbody></table></div>`;
         m.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
           const res = await api(`/api/credits/${id}/tranches/${b.dataset.del}`, { method: 'DELETE' });
           draw(res.rows); refresh(el);
@@ -245,15 +245,15 @@
     if (!id) return;
     const r = await api(`/api/credits/${id}/payments`);
     const s = r.state || {}, p = r.plan || {};
-    modal(`<h2>Kredit Ödənişləri (CM_Payment.bpl) #${id}</h2><div id="perr"></div>
-      <div class="toolbar" style="gap:12px;flex-wrap:wrap;background:#f8fafc;padding:8px;border-radius:6px">
+    modal(`<h3>Kredit Ödənişləri (CM_Payment.bpl) #${id}</h3><div id="perr"></div>
+      <div class="stat-bar">
         <span>Əsas borc: <b>${money(s.rest)}</b></span>
         <span>Faiz: <b>${money(s.interestrest)}</b></span>
         <span>Vaxtı keçmiş əsas: <b>${money(s.duerest)}</b></span>
         <span>Vaxtı keçmiş faiz: <b>${money(s.dueinterestrest)}</b></span>
         <span>Cərimə: <b>${money(s.penaltyrest)}</b></span>
       </div>
-      <div class="formgrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+      <div class="formgrid c4">
         <label class="field"><span>Tarix</span><input id="pyd" type="date" value="${st.init.date}"></label>
         <label class="field"><span>Əsas borc ödənişi</span><input id="pym" type="number" step="any" value="${esc(p.main_plan || 0)}"></label>
         <label class="field"><span>Faiz ödənişi</span><input id="pyi" type="number" step="any" value="${esc(p.interest_plan || 0)}"></label>
@@ -261,14 +261,14 @@
         <label class="field"><span>Vaxtı keçmiş faiz</span><input id="pydi" type="number" step="any" value="${esc(p.dueinterest_plan || 0)}"></label>
         <label class="field"><span>Cərimə ( Dəbbə )</span><input id="pyp" type="number" step="any" value="${esc(p.penalty_plan || 0)}"></label>
         <label class="field"><span>Qeyd</span><input id="pyn" value="Kredit üzrə növbəti ödəniş"></label>
-        <label style="align-self:end"><input type="checkbox" id="pyfull"> Tam bağlama (CBFullPay)</label>
+        <label class="field chk"><input type="checkbox" id="pyfull"> Tam bağlama (CBFullPay)</label>
       </div>
-      <div class="actions" style="justify-content:flex-start"><button class="btn" id="pyadd">＋ Ödənişi qəbul et (PaymentAdd & Commit)</button></div>
+      <div class="actions start"><button class="btn" id="pyadd">Ödənişi qəbul et (PaymentAdd & Commit)</button></div>
       <div id="pyg" style="margin-top:8px"></div>
       <div class="actions"><button class="btn secondary" id="pyx">${esc(t('common.close'))}</button></div>`, (m, close) => {
       const draw = (rows) => {
         m.querySelector('#pyg').innerHTML = `<div class="tablewrap" style="max-height:36vh"><table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th style="text-align:right">Cəmi</th><th style="text-align:right">Əsas</th><th style="text-align:right">Faiz</th><th style="text-align:right">V.K. Əsas</th><th style="text-align:right">Cərimə</th><th>Qeyd</th><th></th></tr></thead><tbody>
-          ${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.paydate))}</td><td style="text-align:right">${money(x.total)}</td><td style="text-align:right">${money(x.main_amount)}</td><td style="text-align:right">${money(x.interest_amount)}</td><td style="text-align:right">${money(x.duemain_amount)}</td><td style="text-align:right">${money(x.penalty_amount)}</td><td>${esc(x.notes || '')}</td><td><button class="btn secondary btn-sm" data-del="${x.id}">Sil</button></td></tr>`).join('') || '<tr><td colspan="9" class="muted">Ödəniş yoxdur</td></tr>'}</tbody></table></div>`;
+          ${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.paydate))}</td><td style="text-align:right">${money(x.total)}</td><td style="text-align:right">${money(x.main_amount)}</td><td style="text-align:right">${money(x.interest_amount)}</td><td style="text-align:right">${money(x.duemain_amount)}</td><td style="text-align:right">${money(x.penalty_amount)}</td><td>${esc(x.notes || '')}</td><td><button class="btn secondary small" data-del="${x.id}">Sil</button></td></tr>`).join('') || '<tr><td colspan="9" class="muted">Ödəniş yoxdur</td></tr>'}</tbody></table></div>`;
         m.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
           const res = await api(`/api/credits/${id}/payments/${b.dataset.del}`, { method: 'DELETE' });
           draw(res.rows); refresh(el);
@@ -308,32 +308,32 @@
   async function operationsModal(el, id) {
     if (!id) return;
     const [pr, ex] = await Promise.all([api(`/api/credits/${id}/prolongations`), api(`/api/credits/${id}/expires`)]);
-    modal(`<h2>Müddət Uzatma / Vaxtı Keçmişə Köçürmə / Aktivləşdirmə #${id}</h2><div id="operr"></div>
+    modal(`<h3>Müddət Uzatma / Vaxtı Keçmişə Köçürmə / Aktivləşdirmə #${id}</h3><div id="operr"></div>
       <h3>1. Müddətin Uzadılması (CM_Prolongation.bpl)</h3>
-      <div class="toolbar" style="gap:8px;flex-wrap:wrap">
+      <div class="toolbar">
         <label class="field"><span>Tarix</span><input id="prd" type="date" value="${st.init.date}"></label>
         <label class="field"><span>Yeni bitmə tarixi</span><input id="prnd" type="date" value="2027-12-31"></label>
         <label class="field"><span>Yeni %</span><input id="prr" type="number" step="any" value="18"></label>
         <label class="field"><span>Məbləğ</span><input id="pra" type="number" step="any" value="5000"></label>
-        <button class="btn" id="pradd" style="align-self:end">＋ Uzat (Prolongation_Add)</button>
-        <button class="btn secondary" id="prdel" style="align-self:end">Son uzatmanı sil</button>
+        <button class="btn" id="pradd">Uzat (Prolongation_Add)</button>
+        <button class="btn secondary" id="prdel">Son uzatmanı sil</button>
       </div>
       <div id="prg" style="margin-top:6px"></div>
-      <h3 style="margin-top:14px">2. Vaxtı Keçmiş Hesaba Köçürmə (CM_Expire.bpl)</h3>
-      <div class="toolbar" style="gap:8px;flex-wrap:wrap">
+      <h3>2. Vaxtı Keçmiş Hesaba Köçürmə (CM_Expire.bpl)</h3>
+      <div class="toolbar">
         <label class="field"><span>Tarix</span><input id="exd" type="date" value="${st.init.date}"></label>
         <label class="field"><span>Əsas borc</span><input id="exm" type="number" step="any" value="500"></label>
         <label class="field"><span>Faiz borcu</span><input id="exi" type="number" step="any" value="50"></label>
-        <button class="btn" id="exadd" style="align-self:end">＋ Vaxtı keçmişə köçür (Expire_Add)</button>
-        <button class="btn secondary" id="actbtn" style="align-self:end">✔ Krediti Aktivləşdir (CM_Activate)</button>
+        <button class="btn" id="exadd">Vaxtı keçmişə köçür (Expire_Add)</button>
+        <button class="btn secondary" id="actbtn">Krediti Aktivləşdir (CM_Activate)</button>
       </div>
       <div id="exg" style="margin-top:6px"></div>
       <div class="actions"><button class="btn secondary" id="opx">${esc(t('common.close'))}</button></div>`, (m, close) => {
       const drawPr = (rows) => {
-        m.querySelector('#prg').innerHTML = `<table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th>Köhnə tarix</th><th>Yeni tarix</th><th>Yeni %</th><th style="text-align:right">Məbləğ</th></tr></thead><tbody>${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.prolongdate))}</td><td>${esc(fmtDate(x.oldduedate))}</td><td>${esc(fmtDate(x.newduedate))}</td><td>${esc(x.newrate)}</td><td style="text-align:right">${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Uzatma yoxdur</td></tr>'}</tbody></table>`;
+        m.querySelector('#prg').innerHTML = `<div class="tablewrap"><table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th>Köhnə tarix</th><th>Yeni tarix</th><th>Yeni %</th><th style="text-align:right">Məbləğ</th></tr></thead><tbody>${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.prolongdate))}</td><td>${esc(fmtDate(x.oldduedate))}</td><td>${esc(fmtDate(x.newduedate))}</td><td>${esc(x.newrate)}</td><td style="text-align:right">${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Uzatma yoxdur</td></tr>'}</tbody></table></div>`;
       };
       const drawEx = (rows) => {
-        m.querySelector('#exg').innerHTML = `<table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th style="text-align:right">Əsas</th><th style="text-align:right">Faiz</th><th>Qeyd</th></tr></thead><tbody>${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.expiredate))}</td><td style="text-align:right">${money(x.main_amount)}</td><td style="text-align:right">${money(x.interest_amount)}</td><td>${esc(x.notes || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Vaxtı keçmiş köçürmə yoxdur</td></tr>'}</tbody></table>`;
+        m.querySelector('#exg').innerHTML = `<div class="tablewrap"><table class="grid"><thead><tr><th>ID</th><th>Tarix</th><th style="text-align:right">Əsas</th><th style="text-align:right">Faiz</th><th>Qeyd</th></tr></thead><tbody>${rows.map(x => `<tr><td>${x.id}</td><td>${esc(fmtDate(x.expiredate))}</td><td style="text-align:right">${money(x.main_amount)}</td><td style="text-align:right">${money(x.interest_amount)}</td><td>${esc(x.notes || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Vaxtı keçmiş köçürmə yoxdur</td></tr>'}</tbody></table></div>`;
       };
       drawPr(pr.rows); drawEx(ex.rows);
       m.querySelector('#opx').onclick = close;
@@ -359,13 +359,13 @@
   // ---- CM_InterestCalculation.bpl ----
   async function intCalcModal(el) {
     const r = await api('/api/credits/interest-calc');
-    modal(`<h2>Faizlərin Hesablanması (CM_InterestCalculation.bpl)</h2>
-      <div class="toolbar" style="gap:8px;flex-wrap:wrap">
+    modal(`<h3>Faizlərin Hesablanması (CM_InterestCalculation.bpl)</h3>
+      <div class="toolbar">
         <label class="field"><span>Hesablama tarixi</span><input id="icd" type="date" value="${st.init.date}"></label>
-        <button class="btn" id="icrun" style="align-self:end">▶ Faizləri hesabla (CalcPercents)</button>
-        <button class="btn secondary" id="icacc" style="align-self:end">✔ Müxabirləşdir (AcceptCalcedPercents)</button>
-        <button class="btn secondary" id="iccan" style="align-self:end">✖ Ləğv et (CancelCalculation)</button>
-        ${st.cur ? `<button class="btn secondary" id="icstop" style="align-self:end">⏸ Seçilmiş kredit üzrə faizi dayandır (#${st.cur})</button>` : ''}
+        <button class="btn" id="icrun">Faizləri hesabla (CalcPercents)</button>
+        <button class="btn secondary" id="icacc">Müxabirləşdir (AcceptCalcedPercents)</button>
+        <button class="btn secondary" id="iccan">Ləğv et (CancelCalculation)</button>
+        ${st.cur ? `<button class="btn secondary" id="icstop">Seçilmiş kredit üzrə faizi dayandır (#${st.cur})</button>` : ''}
       </div>
       <h3>Cari Hesablanmış Faiz Keşi (CM_INTCACHE)</h3>
       <div id="icg"></div>
@@ -392,8 +392,8 @@
     if (!id) return;
     const r = await api(`/api/credits/${id}/corrector`);
     const s = r.state || {};
-    modal(`<h2>Qalıqların Korrektoru (CM_Corrector.bpl) #${id}</h2>
-      <div class="formgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+    modal(`<h3>Qalıqların Korrektoru (CM_Corrector.bpl) #${id}</h3>
+      <div class="formgrid">
         <label class="field"><span>Əsas borc qalığı (REST)</span><input id="cor_rest" type="number" step="any" value="${esc(s.rest ?? 0)}"></label>
         <label class="field"><span>Faiz qalığı (INTERESTREST)</span><input id="cor_int" type="number" step="any" value="${esc(s.interestrest ?? 0)}"></label>
         <label class="field"><span>V.K. Əsas borc (DUEREST)</span><input id="cor_due" type="number" step="any" value="${esc(s.duerest ?? 0)}"></label>
@@ -401,7 +401,7 @@
         <label class="field"><span>Cərimə qalığı (PENALTYREST)</span><input id="cor_pen" type="number" step="any" value="${esc(s.penaltyrest ?? 0)}"></label>
         <label class="field"><span>Girov dəyəri (PLEDGEPRICE)</span><input id="cor_pl" type="number" step="any" value="${esc(s.pledgeprice ?? 0)}"></label>
         <label class="field"><span>Öhdəlik (OBLIGATION)</span><input id="cor_ob" type="number" step="any" value="${esc(s.obligation ?? 0)}"></label>
-        <label class="field" style="grid-column:span 2"><span>Düzəliş səbəbi</span><input id="cor_rs" value="Korrektor vasitəsilə qalıq düzəlişi"></label>
+        <label class="field span2"><span>Düzəliş səbəbi</span><input id="cor_rs" value="Korrektor vasitəsilə qalıq düzəlişi"></label>
       </div>
       <div class="actions"><button class="btn secondary" id="corx">${esc(t('common.close'))}</button><button class="btn" id="corsave">${esc(t('credits.save'))}</button></div>`, (m, close) => {
       m.querySelector('#corx').onclick = close;
@@ -423,15 +423,15 @@
     if (!id) return;
     const r = await api(`/api/credits/${id}/statement`);
     const rec = (r.card && (r.card.rec || r.card)) || {}, s = r.state || {};
-    modal(`<h2>Kredit Çıxarışı və Tam Bağlama Hesablayıcısı (CM_Statement.bpl) #${id}</h2>
-      <div class="toolbar" style="gap:14px;flex-wrap:wrap;background:#f0fdf4;padding:10px;border-radius:6px">
+    modal(`<h3>Kredit Çıxarışı və Tam Bağlama Hesablayıcısı (CM_Statement.bpl) #${id}</h3>
+      <div class="stat-bar">
         <span>Müqavilə: <b>${esc(rec.NUMBEROFCREDIT)}</b></span>
         <span>Borcalan: <b>${esc(rec.NAME)}</b></span>
         <span>Əsas qalıq: <b>${money(s.rest)}</b></span>
         <span>Faiz qalığı: <b>${money(s.interestrest)}</b></span>
-        <span>Tam bağlama məbləği: <b style="color:#0f766e">${money(r.full_payoff)} ${esc(rec.VAL_NAME || '')}</b></span>
+        <span>Tam bağlama məbləği: <b class="hl">${money(r.full_payoff)} ${esc(rec.VAL_NAME || '')}</b></span>
       </div>
-      <h4>Tranşlar (${r.tranches.length}) & Ödənişlər (${r.payments.length})</h4>
+      <h3 class="sub-h">Tranşlar (${r.tranches.length}) & Ödənişlər (${r.payments.length})</h3>
       <div class="tablewrap" style="max-height:38vh"><table class="grid"><thead><tr><th>Növ</th><th>Tarix</th><th style="text-align:right">Məbləğ</th><th>Təfərrüat</th></tr></thead><tbody>
         ${r.tranches.map(t => `<tr><td><span class="badge amber">Tranş</span></td><td>${esc(fmtDate(t.tranchedate))}</td><td style="text-align:right">${money(t.amount)}</td><td>${esc(t.purpose || '')}</td></tr>`).join('')}
         ${r.payments.map(p => `<tr><td><span class="badge teal">Ödəniş</span></td><td>${esc(fmtDate(p.paydate))}</td><td style="text-align:right">${money(p.total)}</td><td>Əsas: ${money(p.main_amount)}, Faiz: ${money(p.interest_amount)}</td></tr>`).join('')}
@@ -452,45 +452,45 @@
       api(`/api/credits/${id}/notes`),
       api(`/api/credits/${id}/folder-place`),
     ]);
-    modal(`<h2>Kredit Dosyesi: Girov, Zamin, Protokol, Biznes Plan, Qeydlər, Qovluq #${id}</h2>
-      <div style="max-height:66vh;overflow:auto;display:grid;gap:12px">
-        <section class="card"><h3>1. Girov & Zamin Kartları (Cm_NewGuarantee.bpl)</h3>
-          <div class="toolbar" style="gap:6px">
+    modal(`<h3>Kredit Dosyesi: Girov, Zamin, Protokol, Biznes Plan, Qeydlər, Qovluq #${id}</h3>
+      <div>
+        <fieldset class="trside"><legend>1. Girov & Zamin Kartları (Cm_NewGuarantee.bpl)</legend>
+          <div class="toolbar">
             <input id="g_desc" placeholder="Girov təsviri / Zamin adı"><input id="g_amt" type="number" placeholder="Dəyəri / Maaşı"><input id="g_reg" placeholder="Reyestr № / FİN">
-            <button class="btn secondary" id="g_add_col">＋ Girov Kartı</button><button class="btn secondary" id="g_add_guar">＋ Zamin Kartı</button>
+            <button class="btn secondary" id="g_add_col">Girov Kartı</button><button class="btn secondary" id="g_add_guar">Zamin Kartı</button>
           </div>
           <div id="gg_list" style="margin-top:6px"></div>
-        </section>
-        <section class="card"><h3>2. Kredit Komitəsi Protokolu (CM_Protokol.bpl)</h3>
-          <div class="formgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        </fieldset>
+        <fieldset class="trside"><legend>2. Kredit Komitəsi Protokolu (CM_Protokol.bpl)</legend>
+          <div class="formgrid">
             <label class="field"><span>Protokol №</span><input id="pr_no" value="${esc(pr.protokol.protokol_no || '')}"></label>
             <label class="field"><span>Sədr</span><input id="pr_ch" value="${esc(pr.protokol.chairman || '')}"></label>
             <label class="field"><span>Qərar</span><input id="pr_dec" value="${esc(pr.protokol.decision || '')}"></label>
           </div>
-          <button class="btn secondary" id="pr_save" style="margin-top:6px">Protokolu yadda saxla</button>
-        </section>
-        <section class="card"><h3>3. Qeydlər (cm_notes.bpl) & Qovluq Yeri / Məhkəmə / İcra (CM_FolderPlace.bpl)</h3>
-          <div class="toolbar" style="gap:6px">
-            <input id="nt_txt" placeholder="Yeni qeyd mətni..." style="flex:1"><button class="btn secondary" id="nt_add">＋ Qeyd əlavə et</button>
+          <button class="btn secondary small" id="pr_save">Protokolu yadda saxla</button>
+        </fieldset>
+        <fieldset class="trside"><legend>3. Qeydlər (cm_notes.bpl) & Qovluq Yeri / Məhkəmə / İcra (CM_FolderPlace.bpl)</legend>
+          <div class="toolbar">
+            <input id="nt_txt" placeholder="Yeni qeyd mətni..." style="min-width:320px"><button class="btn secondary" id="nt_add">Qeyd əlavə et</button>
           </div>
           <div id="nt_list" style="margin-top:6px"></div>
-          <div class="toolbar" style="gap:6px;margin-top:8px">
+          <div class="toolbar" style="margin-top:8px">
             <input id="fp_loc" placeholder="Qovluğun yeri" value="${esc((fp.rows[0] || {}).location || 'Arxiv')}">
             <input id="fp_st" placeholder="Mərhələ (Normal/Məhkəmə/İcra)" value="${esc((fp.rows[0] || {}).stage || 'Normal')}">
             <input id="fp_ct" placeholder="Məhkəmə / İcraçı" value="${esc((fp.rows[0] || {}).court_name || '')}">
             <button class="btn secondary" id="fp_save">Qovluq yerini yenilə</button>
           </div>
-        </section>
+        </fieldset>
       </div>
       <div class="actions"><button class="btn secondary" id="dosx">${esc(t('common.close'))}</button></div>`, (m, close) => {
       const drawGuar = (g) => {
-        m.querySelector('#gg_list').innerHTML = `<table class="grid"><thead><tr><th>Növ</th><th>Kart #</th><th>Ad / Təsvir</th><th style="text-align:right">Məbləğ / Maaş</th><th>Reyestr / FİN</th></tr></thead><tbody>
+        m.querySelector('#gg_list').innerHTML = `<div class="tablewrap"><table class="grid"><thead><tr><th>Növ</th><th>Kart #</th><th>Ad / Təsvir</th><th style="text-align:right">Məbləğ / Maaş</th><th>Reyestr / FİN</th></tr></thead><tbody>
           ${g.collaterals.map(c => `<tr><td>Girov</td><td>${c.cardid}</td><td>${esc(c.anyinfotodisting || '')}</td><td style="text-align:right">${money(c.pledgeprice)}</td><td>${esc(c.registryno || '')}</td></tr>`).join('')}
           ${g.guarantors.map(z => `<tr><td>Zamin</td><td>${z.cardid}</td><td>${esc(z.guarantorname || '')}</td><td style="text-align:right">${esc(z.guarantorsalary || '')}</td><td>${esc(z.pincode || '')}</td></tr>`).join('')}
-        </tbody></table>`;
+        </tbody></table></div>`;
       };
       const drawNotes = (rows) => {
-        m.querySelector('#nt_list').innerHTML = rows.map(n => `<div style="padding:4px 0;border-bottom:1px solid #eee"><b>${esc(fmtDate(n.notedate))} (${esc(n.username)}):</b> ${esc(n.note)}</div>`).join('');
+        m.querySelector('#nt_list').innerHTML = rows.map(n => `<div class="note-row"><b>${esc(fmtDate(n.notedate))} (${esc(n.username)}):</b> ${esc(n.note)}</div>`).join('');
       };
       drawGuar(guar); drawNotes(nt.rows);
       m.querySelector('#dosx').onclick = close;
@@ -520,8 +520,8 @@
   // ---- CM_ADM.bpl & CM_Setup.bpl & LogOutput ----
   async function admSetupModal() {
     const [adm, setup] = await Promise.all([api('/api/credits/adm'), api('/api/credits/setup/account_groups')]);
-    modal(`<h2>Kredit İdarəetmə (CM_ADM) & Sazlamalar (CM_Setup) & LogOutput</h2>
-      <div class="toolbar" style="gap:8px">
+    modal(`<h3>Kredit İdarəetmə (CM_ADM) & Sazlamalar (CM_Setup) & LogOutput</h3>
+      <div class="toolbar">
         <select id="set_sec">
           <option value="account_groups">Hesab Qrupları (CM_ACCOUNTGROUPS)</option>
           <option value="ie_tuning">Müxabirləşmə Sazlamaları (CM_IETUNING)</option>
@@ -538,7 +538,7 @@
         ${adm.users.map(u => `<tr><td>${esc(u.username)}</td><td>${esc(u.groupname)}</td><td>${esc(u.additions)}</td></tr>`).join('')}
       </tbody></table></div>
       <h3>Əməliyyat Jurnalı (LogOutput.bpl)</h3>
-      <div style="max-height:14vh;overflow:auto;background:#0f172a;color:#e2e8f0;padding:8px;border-radius:6px;font-family:monospace;font-size:12px">
+      <div class="log-pane">
         ${st.logs.map(l => `<div>[${esc(l.time)}] ${esc(l.msg)}</div>`).join('') || '<div>Jurnal boşdur</div>'}
       </div>
       <div class="actions"><button class="btn secondary" id="admx">${esc(t('common.close'))}</button></div>`, (m, close) => {
@@ -562,19 +562,19 @@
   }
   function reports() {
     const c = st.init.coef;
-    modal(`<h2>${esc(t('credits.reports'))}</h2><div id="rerr"></div>
-      <h3>${esc(t('credits.coef'))}</h3><div style="display:flex;gap:10px;flex-wrap:wrap">
+    modal(`<h3>${esc(t('credits.reports'))}</h3><div id="rerr"></div>
+      <h3>${esc(t('credits.coef'))}</h3><div class="toolbar">
       <label class="field"><span>${esc(t('credits.rep_date'))}</span><input id="rd" type="date" value="${st.init.date}"></label>
       <label class="field"><span>${esc(t('credits.rep_kind'))}</span><select id="rk"><option value="main">${esc(t('credits.coef_main'))}</option><option value="interest">${esc(t('credits.coef_interest'))}</option></select></label>
       <label class="field"><span>${esc(t('credits.rep_branches'))}</span><select id="rb" multiple size="3">${opt(c.branches, 'id', x => x.name, null, false).replace(/<option /g, '<option selected ')}</select></label>
       <label class="field"><span>${esc(t('credits.rep_categories'))}</span><select id="rc" multiple size="3">${(c.categories || []).map(x => `<option selected value="${esc(x.id)}">${esc(x.description || x.name || x.id)}</option>`).join('')}</select></label></div>
-      <div class="actions" style="justify-content:flex-start">
+      <div class="actions start">
         <button class="btn secondary" id="rshow">${esc(t('credits.rep_show'))}</button>
         <button class="btn" id="rx">${esc(t('credits.rep_excel'))}</button>
         <button class="btn secondary" id="rresinf">Ehtiyat Hesabatı (CM_ReserveInf)</button>
         <button class="btn secondary" id="rplg">Girov/Zamin Hesabatı</button>
       </div><div id="rres"></div>
-      <h3>${esc(t('credits.deca'))}</h3><div style="display:flex;gap:10px;flex-wrap:wrap">
+      <h3>${esc(t('credits.deca'))}</h3><div class="toolbar">
       <label class="field"><span>${esc(t('credits.rep_date'))}</span><input id="dd" type="date" value="${st.init.date}"></label>
       <label class="field"><span>${esc(t('credits.deca_from'))}</span><input id="dh" type="date" value="${st.init.date}"></label>
       <label class="field"><span>${esc(t('credits.deca_to'))}</span><input id="de" type="date" value="${st.init.date}"></label>
@@ -597,28 +597,39 @@
 
   function page(el) {
     const f = st.init.filter;
-    el.innerHTML = `<div class="card"><div class="toolbar" style="gap:8px;flex-wrap:wrap">
-      <h2 style="margin:0 12px 0 0">${esc(t('credits.title'))}</h2>
-      <button class="btn" id="bnew">＋ ${esc(t('credits.new'))}</button><button class="btn secondary" id="bedit">${esc(t('credits.edit'))}</button>
-      <button class="btn secondary" id="blook">${esc(t('credits.look'))}</button><button class="btn secondary" id="bpost">${esc(t('credits.post'))}</button>
-      <button class="btn secondary" id="bsch">${esc(t('credits.schedule'))}</button><button class="btn secondary" id="brep">${esc(t('credits.reports'))}</button>
-      <button class="btn secondary" id="bref">⟳ ${esc(t('credits.refresh'))}</button></div>
-      <div class="toolbar" style="gap:6px;flex-wrap:wrap;margin-top:6px">
-        <button class="btn secondary" id="btranche">💸 Tranş</button>
-        <button class="btn secondary" id="bpay">💰 Ödəniş</button>
-        <button class="btn secondary" id="bops">⏳ Uzatma / V.Keçmiş / Aktiv</button>
-        <button class="btn secondary" id="bint">％ Faiz Hesablama</button>
-        <button class="btn secondary" id="bcor">🛠 Korrektor</button>
-        <button class="btn secondary" id="bstm">📄 Çıxarış</button>
-        <button class="btn secondary" id="bdos">🗂 Girov / Zamin / Protokol / Qeyd</button>
-        <button class="btn secondary" id="badm">⚙ İdarəetmə & Sazlama</button>
+    el.innerHTML = `<div class="card page">
+      <div class="page-head"><h2>${esc(t('credits.title'))}</h2><div class="spacer"></div>
+        <button class="btn" id="bnew">＋ ${esc(t('credits.new'))}</button><button class="btn secondary" id="bedit">${esc(t('credits.edit'))}</button>
+        <button class="btn secondary" id="blook">${esc(t('credits.look'))}</button><button class="btn secondary" id="bpost">${esc(t('credits.post'))}</button>
+        <button class="btn secondary" id="bsch">${esc(t('credits.schedule'))}</button><button class="btn secondary" id="brep">${esc(t('credits.reports'))}</button>
+        <button class="btn secondary" id="bref">⟳ ${esc(t('credits.refresh'))}</button>
+        <button class="btn secondary" data-flt-toggle>${esc(t('accounts.filter_panel'))}</button></div>
+      <div class="toolbar">
+        <button class="btn secondary small" id="btranche">Tranş</button>
+        <button class="btn secondary small" id="bpay">Ödəniş</button>
+        <button class="btn secondary small" id="bops">Uzatma / V.Keçmiş / Aktiv</button>
+        <button class="btn secondary small" id="bint">Faiz Hesablama</button>
+        <button class="btn secondary small" id="bcor">Korrektor</button>
+        <button class="btn secondary small" id="bstm">Çıxarış</button>
+        <button class="btn secondary small" id="bdos">Girov / Zamin / Protokol / Qeyd</button>
+        <button class="btn secondary small" id="badm">İdarəetmə & Sazlama</button>
       </div>
-      <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-top:8px">
-      <select id="fcur" aria-label="${esc(t('credits.f_CURRENCY'))}"><option value="">${esc(t('credits.f_CURRENCY'))}: *</option>${opt(f.CURRENCY, 'valute', x => x.valu_name, st.filter.CURRENCY, false)}</select>
-      <select id="fbr" aria-label="${esc(t('credits.f_BRANCHID'))}"><option value="">${esc(t('credits.f_BRANCHID'))}: *</option>${opt(f.BRANCHID, 'id', x => x.name, st.filter.BRANCHID, false)}</select>
-      <select id="fst" aria-label="${esc(t('credits.f_KR_STATUS'))}"><option value="">${esc(t('credits.f_KR_STATUS'))}: *</option>${opt(f.KR_STATUS, 'id', x => x.name, st.filter.KR_STATUS, false)}</select>
-      <label><input type="checkbox" id="ftp" ${st.filter.TODAY_PAYMENTS ? 'checked' : ''}> ${esc(t('credits.today_payments'))}</label></div>
-      <div id="crGrid" style="margin-top:10px"><div class="spinner"></div></div></div>`;
+      <div id="crLayout"></div></div>`;
+    const lay = window.SB.filterLayout(el.querySelector('#crLayout'), { key: 'credits', title: t('accounts.filter_title'),
+      applyLabel: t('accounts.refresh'), clearLabel: t('accounts.clear'),
+      onApply: () => refresh(el),
+      onClear: () => { st.filter = {}; page(el); } });
+    lay.body.innerHTML = `
+      <fieldset class="flt-group"><legend>${esc(t('credits.f_CURRENCY'))}</legend>
+        <select id="fcur" aria-label="${esc(t('credits.f_CURRENCY'))}"><option value="">*</option>${opt(f.CURRENCY, 'valute', x => x.valu_name, st.filter.CURRENCY, false)}</select></fieldset>
+      <fieldset class="flt-group"><legend>${esc(t('credits.f_BRANCHID'))}</legend>
+        <select id="fbr" aria-label="${esc(t('credits.f_BRANCHID'))}"><option value="">*</option>${opt(f.BRANCHID, 'id', x => x.name, st.filter.BRANCHID, false)}</select></fieldset>
+      <fieldset class="flt-group"><legend>${esc(t('credits.f_KR_STATUS'))}</legend>
+        <select id="fst" aria-label="${esc(t('credits.f_KR_STATUS'))}"><option value="">*</option>${opt(f.KR_STATUS, 'id', x => x.name, st.filter.KR_STATUS, false)}</select></fieldset>
+      <fieldset class="flt-group"><legend>${esc(t('credits.today_payments'))}</legend>
+        <label class="chk-row"><input type="checkbox" id="ftp" ${st.filter.TODAY_PAYMENTS ? 'checked' : ''}> ${esc(t('credits.today_payments'))}</label></fieldset>`;
+    el.querySelector('[data-flt-toggle]').onclick = () => lay.toggle();
+    lay.main.innerHTML = '<div id="crGrid"><div class="spinner"></div></div>';
     const fv = (id, k) => el.querySelector(id).onchange = (e) => { const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value; if (v === '' || v === false) delete st.filter[k]; else st.filter[k] = v === true ? true : +v; refresh(el); };
     fv('#fcur', 'CURRENCY'); fv('#fbr', 'BRANCHID'); fv('#fst', 'KR_STATUS'); fv('#ftp', 'TODAY_PAYMENTS');
     const curId = () => {
