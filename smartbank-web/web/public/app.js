@@ -423,7 +423,7 @@
       const it = document.getElementById('idleTxt'); if (it) it.textContent = t('idle.text', { seconds: Math.max(0, left) });
       if (Date.now() - lastPoll > 30000) { // detect server-side expiry (does not count as activity)
         lastPoll = Date.now();
-        try { const st = await api('/api/session', { activity: false }); if (st.idle_seconds_left <= 0) logout('idle.logged_out'); }
+        try { const st = await api('/api/session', { activity: false }); (st.alerts || []).forEach(a => a.message && toast(a.message, a.shutdown ? 'error' : 'info')); if (st.idle_seconds_left <= 0) logout('idle.logged_out'); }
         catch (e) { if (e.status === 401) { stopIdle(); S.session = null; showLogin({ info: t('idle.logged_out') }); } }
       }
     }, 1000);

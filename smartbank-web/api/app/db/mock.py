@@ -177,6 +177,8 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
             return self.session_id
         if key == "SBLOGIN.USERID":
             return self.user.get("user_id", 0)
+        if key == "SBLOGIN.GET_LASTLOGINTIME":
+            return datetime.datetime.fromisoformat(self.st["sys"]["tek_dat"])
         if key == "SBOP.GET_DATE":
             return datetime.datetime.fromisoformat(self.st["sys"]["tek_dat"])
         if key == "SBCONFIG.OPENFILE":
@@ -427,6 +429,8 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
             return
         if self._cards_execute(sql, binds or {}):
             return
+        if sql.strip().lower() == "alter session set isolation_level = read committed":
+            return  # DOA SBSession.IsolationLevel = ilReadCommitted
         m = re.fullmatch(r'ALTER USER "([A-Z][A-Z0-9_$#]*)" ACCOUNT UNLOCK', sql.strip())
         if m:
             if not self.user.get("is_adm"):
@@ -439,6 +443,12 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
+        low = sql.strip().lower()
+        if low.startswith(("begin dbms_output.enable(", "begin dbms_alert.register(")):
+            return None  # main form start-up (sb.main_form_init)
+        if low.startswith("begin dbms_output.put_line("):
+            self.__dict__.setdefault("_output", []).append((binds or {}).get("line"))
+            return None
         r = self._em_plsql(sql, binds or {})          # Packages/ExchangeMGR-NBC (EXCH_TRANS.ex_transaction*)
         if r is NotImplemented:
             r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
@@ -453,6 +463,12 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
         return r
 
     def plsql_out(self, sql, binds=None):
+        low = sql.strip().lower()
+        if low.startswith("begin dbms_alert.waitany("):
+            return {"name": None, "message": None, "status": 1}  # 1 = timeout (no alert)
+        if low.startswith("begin dbms_output.get_line("):
+            buf = self.__dict__.setdefault("_output", [])
+            return {"line": buf.pop(0), "status": 0} if buf else {"line": None, "status": 1}
         r = self._em_plsql_out(sql, binds or {})      # Packages/ExchangeMGR-NBC (get_ex_office_out_params)
         if r is NotImplemented:
             r = self._azi_plsql_out(sql, binds or {})
@@ -531,13 +547,17 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
                 rows = [a for a in rows if not a["CLOSE_DAT"]]
             if "acc.close_dat is not null" in s:
                 rows = [a for a in rows if a["CLOSE_DAT"]]
-            for bind, col in (("bal_cn", "BAL_CN1"), ("customer_id", "KLI_ID"), ("currency_id", "VAL_ACC"),
-                              ("filial_id", "FILIAL"), ("acc_id", "ID")):
-                if bind in b:
-                    rows = [a for a in rows if a[col] == b[bind]]
-            if "flag_like" in b:
-                ch = b["flag_like"].strip("%")
-                rows = [a for a in rows if ch in (a["TIPACC"] or "")]
+            # BuildAccsQuery writes the filter values into the text (Format %d), as Delphi does
+            for col in ("BAL_CN1", "KLI_ID", "VAL_ACC", "FILIAL"):
+                m = re.search(rf"and \(acc\.{col.lower()} = (-?\d+)\)", s)
+                if m:
+                    rows = [a for a in rows if a[col] == int(m.group(1))]
+            if "acc_id" in b:
+                rows = [a for a in rows if a["ID"] == b["acc_id"]]
+            m = re.search(r"and \(acc\.tipacc like '%(.+?)%' \)", s)
+            if m:
+                ch = m.group(1).replace("''", "'")
+                rows = [a for a in rows if ch in (a["TIPACC"] or "").lower()]   # query text is lower-cased here
             if "order by acc.acc_no" in s:
                 rows.sort(key=lambda a: a["ACC_NO"])
             elif "order by acc.name" in s:
@@ -545,6 +565,14 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
             elif "order by acc.val_acc" in s:
                 rows.sort(key=lambda a: a["VAL_ACC"])
             return page([self._acc_view(a) for a in rows])
+        if s == "select rowid as doa__rowid from account where id = :acc_id":
+            return [{"DOA__ROWID": f"AAA{a['ID']}"} for a in A["accounts"] if a["ID"] == b["acc_id"]]
+        if s == "select * from account where rowid = :doa__rowid for update nowait":   # DOA lmCheckImmediate lock
+            self._check_access("Accounts", "update")
+            rows = [a for a in A["accounts"] if f"AAA{a['ID']}" == b["doa__rowid"]]
+            if self.st.get("acc_locked") and b["doa__rowid"] in self.st["acc_locked"]:
+                raise DBError("ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired", 54)
+            return rows
         for n in (1, 2, 3, 4):
             if f"from bal_spr{n} order by bal_cn" in s:
                 return sorted(A[f"bal_spr{n}"], key=lambda r: r["BAL_CN"])

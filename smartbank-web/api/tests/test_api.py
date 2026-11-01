@@ -74,7 +74,9 @@ def test_companies_and_context():
 def test_tree_rights_server_enforced():
     cl = c(); login(cl, "TELLER", "Teller#2026"); t = cl.get("/api/tree").json()
     acc = t[1]["children"][0]; assert acc["caption"] == "Account card" and acc["allowed"]
-    bal = t[1]["children"][2]; assert not bal["allowed"]
+    # Delphi checks sb_aca.checkmodright only when a node is opened (TPluginTreeView.Change), so the tree marks
+    # every node allowed and /api/modules/open refuses (403)
+    bal = t[1]["children"][2]; assert bal["allowed"]
     assert cl.post("/api/modules/open", json={"path": bal["path"]}).status_code == 403
     tm = cl.post("/api/modules/open", json={"path": "3.0"}).json(); assert tm["params"] == "Mode=View"
     assert t[0]["allowed"]  # splash module always allowed

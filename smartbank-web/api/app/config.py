@@ -30,6 +30,12 @@ class Settings:
     tree_ini_section: str = os.getenv("TREE_INI_SECTION", "Tree")             # sbMainForm_Unit.dfm TV.IniSection
     plugin_ini_section: str = os.getenv("PLUGIN_INI_SECTION", "PluginManager")  # sbMainForm_Unit.dfm TV.PluginIniSection
     hide_denied_nodes: bool = _b("HIDE_DENIED_NODES", False)
+    # Web-only: sb_aca.checkmodright for every tree node at load (Delphi checks only when a node is opened)
+    tree_precheck_rights: bool = _b("TREE_PRECHECK_RIGHTS", False)
+    # Web-only: read 'CaptionKey' per tree node for locale captions (an extra SBCONFIG.ReadValue Delphi does not do)
+    tree_caption_keys: bool = _b("TREE_CAPTION_KEYS", False)
+    # v$session.program sent at logon; the Delphi client is SmartBank.exe (Programs/SmartBank/SmartBank.dpr). Empty = driver default
+    oracle_program: str = os.getenv("ORACLE_PROGRAM", "SmartBank.exe")
     max_logon_retry: int = int(os.getenv("MAX_LOGON_RETRY", "3"))             # SBOInitPkg.pas:40
     login_lock_seconds: int = int(os.getenv("LOGIN_LOCK_SECONDS", "300"))
     session_idle_minutes: int = int(os.getenv("SESSION_IDLE_MINUTES", "45"))

@@ -70,8 +70,9 @@ SQL_CUSTOMERS = "select * from CUSTOMERS\nwhere close_dat is null\norder by ID" 
 SQL_CURRENCY = "select * from AVALUTE"                                              # AccountDataModuleImpl.dfm:89
 SQL_REPORT_SYMBOL = "select * from REPORT_SYMBOL"                                  # AccountDataModuleImpl.dfm:121
 SQL_FILIALS = "select * from FILIAL\norder by ID"                                  # AccountDataModuleImpl.dfm:472
-SQL_ACC_FLAGS = "SELECT symbol, name, description\n FROM account_flags"           # AccountDataModuleImpl.dfm:505
-SQL_PAIR_ACCOUNTS = "select\n  acc.ID as AccID,\n  acc.ACC_NO as AccNo\nfrom\n  ACCOUNT acc\norder by acc.ACC_NO"  # AccountPropertiesForm_Unit.dfm:563
+SQL_ACC_FLAGS = "SELECT symbol, name, description\n  FROM account_flags"          # AccountDataModuleImpl.dfm:505 AccFlagsData
+SQL_ACCOUNT_FLAGS = "SELECT symbol, name, description\n  FROM account_flags"      # AccountDataModuleImpl.dfm:556 AccountFlagsData (same text)
+SQL_PAIR_ACCOUNTS = "select\n  acc.ID as AccID,\n  acc.ACC_NO as AccNo\nfrom\n ACCOUNT acc\norder by acc.ACC_NO"  # AccountPropertiesForm_Unit.dfm:563
 # AccStatesImpl.dfm:201 (master AccountDataModule ACCID)
 SQL_ACC_STATES = ("select\n  arc.DATDATE as ArchiveDate,\n  arc.ACC_ID as AccID,\n  abs(arc.OSTAT) as Amount,\n"
                   "  abs(arc.POK_OSTAT) as LAmount,\n  abs(arc.OBR_D) as DebitTurnover,\n  abs(arc.POK_OBR_D) as DebitLTurnover,\n"
@@ -91,7 +92,9 @@ SQL_CREDIT_TRANSACTIONS = ("select\n  p.ID,\n  p.kredit as CreditAccID,\n  p.dat
 
 # ------------------------------------------------------------------------------------------------ query builder
 def build_accs_query(f: dict) -> tuple[str, dict]:
-    """AccountMainFormImpl.pas:559-603 BuildAccsQuery. Returns (sql, binds)."""
+    """AccountMainFormImpl.pas:559-603 BuildAccsQuery, verbatim: Delphi writes the filter values into the text with
+    Format(' AND (acc.BAL_CN1 = %d)'#13#10, ...) and the flag symbol between quotes, so the web does the same
+    (integers go through int(), so the text can only contain digits). Returns (sql, binds); binds is always {}."""
     sql, b = SACCOUNTS_QUERY, {}
     if f.get("apply_filter"):
         if f.get("status") == "active":                                   # :564-566
@@ -99,15 +102,18 @@ def build_accs_query(f: dict) -> tuple[str, dict]:
         elif f.get("status") == "closed":                                 # :570-573
             sql += " AND (acc.CLOSE_DAT IS NOT NULL)\r\n"
         if f.get("bal_cn") is not None:                                   # :576-577 UseBalanceFilter
-            sql += " AND (acc.BAL_CN1 = :bal_cn)\r\n"; b["bal_cn"] = int(f["bal_cn"])
+            sql += " AND (acc.BAL_CN1 = %d)\r\n" % int(f["bal_cn"])
         if f.get("customer_id") is not None:                              # :578-579 UseCustomerFilter
-            sql += " AND (acc.KLI_ID = :customer_id)\r\n"; b["customer_id"] = int(f["customer_id"])
+            sql += " AND (acc.KLI_ID = %d)\r\n" % int(f["customer_id"])
         if f.get("currency_id") is not None:                              # :580-581 UseCurrencyFilter
-            sql += " AND (acc.VAL_ACC = :currency_id)\r\n"; b["currency_id"] = int(f["currency_id"])
+            sql += " AND (acc.VAL_ACC = %d)\r\n" % int(f["currency_id"])
         if f.get("filial_id") is not None:                                # :582-583 UseFilialFilter
-            sql += " AND (acc.FILIAL = :filial_id)\r\n"; b["filial_id"] = int(f["filial_id"])
+            sql += " AND (acc.FILIAL = %d)\r\n" % int(f["filial_id"])
         if f.get("flag"):                                                 # :584-585 CBUseAccFlags: Symbol[1]
-            sql += " AND (acc.tipacc like :flag_like  )\r\n"; b["flag_like"] = "%" + str(f["flag"])[0] + "%"
+            ch = str(f["flag"])[0]
+            if ch == "'":
+                ch = "''"   # only difference: a quote symbol would break the Delphi text; doubled here
+            sql += " AND (acc.tipacc like " + "'" + "%" + ch + "%" + "'" + "  )\r\n"
     order = f.get("order", "accno")                                       # :588-595
     if order == "accno":
         sql += "ORDER BY acc.ACC_NO\r\n"
@@ -224,6 +230,13 @@ def list_accounts(conn, f: dict, offset: int = 0, limit: int = FETCH_LIMIT):
     return [_row(r) for r in rows[:limit]], more
 
 
+def refresh(conn, f: dict, limit: int = FETCH_LIMIT) -> dict:
+    """AccountMainFormImpl.pas:600-623 RefreshExecute: AccountsData.SQL.Text := BuildAccsQuery; Open; AccFlagsData.Refresh."""
+    rows, more = list_accounts(conn, f, 0, limit)
+    flags = [_row(r) for r in conn.query(SQL_ACC_FLAGS)]
+    return {"rows": rows, "more": more, "acc_flags": flags}
+
+
 def get_account(conn, acc_id: int) -> dict | None:
     sql = SACCOUNTS_QUERY + "\r\n  AND (acc.ID = :acc_id)"
     rows = conn.query(sql, {"acc_id": acc_id})
@@ -282,9 +295,32 @@ def add_account(conn, a: AccountIn) -> int:
 
 def update_account(conn, acc_id: int, a: AccountIn):
     validate(a)
+    lock_account(conn, acc_id)
     # SBAccount.pas:124-147 Sb_EditAccount -> SBOP.upd_account (pmNamed, 'v_' prefixed); then Sb_Commit
     conn.call_proc("SBOP", "upd_account", [], named={"v_id": acc_id, **account_params(a, "v_")}, commit=False)
     conn.commit()
+
+
+# DOA TOracleDataSet LockingMode = lmCheckImmediate (AccountDataModuleImpl.dfm:163 AccountsData): DataSet.Edit
+# (AccountPropertiesForm_Unit.pas Edit) locks the current ACCOUNT row with "for update nowait" before editing;
+# a row locked by another session raises ORA-00054. The lock is released by the Sb_Commit after Sb_EditAccount.
+SQL_LOCK_ACCOUNT = "select * from ACCOUNT where rowid = :doa__rowid for update nowait"
+SQL_ACCOUNT_ROWID = "select rowid as doa__rowid from ACCOUNT where ID = :acc_id"
+
+
+def lock_account(conn, acc_id: int):
+    rid = conn.query(SQL_ACCOUNT_ROWID, {"acc_id": acc_id})
+    if not rid:
+        raise ValidationError("error.not_found")
+    conn.query(SQL_LOCK_ACCOUNT, {"doa__rowid": rid[0]["DOA__ROWID"]})
+
+
+def new_defaults(conn) -> dict:
+    """AccountPropertiesForm_Unit.pas:178-188 New: CustomersData.Refresh; Insert; OpenDate := Sb_GetSystemDate;
+    then FormActivate :279-284 (dsInsert) FILIALID := SB_ACA.getuserfilialid. Same calls, same order."""
+    customers = [{"id": r["ID"], "name": r["NAME"]} for r in conn.query(SQL_CUSTOMERS)]
+    od = conn.call_func("SBOP", "get_date", [], datetime.datetime).date().isoformat()
+    return {"open_date": od, "filial_id": default_filial(conn), "acc_limit": 0, "acc_flags": [], "customers": customers}
 
 
 def close_account(conn, acc_id: int):
@@ -349,10 +385,11 @@ def make_router(current, require_module, err):
               ws=Depends(guard)):
         if status not in ("all", "active", "closed") or order not in ("accno", "name", "currency"):
             err(400, "error.generic")
-        rows, more = list_accounts(ws.conn, dict(status=status, apply_filter=apply_filter, bal_cn=bal_cn,
-                                                 customer_id=customer_id, currency_id=currency_id,
-                                                 filial_id=filial_id, flag=flag, order=order),
-                                   max(0, offset), max(1, min(limit, 500)))
+        f = dict(status=status, apply_filter=apply_filter, bal_cn=bal_cn, customer_id=customer_id,
+                 currency_id=currency_id, filial_id=filial_id, flag=flag, order=order)
+        if offset <= 0:   # Refresh: open + AccFlagsData.Refresh
+            return {**refresh(ws.conn, f, max(1, min(limit, 500))), "offset": 0}
+        rows, more = list_accounts(ws.conn, f, offset, max(1, min(limit, 500)))   # next 50 of the same cursor
         return {"rows": rows, "more": more, "offset": offset}
 
     @r.get("/pair-lookup")
@@ -361,9 +398,7 @@ def make_router(current, require_module, err):
 
     @r.get("/new-defaults")
     def _defaults(ws=Depends(guard)):
-        # AccountPropertiesForm_Unit.pas:178-188 New: OpenDate := Sb_GetSystemDate; FormActivate filial
-        return {"open_date": ws.conn.call_func("SBOP", "get_date", [], datetime.datetime).date().isoformat(),
-                "filial_id": default_filial(ws.conn), "acc_limit": 0, "acc_flags": []}
+        return new_defaults(ws.conn)
 
     @r.get("/{acc_id}")
     def _get(acc_id: int, ws=Depends(guard)):

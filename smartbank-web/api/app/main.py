@@ -134,7 +134,14 @@ def login(body: LoginIn, request: Request, response: Response):
         err(401, "error.oracle", ora=e.message, remaining=remaining)
     attempts.ok(key)
     ws = store.create(conn, body.username.strip().upper())
-    ws.session_id, ws.user_id = info.get("session_id"), info.get("user_id")
+    ws.session_id = info.get("session_id")
+    try:
+        sb.main_form_init(ws)  # TsbMainForm FormCreate/FormShow/FormActivate Oracle calls, in Delphi order
+    except DBError as e:
+        with store._lock:
+            store._s.pop(ws.token, None)
+        conn.close()
+        err(500, "error.oracle", ora=e.message)
     ws.previous = audit.record_login(ws.username, ws.session_id, request.headers.get("x-forwarded-for") or (request.client.host if request.client else None))  # app-side (DB does not record login times)
     ws.pw_salt = sb.new_salt()
     ws.pw_hash = sb.password_fingerprint(sb.wrap_password(body.new_password or body.password), ws.pw_salt)
@@ -156,7 +163,7 @@ def logout(request: Request, response: Response):
 @app.get("/api/session")
 def session_status(ws=Depends(current)):
     return {"username": ws.username, "session_id": ws.session_id, "idle_seconds_left": ws.idle_left(),
-            "company": ws.company_name, "is_admin": sb.is_admin(ws)}
+            "company": ws.company_name, "is_admin": sb.is_admin(ws), **sb.poll_session(ws)}
 
 
 @app.post("/api/session/activity")
@@ -166,7 +173,7 @@ def activity(ws=Depends(current)):
 
 @app.get("/api/system")
 def system(ws=Depends(current)):
-    return {**sb.system_info(ws.conn), "username": ws.username, "company": ws.company_name,
+    return {**sb.system_info(ws), "username": ws.username, "company": ws.company_name,
             **{k: v for k, v in ws.previous.items() if k != "event_id"}}
 
 

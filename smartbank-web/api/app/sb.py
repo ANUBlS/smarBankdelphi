@@ -9,9 +9,10 @@ import hashlib
 import hmac
 import re
 import secrets
+import time
 
 from .config import settings
-from .db import DBError
+from .db import DBError, Out
 
 # ---------------------------------------------------------------------------------------------------------
 # Password wrapping
@@ -28,7 +29,7 @@ ORA_EXPIRED = 28001  # UnitSBOraLogOn.pas:300  expire := 'ORA-28001'
 # Packages/SBCommon50/UnitSBOraLogOn.dfm  OracleDataSet1
 SQL_USER_OBJINF = ("select * from sba_objinf where id = (select classid from sba_objinf where type='U' and obj=user)")
 # Packages/SBCommon50/UnitSBOraLogOn.dfm  OracleDataSet4
-SQL_PASSWORD_EXPIRY = ("select to_date(to_char(a.expiry_date,'dd.mon.yyyy'))-to_date(to_char(sysdate,'dd.mon.yyyy')) as ex from dba_users a where "
+SQL_PASSWORD_EXPIRY = ("select to_date(to_char(a.expiry_date,'dd.mon.yyyy'))-to_date(to_char(sysdate,'dd.mon.yyyy')) as ex from dba_users a where \n"
                        "                     user_id=UID")
 # Packages/sboapi50/sboapiDataModuleImpl.dfm:150  DSBankDate
 SQL_SYSDAT = "select TEK_DAT , PRED_DAT \n  from SYSDAT"
@@ -48,19 +49,30 @@ class LoginResult(dict):
 
 
 def logon(backend, username: str, password: str, new_password: str | None = None):
-    """Port of TpfmOraSBLogOn OK handler (Packages/SBCommon50/UnitSBOraLogOn.pas:299-400)
-    + Sb_Initialize (Packages/sboapi50/SBOInitPkg.pas:47-67).
+    """The Oracle logons of the Delphi start-up, in Delphi order (docs/oracle-parity.md, section Login):
 
-    Returns (conn, info). Raises DBError (ORA text shown to user, like ShowMessage(E.Message) :318)."""
+    1. TfmOraSBLogOn.btOkClick (Packages/SBCommon50/UnitSBOraLogOn.pas:286-400) on the form's own OracleSession1:
+       LogOn ('KLs'+password+'#1$', :314-315); ORA-28001 -> TfmPassChange + SetPassword + LogOn (:317-329);
+       OracleDataSet1.Open; OracleDataSet4.Open (:349-350); OracleSession1.Connected := False (:390).
+    2. TSBOracleLogOn.CheckForExpire (Packages/SBCommon50/SBOracleLogOn.pas): SBSession LogOn; LogOff (test logon).
+    3. Sb_Initialize (Packages/sboapi50/SBOInitPkg.pas:47-67): SBSession.LogOn (sboapiDataModuleImpl.pas LogOn),
+       DOA IsolationLevel = ilReadCommitted, then SessionID := Sb_GetSessionID() (SBLogin.pas / SBSrvIntf.pas:213).
+
+    Returns (conn, info) where conn is session 3 (the per-user web session). Raises DBError."""
     dsn = settings.dsn()
-    conn = backend.connect(username, wrap_password(password), dsn,
-                           newpassword=wrap_password(new_password) if new_password else None)
+    wrapped = wrap_password(password)
+    # ORA-28001: the web asks for the new password up front and changes it during the logon (oracledb newpassword
+    # = OCIPasswordChange, what DOA SetPassword does). Delphi SetPassword(fmPassChange.edNewPass.Text) sends the
+    # UNWRAPPED new password and then logs on with the wrapped one (:397); the web wraps it (documented difference).
+    new_wrapped = wrap_password(new_password) if new_password else None
     info: dict = {"warnings": []}
+    # 1. login form session (OracleSession1)
+    form = backend.connect(username, wrapped, dsn, newpassword=new_wrapped)
     try:
         # UnitSBOraLogOn.pas:349-350  OracleDataSet1.Open; OracleDataSet4.Open;
-        objinf = conn.query(SQL_USER_OBJINF)
+        objinf = form.query(SQL_USER_OBJINF)
         try:
-            exp = conn.query(SQL_PASSWORD_EXPIRY)
+            exp = form.query(SQL_PASSWORD_EXPIRY)
         except DBError:
             exp = []  # dba_users needs SELECT grant; Delphi would raise here. Logged as warning instead.
             info["warnings"].append({"key": "login.warn_expiry_unavailable"})
@@ -72,41 +84,143 @@ def logon(backend, username: str, password: str, new_password: str | None = None
         finger3 = (objinf[0].get("FINGER3") if objinf else 0) or 0
         if int(finger3) == 1:
             raise DBError("FINGERPRINT_REQUIRED", -1)
-        # SBOInitPkg.pas:64  ASBData.SessionID := Sb_GetSessionID();  -> SBLogin.pas:15 / SBSrvIntf.pas:213
+    finally:
+        # UnitSBOraLogOn.pas:390  OracleSession1.Connected:=False;
+        form.close()
+    pw = new_wrapped or wrapped
+    # 2. SBOracleLogOn.pas CheckForExpire:  FSession.LogOn; FSession.LogOff;
+    backend.connect(username, pw, dsn).close()
+    # 3. SBOInitPkg.pas Sb_Initialize -> sboapiDataModule.LogOn -> SBSession.LogOn
+    conn = backend.connect(username, pw, dsn)
+    try:
+        # sboapiDataModuleImpl.dfm SBSession.IsolationLevel = ilReadCommitted (applied by DOA after LogOn)
+        conn.execute(SQL_ISOLATION)
+        # SBOInitPkg.pas:64  ASBData.SessionID := Sb_GetSessionID();  -> SBLogin.pas / SBSrvIntf.pas:213
         info["session_id"] = conn.call_func("SBLOGIN", "GetSessionID", [], int)
-        # SBLogin.pas:21 / SBSrvIntf.pas:229   sPN_GetLoginUserID = 'UserID'
-        try:
-            info["user_id"] = conn.call_func("SBLOGIN", "UserID", [], int)
-        except DBError:
-            info["user_id"] = None
     except Exception:
         conn.close()
         raise
     return conn, info
 
 
+# DOA TOracleSession.IsolationLevel = ilReadCommitted (sboapiDataModuleImpl.dfm SBSession)
+SQL_ISOLATION = "alter session set isolation_level = read committed"
+# SBOutput.pas:29-41 -> DOA TOracleSession.DBMS_Output (Enable / Put_Line / Get_Line)
+PLSQL_OUTPUT_ENABLE = "begin dbms_output.enable(:buffer_size); end;"
+OUTPUT_BUFFER_SIZE = 20000
+PLSQL_OUTPUT_PUT_LINE = "begin dbms_output.put_line(:line); end;"
+PLSQL_OUTPUT_GET_LINE = "begin dbms_output.get_line(:line, :status); end;"
+# sbMainForm_Unit.pas:453
+LOG_BANNER = "SmartBank 4.0, Copyright 1996-2016, Smart Systems Technology, Ltd."
+# SBAlert.pas -> DOA TOracleSession.DBMS_Alert (Register / WaitAny)
+PLSQL_ALERT_REGISTER = "begin dbms_alert.register(:name); end;"
+PLSQL_ALERT_WAITANY = "begin dbms_alert.waitany(:name, :message, :status, :timeout); end;"
+ALERT_TIMEOUT = 0          # AlertThread.pas  FTimeout := 0
+LOG_POLL_SECONDS = 60      # sbMainForm_Unit.dfm LogTimer.Interval = 60000
+
+
+def alert_names(session_id) -> list[str]:
+    # sbMainForm_Unit.pas:465-468
+    return ("MessageBroadcast,MsgToUser_%d,SessionShutdown,Shutdown_%d" % (session_id or 0, session_id or 0)).split(",")
+
+
+def main_form_init(ws):
+    """TsbMainForm.FormCreate/FormShow/FormActivate Oracle calls after Sb_Initialize, in Delphi order
+    (Programs/SmartBank/sbMainForm_Unit.pas:424-483, :989-1004, :710-712). Run once per web session at login."""
+    c = ws.conn
+    build_tree(ws)                                                    # :424 TV.Open (SBCONFIG)
+    c.plsql(PLSQL_OUTPUT_ENABLE, {"buffer_size": OUTPUT_BUFFER_SIZE})  # :451 Sb_LogEnable
+    c.plsql(PLSQL_OUTPUT_PUT_LINE, {"line": LOG_BANNER})              # :453 Sb_LogPutLine
+    try:                                                              # :465 InitAlertThread -> AlertThread.WaitAny
+        for name in alert_names(ws.session_id):                       #      Sb_AlertRegister per name
+            c.plsql(PLSQL_ALERT_REGISTER, {"name": name})
+        ws.alerts_active = True
+    except DBError:
+        ws.alerts_active = False  # runs in TAlertThread in Delphi: a failure there does not stop the main form
+    info = ws.main_info
+    info["operation_date"] = c.call_func("SBOP", "get_date", [], datetime.datetime)  # :477 Sb_GetSystemDate
+    # :483 SBTranslateProc.TranslateAllCompForms(Self, OrPack_SL): not ported (web has its own locales)
+    try:                                                              # :997-998 FormShow ODS_get_app_header
+        rows = c.query(SQL_APP_HEADER)
+        info["app_header"] = rows[0]["GET_APP_HEADER"] if rows else None
+    except DBError:
+        info["app_header"] = None
+    # :1002 and :1004  Sblogin.CallDateFunction('get_lastlogintime', []) (twice). The web shows its own
+    # app-side login times (audit.py), the value is only kept as db_last_login_time.
+    c.call_func("SBLOGIN", "get_lastlogintime", [], datetime.datetime)
+    info["db_last_login_time"] = c.call_func("SBLOGIN", "get_lastlogintime", [], datetime.datetime)
+    c.query(SQL_COMPANIES)                                            # :710-712 FormActivate company_list.Active
+    ws.last_log_drain = time.time()
+
+
+def poll_session(ws) -> dict:
+    """Background polls of the main form, run on the client's session poll:
+    AlertThread.WaitAny (every 2 s in Delphi, AlertThread.pas) and LogTimerTimer (every 60 s, sbMainForm_Unit.pas:823-839)."""
+    out = {"alerts": [], "log": []}
+    c = ws.conn
+    names = {n.upper() for n in alert_names(ws.session_id)}
+    while ws.alerts_active and len(out["alerts"]) < 20:
+        try:
+            r = c.plsql_out(PLSQL_ALERT_WAITANY, {"name": Out(str), "message": Out(str), "status": Out(int),
+                                                  "timeout": ALERT_TIMEOUT})
+        except DBError:
+            ws.alerts_active = False
+            break
+        if r.get("status") != 0:                                      # SBAlert.pas DecodeAlertStatus: 0 = raised
+            break
+        name = (r.get("name") or "").upper()
+        if name not in names:
+            continue
+        a = {"name": name, "message": r.get("message") or ""}
+        if name in ("SESSIONSHUTDOWN", f"SHUTDOWN_{ws.session_id}"):   # :931-946 InitiateShutdown
+            kv = dict(x.split("=", 1) for x in _comma_text(a["message"]) if "=" in x)
+            a.update(shutdown=True, timeout=kv.get("timeout"), message=kv.get("message", ""))
+            ws.alerts_active = False                                  # FMessageAlertThread.Terminate
+        out["alerts"].append(a)
+    if time.time() - ws.last_log_drain >= LOG_POLL_SECONDS:
+        ws.last_log_drain = time.time()
+        while len(out["log"]) < 1000:                                 # while Sb_LogGetLine(Line) do ...
+            try:
+                r = c.plsql_out(PLSQL_OUTPUT_GET_LINE, {"line": Out(str), "status": Out(int)})
+            except DBError:                                           # SBOutput.pas:23-26 EOracleError -> False
+                break
+            if r.get("status") != 0:
+                break
+            out["log"].append(r.get("line") or "")
+    return out
+
+
+def _comma_text(s: str) -> list[str]:
+    """TStrings.CommaText split (quoted items allowed)."""
+    import csv
+    return next(csv.reader([s], skipinitialspace=True), [])
+
+
 # Programs/SmartBank/sbMainForm_Unit.dfm:1168  ODS_get_app_header
 SQL_APP_HEADER = "select get_app_header from dual"
 
 
-def system_info(conn) -> dict:
-    """Header data. sbMainForm_Unit.pas:481-483 Caption := ProductName + ' [Date: dd-mmm-yyyy]' using Sb_GetSystemDate
-    (SBCore.pas:56 SBOperationDay.CallDateFunction('get_date') ; SBOperationDay.PackageName='SBOP')."""
-    op_date = conn.call_func("SBOP", "get_date", [], datetime.datetime)
-    sysdat = conn.query(SQL_SYSDAT)
-    branch = conn.query(SQL_BRANCH)
-    # sbMainForm_Unit.pas:997-998  uName := ODS_get_app_header.FieldByName('get_app_header').AsString
-    try:
-        header = conn.query(SQL_APP_HEADER)[0]["GET_APP_HEADER"]
-    except DBError:
-        header = None
+def system_info(ws) -> dict:
+    """Header data. SBOP.get_date and get_app_header are read once by main_form_init in Delphi order
+    (sbMainForm_Unit.pas:477 Caption ' [Date: dd-mmm-yyyy]', :997-998). SYSDAT/BANKINFO (DSBankDate / Branch,
+    sboapiDataModuleImpl.dfm) are web-only header reads, done once per session."""
+    if not ws.main_info:
+        main_form_init(ws)
+    if ws.system_cache is None:
+        sysdat = ws.conn.query(SQL_SYSDAT)
+        branch = ws.conn.query(SQL_BRANCH)
+        ws.system_cache = {
+            "tek_dat": sysdat[0]["TEK_DAT"].date().isoformat() if sysdat and sysdat[0]["TEK_DAT"] else None,
+            "pred_dat": sysdat[0]["PRED_DAT"].date().isoformat() if sysdat and sysdat[0]["PRED_DAT"] else None,
+            "branch": branch[0]["KOD_FIL"] if branch else None,
+        }
+    op_date, llt = ws.main_info.get("operation_date"), ws.main_info.get("db_last_login_time")
     return {
         "product_name": settings.product_name,
-        "app_header": header,
+        "app_header": ws.main_info.get("app_header"),
         "operation_date": op_date.date().isoformat() if op_date else None,
-        "tek_dat": sysdat[0]["TEK_DAT"].date().isoformat() if sysdat and sysdat[0]["TEK_DAT"] else None,
-        "pred_dat": sysdat[0]["PRED_DAT"].date().isoformat() if sysdat and sysdat[0]["PRED_DAT"] else None,
-        "branch": branch[0]["KOD_FIL"] if branch else None,
+        "db_last_login_time": llt.isoformat() if isinstance(llt, datetime.datetime) else None,
+        **ws.system_cache,
     }
 
 
@@ -190,28 +304,39 @@ def _parse_action(action: str):
 
 
 def build_tree(ws) -> list[dict]:
-    """TTreeViewIni.ReadNodes (Packages/SBCommon50/TreeViewIni.pas:189-205), section names per BuildSectionName
-    (:159-168): '<IniSection>\\Sections\\Item0\\Item3'. Access per node as in TPluginTreeView.Change
-    (PluginTreeView.pas:111-128): in-place plugin node without right -> cannot be opened."""
+    """TPluginTreeView.DoOpen (Packages/sbplg50/PluginTreeView.pas:435-456): PluginManager.Open (load_plugins), then
+    TTreeViewIni.ReadNodes (Packages/SBCommon50/TreeViewIni.pas:189-205) with section names per BuildSectionName
+    (:159-168) '<IniSection>\\Sections\\Item0\\Item3'. Per node, in Delphi order: Caption (:201), Action
+    (TPluginTreeView.ReadNode :353), then for plugin nodes RefreshNode -> GetClosedPluginIcon (:221) reads 'Icon'
+    of NodeByPlugin(Plugin, ParamsAsString) (first node with that plugin and params), then the children.
+    Rights: Delphi calls sb_aca.checkmodright only when a node is opened (TPluginTreeView.Change :111-128,
+    OnAccessCheck is assigned after TV.Open, sbMainForm_Unit.pas:463) -> /api/modules/open. The web-only
+    pre-check per node runs only with TREE_PRECHECK_RIGHTS or HIDE_DENIED_NODES."""
     if ws.tree_cache is not None:
         return ws.tree_cache
     plugins = load_plugins(ws)
     rights: dict[str, bool] = {}
+    first_node: dict[tuple, str] = {}
+    precheck = settings.tree_precheck_rights or settings.hide_denied_nodes
 
     def read(section: str, path: list[int]) -> list[dict]:
         nodes = []
         for i in range(int(ini_read(ws, section, "Count", "0") or 0)):
             s = f"{section}\\Item{i}"
             node = {"path": ".".join(map(str, path + [i])), "caption": ini_read(ws, s, "Caption", "<no data>"),
-                    "icon": ini_read(ws, s, "Icon", ""), "caption_key": ini_read(ws, s, "CaptionKey", "") or None, "clsid": None, "params": "", "allowed": True}
+                    "icon": "", "caption_key": None, "clsid": None, "params": "", "allowed": True}
             idx, params = _parse_action(ini_read(ws, s, "Action", ""))
             if idx is not None and 0 <= idx < len(plugins):
                 p = plugins[idx]
                 node.update(plugin_index=idx, clsid=p["clsid"], params=params)
-                if p["method"] == "axinplace" and p["clsid"]:
+                src = first_node.setdefault((idx, params), s)
+                node["icon"] = ini_read(ws, src, "Icon", "")
+                if precheck and p["method"] == "axinplace" and p["clsid"]:
                     if p["clsid"] not in rights:
                         rights[p["clsid"]] = check_module_right(ws, p["clsid"])
                     node["allowed"] = rights[p["clsid"]]
+            if settings.tree_caption_keys:  # web-only locale key, not read by Delphi
+                node["caption_key"] = ini_read(ws, s, "CaptionKey", "") or None
             node["children"] = read(s, path + [i])
             nodes.append(node)
         return nodes

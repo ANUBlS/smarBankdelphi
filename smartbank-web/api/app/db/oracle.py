@@ -166,6 +166,9 @@ class OracleBackend:
             kw = {"user": user, "password": password, "dsn": dsn}
             if newpassword:
                 kw["newpassword"] = newpassword  # ORA-28001 handling, like TfmPassChange+SetPassword
+            from ..config import settings
+            if settings.oracle_program:
+                kw["program"] = settings.oracle_program  # v$session.program as for the Delphi client
             c = oracledb.connect(**kw)
         except oracledb.Error as e:
             raise _wrap(e)
