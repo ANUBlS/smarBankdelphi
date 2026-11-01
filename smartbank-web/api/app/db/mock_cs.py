@@ -247,69 +247,70 @@ class CsMixin:
                 r["CREDITCURRENCYID"] = (accno.get(c["CREDIT"]) or {}).get("VAL_ACC")
                 out.append(r)
             return out
-        if "decode(cust_type,0,'huquqi',1,'fiziki',2,'f.s.') tip" in s:
-            tips = {0: "huquqi", 1: "fiziki", 2: "f.s."}
+        # Packages/Customers CustomerMainFormImpl.pas SGetCusQuery (+ BuildCusQuery filial / order by)
+        if "decode(c.cust_type,null,'hüquqi', 1, 'fiziki', 2, 'f.s.') tip from customers c" in s:
+            tips = {None: "Hüquqi", 1: "Fiziki", 2: "f.s."}
+            ids = None
+            if "and id in(select kli_id from account where filial=:filial)" in s:
+                ids = {a["KLI_ID"] for a in A["accounts"] if a.get("FILIAL") == b.get("filial")}
             rows = []
             for c in C["customers"]:
-                if c.get("CLOSE_DAT") is not None:
+                if c.get("CLOSE_DAT") is not None or (ids is not None and c["ID"] not in ids):
                     continue
-                if "c.filial = :filial" in s and (c.get("FILIAL") or 101) != b.get("filial"):
-                    continue
-                ct = c.get("CUST_TYPE", 0)
                 rows.append({**c, "ROWID": f"AAC{c['ID']}", "OPEN_DAT": _d(c["OPEN_DAT"]),
-                             "DAT_NAL": _d(c.get("DAT_NAL")), "DAT_USTAV": _d(c.get("DAT_USTAV")),
-                             "FILIAL": c.get("FILIAL") or 101, "TIP": tips.get(ct, "huquqi"),
-                             "NAME1": c.get("NAME") or ""})
-            return _sorted(rows, _order_key(s))
-        if "from out_account account, avalute" in s:
-            cur_map = {c["VALUTE"]: c for c in A["avalute"]}
-            cid = b.get("ID")
-            curr_filter = b.get("curr")
-            out = []
+                             "CLOSE_DAT": None, "DAT_NAL": _d(c.get("DAT_NAL")), "DAT_USTAV": _d(c.get("DAT_USTAV")),
+                             "TIP": tips.get(c.get("CUST_TYPE")), "NAME1": re.sub("[IiİıI]", "`", c.get("NAME") or ""),
+                             "SAMELYDATE": _d(c.get("SAMELYDATE"))})
+            return _sorted(rows, [_order_key(s)[0].replace("c.", "")])
+        # CustomerMainFormImpl.pas SGetCustomerAccsQuery (Account UNION ALL out_Account); the appended
+        # currency predicate binds to the out_Account branch only (Delphi BuildAccQuery parity)
+        if "from out_account acc, avalute currency, out_tenostat t" in s:
+            cur = {c["VALUTE"]: c.get("VAL_NAME") for c in A["avalute"]}
+            cid, out = b.get("ID"), []
             for a in A["accounts"]:
-                if a.get("CLOSE_DAT") is not None or a.get("KLI_ID") != cid:
+                if a.get("CLOSE_DAT") is None and a.get("KLI_ID") == cid and a.get("VAL_ACC") in cur:
+                    out.append({"ID": a["ID"], "ACCNO": a["ACC_NO"], "ACCNAME": a["NAME"], "OPENDATE": _d(a.get("OPEN_DAT")),
+                                "CURRENCYSNAME": cur[a["VAL_ACC"]], "BALANCE": a.get("OSTAT", 0),
+                                "LBALANCE": a.get("POK_OSTAT", 0)})
+            oa = getattr(self, "oa", None) or {}
+            ten = {t["ACC_ID"]: t for t in oa.get("out_tenostat", [])}
+            for a in oa.get("out_account", []):
+                if a.get("CLOSE_DAT") is not None or a.get("KLI_ID") != cid or a.get("VAL_ACC") not in cur \
+                        or a["ID"] not in ten:
                     continue
-                if curr_filter is not None and a.get("VAL_ACC") != curr_filter:
+                if "and (acc.val_acc = :curr)" in s and a.get("VAL_ACC") != b.get("curr"):
                     continue
-                cv = cur_map.get(a.get("VAL_ACC"), {})
-                out.append({
-                    "ID": a["ID"], "CUSTOMERID": a["KLI_ID"], "ACCNO": a["ACC_NO"],
-                    "ACCNAME": a["NAME"], "CURRENCYID": a["VAL_ACC"],
-                    "CURRENCYSNAME": cv.get("VAL_NAME", "AZN"), "CURRENCYNAME": cv.get("VALU_NAME", "Manat"),
-                    "BALANCE": a.get("OSTAT", 0), "LBALANCE": a.get("POK_OSTAT", 0),
-                    "OPENDATE": _d(a.get("OPEN_DAT")), "CLOSEDATE": _d(a.get("CLOSE_DAT")),
-                    "PAIRACCOUNTID": a.get("PAIR_ACC", 0), "FILIAL": a.get("FILIAL", 101),
-                    "REPORTSYMBOL": a.get("SIM_OTCET", 0), "ISOUTBALANCE": 0,
-                })
-            return _sorted(out, _order_key(s))
-        if s == "select c.rowid, c.* from cust_info c where c.id = :id order by c.card_no":
-            ci = C.setdefault("cust_info", {})
-            cards = ci.get(str(b["ID"]), [])
-            if not cards:
-                c = next((x for x in C["customers"] if x["ID"] == b["ID"]), None)
+                out.append({"ID": a["ID"], "ACCNO": a["ACC_NO"], "ACCNAME": a["NAME"], "OPENDATE": _d(a.get("OPEN_DAT")),
+                            "CURRENCYSNAME": cur[a["VAL_ACC"]], "BALANCE": ten[a["ID"]]["OSTAT"],
+                            "LBALANCE": ten[a["ID"]]["POK_OSTAT"]})
+            ok = _order_key(s)
+            return _sorted(out, ok[:1]) if ok else out
+        if s == "select * from filial":
+            return A["filial"]
+        if s == "select * from customers where id = :id":
+            return [dict(c) for c in C["customers"] if c["ID"] == b.get("ID")]
+        # CustomerInfoFormImpl.dfm CustInfoData
+        if s == "select i.rowid,i.* from custinfo i where idcust = :customerid order by id":
+            cid = b["CustomerID"]
+            ci = C.setdefault("custinfo", [])
+            seeded = C.setdefault("custinfo_seeded", [])
+            if cid not in seeded:
+                seeded.append(cid)
+                c = next((x for x in C["customers"] if x["ID"] == cid), None)
                 if c:
-                    cards = [{
-                        "ROWID": f"AACI{b['ID']}_0", "ID": b["ID"], "CARD_NO": 0,
-                        "PASP_TYPE": "Şəxsiyyət vəsiqəsi", "PASPORT": c.get("INCORPORATION_NUMBER") or "AZE0123456",
-                        "KEM_VIDAN": "ASAN 1", "PASP_DATE": _d(c.get("OPEN_DAT")),
-                        "DOG_YER": "Bakı", "DOG_TAR": _d("1985-05-15"), "CINS": "Kişi",
-                        "MILLIYET": "Azərbaycanlı", "GRAJDAN": "Azərbaycan",
-                        "WORK_PLACE": c.get("NAME"), "DOLJNOST": "Direktor",
-                        "PARTNER": "-", "FATHER": "Əli", "ADRESS": c.get("ADDRESS") or "Bakı ş.",
-                        "STRANA": "Azərbaycan", "TEL": c.get("TPH_NUMBER") or "012-400-00-00",
-                        "TEL_MOB": "050-200-00-00", "FAKS": "-", "E_MAIL": c.get("EMAIL") or "info@bank.az",
-                    }]
-                    ci[str(b["ID"])] = cards
-            return sorted(cards, key=lambda x: x["CARD_NO"])
-        if s == "select t.*, t.rowid from custipinfo t where t.custid = :custid and t.card_no = :card_no":
-            ip = C.setdefault("cust_ipinfo", {})
-            rec = ip.get(f"{b['CUSTID']}_{b['CARD_NO']}")
-            if not rec:
-                rec = {"ROWID": f"AAIP{b['CUSTID']}_{b['CARD_NO']}", "CUSTID": b["CUSTID"], "CARD_NO": b["CARD_NO"],
-                       "FAMILYSTATUS": 1, "EDUCATION": 1, "PLACE1": 1, "WORK1": 1, "WORK2": 1, "VERIFY": 1,
-                       "FAMILYMEMBERS": 3, "MONTHLYINCOME": 2500.0, "MONTHLYEXPENSE": 900.0}
-                ip[f"{b['CUSTID']}_{b['CARD_NO']}"] = rec
-            return [rec]
+                    nid = max([x["ID"] for x in ci] + [0]) + 1
+                    first, _, last = (c.get("NAME") or "").partition(" ")
+                    ci.append({"ID": nid, "IDCUST": cid, "NAME": first, "LASTNAME": last, "SONAME": "",
+                               "BIRTHDAY": _d("1985-05-15"), "BIRTHPLACE": "Bakı", "ADDRESS": c.get("ADDRESS") or "",
+                               "CITY": "Bakı", "WORKPLACE": "", "WORK": "", "PHONE_W": c.get("TPH_NUMBER") or "",
+                               "PHONE_H": "", "PHONE_M": "", "E_MAIL": c.get("EMAIL") or "", "URL": "", "GARANTED": "",
+                               "PASSER": "AZE", "PASPNUM": "0123456", "PASPDATE": _d("2020-01-10"),
+                               "PASPPLACE": "ASAN 1", "NOTE": ""})
+            return sorted([dict(x, ROWID=f"AACI{x['ID']}") for x in ci if x["IDCUST"] == cid], key=lambda x: x["ID"])
+        # uCustomersIPInfo.dfm ODSIpInfo
+        if s == "select i.rowid,i.* from custipinfo i where custid=:custid and cardid=:cardid":
+            return [dict(x, ROWID=f"AAIP{x['CUSTID']}_{x['CARDID']}") for x in C.setdefault("custipinfo", [])
+                    if x["CUSTID"] == b["custid"] and x["CARDID"] == b["cardid"]]
         if s == "select * from vid_sob":
             return C["lookups"]["vid_sob"]
         if s == "select * from avalute order by valute":
@@ -318,6 +319,16 @@ class CsMixin:
 
     def _cs_execute(self, sql, b):
         s = " ".join(sql.lower().split())
+        if s.startswith("update custipinfo set ") or s.startswith("insert into custipinfo "):
+            L = self.cs.setdefault("custipinfo", [])
+            rec = next((x for x in L if x["CUSTID"] == b["custid"] and x["CARDID"] == b["cardid"]), None)
+            if rec is None:
+                if s.startswith("update"):
+                    return True
+                rec = {"CUSTID": b["custid"], "CARDID": b["cardid"]}
+                L.append(rec)
+            rec.update({k: (_d(v) if isinstance(v, datetime.date) else v) for k, v in b.items() if k.isupper()})
+            return True
         if s.startswith("update settings s set s.value = :value where upper(s.name)='transaction_statust'"):
             self.cs["settings"]["TRANSACTION_STATUST"] = str(b["Value"])
             return True
@@ -445,45 +456,27 @@ class CsMixin:
                 if k in n and n[k] is not None:
                     c[k] = n[k]
             return {}
+        # Packages/Customers CustomerInfoFormImpl.pas sb_custInfo (pmNamed)
+        if key == "SB_CUSTINFO.ADD_CUSTINFO":
+            ci = C.setdefault("custinfo", [])
+            C.setdefault("custinfo_seeded", []).append(n["vidcust"])
+            ci.append({"ID": max([x["ID"] for x in ci] + [0]) + 1, "IDCUST": n["vidcust"]})
+            return {}
         if key == "SB_CUSTINFO.UPD_CUSTINFO":
-            ci = C.setdefault("cust_info", {})
-            cid = str(n["v_ID"])
-            cno = int(n.get("v_CARD_NO") or 0)
-            cards = ci.setdefault(cid, [])
-            rec = next((x for x in cards if x["CARD_NO"] == cno), None)
-            payload = {
-                "ROWID": f"AACI{cid}_{cno}", "ID": int(cid), "CARD_NO": cno,
-                "PASP_TYPE": n.get("v_PASP_TYPE"), "PASPORT": n.get("v_PASPORT"),
-                "KEM_VIDAN": n.get("v_KEM_VIDAN"), "PASP_DATE": _d(n.get("v_PASP_DATE")),
-                "DOG_YER": n.get("v_DOG_YER"), "DOG_TAR": _d(n.get("v_DOG_TAR")),
-                "CINS": n.get("v_CINS"), "MILLIYET": n.get("v_MILLIYET"), "GRAJDAN": n.get("v_GRAJDAN"),
-                "WORK_PLACE": n.get("v_WORK_PLACE"), "DOLJNOST": n.get("v_DOLJNOST"),
-                "PARTNER": n.get("v_PARTNER"), "FATHER": n.get("v_FATHER"),
-                "ADRESS": n.get("v_ADRESS"), "STRANA": n.get("v_STRANA"),
-                "TEL": n.get("v_TEL"), "TEL_MOB": n.get("v_TEL_MOB"),
-                "FAKS": n.get("v_FAKS"), "E_MAIL": n.get("v_E_MAIL"),
-            }
-            if rec:
-                rec.update(payload)
-            else:
-                cards.append(payload)
+            rec = next((x for x in C.setdefault("custinfo", []) if x["ID"] == n["vid"]), None)
+            if rec is None:
+                raise DBError("ORA-01403: no data found", 1403)
+            m = {"vName": "NAME", "vLastName": "LASTNAME", "vSoName": "SONAME", "vBirthDay": "BIRTHDAY",
+                 "vBirthPlace": "BIRTHPLACE", "vAddress": "ADDRESS", "vCity": "CITY", "vWorkPlace": "WORKPLACE",
+                 "vWork": "WORK", "vPhone_w": "PHONE_W", "vPhone_h": "PHONE_H", "vPhone_m": "PHONE_M",
+                 "ve_mail": "E_MAIL", "vurl": "URL", "vGaranted": "GARANTED", "vPasSer": "PASSER",
+                 "vPaspNum": "PASPNUM", "vPaspDate": "PASPDATE", "vPaspPlace": "PASPPLACE", "vNote": "NOTE"}
+            for k, col in m.items():
+                v = n.get(k)
+                rec[col] = _d(v) if isinstance(v, datetime.date) else v
             return {}
         if key == "SB_CUSTINFO.DEL_CUSTINFO":
-            ci = C.setdefault("cust_info", {})
-            cid = str(n["v_ID"])
-            cno = int(n.get("v_CARD_NO") or 0)
-            ci[cid] = [x for x in ci.get(cid, []) if x["CARD_NO"] != cno]
-            return {}
-        if key == "SB_CUSTINFO.UPD_CUSTIPINFO":
-            ip = C.setdefault("cust_ipinfo", {})
-            k = f"{n['v_CUSTID']}_{n['v_CARD_NO']}"
-            ip[k] = {
-                "ROWID": f"AAIP{k}", "CUSTID": n["v_CUSTID"], "CARD_NO": n["v_CARD_NO"],
-                "FAMILYSTATUS": n.get("v_FAMILYSTATUS"), "EDUCATION": n.get("v_EDUCATION"),
-                "PLACE1": n.get("v_PLACE1"), "WORK1": n.get("v_WORK1"), "WORK2": n.get("v_WORK2"),
-                "VERIFY": n.get("v_VERIFY"), "FAMILYMEMBERS": n.get("v_FAMILYMEMBERS"),
-                "MONTHLYINCOME": n.get("v_MONTHLYINCOME"), "MONTHLYEXPENSE": n.get("v_MONTHLYEXPENSE"),
-            }
+            C["custinfo"] = [x for x in C.setdefault("custinfo", []) if x["ID"] != n["v_id"]]
             return {}
         return NotImplemented
 

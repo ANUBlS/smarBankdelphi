@@ -245,6 +245,129 @@ def upd_customer_params(cust_id: int, r: dict) -> dict:
     return out
 
 
+# ------------------------------------------------------------------------------------------------ Customers.ocx / P_Customers / CustomersInformations
+# ActiveX CLSIDs that open these screens (web/modules.json; Customers_TLB.pas CLASS_CustomerMainForm,
+# Customers_Informations_TLB.pas, P_Customers TLB - two classes). Any one right opens the OCX endpoints.
+OCX_CLSIDS = ("{E3CA3696-40B6-11D6-B256-00C0262B568B}", "{F6BB2CF6-4941-4688-A744-6C2358216363}",
+              "{831E1831-3FE1-41EA-9D02-ED1F8BB5C6EE}", "{831E1831-3FE1-41EA-9D02-ED1F8BB5C6ED}")
+# Packages/Customers/CustomerMainFormImpl.pas:248-252 SGetCusQuery (verbatim, CRLF as #13#10)
+SQL_OCX_CUS_BASE = (
+    "select c.rowID,id, op_id, open_dat, close_dat, nerezident,prinad_kod, name, short_name, group_klie, vid_sob, "
+    "org_sob, sfera_dey, otrasl, nalog_kod, kod_okpro,inn, dat_nal, dat_ustav, bik ,"
+    "  translate(name, 'IiİiIı', '``````') as name1,"
+    "decode(c.cust_type,null,'Hüquqi', 1, 'Fiziki', 2, 'f.s.') tip from CUSTOMERS C\r\n"
+    "where CLOSE_DAT IS NULL\r\n")
+# CustomerMainFormImpl.pas:694-708 BuildCusQuery: optional filial predicate (Format %d -> bind) + cbOrderCus ORDER BY
+SQL_OCX_CUS_FILIAL = "AND ID in(select KLI_ID from ACCOUNT where FILIAL=:filial)\r\n"
+SQL_OCX_CUSTOMERS = SQL_OCX_CUS_BASE + "{filial_clause}\r\norder by C.{sort}"
+OCX_CUST_SORT = ("ID", "NAME", "OPEN_DAT")          # cbOrderCus items 0/1 -> C.ID, 2 -> C.NAME, 3 -> C.OPEN_DAT
+# CustomerMainFormImpl.pas:223-246 SGetCustomerAccsQuery (verbatim); BuildAccQuery (pas:672-681) appends the
+# currency predicate (Format %d -> bind) and 'ORDER BY <AccOrderFields>'. NB (Delphi parity): the appended AND
+# binds to the second (out_Account) branch of the UNION ALL only.
+SQL_OCX_ACC_BASE = (
+    "SELECT acc.ID, acc.ACC_NO as AccNo, acc.NAME as AccName, acc.OPEN_DAT as OpenDate,\r\n"
+    " Currency.VAL_NAME as CurrencySName, T.OSTAT as Balance, T.POK_OSTAT as LBalance\r\n"
+    "FROM\r\n Account acc,\r\n AVALUTE Currency,\r\n tenostat t\r\n"
+    "WHERE\r\n (CLOSE_DAT IS NULL)\r\n AND (acc.KLI_ID = :ID)\r\n AND (Currency.VALUTE = acc.VAL_ACC)\r\n"
+    " AND (T.ACC_ID = acc.ID)\r\n"
+    " UNION ALL "
+    "SELECT acc.ID, acc.ACC_NO as AccNo, acc.NAME as AccName, acc.OPEN_DAT as OpenDate,\r\n"
+    " Currency.VAL_NAME as CurrencySName, T.OSTAT as Balance, T.POK_OSTAT as LBalance\r\n"
+    "FROM\r\n out_Account acc,\r\n AVALUTE Currency,\r\n out_tenostat t\r\n"
+    "WHERE\r\n (CLOSE_DAT IS NULL)\r\n AND (acc.KLI_ID = :ID)\r\n AND (Currency.VALUTE = acc.VAL_ACC)\r\n"
+    " AND (T.ACC_ID = acc.ID)\r\n")
+SQL_OCX_ACC_CURR = "AND (acc.VAL_ACC = :curr)\r\n"
+SQL_OCX_ACCOUNTS = SQL_OCX_ACC_BASE + "{curr_clause}{order}"
+OCX_ACC_SORT = ("AccNo", "AccName", "OpenDate", "CurrencySName")   # AccOrderFields (pas:194-201); 'unused' = no ORDER
+SQL_OCX_FILIAL_ALL = "select *\nfrom FILIAL"                         # CustomerDataModuleImpl.dfm:412 FilialsData
+SQL_OCX_AVALUTE_ALL = "select * from AVALUTE"                        # CustomerDataModuleImpl.dfm:163 CurrencyData
+SQL_OCX_VID_SOB_ALL = "SELECT * FROM VID_SOB"                        # CustomerDataModuleImpl.dfm:61
+# CustomerInfoFormImpl.dfm:876 CustInfoData (variable :CustomerID, pas:176)
+SQL_OCX_CUSTINFO = "select i.rowid,I.*\n  from CUSTINFO i\nwhere IDCust = :CustomerID\norder by id "
+# uCustomersIPInfo.dfm:404 ODSIpInfo (variables :custid, :cardid)
+SQL_OCX_IPINFO = "select i.rowid,i.* from custipinfo i\nwhere custid=:custid\nand cardid=:cardid"
+# ODSIpInfo is an updatable TOracleDataSet (uCustomersIPInfo.pas:156-170 Post): DOA generates this DML from the
+# dataset fields; the web port writes the same columns explicitly.
+OCX_IP_FIELDS = ("BDATE", "MARRIAGE", "MONTHLYPROFIT", "PROFESSION", "PASSTYPE", "PASSSERIE", "PASSNUM",
+                 "SOCCATEGORY", "INSURANCECOMP", "INSPOLICNUM", "INSAMOUNT", "INSPERIODID", "INSCONTRACTDATE",
+                 "INSCONTRACTPREIOD", "INSCONTRLASTDATE", "UNIQUEINSID", "BB_FAMILYSTATUS", "BB_INN")
+SQL_OCX_IPINFO_UPD = ("update custipinfo set " + ", ".join(f"{f}=:{f}" for f in OCX_IP_FIELDS)
+                      + "\nwhere custid=:custid\nand cardid=:cardid")
+SQL_OCX_IPINFO_INS = ("insert into custipinfo (CUSTID, CARDID, " + ", ".join(OCX_IP_FIELDS) + ")\nvalues (:custid, :cardid, "
+                      + ", ".join(":" + f for f in OCX_IP_FIELDS) + ")")
+# web helper: current customer row, so Sb_EditCustomer's extra v_* arguments keep their stored values
+SQL_OCX_CUST_ROW = "select * from customers where id = :ID"
+
+
+class OcxCustomerIn(BaseModel):
+    """CustomerDataModuleImpl.pas:121-142 ActiveCustomerListApplyRecord -> TCustomer fields."""
+    open_dat: datetime.date | None = None
+    name: str | None = None
+    short_name: str | None = None
+    nerezident: int = 0
+    prinad_kod: int | None = None
+    group_klie: int | None = None
+    vid_sob: int | None = None
+    org_sob: int | None = None
+    sfera_dey: int | None = None
+    otrasl: int | None = None
+    nalog_kod: int | None = None
+    kod_okpro: str | None = None
+    inn: str | None = None
+    bik: str | None = None
+    dat_nal: datetime.date | None = None
+    dat_ustav: datetime.date | None = None
+
+
+class OcxCustInfoIn(BaseModel):
+    """CustomerInfoFormImpl.pas:281-306 ToolButton6Click -> sb_custInfo.upd_custinfo. id=None: ToolButton2Click
+    (add_custinfo first, then the new card is edited)."""
+    id: int | None = None
+    name: str | None = None
+    lastname: str | None = None
+    soname: str | None = None
+    birthday: datetime.date | None = None
+    birthplace: str | None = None
+    address: str | None = None
+    city: str | None = None
+    workplace: str | None = None
+    work: str | None = None
+    phone_w: str | None = None
+    phone_h: str | None = None
+    phone_m: str | None = None
+    e_mail: str | None = None
+    url: str | None = None
+    garanted: str | None = None
+    passer: str | None = None
+    paspnum: str | None = None
+    paspdate: datetime.date | None = None
+    paspplace: str | None = None
+    note: str | None = None
+
+
+class OcxIpInfoIn(BaseModel):
+    """uCustomersIPInfo.pas ODSIpInfo fields (custipinfo)."""
+    cardid: int
+    bdate: datetime.date | None = None
+    marriage: int | None = None
+    monthlyprofit: float | None = None
+    profession: str | None = None
+    passtype: int | None = None
+    passserie: str | None = None
+    passnum: str | None = None
+    soccategory: int | None = None
+    insurancecomp: int | None = None
+    inspolicnum: str | None = None
+    insamount: float | None = None
+    insperiodid: int | None = None
+    inscontractdate: datetime.date | None = None
+    inscontractpreiod: datetime.date | None = None
+    inscontrlastdate: datetime.date | None = None
+    uniqueinsid: str | None = None
+    bb_familystatus: int | None = None
+    bb_inn: str | None = None
+
+
 # ------------------------------------------------------------------------------------------------ helpers
 def _num(v):
     return float(v) if isinstance(v, Decimal) else v
@@ -644,6 +767,26 @@ def make_router(current, require_module, err):
             err(403, "error.access_denied")
         return ws
 
+    def _ocx_customers(conn, sort="ID", filial=None):
+        sql = SQL_OCX_CUSTOMERS.format(filial_clause=SQL_OCX_CUS_FILIAL if filial else "", sort=sort)
+        return [row(x) for x in conn.query(sql, {"filial": filial} if filial else {})]
+
+    def _ocx_accounts(conn, cust_id, sort="AccNo", currency_id=None):
+        sql = SQL_OCX_ACCOUNTS.format(curr_clause=SQL_OCX_ACC_CURR if currency_id is not None else "",
+                                      order=f"ORDER BY {sort}" if sort in OCX_ACC_SORT else "")
+        binds = {"ID": cust_id}
+        if currency_id is not None:
+            binds["curr"] = currency_id
+        return [row(x) for x in conn.query(sql, binds)]
+
+    # Customers.ocx lookup datasets (same table selects as the P_Customers DFM LOOKUPS)
+    _OCX_LK = {"prinad": LOOKUPS["relations"], "qrp_klie": LOOKUPS["groups"], "vid_sob": SQL_OCX_VID_SOB_ALL,
+               "org_prav": LOOKUPS["org_types"], "sferadey": LOOKUPS["action_areas"], "otrasli": LOOKUPS["branches"],
+               "nalog": LOOKUPS["tax_areas"], "countries": LOOKUPS["countries"]}
+
+    # decode(c.cust_type,null,'Hüquqi',1,'Fiziki',2,'f.s.') -> TIP; cust_type 0 decodes to NULL
+    _TIP = {0: (None, "Hüquqi"), 1: ("Fiziki",), 2: ("f.s.",)}
+
     @r.get("/ocx/init")
     def _ocx_init(ws=Depends(current)):
         _ocx_guard(ws)
@@ -652,29 +795,25 @@ def make_router(current, require_module, err):
             "system_date": sysdate(conn).date().isoformat(),
             "filials": [row(x) for x in conn.query(SQL_OCX_FILIAL_ALL)],
             "currencies": [row(x) for x in conn.query(SQL_OCX_AVALUTE_ALL)],
-            "prinad": [row(x) for x in conn.query(LOOKUPS["prinad"])],
-            "qrp_klie": [row(x) for x in conn.query(LOOKUPS["qrp_klie"])],
+            "prinad": [row(x) for x in conn.query(_OCX_LK["prinad"])],
+            "qrp_klie": [row(x) for x in conn.query(_OCX_LK["qrp_klie"])],
             "vid_sob": [row(x) for x in conn.query(SQL_OCX_VID_SOB_ALL)],
-            "org_prav": [row(x) for x in conn.query(LOOKUPS["org_prav"])],
-            "sferadey": [row(x) for x in conn.query(LOOKUPS["sferadey"])],
-            "otrasli": [row(x) for x in conn.query(LOOKUPS["otrasli"])],
-            "nalog": [row(x) for x in conn.query(LOOKUPS["nalog"])],
-            "countries": [row(x) for x in conn.query(LOOKUPS["countries_by_name"])],
+            "org_prav": [row(x) for x in conn.query(_OCX_LK["org_prav"])],
+            "sferadey": [row(x) for x in conn.query(_OCX_LK["sferadey"])],
+            "otrasli": [row(x) for x in conn.query(_OCX_LK["otrasli"])],
+            "nalog": [row(x) for x in conn.query(_OCX_LK["nalog"])],
+            "countries": [row(x) for x in conn.query(_OCX_LK["countries"])],
         }
 
     @r.get("/ocx/list")
     def _ocx_list(sort: str = "ID", filial: int | None = None, cust_type: int | None = None,
-                  include_closed: bool = False, q_id: str = "", q_inn: str = "", q_name: str = "",
-                  q_date: str = "", ws=Depends(current)):
+                  q_id: str = "", q_inn: str = "", q_name: str = "", q_date: str = "", ws=Depends(current)):
         _ocx_guard(ws)
         if sort not in OCX_CUST_SORT:
             err(400, "error.generic")
-        fil_clause = "AND c.FILIAL = :filial" if filial else ""
-        sql = SQL_OCX_CUSTOMERS.format(filial_clause=fil_clause, sort=sort)
-        binds = {"filial": filial} if filial else {}
-        rows = [row(x) for x in ws.conn.query(sql, binds)]
+        rows = _ocx_customers(ws.conn, sort, filial)
         if cust_type is not None:
-            rows = [x for x in rows if (x.get("cust_type") or 0) == cust_type]
+            rows = [x for x in rows if x.get("tip") in _TIP.get(cust_type, ())]
         if q_id:
             rows = [x for x in rows if str(x.get("id") or "").startswith(q_id)]
         if q_inn:
@@ -690,58 +829,68 @@ def make_router(current, require_module, err):
     def _ocx_accs(cust_id: int, sort: str = "AccNo", currency_id: int | None = None,
                   q_accno: str = "", q_accname: str = "", ws=Depends(current)):
         _ocx_guard(ws)
-        if sort not in OCX_ACC_SORT:
-            sort = "AccNo"
-        curr_clause = "AND (Account.CurrencyID = :curr)" if currency_id is not None else ""
-        sql = SQL_OCX_ACCOUNTS.format(curr_clause=curr_clause, sort=sort)
-        binds = {"ID": cust_id}
-        if currency_id is not None:
-            binds["curr"] = currency_id
-        rows = [row(x) for x in ws.conn.query(sql, binds)]
+        rows = _ocx_accounts(ws.conn, cust_id, sort, currency_id)
         if q_accno:
             rows = [x for x in rows if str(x.get("accno") or "").upper().startswith(q_accno.upper())]
         if q_accname:
             rows = [x for x in rows if q_accname.upper() in str(x.get("accname") or "").upper()]
         return rows
 
-    @r.post("/ocx/customers")
-    def _ocx_add(body: OcxCustomerIn, ws=Depends(current)):
-        _ocx_guard(ws)
+    def _ocx_ext(keep: dict | None = None):
+        """SBCustomer.pas:177-221 Sb_AddCustomer / 233-276 Sb_EditCustomer extra v_* arguments. The Customers.ocx form
+        fills only the basic TCustomer fields; on edit the extra arguments keep the stored values (no data loss)."""
+        k = keep or {}
+        ext = {"v_INCORP_NUM": k.get("incorporation_number")}
+        for f in ("TPH_CONTACT_TYPE", "TPH_COMMUNICATION_TYPE", "TPH_NUMBER", "ADDRESS_TYPE", "ADDRESS", "CITY",
+                  "COUNTRY_CODE", "EMAIL", "URL", "INCORPORATION_STATE", "INCORPORATION_CNTR", "TPH_EXTENSION",
+                  "TPH_ZIP", "TPH_COUNTRY_PREFIX", "TPH_STATE"):
+            ext["v_" + f] = k.get(f.lower())
+        for f in ("risk_categ", "riskdescid", "samelydate", "quality_id"):
+            ext["v_" + f] = k.get(f)
+        if isinstance(ext["v_samelydate"], str):
+            ext["v_samelydate"] = date_only(datetime.date.fromisoformat(ext["v_samelydate"][:10]))
+        return ext
+
+    def _ocx_check(body: OcxCustomerIn):
         if not (body.name or "").strip():
             err(400, "customers.err_name", field="name")
         if not (body.short_name or "").strip():
             err(400, "customers.err_short_name", field="short_name")
-        d_open = date_only(body.open_dat) if body.open_dat else sysdate(ws.conn)
+
+    @r.post("/ocx/customers")
+    def _ocx_add(body: OcxCustomerIn, ws=Depends(current)):
+        _ocx_guard(ws)
+        _ocx_check(body)
         named = {
-            "OP_ID": 0, "OPEN_DAT": d_open, "CLOSE_DAT": None, "NEREZIDENT": body.nerezident,
-            "PRINAD_KOD": body.prinad_kod or 1, "NAME": body.name, "SHORT_NAME": body.short_name,
-            "GROUP_KLIE": body.group_klie or 1, "VID_SOB": body.vid_sob or 1, "ORG_SOB": body.org_sob or 1,
-            "SFERA_DEY": body.sfera_dey or 1, "OTRASL": body.otrasl or 1, "NALOG_KOD": body.nalog_kod or 1,
-            "KOD_OKPRO": body.kod_okpro, "INN": body.inn, "DAT_NAL": date_only(body.dat_nal),
-            "DAT_USTAV": date_only(body.dat_ustav), "BIK": body.bik, "CUST_TYPE": body.cust_type,
-            "FILIAL": body.filial or 101,
+            "OP_ID": 0, "OPEN_DAT": date_only(body.open_dat) if body.open_dat else sysdate(ws.conn),
+            "NAME": body.name, "CLOSE_DAT": None, "NEREZIDENT": body.nerezident, "PRINAD_KOD": body.prinad_kod,
+            "SHORT_NAME": body.short_name, "GROUP_KLIE": body.group_klie, "VID_SOB": body.vid_sob,
+            "ORG_SOB": body.org_sob, "SFERA_DEY": body.sfera_dey, "OTRASL": body.otrasl, "NALOG_KOD": body.nalog_kod,
+            "INN": body.inn, "BIK": body.bik, "KOD_OKPRO": body.kod_okpro, "DAT_NAL": date_only(body.dat_nal),
+            "DAT_USTAV": date_only(body.dat_ustav), **_ocx_ext(),
         }
-        cid = ws.conn.call_func("SBOP", "SB_ADDCUSTOMER", [], int, named=named)
-        return {"status": "saved", "id": cid}
+        before = {c["id"] for c in _ocx_customers(ws.conn)}
+        ws.conn.call_proc("SBOP", "add_customer", [], named=named)     # SBDecls.pas:21 sPN_AddCustomer
+        new = [c["id"] for c in _ocx_customers(ws.conn) if c["id"] not in before]
+        return {"status": "saved", "id": new[0] if new else None}
 
     @r.put("/ocx/customers/{cust_id}")
     def _ocx_upd(cust_id: int, body: OcxCustomerIn, ws=Depends(current)):
         _ocx_guard(ws)
-        if not (body.name or "").strip():
-            err(400, "customers.err_name", field="name")
-        if not (body.short_name or "").strip():
-            err(400, "customers.err_short_name", field="short_name")
-        d_open = date_only(body.open_dat) if body.open_dat else sysdate(ws.conn)
+        _ocx_check(body)
+        cur = ws.conn.query(SQL_OCX_CUST_ROW, {"ID": cust_id})
+        if not cur:
+            err(404, "error.not_found")
         named = {
-            "v_ID": cust_id, "OPEN_DAT": d_open, "NEREZIDENT": body.nerezident,
-            "PRINAD_KOD": body.prinad_kod or 1, "NAME": body.name, "SHORT_NAME": body.short_name,
-            "GROUP_KLIE": body.group_klie or 1, "VID_SOB": body.vid_sob or 1, "ORG_SOB": body.org_sob or 1,
-            "SFERA_DEY": body.sfera_dey or 1, "OTRASL": body.otrasl or 1, "NALOG_KOD": body.nalog_kod or 1,
-            "KOD_OKPRO": body.kod_okpro, "INN": body.inn, "DAT_NAL": date_only(body.dat_nal),
-            "DAT_USTAV": date_only(body.dat_ustav), "BIK": body.bik, "CUST_TYPE": body.cust_type,
-            "FILIAL": body.filial or 101,
+            "v_ID": cust_id, "v_OP_ID": 0, "v_OPEN_DAT": date_only(body.open_dat) if body.open_dat else sysdate(ws.conn),
+            "v_NAME": body.name, "v_CLOSE_DAT": None, "v_NEREZIDENT": body.nerezident,
+            "v_PRINAD_KOD": body.prinad_kod, "v_SHORT_NAME": body.short_name, "v_GROUP_KLIE": body.group_klie,
+            "v_VID_SOB": body.vid_sob, "v_ORG_SOB": body.org_sob, "v_SFERA_DEY": body.sfera_dey,
+            "v_OTRASL": body.otrasl, "v_NALOG_KOD": body.nalog_kod, "v_INN": body.inn, "v_BIK": body.bik,
+            "v_KOD_OKPRO": body.kod_okpro, "v_DAT_NAL": date_only(body.dat_nal),
+            "v_DAT_USTAV": date_only(body.dat_ustav), **_ocx_ext(row(cur[0])),
         }
-        ws.conn.call_proc("SBOP", "SB_EDITCUSTOMER", [], named=named)
+        ws.conn.call_proc("SBOP", "upd_customer", [], named=named)     # SBDecls.pas:23 sPN_UpdateCustomer
         return {"status": "saved", "id": cust_id}
 
     @r.post("/ocx/customers/{cust_id}/close")
@@ -753,110 +902,105 @@ def make_router(current, require_module, err):
             v_err(e)
         return {"ok": True}
 
+    def _ocx_cards(conn, cust_id):
+        return [row(x) for x in conn.query(SQL_OCX_CUSTINFO, {"CustomerID": cust_id})]
+
+    def _ocx_ip(conn, cust_id, card_id):
+        ip = [row(x) for x in conn.query(SQL_OCX_IPINFO, {"custid": cust_id, "cardid": card_id})]
+        return ip[0] if ip else None
+
     @r.get("/ocx/customers/{cust_id}/info")
     def _ocx_info_get(cust_id: int, ws=Depends(current)):
         _ocx_guard(ws)
-        cards = [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]
+        cards = _ocx_cards(ws.conn, cust_id)
         ip_cards = {}
         for c in cards:
-            cno = c.get("card_no", 0)
-            ip = [row(x) for x in ws.conn.query(SQL_OCX_IPINFO, {"CUSTID": cust_id, "CARD_NO": cno})]
+            ip = _ocx_ip(ws.conn, cust_id, c["id"])
             if ip:
-                ip_cards[str(cno)] = ip[0]
+                ip_cards[str(c["id"])] = ip
         return {"cards": cards, "ip_info": ip_cards}
 
     @r.post("/ocx/customers/{cust_id}/info")
     def _ocx_info_save(cust_id: int, body: OcxCustInfoIn, ws=Depends(current)):
         _ocx_guard(ws)
-        named = {
-            "v_ID": cust_id, "v_CARD_NO": body.card_no, "v_PASP_TYPE": body.pasp_type,
-            "v_PASPORT": body.pasport, "v_KEM_VIDAN": body.kem_vidan, "v_PASP_DATE": date_only(body.pasp_date),
-            "v_DOG_YER": body.dog_yer, "v_DOG_TAR": date_only(body.dog_tar), "v_CINS": body.cins,
-            "v_MILLIYET": body.milliyet, "v_GRAJDAN": body.grajdan, "v_WORK_PLACE": body.work_place,
-            "v_DOLJNOST": body.doljnost, "v_PARTNER": body.partner, "v_FATHER": body.father,
-            "v_ADRESS": body.adress, "v_STRANA": body.strana, "v_TEL": body.tel,
-            "v_TEL_MOB": body.tel_mob, "v_FAKS": body.faks, "v_E_MAIL": body.e_mail,
-        }
-        ws.conn.call_proc("SB_CUSTINFO", "UPD_CUSTINFO", [], named=named)
-        return {"ok": True, "cards": [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]}
+        conn = ws.conn
+        card_id = body.id
+        if card_id is None:      # ToolButton2Click: add_custinfo('vidcust'), Refresh, RecNo := RecordCount
+            conn.call_proc("sb_custInfo", "add_custinfo", [], named={"vidcust": cust_id})
+            cards = _ocx_cards(conn, cust_id)
+            card_id = cards[-1]["id"] if cards else None
+        conn.call_proc("sb_custInfo", "upd_custinfo", [], named={          # ToolButton6Click
+            "vid": card_id, "vidcust": cust_id, "vName": body.name, "vLastName": body.lastname,
+            "vSoName": body.soname, "vBirthDay": date_only(body.birthday), "vBirthPlace": body.birthplace,
+            "vAddress": body.address, "vCity": body.city, "vWorkPlace": body.workplace, "vWork": body.work,
+            "vPhone_w": body.phone_w, "vPhone_h": body.phone_h, "vPhone_m": body.phone_m, "ve_mail": body.e_mail,
+            "vurl": body.url, "vGaranted": body.garanted, "vPasSer": body.passer, "vPaspNum": body.paspnum,
+            "vPaspDate": date_only(body.paspdate), "vPaspPlace": body.paspplace, "vNote": body.note,
+        })
+        return {"ok": True, "id": card_id, "cards": _ocx_cards(conn, cust_id)}
 
-    @r.delete("/ocx/customers/{cust_id}/info/{card_no}")
-    def _ocx_info_del(cust_id: int, card_no: int, ws=Depends(current)):
+    @r.delete("/ocx/customers/{cust_id}/info/{card_id}")
+    def _ocx_info_del(cust_id: int, card_id: int, ws=Depends(current)):
         _ocx_guard(ws)
-        ws.conn.call_proc("SB_CUSTINFO", "DEL_CUSTINFO", [], named={"v_ID": cust_id, "v_CARD_NO": card_no})
-        return {"ok": True, "cards": [row(x) for x in ws.conn.query(SQL_OCX_CUSTINFO, {"ID": cust_id})]}
+        ws.conn.call_proc("sb_custInfo", "del_custinfo", [], named={"v_id": card_id})   # ToolButton4Click
+        return {"ok": True, "cards": _ocx_cards(ws.conn, cust_id)}
 
     @r.post("/ocx/customers/{cust_id}/ipinfo")
     def _ocx_ip_save(cust_id: int, body: OcxIpInfoIn, ws=Depends(current)):
         _ocx_guard(ws)
-        ws.conn.call_proc("SB_CUSTINFO", "UPD_CUSTIPINFO", [], named={
-            "v_CUSTID": cust_id, "v_CARD_NO": body.card_no, "v_FAMILYSTATUS": body.familystatus,
-            "v_EDUCATION": body.education, "v_PLACE1": body.place1, "v_WORK1": body.work1,
-            "v_WORK2": body.work2, "v_VERIFY": body.verify, "v_FAMILYMEMBERS": body.familymembers,
-            "v_MONTHLYINCOME": body.monthlyincome, "v_MONTHLYEXPENSE": body.monthlyexpense,
-        })
-        ip = [row(x) for x in ws.conn.query(SQL_OCX_IPINFO, {"CUSTID": cust_id, "CARD_NO": body.card_no})]
-        return {"ok": True, "ip_info": ip[0] if ip else {}}
+        conn = ws.conn
+        binds = {"custid": cust_id, "cardid": body.cardid}
+        for f in OCX_IP_FIELDS:
+            v = getattr(body, f.lower())
+            binds[f] = date_only(v) if isinstance(v, datetime.date) else v
+        conn.execute(SQL_OCX_IPINFO_UPD if _ocx_ip(conn, cust_id, body.cardid) else SQL_OCX_IPINFO_INS, binds)
+        conn.commit()
+        return {"ok": True, "ip_info": _ocx_ip(conn, cust_id, body.cardid) or {}}
 
     @r.get("/ocx/settings/{table_name}")
     def _ocx_settings_get(table_name: str, ws=Depends(current)):
         _ocx_guard(ws)
-        allowed = {"prinad": LOOKUPS["prinad"], "qrp_klie": LOOKUPS["qrp_klie"], "vid_sob": SQL_OCX_VID_SOB_ALL,
-                   "org_prav": LOOKUPS["org_prav"], "sferadey": LOOKUPS["sferadey"], "otrasli": LOOKUPS["otrasli"],
-                   "nalog": LOOKUPS["nalog"]}
+        allowed = {k: v for k, v in _OCX_LK.items() if k != "countries"}
         if table_name not in allowed:
             err(400, "error.generic")
         return [row(x) for x in ws.conn.query(allowed[table_name])]
 
     @r.get("/info-ocx/analyze")
     def _info_ocx_analyze(mode: str = "customers", filial: int | None = None, currency_id: int | None = None,
-                          cust_type: int | None = None, status: str = "open", min_bal: float | None = None,
-                          max_bal: float | None = None, start_date: str = "", end_date: str = "",
-                          ws=Depends(current)):
+                          cust_type: int | None = None, min_bal: float | None = None, max_bal: float | None = None,
+                          start_date: str = "", end_date: str = "", ws=Depends(current)):
         _ocx_guard(ws)
         conn = ws.conn
+        if mode not in ("customers", "accounts", "documents"):
+            err(400, "error.generic")
+        custs = _ocx_customers(conn, "ID", filial)
         if mode == "customers":
-            sql = SQL_OCX_CUSTOMERS.format(filial_clause="", sort="ID")
-            rows = [row(x) for x in conn.query(sql)]
+            rows = custs
             if cust_type is not None:
-                rows = [x for x in rows if (x.get("cust_type") or 0) == cust_type]
-            if filial is not None:
-                rows = [x for x in rows if (x.get("filial") or 101) == filial]
+                rows = [x for x in rows if x.get("tip") in _TIP.get(cust_type, ())]
             if start_date:
                 rows = [x for x in rows if str(x.get("open_dat") or "")[:10] >= start_date]
             if end_date:
                 rows = [x for x in rows if str(x.get("open_dat") or "")[:10] <= end_date]
             return {"mode": mode, "rows": rows, "total": len(rows)}
-        elif mode == "accounts":
-            custs = [row(x) for x in conn.query(SQL_OCX_CUSTOMERS.format(filial_clause="", sort="ID"))]
-            all_accs = []
-            for c in custs:
-                for a in conn.query(SQL_OCX_ACCOUNTS.format(curr_clause="", sort="AccNo"), {"ID": c["id"]}):
-                    ar = row(a)
-                    ar["customer_name"] = c.get("name")
-                    all_accs.append(ar)
-            if currency_id is not None:
-                all_accs = [x for x in all_accs if x.get("currencyid") == currency_id]
-            if filial is not None:
-                all_accs = [x for x in all_accs if (x.get("filial") or 101) == filial]
+        accs = []
+        for c in custs:
+            for a in _ocx_accounts(conn, c["id"], "AccNo", currency_id):
+                a["customer_name"] = c.get("name")
+                accs.append(a)
+        if mode == "accounts":
             if min_bal is not None:
-                all_accs = [x for x in all_accs if float(x.get("balance") or 0) >= min_bal]
+                accs = [x for x in accs if float(x.get("balance") or 0) >= min_bal]
             if max_bal is not None:
-                all_accs = [x for x in all_accs if float(x.get("balance") or 0) <= max_bal]
-            return {"mode": mode, "rows": all_accs, "total": len(all_accs)}
-        else:
-            # documents / transactions mode
-            custs = [row(x) for x in conn.query(SQL_OCX_CUSTOMERS.format(filial_clause="", sort="ID"))]
-            docs = []
-            seen = set()
-            for c in custs:
-                for a in conn.query(SQL_OCX_ACCOUNTS.format(curr_clause="", sort="AccNo"), {"ID": c["id"]}):
-                    ar = row(a)
-                    for t in account_transactions(conn, ar["id"]):
-                        if t["id"] not in seen:
-                            seen.add(t["id"])
-                            docs.append(t)
-            return {"mode": mode, "rows": docs, "total": len(docs)}
+                accs = [x for x in accs if float(x.get("balance") or 0) <= max_bal]
+            return {"mode": mode, "rows": accs, "total": len(accs)}
+        docs, seen = [], set()
+        for a in accs:
+            for t in account_transactions(conn, a["id"]):
+                if t["id"] not in seen:
+                    seen.add(t["id"])
+                    docs.append(t)
+        return {"mode": mode, "rows": docs, "total": len(docs)}
 
     @r.get("/{cust_id}")
     def _get(cust_id: int, ws=Depends(guard)):

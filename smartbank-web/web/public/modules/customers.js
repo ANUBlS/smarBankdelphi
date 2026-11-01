@@ -428,10 +428,8 @@
             <option value="2">2 - f.s.</option>`)}</fieldset>
       <fieldset class="flt-group"><legend>Sıralama</legend>${sel('coSort', `
             <option value="ID">Kodu (ID)</option>
-            <option value="INN">VÖEN (INN)</option>
             <option value="NAME">Adı (NAME)</option>
-            <option value="OPEN_DAT">Açılma tarixi</option>
-            <option value="CUST_TYPE">Müştəri tipi</option>`)}</fieldset>
+            <option value="OPEN_DAT">Açılma tarixi</option>`)}</fieldset>
       <fieldset class="flt-group"><legend>Axtarış (Müştəri)</legend>
         <label>Kodu (ID)<input id="coQId"></label>
         <label>VÖEN (INN)<input id="coQInn"></label>
@@ -441,12 +439,11 @@
       <fieldset class="flt-group"><legend>Müştərinin hesabları</legend>
         <label>Valyuta${sel('coAccCurr', '<option value="">Hamısı</option>')}</label>
         <label>Sıralama${sel('coAccSort', `
+            <option value="unused">Sırasız</option>
             <option value="AccNo">Hesab №</option>
             <option value="AccName">Hesab adı</option>
-            <option value="CurrencyID">Valyuta</option>
-            <option value="Balance">Qalıq</option>
-            <option value="LBalance">Manat qalığı</option>
-            <option value="OpenDate">Açılma tarixi</option>`)}</label>
+            <option value="OpenDate">Açılma tarixi</option>
+            <option value="CurrencySName">Valyuta</option>`)}</label>
         <label>Hesab №<input id="coQAccNo"></label>
         <label>Hesab adı<input id="coQAccName"></label></fieldset>`;
     lay.main.innerHTML = `
@@ -455,7 +452,7 @@
             <thead><tr>
                 <th style="width:80px">Kodu (ID)</th><th style="width:120px">VÖEN (INN)</th><th>Müştərinin adı (NAME)</th>
                 <th style="width:180px">Qısa adı (SHORT_NAME)</th><th style="width:105px">Qeydiyyat tarixi</th>
-                <th style="width:80px">Tipi</th><th style="width:75px">Filial</th><th style="width:85px">Qeyri-rez.</th>
+                <th style="width:80px">Tipi</th><th style="width:85px">Qeyri-rez.</th>
             </tr></thead>
             <tbody id="coCustBody"></tbody>
           </table>
@@ -467,7 +464,7 @@
             <thead><tr>
                 <th style="width:190px">Hesab № (ACCNO)</th><th>Hesabın adı (ACCNAME)</th><th style="width:80px">Valyuta</th>
                 <th style="width:120px" class="num">Qalıq (BALANCE)</th><th style="width:120px" class="num">Milli val. qalığı</th>
-                <th style="width:105px">Açılma tarixi</th><th style="width:90px">Balans növü</th>
+                <th style="width:105px">Açılma tarixi</th>
             </tr></thead>
             <tbody id="coAccBody"></tbody>
           </table>
@@ -507,7 +504,7 @@
     function renderCustRows(){
       const tb = $('#coCustBody');
       if (!st.rows.length){
-        tb.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center">Məlumat tapılmadı</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">Məlumat tapılmadı</td></tr>`;
         return;
       }
       tb.innerHTML = st.rows.map(r => `
@@ -517,8 +514,7 @@
           <td><b>${esc(r.name||'')}</b></td>
           <td>${esc(r.short_name||'')}</td>
           <td>${fmtDate(r.open_dat)}</td>
-          <td><span class="badge teal">${esc(r.tip||'huquqi')}</span></td>
-          <td>${r.filial||101}</td>
+          <td>${r.tip ? `<span class="badge teal">${esc(r.tip)}</span>` : ''}</td>
           <td>${r.nerezident ? 'Qeyri-rez.' : 'Rezident'}</td>
         </tr>
       `).join('');
@@ -549,7 +545,7 @@
         $('#coAccCount').textContent = `${st.accs.length} hesab`;
         const tb = $('#coAccBody');
         if (!st.accs.length){
-          tb.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">Hesab yoxdur</td></tr>`;
+          tb.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">Hesab yoxdur</td></tr>`;
           return;
         }
         tb.innerHTML = st.accs.map(a => `
@@ -560,7 +556,6 @@
             <td class="num">${fmtNum(a.balance)}</td>
             <td class="num">${fmtNum(a.lbalance)}</td>
             <td>${fmtDate(a.opendate)}</td>
-            <td>${a.isoutbalance ? 'Balansdankənar' : 'Balans'}</td>
           </tr>
         `).join('');
       } catch(e){ showErr(e); }
@@ -579,7 +574,7 @@
         otrasl: (st.init.otrasli[0]||{}).id || 1,
         nalog_kod: (st.init.nalog[0]||{}).id || 1,
         kod_okpro: '', inn: '', dat_nal: st.init.system_date || '2026-10-25',
-        dat_ustav: st.init.system_date || '2026-10-25', bik: '', cust_type: 0, filial: 101
+        dat_ustav: st.init.system_date || '2026-10-25', bik: ''
       };
       const opts = (arr, val) => (arr||[]).map(x => `<option value="${x.id}" ${Number(x.id)===Number(val)?'selected':''}>${esc(x.name||x.id)}</option>`).join('');
       const mh = $('#coModalHost');
@@ -589,19 +584,11 @@
             <h3>${isEdit ? `Müştəri redaktəsi — ID ${c.id}` : 'Yeni müştəri (CustomerPropertiesForm)'}</h3>
             <button type="button" class="modal-close-x" id="cpClose" title="Bağla (Esc)">✕</button>
             <div class="formgrid c2">
-              <label class="field"><span>Müştəri tipi (CUST_TYPE)</span><select id="cpType">
-                  <option value="0" ${Number(c.cust_type)===0?'selected':''}>0 - Hüquqi şəxs</option>
-                  <option value="1" ${Number(c.cust_type)===1?'selected':''}>1 - Fiziki şəxs</option>
-                  <option value="2" ${Number(c.cust_type)===2?'selected':''}>2 - Fərdi sahibkar (f.s.)</option>
-                </select>
-              </label>
               <label class="field"><span>Qeydiyyat tarixi (OPEN_DAT)</span><input type="date" id="cpOpenDat" value="${String(c.open_dat||'').slice(0,10)}">
               </label>
               <label class="field span2"><span>Tam adı (NAME) *</span><input id="cpName" value="${esc(c.name||'')}">
               </label>
               <label class="field"><span>Qısa adı (SHORT_NAME) *</span><input id="cpShort" value="${esc(c.short_name||'')}">
-              </label>
-              <label class="field"><span>Filial (FILIAL)</span><select id="cpFilial">${opts(st.init.filials, c.filial||101)}</select>
               </label>
               <label class="field"><span>VÖEN (INN)</span><input id="cpInn" value="${esc(c.inn||'')}">
               </label>
@@ -642,11 +629,9 @@
       $('#cpSave').onclick = async () => {
         try {
           const payload = {
-            cust_type: Number($('#cpType').value),
             open_dat: $('#cpOpenDat').value || null,
             name: $('#cpName').value,
             short_name: $('#cpShort').value,
-            filial: Number($('#cpFilial').value || 101),
             inn: $('#cpInn').value || null,
             kod_okpro: $('#cpOkpo').value || null,
             prinad_kod: Number($('#cpPrinad').value || 1),
@@ -672,6 +657,29 @@
       };
     }
 
+    // CustomerInfoFormImpl (CUSTINFO via sb_custInfo add/upd/del_custinfo) + uCustomersIPInfo (CUSTIPINFO by custid/cardid)
+    const CI_FIELDS = [
+      ['name','Adı (NAME)'], ['lastname','Soyadı (LASTNAME)'], ['soname','Atasının adı (SONAME)'],
+      ['birthday','Doğum tarixi (BIRTHDAY)','date'], ['birthplace','Doğum yeri (BIRTHPLACE)'],
+      ['address','Ünvan (ADDRESS)'], ['city','Şəhər (CITY)'], ['workplace','İş yeri (WORKPLACE)'], ['work','Vəzifə (WORK)'],
+      ['phone_w','İş tel. (PHONE_W)'], ['phone_h','Ev tel. (PHONE_H)'], ['phone_m','Mobil (PHONE_M)'],
+      ['e_mail','E-mail (E_MAIL)'], ['url','URL'], ['garanted','Zamin (GARANTED)'],
+      ['passer','Pasport seriyası (PASSER)'], ['paspnum','Pasport № (PASPNUM)'], ['paspdate','Verilmə tarixi (PASPDATE)','date'],
+      ['paspplace','Kim tərəfindən verilib (PASPPLACE)'], ['note','Qeyd (NOTE)']];
+    const IP_FIELDS = [
+      ['bdate','Doğum tarixi (BDATE)','date'], ['marriage','Ailə vəziyyəti (MARRIAGE)'], ['monthlyprofit','Aylıq gəlir (MONTHLYPROFIT)','number'],
+      ['profession','Peşə (PROFESSION)'], ['passtype','Sənəd növü (PASSTYPE)'], ['passserie','Seriya (PASSSERIE)'],
+      ['passnum','Nömrə (PASSNUM)'], ['soccategory','Sosial kateqoriya (SOCCATEGORY)'], ['insurancecomp','Sığorta şirkəti (INSURANCECOMP)'],
+      ['inspolicnum','Polis № (INSPOLICNUM)'], ['insamount','Sığorta məbləği (INSAMOUNT)','number'], ['insperiodid','Dövr (INSPERIODID)','number'],
+      ['inscontractdate','Müqavilə tarixi (INSCONTRACTDATE)','date'], ['inscontractpreiod','Müqavilə dövrü (INSCONTRACTPREIOD)','date'],
+      ['inscontrlastdate','Son tarix (INSCONTRLASTDATE)','date'], ['uniqueinsid','Unikal ID (UNIQUEINSID)'],
+      ['bb_familystatus','Ailə statusu (BB_FAMILYSTATUS)','number'], ['bb_inn','VÖEN (BB_INN)']];
+    const ciInput = (pfx, [k, label, type], v) => `<label class="field"><span>${label}</span><input id="${pfx}_${k}" ${type ? `type="${type}"` : ''} ${type==='number'?'step="any"':''} value="${esc(type==='date' ? String(v ?? '').slice(0,10) : (v ?? ''))}"></label>`;
+    const ciRead = (pfx, defs) => Object.fromEntries(defs.map(([k,, type]) => {
+      const v = $(`#${pfx}_${k}`).value;
+      return [k, v === '' ? null : (type === 'number' ? Number(v) : v)];
+    }));
+
     async function openCustInfoModal(cust){
       if (!cust) return toast('Müştəri seçilməyib');
       try {
@@ -679,62 +687,30 @@
         let cards = data.cards || [];
         let ipMap = data.ip_info || {};
         let curIdx = 0;
-
         const mh = $('#coModalHost');
         function renderCard(){
-          const card = cards[curIdx] || {
-            card_no: cards.length ? Math.max(...cards.map(x=>x.card_no))+1 : 0,
-            pasp_type: 'Şəxsiyyət vəsiqəsi', pasport: '', kem_vidan: '', pasp_date: '2020-01-01',
-            dog_yer: 'Bakı', dog_tar: '1985-01-01', cins: 'Kişi', milliyet: 'Azərbaycanlı',
-            grajdan: 'Azərbaycan', work_place: cust.name, doljnost: '', partner: '', father: '',
-            adress: '', strana: 'Azərbaycan', tel: '', tel_mob: '', faks: '', e_mail: ''
-          };
-          const ip = ipMap[String(card.card_no)] || {familystatus:1, education:1, place1:1, work1:1, work2:1, verify:1, familymembers:3, monthlyincome:2000, monthlyexpense:800};
+          const card = cards[curIdx] || {id: null};
+          const ip = (card.id != null && ipMap[String(card.id)]) || {};
           mh.innerHTML = `
             <div class="backdrop stacked">
               <div class="modal wide" role="dialog">
-                <h3>Müştəri haqqında məlumat (CustomerInfoForm) — ${esc(cust.name)} [Kart №${card.card_no}]</h3>
+                <h3>Müştəri haqqında məlumat (CustomerInfoForm) — ${esc(cust.name)}${card.id != null ? ` [Kart ${card.id}]` : ' [yeni kart]'}</h3>
                 <button type="button" class="modal-close-x" id="ciClose" title="Bağla (Esc)">✕</button>
                 <div>
                   <div class="toolbar">
-                    <label class="field"><span>Kart seçimi</span><select id="ciCardSel">
-                        ${cards.map((c,i) => `<option value="${i}" ${i===curIdx?'selected':''}>Kart №${c.card_no} (${esc(c.pasport||'yeni')})</option>`).join('')}
+                    <label class="field"><span>Kart (CUSTINFO.ID)</span><select id="ciCardSel">
+                        ${cards.map((c,i) => `<option value="${i}" ${i===curIdx?'selected':''}>${c.id} — ${esc([c.name, c.lastname].filter(Boolean).join(' ') || 'boş')}</option>`).join('')}
+                        ${card.id == null ? '<option selected>yeni</option>' : ''}
                       </select>
                     </label>
-                    <button class="btn secondary small" id="ciAddCard">Yeni kart əlavə et</button>
-                    <button class="btn secondary small" id="ciDelCard">Kartı sil (del_custinfo)</button>
+                    <button class="btn secondary small" id="ciAddCard">Yeni kart (add_custinfo)</button>
+                    <button class="btn secondary small" id="ciDelCard" ${card.id == null ? 'disabled' : ''}>Kartı sil (del_custinfo)</button>
                   </div>
-                  <div class="formgrid">
-                    <label class="field"><span>Sənədin növü (PASP_TYPE)</span><input id="ciPaspType" value="${esc(card.pasp_type||'')}"></label>
-                    <label class="field"><span>Seriya və № (PASPORT)</span><input id="ciPasport" value="${esc(card.pasport||'')}"></label>
-                    <label class="field"><span>Verilmə tarixi (PASP_DATE)</span><input type="date" id="ciPaspDate" value="${String(card.pasp_date||'').slice(0,10)}"></label>
-                    <label class="field"><span>Kim tərəfindən verilib (KEM_VIDAN)</span><input id="ciKemVidan" value="${esc(card.kem_vidan||'')}"></label>
-                    <label class="field"><span>Doğum yeri (DOG_YER)</span><input id="ciDogYer" value="${esc(card.dog_yer||'')}"></label>
-                    <label class="field"><span>Doğum tarixi (DOG_TAR)</span><input type="date" id="ciDogTar" value="${String(card.dog_tar||'').slice(0,10)}"></label>
-                    <label class="field"><span>Cinsi (CINS)</span><select id="ciCins">
-                        <option value="Kişi" ${card.cins==='Kişi'?'selected':''}>Kişi</option>
-                        <option value="Qadın" ${card.cins==='Qadın'?'selected':''}>Qadın</option>
-                      </select>
-                    </label>
-                    <label class="field"><span>Milliyyəti (MILLIYET)</span><input id="ciMilliyet" value="${esc(card.milliyet||'')}"></label>
-                    <label class="field"><span>Vətəndaşlığı (GRAJDAN)</span><input id="ciGrajdan" value="${esc(card.grajdan||'')}"></label>
-                    <label class="field"><span>İş yeri (WORK_PLACE)</span><input id="ciWork" value="${esc(card.work_place||'')}"></label>
-                    <label class="field"><span>Vəzifəsi (DOLJNOST)</span><input id="ciDoljnost" value="${esc(card.doljnost||'')}"></label>
-                    <label class="field"><span>Ata adı (FATHER)</span><input id="ciFather" value="${esc(card.father||'')}"></label>
-                    <label class="field"><span>Həyat yoldaşı (PARTNER)</span><input id="ciPartner" value="${esc(card.partner||'')}"></label>
-                    <label class="field"><span>Ölkə (STRANA)</span><input id="ciStrana" value="${esc(card.strana||'')}"></label>
-                    <label class="field"><span>Ünvan (ADRESS)</span><input id="ciAdress" value="${esc(card.adress||'')}"></label>
-                    <label class="field"><span>Telefon (TEL)</span><input id="ciTel" value="${esc(card.tel||'')}"></label>
-                    <label class="field"><span>Mobil (TEL_MOB)</span><input id="ciTelMob" value="${esc(card.tel_mob||'')}"></label>
-                    <label class="field"><span>E-mail (E_MAIL)</span><input id="ciEmail" value="${esc(card.e_mail||'')}"></label>
-                  </div>
+                  <div class="formgrid">${CI_FIELDS.map(f => ciInput('ci', f, card[f[0]])).join('')}</div>
                   <fieldset class="trside">
-                    <legend>İpoteka əlavə məlumatları (frmIPINFO / CUSTIPINFO)</legend>
-                    <div class="formgrid">
-                      <label class="field"><span>Ailə üzvləri sayı</span><input type="number" id="ciFamMem" value="${ip.familymembers||1}"></label>
-                      <label class="field"><span>Aylıq gəlir (MONTHLYINCOME)</span><input type="number" step="0.01" id="ciIncome" value="${ip.monthlyincome||0}"></label>
-                      <label class="field"><span>Aylıq xərc (MONTHLYEXPENSE)</span><input type="number" step="0.01" id="ciExpense" value="${ip.monthlyexpense||0}"></label>
-                    </div>
+                    <legend>Fərdi sahibkar məlumatları (frmIPINFO / CUSTIPINFO)</legend>
+                    ${card.id == null ? '<p class="muted">Əvvəlcə kartı yadda saxlayın.</p>' : `<div class="formgrid">${IP_FIELDS.map(f => ciInput('ip', f, ip[f[0]])).join('')}</div>
+                    <div class="actions"><button class="btn secondary" id="ipSave">CUSTIPINFO yadda saxla</button></div>`}
                   </fieldset>
                 </div>
                 <div class="actions">
@@ -742,56 +718,35 @@
                   <button class="btn" id="ciSave">Yadda saxla (sb_custInfo.upd_custinfo)</button>
                 </div>
               </div>
-            </div>
-          `;
+            </div>`;
           $('#ciClose').onclick = $('#ciCancel').onclick = () => { mh.innerHTML = ''; };
           const selEl = $('#ciCardSel');
-          if (selEl) selEl.onchange = () => { curIdx = Number(selEl.value); renderCard(); };
-          $('#ciAddCard').onclick = () => {
-            const nextNo = cards.length ? Math.max(...cards.map(x=>x.card_no)) + 1 : 0;
-            cards.push({card_no: nextNo, pasp_type: 'Şəxsiyyət vəsiqəsi', cins: 'Kişi', strana: 'Azərbaycan'});
-            curIdx = cards.length - 1;
-            renderCard();
-          };
+          selEl.onchange = () => { if (selEl.value !== 'yeni') { curIdx = Number(selEl.value); renderCard(); } };
+          $('#ciAddCard').onclick = () => { curIdx = cards.length; renderCard(); };
           $('#ciDelCard').onclick = async () => {
+            if (card.id == null) return;
             try {
-              const res = await api(`/api/customers/ocx/customers/${cust.id}/info/${card.card_no}`, {method:'DELETE'});
-              cards = res.cards || [];
-              curIdx = 0;
-              toast('Kart silindi');
-              renderCard();
+              const res = await api(`/api/customers/ocx/customers/${cust.id}/info/${card.id}`, {method:'DELETE'});
+              cards = res.cards || []; curIdx = 0;
+              toast('Kart silindi'); renderCard();
             } catch(e){ showErr(e); }
           };
           $('#ciSave').onclick = async () => {
             try {
               const res = await api(`/api/customers/ocx/customers/${cust.id}/info`, {
-                method: 'POST',
-                body: ({
-                  card_no: card.card_no,
-                  pasp_type: $('#ciPaspType').value, pasport: $('#ciPasport').value,
-                  pasp_date: $('#ciPaspDate').value || null, kem_vidan: $('#ciKemVidan').value,
-                  dog_yer: $('#ciDogYer').value, dog_tar: $('#ciDogTar').value || null,
-                  cins: $('#ciCins').value, milliyet: $('#ciMilliyet').value,
-                  grajdan: $('#ciGrajdan').value, work_place: $('#ciWork').value,
-                  doljnost: $('#ciDoljnost').value, father: $('#ciFather').value,
-                  partner: $('#ciPartner').value, strana: $('#ciStrana').value,
-                  adress: $('#ciAdress').value, tel: $('#ciTel').value,
-                  tel_mob: $('#ciTelMob').value, faks: '', e_mail: $('#ciEmail').value,
-                })
-              });
-              await api(`/api/customers/ocx/customers/${cust.id}/ipinfo`, {
-                method: 'POST',
-                body: ({
-                  card_no: card.card_no,
-                  familystatus: 1, education: 1, place1: 1, work1: 1, work2: 1, verify: 1,
-                  familymembers: Number($('#ciFamMem').value || 1),
-                  monthlyincome: Number($('#ciIncome').value || 0),
-                  monthlyexpense: Number($('#ciExpense').value || 0),
-                })
-              });
+                method: 'POST', body: {id: card.id, ...ciRead('ci', CI_FIELDS)}});
               cards = res.cards || [];
-              toast('Müştəri kartı yadda saxlanıldı');
-              renderCard();
+              curIdx = Math.max(0, cards.findIndex(x => x.id === res.id));
+              toast('Müştəri kartı yadda saxlanıldı'); renderCard();
+            } catch(e){ showErr(e); }
+          };
+          const ipBtn = $('#ipSave');
+          if (ipBtn) ipBtn.onclick = async () => {
+            try {
+              const res = await api(`/api/customers/ocx/customers/${cust.id}/ipinfo`, {
+                method: 'POST', body: {cardid: card.id, ...ciRead('ip', IP_FIELDS)}});
+              ipMap[String(card.id)] = res.ip_info || {};
+              toast('CUSTIPINFO yadda saxlanıldı');
             } catch(e){ showErr(e); }
           };
         }
@@ -895,8 +850,8 @@
         const b = host.querySelector('#ciBody');
         const rows = res.rows || [];
         if (mode === 'customers'){
-          h.innerHTML = `<tr><th>ID</th><th>VÖEN</th><th>Adı</th><th>Qısa adı</th><th>Tipi</th><th>Açılma tarixi</th><th>Filial</th></tr>`;
-          b.innerHTML = rows.map(r => `<tr><td>${r.id}</td><td>${esc(r.inn||'')}</td><td>${esc(r.name||'')}</td><td>${esc(r.short_name||'')}</td><td>${esc(r.tip||'')}</td><td>${fmtDate(r.open_dat)}</td><td>${r.filial||101}</td></tr>`).join('');
+          h.innerHTML = `<tr><th>ID</th><th>VÖEN</th><th>Adı</th><th>Qısa adı</th><th>Tipi</th><th>Açılma tarixi</th></tr>`;
+          b.innerHTML = rows.map(r => `<tr><td>${r.id}</td><td>${esc(r.inn||'')}</td><td>${esc(r.name||'')}</td><td>${esc(r.short_name||'')}</td><td>${esc(r.tip||'')}</td><td>${fmtDate(r.open_dat)}</td></tr>`).join('');
         } else if (mode === 'accounts'){
           h.innerHTML = `<tr><th>Hesab №</th><th>Hesab adı</th><th>Müştəri</th><th>Valyuta</th><th class="num">Qalıq</th><th>Açılma tarixi</th></tr>`;
           b.innerHTML = rows.map(r => `<tr><td><code>${esc(r.accno||'')}</code></td><td>${esc(r.accname||'')}</td><td>${esc(r.customer_name||'')}</td><td>${esc(r.currencysname||'')}</td><td class="num">${fmtNum(r.balance)}</td><td>${fmtDate(r.opendate)}</td></tr>`).join('');
