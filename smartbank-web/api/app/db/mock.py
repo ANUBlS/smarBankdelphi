@@ -61,6 +61,8 @@ from .mock_pay import PayMixin
 from .mock_ord import OrdMixin
 from .mock_rt import RtMixin
 from . import mock_xohks
+from . import mock_csv
+from .mock_csv import CsvMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -100,6 +102,7 @@ def reset():
     mock_azips_new.reset()
     mock_cs.reset()
     mock_cr.reset()
+    mock_csv.reset()
     mock_bal.reset()
     mock_out.reset()
     mock_ost._fix = None
@@ -110,7 +113,7 @@ def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
+class MockConnection(CsvMixin, BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, EmMixin, CpMixin, ExMixin, CdMixin, DepMixin, CardsMixin, XohksMixin, AzipsInMixin, AzipsNewMixin, AzipsMixin, AzipsEditMixin, OexiMixin, OrepMixin, OmemMixin, OsetMixin, OaccMixin, OstMixin, OtpMixin, OctMixin, OutMixin, BalMixin, CsMixin, CrMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -124,7 +127,9 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
-        r = self._bb_func(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServAdd)
+        r = self._csv_func(key, args, named)           # Packages/PCustService_irshad
+        if r is NotImplemented:
+            r = self._bb_func(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServAdd)
         if r is NotImplemented:
             r = self._asan_func(key, named)                # Packages/ASANFinance (asan_transaction.add_cust)
         if r is NotImplemented:
@@ -230,7 +235,9 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper() if pkg else name.upper()
-        r = self._bb_proc(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServ*)
+        r = self._csv_proc(key, args, named)           # Packages/PCustService_irshad
+        if r is NotImplemented:
+            r = self._bb_proc(key, args)                   # Packages/BBPayings (Cable_Manager.AbnServ*)
         if r is NotImplemented:
             r = self._pay_proc(key, args)                  # Packages/Payments (standalone Ibank_change_status)
         if r is NotImplemented:
@@ -293,7 +300,9 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
-        r = self._bb_query(sql, b)  # Packages/BBPayings (own texts only)
+        r = self._csv_query(s, sql, b)  # Packages/PCustService_irshad (own texts only)
+        if r is NotImplemented:
+            r = self._bb_query(sql, b)  # Packages/BBPayings (own texts only)
         if r is NotImplemented:
             r = self._asan_query(sql, b)  # Packages/ASANFinance (own texts only)
         if r is NotImplemented:
