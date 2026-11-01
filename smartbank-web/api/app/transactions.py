@@ -38,8 +38,14 @@ def status_first(conn) -> bool:
 
 
 def set_status_first(conn, on: bool) -> None:
-    """ChBoxStatusTClick :1057-1065: ODS_StatusT.Edit; Value := 1/0; Post (DOA generates the UPDATE by rowid)."""
-    conn.execute("update Settings s set s.Value = :Value where upper(s.name)='TRANSACTION_STATUST'", {"Value": 1 if on else 0})
+    """ChBoxStatusTClick :1057-1065: ODS_StatusT.Edit; FieldByName('Value').AsInteger := 1/0; Post.
+    DOA posts by ROWID: lock the record, update the modified column, then CommitOnPost (default True) commits."""
+    r = conn.query(Q.SQL_STATUST)              # the open ODS_StatusT row (ActiveFormCreate :646) - its ROWID
+    if not r:
+        return                                 # no TRANSACTION_STATUST row: see docs (not ported)
+    rid = r[0].get("ROWID")
+    conn.query(Q.SQL_STATUST_LOCK, {"doa__rowid": rid})
+    conn.execute(Q.SQL_STATUST_UPDATE, {"VALUE": "1" if on else "0", "doa__rowid": rid})
     conn.commit()
 
 
@@ -194,17 +200,26 @@ def add_params(t: TrIn, tr_id: int | None) -> dict:
     }
 
 
-def save_transaction(conn, t: TrIn, current: dict | None) -> int:
-    """SaveTransaction (TransactionPropertiesImpl.pas:376-411) + TransactionsApplyRecord (TransactionDataModuleUnit.pas:245-266)."""
+def editor_open(conn, mode: str) -> None:
+    """ActionInsertExecute :661 / ActionEditExecute :708: SB_ACA.CheckObjectAccess('Transaction', 'insert'|'update')
+    before the editor opens. The commission path (CommissionImpl.pas:73-81 GridCommissionDblClick) calls no access check."""
+    if mode in ("insert", "edit"):
+        conn.call_proc("SB_ACA", "CheckObjectAccess", ["Transaction", "insert" if mode == "insert" else "update"],
+                       commit=False)
+
+
+def save_transaction(conn, t: TrIn, current: dict | None, access_checked: bool = False) -> int:
+    """SaveTransaction (TransactionPropertiesImpl.pas:389-421) + TransactionsApplyRecord (TransactionDataModuleUnit.pas:244-270)."""
     validate_transaction(conn, t)
     if t.mode == "edit":
         if not current:
             raise TrError("error.not_found")
-        conn.call_proc("SB_ACA", "CheckObjectAccess", ["Transaction", "update"], commit=False)   # ActionEditExecute :708
-        if current.get("status") == TS_COMMITED:
-            conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["TRANSACTIONCOMMITEDEDIT"], commit=False)
-    else:
-        conn.call_proc("SB_ACA", "CheckObjectAccess", ["Transaction", "insert"], commit=False)   # ActionInsertExecute :661
+    if not access_checked:
+        # Normally done once when the editor opens (editor_open); only a client that skipped it gets it here.
+        editor_open(conn, t.mode)
+    if t.mode == "edit" and current.get("status") == TS_COMMITED:
+        # SaveTransaction (TransactionPropertiesImpl.pas:392-394)
+        conn.call_proc("SB_ACA", "CheckAdvancedObjectAccess", ["TRANSACTIONCOMMITEDEDIT"], commit=False)
     cnt = conn.query(Q.SQL_VIDOP_TRDEL, {"v_ID": int(t.operation_code or 0)})[0]["CNT"]
     if int(cnt) == 1:
         raise TrError(TRDEL_MSG["edit"])
@@ -244,9 +259,11 @@ def reject(conn, rows_by_id: dict, ids: list[int], reason: str) -> dict:
     return {"rejected": ok, "errors": bad, "total": ok + bad}
 
 
-def delete_one(conn, row_: dict, multi: bool) -> dict:
-    """ActionDeleteExecute :962-1024 (per row)."""
-    conn.call_proc("SB_ACA", "CheckObjectAccess", ["Transaction", "delete"], commit=False)
+def delete_one(conn, row_: dict, multi: bool, check: bool = True) -> dict:
+    """ActionDeleteExecute :962-1024 (per row). SB_ACA.CheckObjectAccess('Transaction','delete') runs once per action
+    (:969, before the loop): only for the first row the client sends (check=True)."""
+    if check:
+        conn.call_proc("SB_ACA", "CheckObjectAccess", ["Transaction", "delete"], commit=False)
     cnt = conn.query(Q.SQL_VIDOP_TRDEL, {"v_ID": int(row_.get("operationcode") or 0)})[0]["CNT"]
     if int(cnt) == 1:
         return {"blocked": True}
@@ -263,9 +280,10 @@ def delete_one(conn, row_: dict, multi: bool) -> dict:
 
 # ------------------------------------------------------------------------------------------------ lookups
 def accounts(conn) -> list[dict]:
-    """DebitAccData/CreditAccData with :src_pos from settings 'AccNoSearchPos' (FormCreate :526-531)."""
+    """DebitAccData/CreditAccData with :src_pos from settings 'AccNoSearchPos' (FormCreate :619-626).
+    ODS_SettingsVALUE.AsInteger is 0 for NULL or for no row (TField.AsInteger on an empty dataset)."""
     sp = conn.query(Q.SQL_SRC_POS)
-    src = int(sp[0]["VALUE"]) if sp and sp[0]["VALUE"] is not None else 1
+    src = int(sp[0]["VALUE"]) if sp and sp[0]["VALUE"] is not None else 0
     return [row(r) for r in conn.query(Q.SQL_ACCOUNTS, {"src_pos": src})]
 
 
@@ -282,6 +300,45 @@ def editor_lookups(conn) -> dict:
         "countries": [row(r) for r in conn.query(Q.SQL_COUNTRIES)],
         "system_date": conn.query(Q.SQL_SYSDAT)[0]["TEK_DAT"].date().isoformat(),
     }
+
+
+# ------------------------------------------------------------------------------------------------ TrDest (DBNavigator1)
+def _trdest_rowid(conn, tid: int):
+    r = conn.query(Q.SQL_TRDEST_ROWID, {"id": tid})
+    if not r:
+        raise TrError("error.not_found")
+    return r[0]["DOA__ROWID"]
+
+
+def trdest_insert(conn, tid: int | None, name: str | None) -> None:
+    """DBNavigator1 Insert + Post on TrDest -> DOA insert, CommitOnPost."""
+    conn.execute(Q.SQL_TRDEST_INSERT, {"ID": tid, "NAME": name})
+    conn.commit()
+
+
+def trdest_update(conn, tid: int, new_id: int | None, name: str | None, old_name: str | None) -> None:
+    """DBNavigator1 Edit + Post: DOA locks the record at Post, updates only the modified columns, CommitOnPost."""
+    rid = _trdest_rowid(conn, tid)
+    id_changed = new_id is not None and new_id != tid
+    name_changed = name != old_name
+    if not id_changed and not name_changed:
+        return                                  # DOA: Post without modifications sends nothing
+    conn.query(Q.SQL_TRDEST_LOCK, {"doa__rowid": rid})
+    if id_changed and name_changed:
+        conn.execute(Q.SQL_TRDEST_UPDATE_ID_NAME, {"ID": new_id, "NAME": name, "doa__rowid": rid})
+    elif id_changed:
+        conn.execute(Q.SQL_TRDEST_UPDATE_ID, {"ID": new_id, "doa__rowid": rid})
+    else:
+        conn.execute(Q.SQL_TRDEST_UPDATE_NAME, {"NAME": name, "doa__rowid": rid})
+    conn.commit()
+
+
+def trdest_delete(conn, tid: int) -> None:
+    """DBNavigator1 Delete (after its confirmation): DOA locks the record, deletes by ROWID, CommitOnPost."""
+    rid = _trdest_rowid(conn, tid)
+    conn.query(Q.SQL_TRDEST_LOCK, {"doa__rowid": rid})
+    conn.execute(Q.SQL_TRDEST_DELETE, {"doa__rowid": rid})
+    conn.commit()
 
 
 # ------------------------------------------------------------------------------------------------ router
@@ -311,6 +368,16 @@ class DeleteIn(BaseModel):
     date: datetime.date
     id: int
     multi: bool = False
+    first: bool = True          # first row of this ActionDelete -> CheckObjectAccess
+
+
+class EditorOpenIn(BaseModel):
+    mode: str = Field(pattern="^(insert|edit|commission)$")
+
+
+class TrDestIn(BaseModel):
+    id: int | None = None
+    name: str | None = Field(default=None, max_length=500)
 
 
 class AmountsIn(BaseModel):
@@ -374,7 +441,39 @@ def make_router(current, require_module, err):
         rw = _rows(ws, body.date).get(body.id)
         if not rw:
             err(404, "error.not_found")
-        return delete_one(ws.conn, rw, body.multi)
+        key = "transactionmanager.delete_checked"
+        check = body.first or not ws.module_state.get(key)
+        res = delete_one(ws.conn, rw, body.multi, check)
+        ws.module_state[key] = True
+        return res
+
+    @r.post("/editor-open")
+    def _eo(body: EditorOpenIn, ws=Depends(guard)):
+        editor_open(ws.conn, body.mode)
+        ws.module_state["transactionmanager.editor_checked"] = body.mode in ("insert", "edit")
+        return {"ok": True}
+
+    def _trdest_call(fn, *a):
+        try:
+            fn(*a)
+        except TrError as e:
+            err(404, e.key)
+        return {"ok": True}
+
+    @r.post("/trdest")
+    def _tdi(b: TrDestIn, ws=Depends(guard)):
+        return _trdest_call(trdest_insert, ws.conn, b.id, b.name or None)
+
+    @r.put("/trdest/{tid}")
+    def _tdu(tid: int, b: TrDestIn, ws=Depends(guard)):
+        old = next((x for x in ws.conn.query(Q.SQL_TRDEST) if int(x["ID"]) == tid), None)
+        if old is None:
+            err(404, "error.not_found")
+        return _trdest_call(trdest_update, ws.conn, tid, b.id, b.name or None, old.get("NAME"))
+
+    @r.delete("/trdest/{tid}")
+    def _tdd(tid: int, ws=Depends(guard)):
+        return _trdest_call(trdest_delete, ws.conn, tid)
 
     @r.get("/editor-lookups")
     def _el(ws=Depends(guard)):
@@ -408,7 +507,8 @@ def make_router(current, require_module, err):
     def _save(t: TrIn, ws=Depends(guard)):
         cur = _rows(ws, t.orig_date or t.transaction_date).get(t.id) if t.mode == "edit" else None
         try:
-            return {"id": save_transaction(ws.conn, t, cur)}
+            checked = bool(ws.module_state.get("transactionmanager.editor_checked"))   # ResetTransaction re-inserts without a new check
+            return {"id": save_transaction(ws.conn, t, cur, access_checked=checked)}
         except TrError as e:
             err(400, e.key, field=e.field)
 
