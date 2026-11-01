@@ -287,11 +287,16 @@
     const [path, qs] = h.split('?');
     const params = new URLSearchParams(qs || '');
     const c = document.getElementById('content'); if (!c) return;
+    if (window.SB.unifyLayout) window.SB.unifyLayout(c, '');   // stop the previous page's layout observer
     if (params.get('node')) { S.activePath = params.get('node'); document.querySelectorAll('.node').forEach(x => x.classList.toggle('active', x.dataset.path === S.activePath)); }
     if (path === '/home' || path === '/login') return homePage(c);
     if (path === '/admin/login-history') return historyPage(c);
     const entry = Object.entries(S.modules).find(([, m]) => m.route === path);
-    if (entry && entry[1].migrated && pages[path]) return pages[path](c, { clsid: entry[0], module: entry[1], node: findNode(S.tree, S.activePath), params });
+    if (entry && entry[1].migrated && pages[path]) {
+      const r = pages[path](c, { clsid: entry[0], module: entry[1], node: findNode(S.tree, S.activePath), params });
+      if (window.SB.unifyLayout) window.SB.unifyLayout(c, path);   // Accounts look for older modules (ui/unify.js)
+      return r;
+    }
     if (entry && entry[1].route === '/home') return homePage(c);
     notMigratedPage(c, entry, findNode(S.tree, S.activePath));
   }

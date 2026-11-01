@@ -48,7 +48,7 @@
   const labels = (title, cols, header = [], signatures = []) => ({ title, header, signatures, total: t('balance.total'), group_total: t('balance.group_total'),
     cols: Object.fromEntries(cols.map(c => [c.toLowerCase(), lab(c)])), sheet: title.slice(0, 31) });
   const shell = (title, form, buttons) => `<div class="card"><div class="toolbar" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0 12px 0 0">${esc(t(title))}</h2></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;align-items:end;margin-top:8px">${form}</div>
+    <div class="bal-form" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;align-items:end;margin-top:8px">${form}</div>
     <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-top:8px">${buttons}</div><div id="berr"></div><div id="bres" style="margin-top:10px"></div></div>`;
   const btn = (id, k, sec = true) => `<button class="btn ${sec ? 'secondary' : ''}" id="${id}">${esc(t(k))}</button>`;
   const plans = () => [0, 1, 2, 3].map(i => ({ id: i, n: t('balance.plan_' + i) }));
@@ -61,7 +61,7 @@
 
   /* ------------------------------------------------------------------------------- Balance (TFrmBalance) */
   const EXPORT_FIELDS = ['BAL_CN', 'FIRSTACTIVE', 'FIRSTPASSIVE', 'DTURNOVER', 'KTURNOVER', 'LASTACTIVE', 'LASTPASSIVE', 'BALNAME'];
-  function balancePage(el, I, P = '/api/balance', TK = TK) {
+  function balancePage(el, I, P = '/api/balance', TK = 'balance.title_balance') {
     el.innerHTML = shell(TK,
       field('balance.beg', `<input type="date" id="bb" value="${I.date}">`) + field('balance.end', `<input type="date" id="be" value="${I.date}">`)
       + field('balance.plan', `<select id="bp">${opt(plans(), 'id', x => x.n, 0)}</select>`)
@@ -153,7 +153,7 @@
   }
 
   /* -------------------------------------------------------------------------- TodayBalance (TFrmTodayBalance) */
-  function todayPage(el, I, P = '/api/todaybalance', TK = TK) {
+  function todayPage(el, I, P = '/api/todaybalance', TK = 'balance.title_today') {
     const one = I.single_branch ? I.branches[0].branchid : -1;
     el.innerHTML = shell(TK,
       field('balance.date', `<input type="date" id="td" value="${I.date}">`)
@@ -197,7 +197,7 @@
   }
 
   /* ------------------------------------------------------------------------ BalanceAnalys (TFormBalanceAnalys) */
-  function analysPage(el, I, P = '/api/balanceanalys', TK = TK) {
+  function analysPage(el, I, P = '/api/balanceanalys', TK = 'balance.title_analys') {
     el.innerHTML = shell(TK,
       field('balance.beg', `<input type="date" id="ab" value="${I.date}">`) + field('balance.end', `<input type="date" id="ae" value="${I.date}">`)
       + field('balance.branches', checks('abr', I.branches, 'id', x => x.name))
