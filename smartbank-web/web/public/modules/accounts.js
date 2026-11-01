@@ -244,6 +244,7 @@
     const lk = st.lk;
     let a;
     try { a = id ? await api(`/api/accounts/${id}`) : await api('/api/accounts/new-defaults'); } catch (e) { return toast(t(e.key, e), 'error'); }
+    if (!id && a.customers) lk.customers = a.customers;   // New: AccountDataModule.CustomersData.Refresh (AccountPropertiesForm_Unit.pas:180)
     const v = id ? { acc_no: a.accno, acc_name: a.accname, customer_id: a.customerid, currency_id: a.currencyid, open_date: a.opendate, sacc: a.sacc, sacc2: a.sacc2, sacc3: a.sacc3, sacc4: a.sacc4,
                      acc_limit: a.acclimit, report_symbol: a.reportsymbol, pair_acc: a.pairacc, pair_accno: a.pair_accno, filial_id: a.filialid, flags: a.acc_flags_checked || [], accflags: a.accflags ?? '' }
                  : { acc_no: '', acc_name: '', customer_id: '', currency_id: '', open_date: a.open_date, sacc: '', sacc2: '', sacc3: '', sacc4: '', acc_limit: '', report_symbol: '', pair_acc: '', pair_accno: '', filial_id: a.filial_id, flags: [], accflags: '' };

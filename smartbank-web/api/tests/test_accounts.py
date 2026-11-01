@@ -22,10 +22,11 @@ def test_query_builder_matches_delphi():
     sql, b = accounts.build_accs_query(dict(apply_filter=True, status="active", bal_cn=3801, customer_id=1,
                                             currency_id=944, filial_id=101, flag="A", order="name"))
     assert sql.startswith(accounts.SACCOUNTS_QUERY)
-    assert sql[len(accounts.SACCOUNTS_QUERY):] == (" AND (acc.CLOSE_DAT IS NULL)\r\n AND (acc.BAL_CN1 = :bal_cn)\r\n"
-        " AND (acc.KLI_ID = :customer_id)\r\n AND (acc.VAL_ACC = :currency_id)\r\n AND (acc.FILIAL = :filial_id)\r\n"
-        " AND (acc.tipacc like :flag_like  )\r\nORDER BY acc.NAME\r\n")
-    assert b == {"bal_cn": 3801, "customer_id": 1, "currency_id": 944, "filial_id": 101, "flag_like": "%A%"}
+    # AccountMainFormImpl.pas:559-603 Format(' AND (acc.BAL_CN1 = %d)'#13#10, ...) - values written into the text
+    assert sql[len(accounts.SACCOUNTS_QUERY):] == (" AND (acc.CLOSE_DAT IS NULL)\r\n AND (acc.BAL_CN1 = 3801)\r\n"
+        " AND (acc.KLI_ID = 1)\r\n AND (acc.VAL_ACC = 944)\r\n AND (acc.FILIAL = 101)\r\n"
+        " AND (acc.tipacc like '%A%'  )\r\nORDER BY acc.NAME\r\n")
+    assert b == {}
     sql2, b2 = accounts.build_accs_query(dict(apply_filter=False, status="active", bal_cn=1))  # filters ignored
     assert sql2 == accounts.SACCOUNTS_QUERY + "ORDER BY acc.ACC_NO\r\n" and b2 == {}
 
@@ -94,7 +95,9 @@ def test_lookups_and_defaults():
     c = cl(); lk = c.get("/api/accounts/lookups").json()
     assert [x["id"] for x in lk["customers"]] == [1, 2, 3, 4]  # close_dat is null
     assert lk["acc_flags"][0]["symbol"] == "A"
-    d = c.get("/api/accounts/new-defaults").json(); assert d == {"open_date": "2026-10-12", "filial_id": 101, "acc_limit": 0, "acc_flags": []}
+    d = c.get("/api/accounts/new-defaults").json(); cs = d.pop("customers")
+    assert d == {"open_date": "2026-10-12", "filial_id": 101, "acc_limit": 0, "acc_flags": []}
+    assert [x["id"] for x in cs] == [1, 2, 3, 4]   # New: CustomersData.Refresh
 
 
 def test_required_fields_in_delphi_order():
