@@ -49,3 +49,50 @@ pmPositional; `TOracleSession.Preferences.ZeroDateIsNull = True` (default), so D
 
 Counts (Accounts): **identical 17** (#1, 2, 7-11, 14-16, 18-24) · **fixed 7** (#3, 4, 5, 6, 12, 13, 17) ·
 **differs, deliberate 1** (#20 commit timing) · **still missing 0** · not ported/not applicable 3 (#25-27) · web-only reads (#28).
+
+## Login (`Packages/SBCommon50/UnitSBOraLogOn`, `SBOracleLogOn`, `Packages/sboapi50/SBOInitPkg`, `Programs/SmartBank/sbMainForm_Unit` → `api/app/sb.py`, `/api/login`, `/api/session`, `/api/system`, `/api/tree`)
+
+The web keeps its own login design: one Oracle session per web user, the 45-minute idle logout that closes that
+session, the app-side login audit, the lock after 5 failures and the admin unlock. Only the Oracle calls, their order
+and their parameters follow Delphi. Tests: `api/tests/test_login_oracle_parity.py` (recording backend/connection;
+the dataset SQL is re-read from the .dfm files, using `git show HEAD:` in a sparse checkout).
+
+| # | Delphi | Oracle call | Web | Status | Notes |
+|---|---|---|---|---|---|
+| 1 | UnitSBOraLogOn.pas:314-315 btOkClick | `OracleSession1.LogOn`, password `'KLs'+pw+'#1$'` | `sb.logon` connect 1 | identical | |
+| 2 | :317-329 | ORA-28001 → TfmPassChange, `SetPassword(edNewPass.Text)`, LogOn | connect 1 with `newpassword` (OCI password change) | differs, deliberate | Delphi sends the **unwrapped** new password and then logs on with the wrapped one (:397), so the next logon fails: a Delphi bug. The web sends `'KLs'+new+'#1$'`. TfmPassChange makes no Oracle call (VerifyPassword is defined but not called). |
+| 3 | :349, UnitSBOraLogOn.dfm OracleDataSet1 | `select * from sba_objinf where id = (…obj=user)` | connect 1 | identical | |
+| 4 | :350, OracleDataSet4 | `select … as ex from dba_users a where \n user_id=UID` | connect 1 | fixed | The SQL text was missing the line break. Kept web behaviour: an error (no grant on dba_users) gives the warning `login.warn_expiry_unavailable` instead of stopping the logon. |
+| 5 | :360-363 | `ex < 5` → warning | `login.warn_password_expires` | identical | |
+| 6 | :370-386 | `finger3 = 1` → fingerprint scan (BSDK) | 403 `FINGERPRINT_REQUIRED` | not ported | No fingerprint reader in the browser. |
+| 7 | :390 | `OracleSession1.Connected := False` | close connect 1 | fixed | The web used the form session as the working session. |
+| 8 | SBOracleLogOn.pas CheckForExpire | SBSession `LogOn; LogOff` | connect 2 + close | fixed | was missing |
+| 9 | SBOInitPkg.pas:47-67 Sb_Initialize | `SBSession.LogOn` | connect 3 (the per-user web session) | fixed | separate session, as in Delphi |
+| 10 | sboapiDataModuleImpl.dfm SBSession `IsolationLevel = ilReadCommitted` | `alter session set isolation_level = read committed` | connect 3 | fixed | was missing. The statement is the DOA behaviour reconstructed (the DOA source is not in the repo). |
+| 11 | client info | v$session.program = the client exe | `program="SmartBank.exe"` (`ORACLE_PROGRAM`, empty = driver default) | fixed | DOA/OCI reports the exe name. No DBMS_APPLICATION_INFO calls exist in the Delphi sources. |
+| 12 | SBOInitPkg.pas:64 | `SBLOGIN.GetSessionID` | connect 3 | identical | |
+| 13 | — | `SBLOGIN.UserID` | removed | fixed | The main program never calls it at logon. |
+| 14 | DBIniFile.pas:147-151 | `SBCONFIG.OpenFile([FileName])` once | `ini_open` | identical | |
+| 15 | PluginSrv.pas:881-900 | `ReadValue('<PluginManager>\Packages','Count')`, `ItemN` | `load_plugins` | identical | |
+| 16 | TreeViewIni.pas:189-205, PluginTreeView.pas:353, :221 | per node `Count`, `Caption` (`<no data>`), `Action`, then `Icon` only for plugin nodes (of NodeByPlugin), then the children | `build_tree` | fixed | The web read `Icon` for every node and a web-only `CaptionKey`. `CaptionKey` is now off by default (`TREE_CAPTION_KEYS=1` turns it on). |
+| 17 | sbMainForm_Unit.pas:463, PluginTreeView.pas:111-128 | `sb_aca.checkmodright` only when a node is opened | removed from the tree load | fixed | Nodes are `allowed: true`. A denied open gets 403 `error.access_denied`. `TREE_PRECHECK_RIGHTS=1` or `HIDE_DENIED_NODES=1` restore the web-only pre-check. |
+| 18 | :1029-1032 AccCheck | `sb_aca.checkmodright([GUID])` | `/api/modules/open` | identical | |
+| 19 | :451 Sb_LogEnable (SBOutput.pas) | `dbms_output.enable` | `main_form_init` | fixed | was missing. The 20000 buffer is the DOA default (reconstructed). |
+| 20 | :453 Sb_LogPutLine | `dbms_output.put_line('SmartBank 4.0, Copyright 1996-2016, Smart Systems Technology, Ltd.')` | `main_form_init` | fixed | was missing |
+| 21 | :465-468 InitAlertThread | `dbms_alert.register` for `MessageBroadcast`, `MsgToUser_<sid>`, `SessionShutdown`, `Shutdown_<sid>` | `main_form_init` | fixed | was missing. A failure does not stop the login (it runs in TAlertThread). |
+| 22 | AlertThread.pas / SBAlert.pas | `dbms_alert.waitany(name, message, status, timeout=0)` loop; a shutdown alert stops the thread | `/api/session` poll → `alerts` (toast in app.js) | fixed | Timing differs deliberately: the web polls every 30 s instead of every 2 s. A shutdown alert only shows its message, as in Delphi (InitiateShutdown does not exit). |
+| 23 | :823-839 LogTimer (60000 ms) | `dbms_output.get_line` until status ≠ 0 | `/api/session` poll, at most every 60 s → `log` | fixed | |
+| 24 | :477 Sb_GetSystemDate | `SBOP.get_date` | `main_form_init` → `/api/system.operation_date` | identical | now read once at start-up |
+| 25 | :997-998 FormShow | `select get_app_header from dual` | `main_form_init` | identical | |
+| 26 | :1002, :1004 | `SBLOGIN.get_lastlogintime` twice | `main_form_init` → `db_last_login_time` | fixed | was missing. The screen still shows the app-side audit times. |
+| 27 | :710-712 FormActivate | `select * from companies order by company_name` | `main_form_init` | fixed | was missing |
+| 28 | CompanySelection.pas | `complist_id`, `DBMS_SESSION.SET_CONTEXT` | `/api/companies` | identical | |
+| 29 | PasswordChange_unit.pas | `SB_ADM.verify_password`, `SBLOGIN.ChangeUserPsw` | `/api/password` | identical | |
+| 30 | :483 TranslateAllCompForms | `SL_CONTROL.TranslateWords` per control | — | not ported | UI translation; the web has its own locales. Packages/SBTranslate/SBTranslateProc.pas is empty at HEAD (only `__history` has the source). |
+| 31 | Setup_RegionalSettings | none (Windows SetLocaleInfo) | — | not applicable | no Oracle call |
+| 32 | ReconnectExecute, Sb_CheckFatalError, ForTerminateApp | reconnect; disconnect on fatal error; `select 'TRUE' …` keep-alive | — | not ported | The keep-alive timer is disabled in Delphi. A broken web session ends through the idle logout or logout. |
+| 33 | — | `SB_ACA.isadm`; unlock (`all_users` + `ALTER USER … ACCOUNT UNLOCK` in the admin's session); `SYSDAT`/`BANKINFO` header reads (once per session); app audit; idle close | various | web-only | These are the web design features that were kept. |
+
+Counts (Login): **identical 11** (#1, 3, 5, 12, 14, 15, 18, 24, 25, 28, 29) · **fixed 15** (#4, 7-11, 13, 16, 17, 19-23, 26, 27)
+· **differs, deliberate 1** (#2, plus the kept tolerance in #4 and the poll timing in #22) · **still missing 0**
+· not ported/not applicable 4 (#6, 30, 31, 32) · web-only (#33).

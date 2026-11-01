@@ -14,7 +14,6 @@ class WebSession:
     conn: object
     username: str
     session_id: int | None = None
-    user_id: int | None = None
     company_id: int | None = None
     company_name: str | None = None
     ini_opened: bool = False
@@ -23,6 +22,11 @@ class WebSession:
     pw_salt: bytes = b""
     pw_hash: bytes = b""
     is_admin: bool | None = None
+    # TsbMainForm start-up values (sb.main_form_init) and background polls (sb.poll_session)
+    main_info: dict = field(default_factory=dict)
+    system_cache: dict | None = None
+    alerts_active: bool = False
+    last_log_drain: float = 0.0
     previous: dict = field(default_factory=dict)
     # per-plugin global state that lives as long as the Delphi DLL stays loaded in the client (e.g. pep_chek)
     module_state: dict = field(default_factory=dict)

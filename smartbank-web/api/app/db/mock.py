@@ -177,6 +177,8 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
             return self.session_id
         if key == "SBLOGIN.USERID":
             return self.user.get("user_id", 0)
+        if key == "SBLOGIN.GET_LASTLOGINTIME":
+            return datetime.datetime.fromisoformat(self.st["sys"]["tek_dat"])
         if key == "SBOP.GET_DATE":
             return datetime.datetime.fromisoformat(self.st["sys"]["tek_dat"])
         if key == "SBCONFIG.OPENFILE":
@@ -427,6 +429,8 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
             return
         if self._cards_execute(sql, binds or {}):
             return
+        if sql.strip().lower() == "alter session set isolation_level = read committed":
+            return  # DOA SBSession.IsolationLevel = ilReadCommitted
         m = re.fullmatch(r'ALTER USER "([A-Z][A-Z0-9_$#]*)" ACCOUNT UNLOCK', sql.strip())
         if m:
             if not self.user.get("is_adm"):
@@ -439,6 +443,12 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
         raise DBError("ORA-06550: mock: block not emulated")
 
     def plsql(self, sql, binds=None, ret=None):
+        low = sql.strip().lower()
+        if low.startswith(("begin dbms_output.enable(", "begin dbms_alert.register(")):
+            return None  # main form start-up (sb.main_form_init)
+        if low.startswith("begin dbms_output.put_line("):
+            self.__dict__.setdefault("_output", []).append((binds or {}).get("line"))
+            return None
         r = self._em_plsql(sql, binds or {})          # Packages/ExchangeMGR-NBC (EXCH_TRANS.ex_transaction*)
         if r is NotImplemented:
             r = self._cd_plsql(sql, binds or {})          # Packages/CashDeskLast (TransCommit)
@@ -453,6 +463,12 @@ class MockConnection(BbMixin, AsanMixin, PayMixin, OrdMixin, MoMixin, RtMixin, E
         return r
 
     def plsql_out(self, sql, binds=None):
+        low = sql.strip().lower()
+        if low.startswith("begin dbms_alert.waitany("):
+            return {"name": None, "message": None, "status": 1}  # 1 = timeout (no alert)
+        if low.startswith("begin dbms_output.get_line("):
+            buf = self.__dict__.setdefault("_output", [])
+            return {"line": buf.pop(0), "status": 0} if buf else {"line": None, "status": 1}
         r = self._em_plsql_out(sql, binds or {})      # Packages/ExchangeMGR-NBC (get_ex_office_out_params)
         if r is NotImplemented:
             r = self._azi_plsql_out(sql, binds or {})
