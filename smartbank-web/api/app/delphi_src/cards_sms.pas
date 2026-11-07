@@ -1,0 +1,532 @@
+{ Verbatim copy of Packages/Cards_New/cards_azericard/sms.pas lines 59-589 (unchanged; executed by api/app/pascal.py) }
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+        
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileExt) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+
+procedure Tsmsfile.ToolButton3Click(Sender: TObject);
+var i,RowCount,MSGCount,SMS_File_Count, selst, selstF :integer;
+    SysSim, StMessage :String;
+    Test :Real;
+    TerminalName, CardNumber, Terminal, Auth_Code, Amount_TR, TranDate, Currency, Post_Date, AmountSett :String;
+    f:textfile;
+    v_dir:string;
+    begin
+    v_dir:=GetCurrentDir;
+  try
+   REFiles.Lines.Clear;
+   SMS_File_Count:=0;
+ // PnlSMSCount.Caption:=IntToStr(SMS_File_Count);
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBoxSmsFiles.Directory:='C:\AZCARD\IN';
+   FileListBoxSmsFiles.Update;
+   if FileListBoxSmsFiles.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+ //  Extract_PGP_Zip('SMS'+bankname+'.0*','SMS'+bankname+'.1*','SMS'+bankname+'.2*','SMS'+bankname+'.3*');//'D'+bankname+'_XXX.*'
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBoxSmsFiles.Mask:='*.*';
+   FileListBoxSmsFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   for i:=0 to FileListBoxSmsFiles.Items.Count-1 do begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+    if (copy(FileListBoxSmsFiles.Items[i],0,3) <> 'SMS')and((copy(FileListBoxSmsFiles.items[i],0,3) <> 'SMS')) then Continue;
+    SMS_File_Count:=SMS_File_Count+1;
+  //  PnlSMSCount.Caption:=IntToStr(SMS_File_Count);
+    {check for file extention}
+    if CheckFileExt(FileListBoxSmsFiles.Directory+FileListBoxSmsFiles.items[i])=false then continue;
+    {LINK TO FILE}
+    AssignFile(F,'C:\AZCARD\IN\'+FileListBoxSmsFiles.Items[i]);
+   // AssignFile(F,'C:\AZCARD\IN\'+FileListBoxSmsFiles.Items[i]);
+    Reset(F);
+    RowCount:=0;
+    while not Eof(F) do begin
+     Readln(F,Stmessage);
+     RowCount:=RowCount+1;
+     if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+    STmessage:='';
+    Reset(F);
+    {VIEW FILE NAME}
+    REFiles.Lines.Add('FILE NAME            :< '+FileListBoxSmsFiles.Items[i]+' >   '+'Message count: '+IntToStr(MSGCount));
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))
+     then begin
+      TerminalName:=Trim(copy(trim(STmessage),1,24));
+      CardNumber  :=Trim(copy(trim(STmessage),25,18));
+      Terminal    :=Trim(copy(trim(STmessage),47,8));
+      Auth_Code   :=Trim(copy(trim(STmessage),57,6));
+      Amount_TR   :=Trim(copy(trim(STmessage),63,15));
+      TranDate    :=Trim(copy(trim(STmessage),78,10));
+      Currency    :=Trim(copy(trim(STmessage),91,3));
+      Post_Date   :=Trim(copy(trim(STmessage),96,9));
+      AmountSett  :=Trim(copy(trim(STmessage),105,15));
+      if post_date<>'' then
+     with REFiles.Lines do begin
+      Add('TERMINAL NAME        :'+TerminalName);
+      Add('CARD NUMBER          :'+CardNumber);
+      Add('TERMINAL             :'+Terminal);
+      Add('AUTH CODE            :'+Auth_Code);
+      Add('AMOUNT TRANSACTION   :'+Amount_TR);
+      Add('DATE TRANSACTION     :'+TranDate);
+      Add('CURRENCY             :'+Currency);
+      Add('DATE POST            :'+Post_Date);
+      Add('AMOUNT SETTLEMENT    :'+AmountSett);
+      Add('-------------------------------------------------------------------------------');
+     end;{with REFiles.Lines}
+     end;{if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))}
+    end;{while not Eof(F)}
+      REFiles.SelStart:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=18;
+      REFiles.SelAttributes.Color:=clBlue;
+      REFiles.SelAttributes.Style:=[];
+      selst:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+      REFiles.SelStart:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=38;
+      REFiles.SelAttributes.Color:=clred;
+      selstF:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+
+
+    CloseFile(F);
+   end;{for i:=0 to FileListBoxSmsFiles.Items.Count-1}
+   REFiles.SelStart:=0;
+   finally
+    //  Delete_PGP_Zip;
+     SendMessage(REFiles.Handle, EM_LINESCROLL, 0,(-1)*(REFiles.Lines.Count-1));
+   end;
+   FileListBoxSmsFiles.Directory:=v_dir;
+end;
+ function MonthIntNum(MonthStr:String):Integer;
+ var IntNum :Integer;
+ begin
+  if MonthStr = 'JAN' then IntNum :=1;
+  if MonthStr = 'FEB' then IntNum :=2;
+  if MonthStr = 'MAR' then IntNum :=3;
+  if MonthStr = 'APR' then IntNum :=4;
+  if MonthStr = 'MAY' then IntNum :=5;
+  if MonthStr = 'JUN' then IntNum :=6;
+  if MonthStr = 'JUL' then IntNum :=7;
+  if MonthStr = 'AUG' then IntNum :=8;
+  if MonthStr = 'SEP' then IntNum :=9;
+  if MonthStr = 'OCT' then IntNum :=10;
+  if MonthStr = 'NOV' then IntNum :=11;
+  if MonthStr = 'DEC' then IntNum :=12;
+  Result :=IntNum;
+ end;
+procedure Tsmsfile.isertbtnClick(Sender: TObject);
+var i, LinesCount, TempInt :Integer;
+   TerminalName, CardNumber, Terminal, Auth_Code, Currency, TempStr :String;
+   TranDate, Post_Date :TDateTime;
+   Amount_TR, AmountSett :Real;
+begin
+
+DataMod_CARDS.mainpacket.CallProcedure('empty_sms_messages',[]);
+ToolButton2.Click;
+{
+
+  DataMod_CARDS.mainpacket.CallProcedure('empty_sms_messages',[]);
+  i :=-1;
+  LinesCount :=REFiles.Lines.Count;
+  while not (i=LinesCount) do begin i:=i+1;
+   if ((Copy(Trim(REFiles.Lines[i]),1,13))='TERMINAL NAME') then begin
+    TerminalName:=(Copy(Trim(REFiles.Lines[i]),23,25)); i :=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1, 11))='CARD NUMBER')    then begin
+    CardNumber:=(Copy(Trim(REFiles.Lines[i]),23,16)); i :=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,8))='TERMINAL') then begin
+    Terminal:=Copy(Trim(REFiles.Lines[i]),23,8); i:=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,9))='AUTH CODE') then begin
+    Auth_Code:=(Copy(Trim(REFiles.Lines[i]),23,6)); i:=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,18))='AMOUNT TRANSACTION') then begin
+    TempStr :=Copy(Trim(REFiles.Lines[i]),23,15);
+    TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+    TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+    Amount_TR:=StrToFloat(TempStr); i:=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,16))='DATE TRANSACTION') then begin
+    TempStr :=Copy(Trim(REFiles.Lines[i]),23,9);
+    TempStr:=StringReplace(TempStr,'-',DateSeparator,[rfReplaceAll, rfIgnoreCase]);
+    TempInt :=MonthIntNum(copy(TempStr,4,3));
+    TempStr:=StringReplace(TempStr,copy(TempStr,4,3),IntToStr(TempInt),[rfReplaceAll, rfIgnoreCase]);
+    TranDate:=StrToDateTime(TempStr);  i:=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,8))='CURRENCY') then begin
+    Currency:=(Copy(Trim(REFiles.Lines[i]),23,3)); i:=i+1;  end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,9))='DATE POST') then begin
+    TempStr :=Copy(Trim(REFiles.Lines[i]),23,9);
+    TempStr:=StringReplace(TempStr,'-',DateSeparator,[rfReplaceAll, rfIgnoreCase]);
+    TempInt :=MonthIntNum(copy(TempStr,4,3));
+    TempStr:=StringReplace(TempStr,copy(TempStr,4,3),IntToStr(TempInt),[rfReplaceAll, rfIgnoreCase]);
+    Post_Date:=StrToDateTime(TempStr);  i:=i+1; end;
+   if ((Copy(Trim(REFiles.Lines[i]),1,17))='AMOUNT SETTLEMENT') then begin
+    TempStr :=Copy(Trim(REFiles.Lines[i]),23,15);
+    TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+    TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+    AmountSett:=StrToFloat(TempStr); i:=i+1;
+
+   DataMod_CARDS.mainpacket.CallProcedure('Insert_SMS_Messages',
+    [TerminalName, CardNumber, Terminal, Auth_Code, Amount_TR, TranDate, Currency, Post_Date, AmountSett]);
+   end;{if ((Copy(Trim(REFiles.Lines[i]),1,19))='AMOUNT SETTLEMENT')}
+ { end;{while not (i=LinesCount) do begin}
+  {ShowMessage('All messages have sent into base');
+  DataMod_CARDS.smsfiles.Close;
+  DataMod_CARDS.smsfiles.Open;
+  DataMod_CARDS.smsfiles2.Close;
+  DataMod_CARDS.smsfiles2.Open;   }
+
+end;
+
+procedure Tsmsfile.ToolButton7Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.smsfiles,'SMSFILES',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Tsmsfile.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tsmsfile.ToolButton1Click(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('ямялиййат тясдиг едилсин? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  сайда ямялиййат тясдиг едилсин?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.mainpacket.CallProcedure('transaction_sms',[TransactionID]) ;
+                DataMod_CARDS.smsfiles2.Close;
+                DataMod_CARDS.smsfiles2.Open;
+               // DataMod_CARDS.messages.Open;
+               // DataMod_CARDS.messages2.Open;
+      //--------------------------------------------end create prows
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+
+
+                            // Excel.Range[Excel.Cells[1, 1], Excel.Cells[index+1,27]].Select;
+                            // excel.Cells[index+1,27].SELECT;
+                           // Excel.Selection.Borders.LineStyle:=1;
+                           // excel.Selection.HorizontalAlignment:=2;
+
+
+                            // Excel.Visible := True;
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          ShowMessage('Ямялиййатлар эцнцн сянядляриня эюндярилди!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+end;
+
+
+procedure Tsmsfile.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+
+procedure Tsmsfile.selectall1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+procedure Tsmsfile.DBGrid3TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid3.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid3.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tsmsfile.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tsmsfile.FormPaint(Sender: TObject);
+begin
+//DataMod_CARDS.mainpacket.CallProcedure('empty_sms_messages',[]);
+//REFiles.Clear;
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid3.DataSource.DataSet.Refresh;
+end;
+
+procedure Tsmsfile.ToolButton2Click(Sender: TObject);
+var i,RowCount,MSGCount,SMS_File_Count, selst, selstF :integer;
+    SysSim, StMessage :String;
+    Test :Real;
+    TerminalName, CardNumber, Terminal, Auth_Code, Amount_TR, TranDate, Currency, Post_Date, AmountSett :String;
+    f:textfile;
+    v_dir:string;
+    begin
+    DataMod_CARDS.mainpacket.CallProcedure('empty_sms_messages',[]);
+    v_dir:=GetCurrentDir;
+  try
+   //REFiles.Lines.Clear;
+   SMS_File_Count:=0;
+ // PnlSMSCount.Caption:=IntToStr(SMS_File_Count);
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBoxSmsFiles.Directory:='C:\AZCARD\IN';
+   FileListBoxSmsFiles.Update;
+   if FileListBoxSmsFiles.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+ //  Extract_PGP_Zip('SMS'+bankname+'.0*','SMS'+bankname+'.1*','SMS'+bankname+'.2*','SMS'+bankname+'.3*');//'D'+bankname+'_XXX.*'
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBoxSmsFiles.Mask:='*.*';
+   FileListBoxSmsFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   for i:=0 to FileListBoxSmsFiles.Items.Count-1 do begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+    if (copy(FileListBoxSmsFiles.Items[i],0,3) <> 'SMS')and((copy(FileListBoxSmsFiles.items[i],0,3) <> 'SMS')) then Continue;
+    SMS_File_Count:=SMS_File_Count+1;
+  //  PnlSMSCount.Caption:=IntToStr(SMS_File_Count);
+    {check for file extention}
+    if CheckFileExt(FileListBoxSmsFiles.Directory+FileListBoxSmsFiles.items[i])=false then continue;
+    {LINK TO FILE}
+    AssignFile(F,'C:\AZCARD\IN\'+FileListBoxSmsFiles.Items[i]);
+   // AssignFile(F,'C:\AZCARD\IN\'+FileListBoxSmsFiles.Items[i]);
+    Reset(F);
+    RowCount:=0;
+    while not Eof(F) do begin
+     Readln(F,Stmessage);
+     RowCount:=RowCount+1;
+     if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+    STmessage:='';
+    Reset(F);
+    {VIEW FILE NAME}
+   // REFiles.Lines.Add('FILE NAME            :< '+FileListBoxSmsFiles.Items[i]+' >   '+'Message count: '+IntToStr(MSGCount));
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))
+     then begin
+      TerminalName:=Trim(copy(trim(STmessage),1,24));
+      CardNumber  :=Trim(copy(trim(STmessage),25,18));
+      Terminal    :=Trim(copy(trim(STmessage),47,8));
+      Auth_Code   :=Trim(copy(trim(STmessage),57,6));
+      Amount_TR   :=Trim(copy(trim(STmessage),63,15));
+      TranDate    :=Trim(copy(trim(STmessage),78,10));
+      Currency    :=Trim(copy(trim(STmessage),91,3));
+      Post_Date   :=Trim(copy(trim(STmessage),96,9));
+      AmountSett  :=Trim(copy(trim(STmessage),105,15));
+
+
+
+      if post_date<>'' then
+       DataMod_CARDS.mainpacket.CallProcedure('Insert_SMS_Messages',
+    [TerminalName, CardNumber, Terminal, Auth_Code, Amount_TR, TranDate, Currency, Post_Date, AmountSett,FileListBoxSmsFiles.Items[i]]);
+     //with REFiles.Lines do begin
+      //Add('TERMINAL NAME        :'+TerminalName);
+      //Add('CARD NUMBER          :'+CardNumber);
+      //Add('TERMINAL             :'+Terminal);
+      //Add('AUTH CODE            :'+Auth_Code);
+      //Add('AMOUNT TRANSACTION   :'+Amount_TR);
+      //Add('DATE TRANSACTION     :'+TranDate);
+      //Add('CURRENCY             :'+Currency);
+      //Add('DATE POST            :'+Post_Date);
+      //Add('AMOUNT SETTLEMENT    :'+AmountSett);
+      //Add('-------------------------------------------------------------------------------');
+     end;{with REFiles.Lines}
+     end;{if ((Length(Trim(StMessage))>100)
+         and (Copy(trim(STmessage),1,3) <> '---')
+         and (Copy(trim(STmessage),1,8) <> 'Terminal'))}
+    end;{while not Eof(F)}
+      //REFiles.SelStart:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase]);
+      //REFiles.SelLength:=18;
+      //REFiles.SelAttributes.Color:=clBlue;
+      //REFiles.SelAttributes.Style:=[];
+      //selst:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase])+1;
+     // REFiles.SelLength:=-1;
+     // REFiles.SelStart:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase]);
+     // REFiles.SelLength:=38;
+     // REFiles.SelAttributes.Color:=clred;
+     // selstF:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase])+1;
+     // REFiles.SelLength:=-1;
+
+     DataMod_CARDS.mainpacket.CallProcedure('smsarxiv',[FileListBox1.Items[i]]);
+    CloseFile(F);
+   //end;{for i:=0 to FileListBoxSmsFiles.Items.Count-1}
+   //REFiles.SelStart:=0;
+   finally
+    //  Delete_PGP_Zip;
+     //SendMessage(REFiles.Handle, EM_LINESCROLL, 0,(-1)*(REFiles.Lines.Count-1));
+   end;
+   FileListBoxSmsFiles.Directory:=v_dir;
+
+     ShowMessage('All messages have sent into base');
+  DataMod_CARDS.smsfiles.Close;
+  DataMod_CARDS.smsfiles.Open;
+  DataMod_CARDS.smsfiles2.Close;
+  DataMod_CARDS.smsfiles2.Open;
+
+end;
+
+
