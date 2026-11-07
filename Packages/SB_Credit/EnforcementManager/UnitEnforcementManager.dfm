@@ -640,6 +640,7 @@ object EnforcementManager: TEnforcementManager
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       ParentFont = False
+      OnClick = SpeedButton4Click
     end
   end
   object Panel2: TPanel

@@ -270,6 +270,7 @@ type
     UsrGroupsDESCRIPTION: TWideStringField;
     Aim_Set: TOracleDataSet;
     AIM_Src: TDataSource;
+    creditcatDataAGRO_KOD: TFloatField;
     procedure DataModuleDestroy(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
     procedure PersonLinkApplyRecord(Sender: TOracleDataSet; Action: Char;

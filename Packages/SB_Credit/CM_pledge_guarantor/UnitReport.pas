@@ -69,7 +69,6 @@ type
     ODS_girovREYSTER: TWideStringField;
     ODS_girovCOMPANYDAT: TDateTimeField;
     ODS_girovLIKVID_ACC_NO: TWideStringField;
-    ODS_girovLIKVID_REST: TFloatField;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     MisExcelExportGirov: TCMExcelExport;
@@ -82,6 +81,8 @@ type
     ODS_zaminTMNUS_PORTFSTATUS: TWideStringField;
     Panel5: TPanel;
     RadioGroup1: TRadioGroup;
+    ODS_zaminNAME: TWideStringField;
+    ODS_girovLIKVID_REST: TFloatField;
     procedure CloseBtnClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure ButtonExportzaClick(Sender: TObject);
@@ -118,7 +119,7 @@ with MisExcelExportGirov do
      ODS_girov.QueryAllRecords:=true;
       ODS_girov.Refresh;
          Connect;
-         ExportDataset(ODS_girov,'GÝROV',true,false);
+         ExportDataset(ODS_girov,'GIROV',true,false);
          ODS_girov.QueryAllRecords:=false;
      Disconnect;
     end;

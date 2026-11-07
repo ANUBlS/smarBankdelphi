@@ -62,6 +62,7 @@ type
     insurance_status:String;
     insurance_inn :variant;
     insurance_end_dat :variant;
+     agro_kod:string;
   end;
 
 var

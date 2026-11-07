@@ -36,9 +36,6 @@ type
     PledgesOUTBAL_CIN: TWideStringField;
     VillagesDataSet: TOracleDataSet;
     DistrictsDataSet: TOracleDataSet;
-    DistrictsDataSetID: TFloatField;
-    DistrictsDataSetNAME: TWideStringField;
-    DistrictsDataSetNAME_ENG: TWideStringField;
     DistrictsDataSrc: TDataSource;
     VillagesDataSrc: TDataSource;
     GurSrc: TDataSource;
@@ -100,8 +97,6 @@ type
     MainDSetGQTELWORK: TWideStringField;
     MainDSetGQTELHOME: TWideStringField;
     MainDSetGQTELMOB: TWideStringField;
-    MainDSetGQVILLAGE: TFloatField;
-    MainDSetGQCITY: TFloatField;
     MainDSetNUMBEROFGUR: TWideStringField;
     MainDSetREZERVEAMMOUNT: TFloatField;
     MainDSetFAIZ: TFloatField;
@@ -186,6 +181,13 @@ type
     ods_guar_orqan: TOracleDataSet;
     dsrc_guar_orqan: TDataSource;
     MainDSetFIN: TWideStringField;
+    DistrictsDataSetID: TFloatField;
+    DistrictsDataSetCNTR_NAME: TWideStringField;
+    VillagesDataSetID: TFloatField;
+    VillagesDataSetCITY_NAME: TWideStringField;
+    VillagesDataSetCOUNTRY_ID: TFloatField;
+    MainDSetGQVILLAGE: TWideStringField;
+    MainDSetGQCITY: TWideStringField;
     procedure oracMainDSet1AfterOpen(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);

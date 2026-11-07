@@ -153,8 +153,6 @@ type
     Label27: TLabel;
     Label30: TLabel;
     Label31: TLabel;
-    DBLookupComboboxEh3: TDBLookupComboboxEh;
-    DBLookupComboboxEh4: TDBLookupComboboxEh;
     DBEditEh16: TDBEditEh;
     Panel23: TPanel;
     Button1: TButton;
@@ -322,6 +320,24 @@ type
     DBLookupComboboxEh6: TDBLookupComboboxEh;
     Label80: TLabel;
     DBEditEh9: TDBEditEh;
+    Button3: TButton;
+    ods_custinf: TOracleDataSet;
+    ods_custinfFULNAME: TWideStringField;
+    ods_custinfPASPORT: TWideStringField;
+    ods_custinfPASPPLACE: TWideStringField;
+    ods_custinfPASPDATE: TDateTimeField;
+    ods_custinfBIRTHPLACE: TWideStringField;
+    ods_custinfCITY: TWideStringField;
+    ods_custinfADDRESS: TWideStringField;
+    ods_custinfPASSPIN: TWideStringField;
+    ods_custinfPHONE_H: TWideStringField;
+    ods_custinfPHONE_M: TWideStringField;
+    DBEditEh12: TDBEditEh;
+    DBEditEh17: TDBEditEh;
+    ods_cust_cr: TOracleDataSet;
+    ods_cust_crBOOROWERID: TFloatField;
+    ods_cust_crPASSPIN: TWideStringField;
+    Button4: TButton;
     procedure SpeedButton9Click(Sender: TObject);
     procedure FormCanResize(Sender: TObject; var NewWidth,
       NewHeight: Integer; var Resize: Boolean);
@@ -362,6 +378,8 @@ type
     procedure DBLookupComboboxEh2Change(Sender: TObject);
     procedure DBLookupComboboxEh5CloseUp(Sender: TObject; Accept: Boolean);
     procedure DBLookupComboboxEh6CloseUp(Sender: TObject; Accept: Boolean);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
    private
     { Private declarations }
     edNewName: TEdit;
@@ -383,7 +401,7 @@ var
    procedure InitPlugin(s:string);export;
 implementation
     uses CommonDecls, DmImpl,SBTranslateProc,sboapiDataModuleImpl,
-  AddGuarFormImpl, AddGuarFormNImpl, AftoInfiIpl;
+  AddGuarFormImpl, AddGuarFormNImpl, AftoInfiIpl, propertyUnit;
 {$R *.DFM}
 procedure InitPlugin(s:string);export;
 begin
@@ -416,7 +434,7 @@ begin
   GurDm:=TGurDm.create(self);
 
   AddGuarForm:=TAddGuarForm.create(self);
-
+  FormProperty:=TFormProperty.create(self);
   AfForm:=TAfForm.create(self);
   AddGuarFormN:=TAddGuarFormN.create(self);
    PageControl1.Pages[2].TabVisible := False;  //ohdelik sx//
@@ -448,7 +466,7 @@ procedure TFrmGuarante.DoEdit(FCreditID : Integer);
   end;
 
 begin
-    LocateAccounts(DBLookupComboboxEh2);
+LocateAccounts(DBLookupComboboxEh2);
    LocateAccounts(DBLookupComboboxEh17);
 end;
 
@@ -465,6 +483,8 @@ CheckBox1.Checked:=false;
    InUse_rg.ItemIndex := FieldByName('cardid').AsInteger;
 
   end;
+
+
 
  with GurDm.OUTCollatralAccs do
 begin
@@ -1130,6 +1150,93 @@ begin
         AfForm.ShowModal;
    if  (gurDm.pledgsortsGUR_TYPE.AsInteger=2) then
         AddGuarFormN.ShowModal;
+   if (gurDm.pledgsortsGUR_TYPE.AsInteger=3) then
+       FormProperty.ShowModal;
+end;
+
+procedure TFrmGuarante.Button3Click(Sender: TObject);
+var
+lkDS: TDataSet;
+searchVal:string;
+begin
+
+
+
+
+
+if DBEditEh9.Text<>'' then
+  ods_custinf.Close;
+  ods_custinf.SetVariable('v_passpin',DBEditEh9.Text);
+  ods_custinf.open;
+
+  if ods_custinf.RecordCount=0 then
+    begin
+      showmessage('Sistemdə bu FIN də müştəri yoxdur...!');
+      exit;
+    end
+    else
+    begin
+     DBEditEh5.Text:=ods_custinfFULNAME.AsString;
+     DBEditEh7.Text:=ods_custinfPASPPLACE.AsString;
+     DBEditEh6.Text:=ods_custinfPASPORT.AsString;
+     DBDateTimeEditEh1.Value:=ods_custinfPASPDATE.AsVariant;
+     DBEditEh16.Text:=ods_custinfADDRESS.AsString;
+     DBEditEh11.Text:=ods_custinfPHONE_M.AsString;
+     DBEditEh14.Text:=ods_custinfPHONE_H.AsString;
+     DBEditEh12.Text:=ods_custinfBIRTHPLACE.AsVariant;
+     DBEditEh17.Text:=ods_custinfCITY.AsVariant;
+
+
+    end;
+end;
+
+procedure TFrmGuarante.Button4Click(Sender: TObject);
+var
+lkDS: TDataSet;
+searchVal:string;
+begin
+
+ with ods_cust_cr do
+  begin
+   close;
+   SetVariable('v_id',creditid);
+   open;
+  DBEditEh9.Text:=ods_cust_crPASSPIN.AsString;
+  end;
+
+
+
+
+if DBEditEh9.Text<>'' then
+  ods_custinf.Close;
+  ods_custinf.SetVariable('v_passpin',DBEditEh9.Text);
+  ods_custinf.open;
+
+  if ods_custinf.RecordCount=0 then
+    begin
+      showmessage('Sistemdə bu FIN də müştəri yoxdur...!');
+      exit;
+    end
+    else
+    begin
+     DBEditEh5.Text:=ods_custinfFULNAME.AsString;
+     DBEditEh7.Text:=ods_custinfPASPPLACE.AsString;
+     DBEditEh6.Text:=ods_custinfPASPORT.AsString;
+     DBDateTimeEditEh1.Value:=ods_custinfPASPDATE.AsVariant;
+     DBEditEh16.Text:=ods_custinfADDRESS.AsString;
+     DBEditEh11.Text:=ods_custinfPHONE_M.AsString;
+     DBEditEh14.Text:=ods_custinfPHONE_H.AsString;
+     DBEditEh12.Text:=ods_custinfBIRTHPLACE.AsVariant;
+     DBEditEh17.Text:=ods_custinfCITY.AsVariant;
+
+
+
+
+
+
+
+
+    end;
 
 end;
 
@@ -1252,7 +1359,7 @@ end;
 
 procedure TFrmGuarante.DBLookupComboboxEh2Change(Sender: TObject);
 begin
-if (gurDm.pledgsortsGUR_TYPE.AsInteger=1) or (gurDm.pledgsortsGUR_TYPE.AsInteger=2)then
+if (gurDm.pledgsortsGUR_TYPE.AsInteger=1) or (gurDm.pledgsortsGUR_TYPE.AsInteger=2)or (gurDm.pledgsortsGUR_TYPE.AsInteger=3)then
 begin
   Button2.Visible:=true;
 end else

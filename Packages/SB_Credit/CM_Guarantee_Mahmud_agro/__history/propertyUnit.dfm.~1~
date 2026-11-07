@@ -1,0 +1,229 @@
+object Form4: TForm4
+  Left = 0
+  Top = 0
+  Caption = 'Form4'
+  ClientHeight = 430
+  ClientWidth = 659
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 659
+    Height = 33
+    Align = alTop
+    TabOrder = 0
+    ExplicitWidth = 556
+    object Label1: TLabel
+      Left = 183
+      Top = 10
+      Width = 24
+      Height = 16
+      Caption = 'FIN:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object EditFin: TEdit
+      Left = 221
+      Top = 7
+      Width = 121
+      Height = 21
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 352
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = 'Axtar'#305#351
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 389
+    Width = 659
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    ExplicitTop = 276
+    ExplicitWidth = 416
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 33
+    Width = 659
+    Height = 182
+    Align = alTop
+    TabOrder = 2
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 657
+      Height = 180
+      Align = alClient
+      Caption = 'M'#252#351't'#601'rinin '#601'mlaklar'#305'n'#305'n siyah'#305's'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      ExplicitLeft = 16
+      ExplicitTop = 32
+      ExplicitWidth = 185
+      ExplicitHeight = 105
+      object DBGridEh1: TDBGridEh
+        Left = 2
+        Top = 15
+        Width = 653
+        Height = 163
+        Align = alClient
+        DataGrouping.GroupLevels = <>
+        DataSource = DataSource1
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = [fsBold]
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 215
+    Width = 659
+    Height = 174
+    Align = alClient
+    TabOrder = 3
+    ExplicitLeft = 64
+    ExplicitTop = 152
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object GroupBox2: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 657
+      Height = 172
+      Align = alClient
+      Caption = 'Girovala '#601'laq'#601'l'#601'ndirilmi'#351' '#601'mlaklar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      ExplicitLeft = 24
+      ExplicitTop = 80
+      ExplicitWidth = 185
+      ExplicitHeight = 105
+      object DBGridEh2: TDBGridEh
+        Left = 2
+        Top = 15
+        Width = 653
+        Height = 155
+        Align = alClient
+        DataGrouping.GroupLevels = <>
+        DataSource = DataSource2
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = [fsBold]
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet2
+    Left = 512
+    Top = 24
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 432
+    Top = 176
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '    t.id,'
+      '    t.pin,'
+      '    jt.old_address,'
+      '    jt.registration_number,'
+      '    jt.reyestr_number,'
+      '    jt.type_id,'
+      '    jt.type_name'
+      'FROM '
+      '    asan_log t,'
+      '    JSON_TABLE('
+      '        t.info, '
+      '        '#39'$.Response.Addresses[*]'#39
+      '        COLUMNS ('
+      
+        '            old_address         VARCHAR2(500) PATH '#39'$.OldAddress' +
+        #39','
+      
+        '            registration_number VARCHAR2(50)  PATH '#39'$.Registrati' +
+        'onNumber'#39','
+      
+        '            reyestr_number      VARCHAR2(100) PATH '#39'$.ReyestrNum' +
+        'ber'#39','
+      '            type_id             VARCHAR2(10)  PATH '#39'$.Type.Id'#39','
+      '            type_name           VARCHAR2(100) PATH '#39'$.Type.Name'#39
+      '        )'
+      '    ) jt'
+      ''
+      
+        'where  id in(select max(id)from asan_log where service='#39'Property' +
+        #39'  and pin=v:pin)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004E00050000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 16
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select* from cm_guar_Property')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 176
+  end
+end

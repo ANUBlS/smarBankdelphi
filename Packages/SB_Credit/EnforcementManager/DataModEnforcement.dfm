@@ -1,6 +1,7 @@
 object DataModuleEnforcement: TDataModuleEnforcement
   OldCreateOrder = False
   OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
   Height = 658
   Width = 914
   object ODSEnforcement: TOracleDataSet
@@ -83,11 +84,92 @@ object DataModuleEnforcement: TDataModuleEnforcement
     Optimize = False
     Session = sboapiDataModule.SBSession
     Left = 48
-    Top = 24
+    Top = 16
   end
   object DSEnforcement: TDataSource
     DataSet = ODSEnforcement
-    Left = 144
-    Top = 24
+    Left = 48
+    Top = 64
+  end
+  object DSGroups: TDataSource
+    DataSet = ODSGroups
+    Left = 127
+    Top = 65
+  end
+  object ODSGroups: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from cn_qrup where id in(select qrupid from ct_admin_in' +
+        ' where userid=uid)'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 16
+  end
+  object ODSAdminGroups: TOracleDataSet
+    SQL.Strings = (
+      'select * from cn_qrup'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 203
+    Top = 14
+  end
+  object DSAdminGroups: TDataSource
+    DataSet = ODSAdminGroups
+    Left = 204
+    Top = 62
+  end
+  object ODSAdminIn: TOracleDataSet
+    SQL.Strings = (
+      'select cta.* from cn_admin_in cta'
+      'where cta.userid=:userid'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000400
+      00000100000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C0000005500530045005200490044000100000000001000
+      000055005300450052004E0041004D0045000100000000000C00000051005200
+      55005000490044000100000000001000000051005200550050004E0041004D00
+      4500010000000000}
+    MasterFields = 'id'
+    DetailFields = 'userid'
+    Session = sboapiDataModule.SBSession
+    Left = 291
+    Top = 13
+  end
+  object DSAdminIn: TDataSource
+    DataSet = ODSAdminIn
+    Left = 288
+    Top = 61
+  end
+  object DSEnforcementAdmin: TDataSource
+    DataSet = ODSEnforcementAdmin
+    Left = 387
+    Top = 63
+  end
+  object ODSEnforcementAdmin: TOracleDataSet
+    SQL.Strings = (
+      'select id,NAME from user$'
+      'where SB_ACA.checkmodaccess_int('#39'CourtManager'#39',name)=1'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    DetailFields = 'id'
+    Session = sboapiDataModule.SBSession
+    Left = 387
+    Top = 14
   end
 end

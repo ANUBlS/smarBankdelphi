@@ -508,7 +508,7 @@ object FrmGuarante: TFrmGuarante
             end
             object DBLookupComboboxEh2: TDBLookupComboboxEh
               Tag = 1
-              Left = 56
+              Left = 54
               Top = 5
               Width = 129
               Height = 19
@@ -784,8 +784,8 @@ object FrmGuarante: TFrmGuarante
             end
           end
           object GroupBox4: TGroupBox
-            Left = 1
-            Top = 40
+            Left = 0
+            Top = 39
             Width = 568
             Height = 166
             Caption = 'Girov qoyan haqq'#305'nda m'#601'lumat'
@@ -1198,11 +1198,10 @@ object FrmGuarante: TFrmGuarante
               end
             end
             object GroupBox10: TGroupBox
-              Left = 2
-              Top = 77
+              Left = 3
+              Top = 75
               Width = 600
               Height = 54
-              Caption = #220'nvan'#305':  '
               Font.Charset = RUSSIAN_CHARSET
               Font.Color = clBlack
               Font.Height = -12
@@ -1211,7 +1210,7 @@ object FrmGuarante: TFrmGuarante
               ParentFont = False
               TabOrder = 5
               object Label27: TLabel
-                Left = 5
+                Left = 341
                 Top = 13
                 Width = 77
                 Height = 13
@@ -1224,11 +1223,11 @@ object FrmGuarante: TFrmGuarante
                 ParentFont = False
               end
               object Label30: TLabel
-                Left = 294
-                Top = 12
-                Width = 81
+                Left = 401
+                Top = 34
+                Width = 25
                 Height = 13
-                Caption = 'Q'#601's'#601'b'#601'/k'#601'nd-'
+                Caption = #214'lk'#601
                 Font.Charset = RUSSIAN_CHARSET
                 Font.Color = clBlack
                 Font.Height = -11
@@ -1237,7 +1236,7 @@ object FrmGuarante: TFrmGuarante
                 ParentFont = False
               end
               object Label31: TLabel
-                Left = 160
+                Left = 4
                 Top = 33
                 Width = 70
                 Height = 13
@@ -1250,60 +1249,16 @@ object FrmGuarante: TFrmGuarante
                 ParentFont = False
               end
               object Label80: TLabel
-                Left = 8
-                Top = 32
+                Left = 7
+                Top = 11
                 Width = 19
                 Height = 14
                 Caption = 'FIN'
               end
-              object DBLookupComboboxEh3: TDBLookupComboboxEh
-                Tag = 1
-                Left = 79
-                Top = 6
-                Width = 209
-                Height = 20
-                DataField = 'GQCITY'
-                DataSource = GurDm.MainDSrc
-                DropDownBox.Sizable = True
-                EditButtons = <>
-                Font.Charset = RUSSIAN_CHARSET
-                Font.Color = clBlack
-                Font.Height = -12
-                Font.Name = 'Tahoma'
-                Font.Style = []
-                KeyField = 'ID'
-                ListField = 'NAME'
-                ListSource = GurDm.DistrictsDataSrc
-                ParentFont = False
-                TabOrder = 0
-                Visible = True
-              end
-              object DBLookupComboboxEh4: TDBLookupComboboxEh
-                Tag = 1
-                Left = 373
-                Top = 8
-                Width = 191
-                Height = 20
-                DataField = 'GQVILLAGE'
-                DataSource = GurDm.MainDSrc
-                DropDownBox.Sizable = True
-                EditButtons = <>
-                Font.Charset = RUSSIAN_CHARSET
-                Font.Color = clBlack
-                Font.Height = -12
-                Font.Name = 'Tahoma'
-                Font.Style = []
-                KeyField = 'ID'
-                ListField = 'NAME'
-                ListSource = GurDm.VillagesDataSrc
-                ParentFont = False
-                TabOrder = 1
-                Visible = True
-              end
               object DBEditEh16: TDBEditEh
-                Left = 236
+                Left = 80
                 Top = 31
-                Width = 326
+                Width = 313
                 Height = 20
                 DataField = 'GQADRESS'
                 DataSource = GurDm.MainDSrc
@@ -1314,19 +1269,60 @@ object FrmGuarante: TFrmGuarante
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 2
+                TabOrder = 0
                 Visible = True
               end
               object DBEditEh9: TDBEditEh
-                Left = 30
-                Top = 30
-                Width = 121
+                Left = 38
+                Top = 9
+                Width = 102
                 Height = 20
                 DataField = 'Fin'
                 DataSource = GurDm.MainDSrc
                 EditButtons = <>
+                TabOrder = 1
+                Visible = True
+              end
+              object Button3: TButton
+                Left = 141
+                Top = 8
+                Width = 54
+                Height = 21
+                Caption = 'ok'
+                TabOrder = 2
+                OnClick = Button3Click
+              end
+              object DBEditEh12: TDBEditEh
+                Left = 429
+                Top = 7
+                Width = 135
+                Height = 20
+                DataField = 'GQCITY'
+                DataSource = GurDm.MainDSrc
+                DragMode = dmAutomatic
+                EditButtons = <>
                 TabOrder = 3
                 Visible = True
+              end
+              object DBEditEh17: TDBEditEh
+                Left = 429
+                Top = 29
+                Width = 135
+                Height = 20
+                DataField = 'GQVILLAGE'
+                DataSource = GurDm.MainDSrc
+                EditButtons = <>
+                TabOrder = 4
+                Visible = True
+              end
+              object Button4: TButton
+                Left = 198
+                Top = 8
+                Width = 75
+                Height = 21
+                Caption = 'Eyni '#351#601'xs'
+                TabOrder = 5
+                OnClick = Button4Click
               end
             end
           end
@@ -4314,7 +4310,6 @@ object FrmGuarante: TFrmGuarante
       05000000020000000400000049004400010000000000080000004E0041004500
       4D00010000000000}
     Session = sboapiDataModule.SBSession
-    Active = True
     Left = 160
     Top = 448
     object OracleDataSet1ID: TFloatField
@@ -4335,7 +4330,6 @@ object FrmGuarante: TFrmGuarante
       05000000020000000400000049004400010000000000080000004E0041004500
       4D00010000000000}
     Session = sboapiDataModule.SBSession
-    Active = True
     Left = 152
     Top = 504
     object OracleDataSet2ID: TFloatField
@@ -4356,7 +4350,6 @@ object FrmGuarante: TFrmGuarante
       4500010000000000140000005600490044005F0053004F0050005F0049004400
       010000000000060000004B004F004400010000000000}
     Session = sboapiDataModule.SBSession
-    Active = True
     Left = 320
     Top = 456
     object OracleDataSet3ID: TFloatField
@@ -4375,7 +4368,6 @@ object FrmGuarante: TFrmGuarante
       05000000020000000400000049004400010000000000080000004E0041004D00
       4500010000000000}
     Session = sboapiDataModule.SBSession
-    Active = True
     Left = 408
     Top = 450
   end
@@ -4387,7 +4379,6 @@ object FrmGuarante: TFrmGuarante
       05000000020000000400000049004400010000000000080000004E0041004D00
       4500010000000000}
     Session = sboapiDataModule.SBSession
-    Active = True
     Left = 488
     Top = 424
   end
@@ -4395,5 +4386,100 @@ object FrmGuarante: TFrmGuarante
     DataSet = OracleDataSet5
     Left = 512
     Top = 488
+  end
+  object ods_custinf: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      
+        'lastname||'#39' '#39'||name||'#39' '#39'||soname fulname ,passer||paspnum paspor' +
+        't,paspplace,paspdate,birthplace,city,address ,passpin,phone_h,ph' +
+        'one_m'
+      ''
+      'from  custinfo where passpin=:v_passpin'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A0056005F005000410053005300500049004E00
+      050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000E000000460055004C004E0041004D004500010000000000
+      0E00000050004100530050004F00520054000100000000001200000050004100
+      5300500050004C00410043004500010000000000100000005000410053005000
+      4400410054004500010000000000140000004200490052005400480050004C00
+      4100430045000100000000000800000043004900540059000100000000000E00
+      000041004400440052004500530053000100000000000E000000500041005300
+      5300500049004E000100000000000E000000500048004F004E0045005F004800
+      0100000000000E000000500048004F004E0045005F004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 224
+    object ods_custinfFULNAME: TWideStringField
+      FieldName = 'FULNAME'
+      Size = 364
+    end
+    object ods_custinfPASPORT: TWideStringField
+      FieldName = 'PASPORT'
+      Size = 200
+    end
+    object ods_custinfPASPPLACE: TWideStringField
+      FieldName = 'PASPPLACE'
+      Size = 100
+    end
+    object ods_custinfPASPDATE: TDateTimeField
+      FieldName = 'PASPDATE'
+    end
+    object ods_custinfBIRTHPLACE: TWideStringField
+      FieldName = 'BIRTHPLACE'
+      Size = 100
+    end
+    object ods_custinfCITY: TWideStringField
+      FieldName = 'CITY'
+      Size = 180
+    end
+    object ods_custinfADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 250
+    end
+    object ods_custinfPASSPIN: TWideStringField
+      FieldName = 'PASSPIN'
+      Size = 30
+    end
+    object ods_custinfPHONE_H: TWideStringField
+      FieldName = 'PHONE_H'
+      Size = 100
+    end
+    object ods_custinfPHONE_M: TWideStringField
+      FieldName = 'PHONE_M'
+      Size = 100
+    end
+  end
+  object ods_cust_cr: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.boorowerid,c.passpin from  custinfo c, cm_portfolio p w' +
+        'here c.idcust=p.boorowerid and p.id=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000001400000042004F004F0052004F0057004500520049004400
+      0100000000000E0000005000410053005300500049004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 504
+    Top = 192
+    object ods_cust_crBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+    end
+    object ods_cust_crPASSPIN: TWideStringField
+      FieldName = 'PASSPIN'
+      Size = 30
+    end
   end
 end

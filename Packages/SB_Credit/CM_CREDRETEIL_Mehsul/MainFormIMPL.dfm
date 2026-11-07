@@ -191,7 +191,7 @@ object MainForm: TMainForm
       Top = 1
       Width = 511
       Height = 491
-      ActivePage = TabSheet1
+      ActivePage = TabSheet2
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -348,7 +348,6 @@ object MainForm: TMainForm
             EditButtons = <>
             KeyField = 'CODE'
             ListField = 'NAME'
-            ListSource = RtDataModule.dsrc_agro_kod
             TabOrder = 1
             Visible = True
           end
@@ -1621,7 +1620,7 @@ object MainForm: TMainForm
             OnKeyPress = ins_ammountKeyPress
           end
           object DBInsurance: TDBLookupComboboxEh
-            Left = 322
+            Left = 320
             Top = 18
             Width = 175
             Height = 21

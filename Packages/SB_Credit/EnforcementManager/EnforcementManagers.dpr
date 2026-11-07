@@ -4,7 +4,8 @@ uses
   ComServ,
   EnforcementManagers_TLB in 'EnforcementManagers_TLB.pas',
   UnitEnforcementManager in 'UnitEnforcementManager.pas' {EnforcementManager: TActiveForm} {EnforcementManager: CoClass},
-  DataModEnforcement in 'DataModEnforcement.pas' {DataModuleEnforcement: TDataModule};
+  DataModEnforcement in 'DataModEnforcement.pas' {DataModuleEnforcement: TDataModule},
+  AdminParametrIcra in 'AdminParametrIcra.pas' {FormParametr};
 
 {$E ocx}
 

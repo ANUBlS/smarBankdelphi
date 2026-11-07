@@ -2484,7 +2484,7 @@ object DecaDataModule: TDecaDataModule
       '                                         '
       '                          UNION ALL'
       '                          SELECT typecode,'
-      '                                 anyinfotodisting,'
+      '                                 description,--anyinfotodisting,'
       '                                 registryno,'
       '                                 pledgeprice,'
       

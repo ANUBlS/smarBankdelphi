@@ -2,8 +2,8 @@ object RtDataModule: TRtDataModule
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 727
-  Width = 1190
+  Height = 770
+  Width = 1200
   object PersonLink: TOracleDataSet
     SQL.Strings = (
       'select rowid, a.* from cm_mehsul a'
@@ -239,6 +239,12 @@ object RtDataModule: TRtDataModule
     end
     object PersonLinkF3: TFloatField
       FieldName = 'F3'
+    end
+    object PersonLinkKOMISION: TFloatField
+      FieldName = 'KOMISION'
+    end
+    object PersonLinkXIDMETHAQQI: TFloatField
+      FieldName = 'XIDMETHAQQI'
     end
   end
   object SrcPersonLink: TDataSource
@@ -541,7 +547,9 @@ object RtDataModule: TRtDataModule
   end
   object Percent: TOracleDataSet
     SQL.Strings = (
-      'SELECT id, bper, eper, faiz, gecfaiz, penya, mehsetid'
+      
+        'SELECT id, bper, eper, faiz, gecfaiz, penya, mehsetid,ayliqfaiz,' +
+        'KOMISSIA'
       '  FROM cm_percent_setting'
       
         'where mehsetid in (select id   from CM_RETLPORIOD where  retcuri' +
@@ -555,13 +563,44 @@ object RtDataModule: TRtDataModule
       120000003A005200450054004300550052004900440003000000000000000000
       00000E0000003A0050004500520049004F004400040000000000000000000000}
     QBEDefinition.QBEFieldDefs = {
-      05000000030000000C0000004300550052005200490044000100000000001000
-      000043005500520052004E0041004D0045000100000000001000000056004100
-      4C005F004E0041004D004500010000000000}
+      0500000009000000040000004900440001000000000008000000420050004500
+      5200010000000000080000004500500045005200010000000000080000004600
+      410049005A000100000000000E0000004700450043004600410049005A000100
+      000000000A000000500045004E0059004100010000000000100000004D004500
+      48005300450054004900440001000000000012000000410059004C0049005100
+      4600410049005A00010000000000100000004B004F004D004900530053004900
+      4100010000000000}
     Cursor = crHourGlass
     Session = sboapiDataModule.SBSession
     Left = 200
     Top = 152
+    object PercentID: TFloatField
+      FieldName = 'ID'
+    end
+    object PercentBPER: TFloatField
+      FieldName = 'BPER'
+    end
+    object PercentEPER: TFloatField
+      FieldName = 'EPER'
+    end
+    object PercentFAIZ: TFloatField
+      FieldName = 'FAIZ'
+    end
+    object PercentGECFAIZ: TFloatField
+      FieldName = 'GECFAIZ'
+    end
+    object PercentPENYA: TFloatField
+      FieldName = 'PENYA'
+    end
+    object PercentMEHSETID: TFloatField
+      FieldName = 'MEHSETID'
+    end
+    object PercentAYLIQFAIZ: TFloatField
+      FieldName = 'AYLIQFAIZ'
+    end
+    object PercentKOMISSIA: TFloatField
+      FieldName = 'KOMISSIA'
+    end
   end
   object Customers: TOracleDataSet
     SQL.Strings = (
@@ -961,7 +1000,7 @@ object RtDataModule: TRtDataModule
   end
   object creditcatData: TOracleDataSet
     SQL.Strings = (
-      'SELECT  a.id, a.name, a.kod,a.vid_sob'
+      'SELECT  a.id, a.name, a.kod,a.vid_sob,a.agro_kod'
       '  FROM cm_creditcat a'
       'where '
       'vid_sob=:vid_sob'
@@ -971,9 +1010,10 @@ object RtDataModule: TRtDataModule
       0400000001000000100000003A005600490044005F0053004F00420003000000
       0000000000000000}
     QBEDefinition.QBEFieldDefs = {
-      05000000040000000400000049004400010000000000080000004E0041004D00
+      05000000050000000400000049004400010000000000080000004E0041004D00
       4500010000000000060000004B004F0044000100000000000E00000056004900
-      44005F0053004F004200010000000000}
+      44005F0053004F004200010000000000100000004100470052004F005F004B00
+      4F004400010000000000}
     Session = sboapiDataModule.SBSession
     Left = 59
     Top = 541
@@ -990,6 +1030,9 @@ object RtDataModule: TRtDataModule
     end
     object creditcatDataVID_SOB: TFloatField
       FieldName = 'VID_SOB'
+    end
+    object creditcatDataAGRO_KOD: TFloatField
+      FieldName = 'AGRO_KOD'
     end
   end
   object DataSrcActivities: TDataSource
@@ -1727,6 +1770,52 @@ object RtDataModule: TRtDataModule
   object dsrc_IsProjectFinanced: TDataSource
     DataSet = Ods_IsProjectFinanced
     Left = 224
+    Top = 664
+  end
+  object ods_Insurance: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name, sid'
+      '  FROM cm_insuranceagency ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      450001000000000006000000530049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 608
+    object ods_InsuranceID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ods_InsuranceNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object ods_InsuranceSID: TWideStringField
+      FieldName = 'SID'
+      Size = 22
+    end
+  end
+  object InsSrc: TDataSource
+    DataSet = ods_Insurance
+    Left = 355
+    Top = 672
+  end
+  object ods_ins_status: TOracleDataSet
+    SQL.Strings = (
+      'select  '#39'TRUE'#39' as kod, '#39'B'#601'li'#39' as name  from dual'
+      'union all'
+      'select  '#39'FALSE'#39' as kod, '#39'Xeyr'#39' as name  from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000060000004B004F004400010000000000080000004E004100
+      4D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 616
+  end
+  object dsrc__ins_status: TDataSource
+    DataSet = ods_ins_status
+    Left = 456
     Top = 664
   end
 end

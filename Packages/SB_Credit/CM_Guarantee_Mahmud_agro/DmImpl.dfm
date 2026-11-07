@@ -558,12 +558,6 @@ object GurDm: TGurDm
       FieldName = 'GQTELMOB'
       Size = 60
     end
-    object MainDSetGQVILLAGE: TFloatField
-      FieldName = 'GQVILLAGE'
-    end
-    object MainDSetGQCITY: TFloatField
-      FieldName = 'GQCITY'
-    end
     object MainDSetNUMBEROFGUR: TWideStringField
       FieldName = 'NUMBEROFGUR'
       Size = 60
@@ -619,6 +613,14 @@ object GurDm: TGurDm
       FieldName = 'FIN'
       Size = 12
     end
+    object MainDSetGQVILLAGE: TWideStringField
+      FieldName = 'GQVILLAGE'
+      Size = 50
+    end
+    object MainDSetGQCITY: TWideStringField
+      FieldName = 'GQCITY'
+      Size = 50
+    end
   end
   object OracleDataSet1: TOracleDataSet
     SQL.Strings = (
@@ -651,49 +653,59 @@ object GurDm: TGurDm
   object VillagesDataSet: TOracleDataSet
     Tag = 21
     SQL.Strings = (
-      'SELECT id, name, depend_id'
+      '/*SELECT id, name, depend_id'
       '  FROM agro_village'
       ''
-      'where depend_id = :depend_id')
+      'where depend_id = :depend_id*/'
+      ''
+      
+        'select id, city_name ,country_id from cities  where country_id= ' +
+        ':country_id')
     Optimize = False
     Variables.Data = {
-      0400000001000000140000003A0044004500500045004E0044005F0049004400
-      040000000000000000000000}
+      0400000001000000160000003A0043004F0055004E005400520059005F004900
+      4400030000000000000000000000}
     QBEDefinition.QBEFieldDefs = {
-      05000000030000000400000049004400010000000000080000004E0041004D00
-      45000100000000001200000044004500500045004E0044005F00490044000100
-      00000000}
+      0500000003000000040000004900440001000000000012000000430049005400
+      59005F004E0041004D0045000100000000001400000043004F0055004E005400
+      520059005F0049004400010000000000}
     Master = DistrictsDataSet
     MasterFields = 'ID'
-    DetailFields = 'DEPEND_ID'
+    DetailFields = 'country_id'
     Session = sboapiDataModule.SBSession
     Left = 538
     Top = 152
+    object VillagesDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object VillagesDataSetCITY_NAME: TWideStringField
+      FieldName = 'CITY_NAME'
+      Size = 80
+    end
+    object VillagesDataSetCOUNTRY_ID: TFloatField
+      FieldName = 'COUNTRY_ID'
+    end
   end
   object DistrictsDataSet: TOracleDataSet
     Tag = 20
     SQL.Strings = (
-      'SELECT id, name, name_eng'
-      '  FROM agro_region')
+      '/*SELECT id, name, name_eng'
+      '  FROM agro_region'
+      '*/'
+      'select id, cntr_name from countries ')
     Optimize = False
     QBEDefinition.QBEFieldDefs = {
-      05000000030000000400000049004400010000000000080000004E0041004D00
-      4500010000000000100000004E0041004D0045005F0045004E00470001000000
-      0000}
+      050000000200000004000000490044000100000000001200000043004E005400
+      52005F004E0041004D004500010000000000}
     Session = sboapiDataModule.SBSession
     Left = 296
     Top = 304
     object DistrictsDataSetID: TFloatField
       FieldName = 'ID'
-      Required = True
     end
-    object DistrictsDataSetNAME: TWideStringField
-      FieldName = 'NAME'
-      Size = 128
-    end
-    object DistrictsDataSetNAME_ENG: TWideStringField
-      FieldName = 'NAME_ENG'
-      Size = 128
+    object DistrictsDataSetCNTR_NAME: TWideStringField
+      FieldName = 'CNTR_NAME'
+      Size = 80
     end
   end
   object DistrictsDataSrc: TDataSource

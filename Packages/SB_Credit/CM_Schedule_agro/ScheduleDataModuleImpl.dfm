@@ -196,10 +196,7 @@ object ScheduleDataModule: TScheduleDataModule
         '   cm_common.GetPeriod(A.DATEOFCONCLUSION,A.DUEDATEFIRSTCONTRACT' +
         ')||'#39' Ay'#39' as period_ay,cm_common.GetPeriod(A.DATEOFCONCLUSION,A.D' +
         'UEDATEFIRSTCONTRACT)as  period,v.val_name,'
-      
-        '   '#39'C'#601'rim'#601': Kredit m'#252'qavil'#601'sinin 3.2. b'#601'ndin'#601' '#601'sas'#601'n gecikdiril'#601 +
-        'n h'#601'r g'#252'n '#252#231#252'n gecik'#601'n '#601'sas m'#601'bl'#601#287'd'#601'n c'#601'rim'#601' faizi hesablan'#305'r.'#39' ' +
-        'cerime,'
+      '   '#39#39' cerime,'
       '   c.rest+c.duerest rest'
       'FROM'
       '   CM_ACTIVE_CREDITS A,avalute v,'

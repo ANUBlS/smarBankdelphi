@@ -18,14 +18,8 @@ type
     Branch: TDataSource;
     ODFUsers: TOracleDataSet;
     Users: TDataSource;
-    ODSPayInfo: TOracleDataSet;
     ODSCreditsID: TFloatField;
     Exporter: TCMExcelExport;
-    ODSPayInfoCREDITID: TFloatField;
-    ODSPayInfoBOOROWER: TWideStringField;
-    ODSPayInfoCRDNUM: TWideStringField;
-    ODSPayInfoMAINPAYED: TFloatField;
-    ODSPayInfoINTRPAYED: TFloatField;
     XFPanel5: TXFPanel;
     XFGroupBox12: TXFGroupBox;
     XFLabel1: TXFLabel;
@@ -46,12 +40,23 @@ type
     XFGroupBox10: TXFGroupBox;
     DBLookupComboboxEh2: TDBLookupComboboxEh;
     XFCheckBox10: TXFCheckBox;
+    ODSPayInfo: TOracleDataSet;
+    ODSPayInfoCREDITID: TFloatField;
+    ODSPayInfoBOOROWER: TWideStringField;
+    ODSPayInfoCRDNUM: TWideStringField;
+    ODSPayInfoMAIN_PAYED: TFloatField;
+    ODSPayInfoMAIN_DUEPAYED: TFloatField;
+    ODSPayInfoINTRPAYED: TFloatField;
+    ODSPayInfoINTR_DUEPAYED: TFloatField;
+    ODSPayInfoREST: TFloatField;
+    ODSPayInfoINTREST: TFloatField;
+    ODSPayInfoDUEREST: TFloatField;
+    ODSPayInfoDUEINTEREST: TFloatField;
     ODSPayInfoFILIAL: TWideStringField;
     ODSPayInfoDAT: TDateTimeField;
+    ODSPayInfoPAY_DAT: TDateTimeField;
+    ODSPayInfoPAY_PENALTYAMMOUNT: TFloatField;
     ODSPayInfoPENALTYAMMOUNT: TFloatField;
-    ODSPayInfoRRN: TWideStringField;
-    ODSPayInfoEKV_MAINPAYED: TFloatField;
-    ODSPayInfoEKV_INTREST: TFloatField;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure XFButton1Click(Sender: TObject);
@@ -124,18 +129,36 @@ procedure TfrmPayRepFilter.GetReport;
 var
   res: String;
   ADDITIONALPARAMS: String;
+  FullWhere: String;
 begin
    with ODSCredits do begin
     Session.Commit;
     Close;
-    if (BuildFilterString<>'')or (ADDITIONALPARAMS<>'') then
-      SQL[2] := 'where '+BuildFilterString + ADDITIONALPARAMS
+
+    // Filtrləri təhlükəsiz birləşdiririk
+    FullWhere := '';
+    if BuildFilterString <> '' then
+      FullWhere := BuildFilterString;
+
+    if ADDITIONALPARAMS <> '' then
+    begin
+      if FullWhere <> '' then
+        FullWhere := FullWhere + ' AND ' + ADDITIONALPARAMS
+      else
+        FullWhere := ADDITIONALPARAMS;
+    end;
+
+    // SQL sorğusuna tətbiq edirik
+    if FullWhere <> '' then
+      SQL[2] := 'where ' + FullWhere
     else
       SQL[2] := '';
 
-   // sql.SaveToFile('c:\aa.txt');
+    // Yoxlamaq üçün SQL-i fayla yazdıra bilərsiniz (şərhdən çıxarın):
+    // sql.SaveToFile('c:\aa.txt');
+
     Open;
-   // ODSCredits.First;
+
     while not Eof do begin
       CM_REPORTS.CallProcedure('insrowpayment',[
         'p_ID',    ODSCreditsID.AsVariant ,
@@ -148,23 +171,19 @@ begin
   end;
 
   RepDataSet.Close;
-
   RepDataSet.Open;
-
   Screen.Cursor := crDefault;
 
-   if RepDataSet.RecordCount>0 then
-     begin
+  if RepDataSet.RecordCount > 0 then
+  begin
     with Exporter do begin
       Connect;
       ExportDataset(RepDataSet,'Report',true,false);
       ShowExcel;
-     // Disconnect;
-     end;
-     end
-     else
-     Showmessage('Daxil edilen Məlumatlar bazada mövcud deyil');
-
+    end;
+  end
+  else
+    Showmessage('Daxil edilen Məlumatlar bazada mövcud deyil');
 end;
 
 procedure TfrmPayRepFilter.XFButton1Click(Sender: TObject);

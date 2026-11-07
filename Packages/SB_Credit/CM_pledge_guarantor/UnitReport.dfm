@@ -53,8 +53,8 @@ object FormReport: TFormReport
           TabOrder = 0
         end
         object BitBtn1: TBitBtn
-          Left = 796
-          Top = 2
+          Left = 797
+          Top = 4
           Width = 82
           Height = 27
           Anchors = []
@@ -84,8 +84,8 @@ object FormReport: TFormReport
           OnClick = BitBtn1Click
         end
         object BitBtn2: TBitBtn
-          Left = 877
-          Top = 2
+          Left = 878
+          Top = 4
           Width = 82
           Height = 27
           Anchors = []
@@ -204,12 +204,14 @@ object FormReport: TFormReport
               FieldName = 'PLEDGENAME'
               Title.Alignment = taCenter
               Visible = True
+              Width = 64
             end
             item
               Expanded = False
               FieldName = 'HOLDERNAME'
               Title.Alignment = taCenter
               Visible = True
+              Width = 64
             end
             item
               Expanded = False
@@ -230,6 +232,7 @@ object FormReport: TFormReport
               FieldName = 'REGISTRYDATE'
               Title.Alignment = taCenter
               Visible = True
+              Width = 64
             end
             item
               Expanded = False
@@ -250,6 +253,7 @@ object FormReport: TFormReport
               FieldName = 'gqname'
               Title.Alignment = taCenter
               Visible = True
+              Width = 64
             end
             item
               Expanded = False
@@ -282,6 +286,7 @@ object FormReport: TFormReport
               FieldName = 'GQPASPDATE'
               Title.Alignment = taCenter
               Visible = True
+              Width = 64
             end
             item
               Expanded = False
@@ -312,6 +317,9 @@ object FormReport: TFormReport
           Height = 530
           Align = alLeft
           TabOrder = 1
+          Visible = False
+          ExplicitLeft = 266
+          ExplicitTop = -62
           object RadioGroup1: TRadioGroup
             Left = 2
             Top = -5
@@ -370,6 +378,13 @@ object FormReport: TFormReport
               FieldName = 'BOOROWERID'
               Title.Alignment = taCenter
               Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'M'#252#351't'#601'ri  adi'
+              Visible = True
+              Width = 180
             end
             item
               Expanded = False
@@ -514,8 +529,8 @@ object FormReport: TFormReport
           TabOrder = 0
         end
         object ButtonExportza: TBitBtn
-          Left = 796
-          Top = 3
+          Left = 792
+          Top = 5
           Width = 82
           Height = 27
           Anchors = []
@@ -545,8 +560,8 @@ object FormReport: TFormReport
           OnClick = ButtonExportzaClick
         end
         object CloseBtn: TBitBtn
-          Left = 877
-          Top = 3
+          Left = 874
+          Top = 5
           Width = 82
           Height = 27
           Anchors = []
@@ -695,6 +710,7 @@ object FormReport: TFormReport
       54004600530054004100540055005300010000000000}
     QueryAllRecords = False
     Session = sboapiDataModule.SBSession
+    Active = True
     Left = 256
     Top = 168
     object ODS_girovID: TFloatField
@@ -748,12 +764,12 @@ object FormReport: TFormReport
     object ODS_girovPLEDGENAME: TWideStringField
       DisplayLabel = 'Girovun ad'#305
       FieldName = 'PLEDGENAME'
-      Size = 700
+      Size = 512
     end
     object ODS_girovHOLDERNAME: TWideStringField
       DisplayLabel = 'Girovu saxlayan'
       FieldName = 'HOLDERNAME'
-      Size = 800
+      Size = 512
     end
     object ODS_girovREGISTRYAGENCY: TWideStringField
       DisplayLabel = 'Girovu Q.ke'#231'ir'#601'n orqan'
@@ -779,7 +795,7 @@ object FormReport: TFormReport
       FieldName = 'PLEDGEPRICE'
     end
     object ODS_girovLIKVID_REST: TFloatField
-      FieldName = 'likvid_rest'
+      FieldName = 'LIKVID_REST'
     end
     object ODS_girovEKLIKVID: TFloatField
       DisplayLabel = 'Ekvivalent'
@@ -826,8 +842,8 @@ object FormReport: TFormReport
   object ODS_zamin: TOracleDataSet
     SQL.Strings = (
       
-        'select p.id,p.boorowerid,p.numberofcredit,(select name from fili' +
-        'al where id =p.branchid ) filial,p.creditlineamount,'
+        'select p.id,p.boorowerid,b.name,p.numberofcredit,(select name fr' +
+        'om filial where id =p.branchid ) filial,p.creditlineamount,'
       'case when p.partitionkey=0 then  '#39'A'#231#305'q'#39'else '#39'Ba'#287'l'#305#39' end status,'
       
         'g.guarantorname,to_date(g.dateofbirth)dateofbirth,g.pincode,g.cu' +
@@ -836,11 +852,13 @@ object FormReport: TFormReport
       
         'g.factadres,g.zaminwork1,g.guarantorsalary, g.zmtelmob1, tmnus_s' +
         'tatus,tmnus_portfstatus'
-      'from cm_portfolio p,cm_guarantor g where p.id=g.creditid'
+      
+        'from cm_portfolio p,cm_guarantor g,cm_boorowerinfo b where p.id=' +
+        'g.creditid and p.id=b.creditid'
       'order by p.boorowerid desc ')
     Optimize = False
     QBEDefinition.QBEFieldDefs = {
-      050000001500000004000000490044000100000000001400000042004F004F00
+      050000001600000004000000490044000100000000001400000042004F004F00
       52004F00570045005200490044000100000000001C0000004E0055004D004200
       450052004F0046004300520045004400490054000100000000000C0000004600
       49004C00490041004C0001000000000020000000430052004500440049005400
@@ -859,7 +877,8 @@ object FormReport: TFormReport
       530041004C00410052005900010000000000120000005A004D00540045004C00
       4D004F00420031000100000000001800000054004D004E00550053005F005300
       540041005400550053000100000000002200000054004D004E00550053005F00
-      50004F00520054004600530054004100540055005300010000000000}
+      50004F0052005400460053005400410054005500530001000000000008000000
+      4E0041004D004500010000000000}
     QueryAllRecords = False
     Session = sboapiDataModule.SBSession
     Active = True
@@ -965,6 +984,10 @@ object FormReport: TFormReport
       DisplayLabel = 'Timenus portfel status'
       FieldName = 'TMNUS_PORTFSTATUS'
       Size = 50
+    end
+    object ODS_zaminNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
     end
   end
   object MisExcelExportzamin: TCMExcelExport

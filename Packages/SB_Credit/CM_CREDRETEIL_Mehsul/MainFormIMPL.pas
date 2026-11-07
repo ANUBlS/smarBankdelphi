@@ -478,6 +478,7 @@ with RtDataModule,Percent do
  DBNumberEditEh2.Text:=FieldByName('faiz').asstring;
  DBNumberEditEh4.Text:=FieldByName('gecfaiz').asstring;
  DBNumberEditEh5.Text:=FieldByName('penya').asstring;
+ DBNumberEditEh7.Text:=FieldByName('KOMISSIA').asstring;
  end;
 end;
 end;

@@ -757,7 +757,7 @@ object ReportForm: TReportForm
       object QRLabel1: TQRLabel
         Left = 11
         Top = 24
-        Width = 60
+        Width = 108
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -768,13 +768,13 @@ object ReportForm: TReportForm
           44.979166666666670000
           29.104166666666670000
           63.500000000000000000
-          158.750000000000000000)
+          285.750000000000000000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'Kreditin '#8470' :'
+        Caption = 'Kreditin  m'#252'qavil'#601' '#8470' :'
         Color = clWhite
         Font.Charset = RUSSIAN_CHARSET
         Font.Color = clWindowText
@@ -1169,7 +1169,7 @@ object ReportForm: TReportForm
       object QRLabel12: TQRLabel
         Left = 536
         Top = 5
-        Width = 146
+        Width = 172
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1180,13 +1180,13 @@ object ReportForm: TReportForm
           44.979166666666670000
           1418.166666666667000000
           13.229166666666670000
-          386.291666666666700000)
+          455.083333333333300000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'Kredit m'#252'qavil'#601'sin'#601' '#601'lav'#601
+        Caption = 'Kredit m'#252'qavil'#601'sin'#601' '#601'lav'#601' '#8470'1'
         Color = clWhite
         Transparent = False
         WordWrap = True

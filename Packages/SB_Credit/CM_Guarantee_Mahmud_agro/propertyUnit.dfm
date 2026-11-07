@@ -1,0 +1,429 @@
+object FormProperty: TFormProperty
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'Da'#231#305'nmaz '#601'mlak'
+  ClientHeight = 430
+  ClientWidth = 857
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 857
+    Height = 33
+    Align = alTop
+    TabOrder = 0
+    ExplicitWidth = 659
+    object Label1: TLabel
+      Left = 183
+      Top = 10
+      Width = 24
+      Height = 16
+      Caption = 'FIN:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object EditFin: TEdit
+      Left = 221
+      Top = 7
+      Width = 121
+      Height = 21
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 352
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = 'Axtar'#305#351
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 389
+    Width = 857
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    ExplicitWidth = 659
+    object Button2: TButton
+      Left = 424
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 0
+      OnClick = Button2Click
+    end
+    object Button3: TButton
+      Left = 512
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      TabOrder = 1
+      OnClick = Button3Click
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 33
+    Width = 857
+    Height = 182
+    Align = alTop
+    TabOrder = 2
+    ExplicitWidth = 659
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 855
+      Height = 180
+      Align = alClient
+      Caption = 'M'#252#351't'#601'rinin '#601'mlaklar'#305'n'#305'n siyah'#305's'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      ExplicitWidth = 657
+      object DBGridEh1: TDBGridEh
+        Left = 2
+        Top = 15
+        Width = 851
+        Height = 163
+        Align = alClient
+        DataGrouping.GroupLevels = <>
+        DataSource = DataSource1
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = [fsBold]
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'ID'
+            Footers = <>
+            Width = 60
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PIN'
+            Footers = <>
+            Width = 120
+          end
+          item
+            EditButtons = <>
+            FieldName = 'TYPE_ID'
+            Footers = <>
+          end
+          item
+            EditButtons = <>
+            FieldName = 'REGISTRATION_NUMBER'
+            Footers = <>
+            Width = 168
+          end
+          item
+            EditButtons = <>
+            FieldName = 'REYESTR_NUMBER'
+            Footers = <>
+            Width = 150
+          end
+          item
+            EditButtons = <>
+            FieldName = 'TYPE_NAME'
+            Footers = <>
+            Width = 80
+          end
+          item
+            EditButtons = <>
+            FieldName = 'OLD_ADDRESS'
+            Footers = <>
+            Width = 150
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 215
+    Width = 857
+    Height = 174
+    Align = alClient
+    TabOrder = 3
+    ExplicitWidth = 659
+    object GroupBox2: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 855
+      Height = 172
+      Align = alClient
+      Caption = 'Girovala '#601'laq'#601'l'#601'ndirilmi'#351' '#601'mlaklar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      ExplicitWidth = 657
+      object DBGridEh2: TDBGridEh
+        Left = 2
+        Top = 15
+        Width = 851
+        Height = 155
+        Align = alClient
+        DataGrouping.GroupLevels = <>
+        DataSource = DataSource2
+        Flat = False
+        FooterColor = clWindow
+        FooterFont.Charset = DEFAULT_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Tahoma'
+        FooterFont.Style = [fsBold]
+        PopupMenu = PopupMenu1
+        RowDetailPanel.Color = clBtnFace
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'GUARID'
+            Footers = <>
+            Width = 60
+          end
+          item
+            EditButtons = <>
+            FieldName = 'FIN'
+            Footers = <>
+            Width = 116
+          end
+          item
+            EditButtons = <>
+            FieldName = 'TYPE_ID'
+            Footers = <>
+            Width = 80
+          end
+          item
+            EditButtons = <>
+            FieldName = 'REGISTRATION_NUMBER'
+            Footers = <>
+            Width = 167
+          end
+          item
+            EditButtons = <>
+            FieldName = 'REYESTR_NUMBER'
+            Footers = <>
+            Width = 150
+          end
+          item
+            EditButtons = <>
+            FieldName = 'TYPE_NAME'
+            Footers = <>
+            Width = 86
+          end
+          item
+            EditButtons = <>
+            FieldName = 'OLD_ADDRESS'
+            Footers = <>
+            Width = 150
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 464
+    Top = 40
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 432
+    Top = 176
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '    t.id,'
+      '    t.pin,'
+      '    jt.old_address,'
+      '    jt.registration_number,'
+      '    jt.reyestr_number,'
+      '    jt.type_id,'
+      '    jt.type_name'
+      'FROM '
+      '    asan_log t,'
+      '    JSON_TABLE('
+      '        t.info, '
+      '        '#39'$.Response.Addresses[*]'#39
+      '        COLUMNS ('
+      
+        '            old_address         VARCHAR2(500) PATH '#39'$.OldAddress' +
+        #39','
+      
+        '            registration_number VARCHAR2(50)  PATH '#39'$.Registrati' +
+        'onNumber'#39','
+      
+        '            reyestr_number      VARCHAR2(100) PATH '#39'$.ReyestrNum' +
+        'ber'#39','
+      '            type_id             VARCHAR2(10)  PATH '#39'$.Type.Id'#39','
+      '            type_name           VARCHAR2(100) PATH '#39'$.Type.Name'#39
+      '        )'
+      '    ) jt'
+      ''
+      
+        'where  id in(select max(id)from asan_log where service='#39'Property' +
+        #39'  and pin=:v_pin)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0056005F00500049004E000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000006000000500049004E00
+      010000000000160000004F004C0044005F004100440044005200450053005300
+      0100000000002600000052004500470049005300540052004100540049004F00
+      4E005F004E0055004D004200450052000100000000001C000000520045005900
+      45005300540052005F004E0055004D004200450052000100000000000E000000
+      54005900500045005F0049004400010000000000120000005400590050004500
+      5F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 40
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1PIN: TWideStringField
+      FieldName = 'PIN'
+      Size = 1020
+    end
+    object OracleDataSet1OLD_ADDRESS: TWideStringField
+      FieldName = 'OLD_ADDRESS'
+      Size = 500
+    end
+    object OracleDataSet1REGISTRATION_NUMBER: TWideStringField
+      FieldName = 'REGISTRATION_NUMBER'
+      Size = 50
+    end
+    object OracleDataSet1REYESTR_NUMBER: TWideStringField
+      FieldName = 'REYESTR_NUMBER'
+      Size = 100
+    end
+    object OracleDataSet1TYPE_ID: TWideStringField
+      FieldName = 'TYPE_ID'
+      Size = 10
+    end
+    object OracleDataSet1TYPE_NAME: TWideStringField
+      FieldName = 'TYPE_NAME'
+      Size = 100
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select* from cm_guar_Property'
+      'where guarid=:v_id ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000C0000004700550041005200490044000100000000000E00
+      00004100530041004E005F004900440001000000000006000000460049004E00
+      010000000000160000004F004C0044005F004100440044005200450053005300
+      0100000000002600000052004500470049005300540052004100540049004F00
+      4E005F004E0055004D004200450052000100000000001C000000520045005900
+      45005300540052005F004E0055004D004200450052000100000000000E000000
+      54005900500045005F0049004400010000000000120000005400590050004500
+      5F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 176
+    object OracleDataSet2GUARID: TFloatField
+      FieldName = 'GUARID'
+    end
+    object OracleDataSet2ASAN_ID: TFloatField
+      FieldName = 'ASAN_ID'
+    end
+    object OracleDataSet2FIN: TWideStringField
+      FieldName = 'FIN'
+      Size = 11
+    end
+    object OracleDataSet2OLD_ADDRESS: TWideStringField
+      FieldName = 'OLD_ADDRESS'
+      Size = 500
+    end
+    object OracleDataSet2REGISTRATION_NUMBER: TWideStringField
+      FieldName = 'REGISTRATION_NUMBER'
+      Size = 25
+    end
+    object OracleDataSet2REYESTR_NUMBER: TWideStringField
+      FieldName = 'REYESTR_NUMBER'
+      Size = 25
+    end
+    object OracleDataSet2TYPE_ID: TWideStringField
+      FieldName = 'TYPE_ID'
+      Size = 3
+    end
+    object OracleDataSet2TYPE_NAME: TWideStringField
+      FieldName = 'TYPE_NAME'
+      Size = 200
+    end
+  end
+  object OracleQuery1: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 232
+    Top = 112
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 344
+    Top = 152
+    object SeilmiiSil1: TMenuItem
+      Caption = 'Se'#231'ilmi'#351'i Sil'
+      OnClick = SeilmiiSil1Click
+    end
+  end
+  object OracleQuery2: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 328
+    Top = 104
+  end
+end

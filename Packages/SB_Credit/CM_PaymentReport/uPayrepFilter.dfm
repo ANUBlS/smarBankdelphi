@@ -4,7 +4,7 @@ object frmPayRepFilter: TfrmPayRepFilter
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'frmIpRepFilter'
-  ClientHeight = 118
+  ClientHeight = 119
   ClientWidth = 685
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,7 +20,7 @@ object frmPayRepFilter: TfrmPayRepFilter
   PixelsPerInch = 96
   TextHeight = 13
   object XFPanel5: TXFPanel
-    Left = 0
+    Left = 1
     Top = 67
     Width = 684
     Height = 51
@@ -227,7 +227,7 @@ object frmPayRepFilter: TfrmPayRepFilter
     Optimize = False
     QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
     Session = sboapiDataModule.SBSession
-    Left = 424
+    Left = 416
     Top = 16
     object ODSCreditsID: TFloatField
       FieldName = 'ID'
@@ -300,100 +300,6 @@ object frmPayRepFilter: TfrmPayRepFilter
     Left = 592
     Top = 6
   end
-  object ODSPayInfo: TOracleDataSet
-    SQL.Strings = (
-      
-        '/*SELECT rownum, creditid, groupname, boorower, crdnum, mainsche' +
-        'dule, mainpayed, (-mainschedule+mainpayed) as maindiff   intrsch' +
-        'edule, intrpayed,  (-intrschedule+intrpayed) as intrdiff,irest'
-      
-        ' ,CREDITLINEAMMOUNT,SUMPAY,SUMSHEDULE,rest qaliq,(rest-(CREDITLI' +
-        'NEAMMOUNT-SUMSHEDULE)) maindiff ,'
-      
-        'mainschedule-mainpayed "'#399'.B '#252'zr'#601' az '#246'd'#601'ni'#351'" ,irest-intrpayed "Fa' +
-        'iz az '#246'd'#601'ni'#351'",ESASHES,FAIZHES  FROM cm_report_payments p'
-      'where creditid>0'
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      ''
-      '*/'
-      'select * FROM cm_report_payments'
-      ' order by groupname')
-    Optimize = False
-    QBEDefinition.QBEFieldDefs = {
-      0500000012000000100000004300520045004400490054004900440001000000
-      00001000000042004F004F0052004F0057004500520001000000000012000000
-      470052004F00550050004E0041004D0045000100000000000C00000043005200
-      44004E0055004D00010000000000180000004D00410049004E00530043004800
-      4500440055004C004500010000000000120000004D00410049004E0050004100
-      5900450044000100000000001800000049004E00540052005300430048004500
-      440055004C0045000100000000001200000049004E0054005200500041005900
-      450044000100000000000800000052004500530054000100000000000E000000
-      49004E005400520045005300540001000000000012000000500052004F004600
-      5F004E0041004D0045000100000000000C000000460049004C00490041004C00
-      010000000000060000004400410054000100000000000E000000500041005900
-      5F004400410054000100000000001C000000500045004E0041004C0054005900
-      41004D004D004F0055004E0054000100000000001600000045004B0056005F00
-      49004E00540052004500530054000100000000001A00000045004B0056005F00
-      4D00410049004E00500041005900450044000100000000000600000052005200
-      4E00010000000000}
-    Session = sboapiDataModule.SBSession
-    Left = 480
-    Top = 40
-    object ODSPayInfoCREDITID: TFloatField
-      DisplayLabel = 'Kredit id'
-      FieldName = 'CREDITID'
-    end
-    object ODSPayInfoBOOROWER: TWideStringField
-      DisplayLabel = 'M'#252#351't'#601'ri'
-      FieldName = 'BOOROWER'
-      Size = 127
-    end
-    object ODSPayInfoCRDNUM: TWideStringField
-      DisplayLabel = 'M'#252'qavil'#601' No'
-      FieldName = 'CRDNUM'
-      Size = 30
-    end
-    object ODSPayInfoDAT: TDateTimeField
-      DisplayLabel = #214'd'#601'diyi tarixi'
-      FieldName = 'DAT'
-    end
-    object ODSPayInfoMAINPAYED: TFloatField
-      DisplayLabel = #399'sasdan '#246'd'#601'nilmi'#351
-      FieldName = 'MAINPAYED'
-    end
-    object ODSPayInfoINTRPAYED: TFloatField
-      DisplayLabel = 'Faizd'#601'n '#246'd'#601'nilmi'#351
-      FieldName = 'INTRPAYED'
-    end
-    object ODSPayInfoEKV_MAINPAYED: TFloatField
-      DisplayLabel = 'Gecikmi'#351' '#601'sas '#246'd'#601'nilmi'#351
-      FieldName = 'EKV_MAINPAYED'
-    end
-    object ODSPayInfoEKV_INTREST: TFloatField
-      DisplayLabel = 'Gecikmi'#351' faiz '#246'd'#601'nilmi'#351
-      FieldName = 'EKV_INTREST'
-    end
-    object ODSPayInfoPENALTYAMMOUNT: TFloatField
-      DisplayLabel = 'D'#601'bb'#601' m'#601'bl'#601#287'i'
-      FieldName = 'PENALTYAMMOUNT'
-    end
-    object ODSPayInfoFILIAL: TWideStringField
-      DisplayLabel = 'Filial'
-      FieldName = 'FILIAL'
-      Size = 50
-    end
-    object ODSPayInfoRRN: TWideStringField
-      FieldName = 'RRN'
-      Size = 4000
-    end
-  end
   object Exporter: TCMExcelExport
     StyleColumnWidth = cwAutoFit
     ColumnWidth = 0
@@ -426,5 +332,128 @@ object frmPayRepFilter: TfrmPayRepFilter
     SummaryCalculation = scSUM
     Left = 432
     Top = 80
+  end
+  object ODSPayInfo: TOracleDataSet
+    SQL.Strings = (
+      
+        '/*SELECT rownum, creditid, groupname, boorower, crdnum, mainsche' +
+        'dule, mainpayed, (-mainschedule+mainpayed) as maindiff   intrsch' +
+        'edule, intrpayed,  (-intrschedule+intrpayed) as intrdiff,irest'
+      
+        ' ,CREDITLINEAMMOUNT,SUMPAY,SUMSHEDULE,rest qaliq,(rest-(CREDITLI' +
+        'NEAMMOUNT-SUMSHEDULE)) maindiff ,'
+      
+        'mainschedule-mainpayed "'#399'.B '#252'zr'#601' az '#246'd'#601'ni'#351'" ,irest-intrpayed "Fa' +
+        'iz az '#246'd'#601'ni'#351'",ESASHES,FAIZHES  FROM cm_report_payments p'
+      'where creditid>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '*/'
+      'select * FROM cm_report_payments'
+      ' order by groupname')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000019000000100000004300520045004400490054004900440001000000
+      00001000000042004F004F0052004F005700450052000100000000000C000000
+      4300520044004E0055004D0001000000000012000000470052004F0055005000
+      4E0041004D004500010000000000180000004D00410049004E00530043004800
+      4500440055004C004500010000000000140000004D00410049004E005F005000
+      41005900450044000100000000001A0000004D00410049004E005F0044005500
+      4500500041005900450044000100000000001800000049004E00540052005300
+      430048004500440055004C0045000100000000001200000049004E0054005200
+      500041005900450044000100000000001A00000049004E00540052005F004400
+      5500450050004100590045004400010000000000080000005200450053005400
+      0100000000000E00000049004E00540052004500530054000100000000000E00
+      0000440055004500520045005300540001000000000016000000440055004500
+      49004E005400450052004500530054000100000000000C000000460049004C00
+      490041004C00010000000000060000004400410054000100000000000E000000
+      5000410059005F00440041005400010000000000240000005000410059005F00
+      500045004E0041004C005400590041004D004D004F0055004E00540001000000
+      00001C000000500045004E0041004C005400590041004D004D004F0055004E00
+      54000100000000001000000045004B0056005F00520045005300540001000000
+      00001600000045004B0056005F0049004E005400520045005300540001000000
+      00001A00000045004B0056005F004D00410049004E0050004100590045004400
+      0100000000001A00000045004B0056005F0049004E0054005200500041005900
+      450044000100000000002200000045004B0056005F004D00410049004E005F00
+      440055004500500041005900450044000100000000002200000045004B005600
+      5F0049004E00540052005F004400550045005000410059004500440001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 40
+    object ODSPayInfoCREDITID: TFloatField
+      DisplayLabel = 'Kredit '#304'D'
+      FieldName = 'CREDITID'
+    end
+    object ODSPayInfoBOOROWER: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri ad'#305
+      FieldName = 'BOOROWER'
+      Size = 508
+    end
+    object ODSPayInfoCRDNUM: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' '#8470
+      FieldName = 'CRDNUM'
+      Size = 120
+    end
+    object ODSPayInfoDAT: TDateTimeField
+      DisplayLabel = #214'd'#601'nilmi'#351'  tarix'
+      FieldName = 'DAT'
+    end
+    object ODSPayInfoPAY_DAT: TDateTimeField
+      DisplayLabel = #214'd'#601'ni'#351' tarixi'
+      FieldName = 'PAY_DAT'
+    end
+    object ODSPayInfoMAIN_PAYED: TFloatField
+      DisplayLabel = #399'sasdan '#246'd'#601'nilmi'#351
+      FieldName = 'MAIN_PAYED'
+    end
+    object ODSPayInfoMAIN_DUEPAYED: TFloatField
+      DisplayLabel = 'Gecikmi'#351' '#601'sasdan '#246'd'#601'nilmi'#351
+      FieldName = 'MAIN_DUEPAYED'
+    end
+    object ODSPayInfoINTRPAYED: TFloatField
+      DisplayLabel = 'Faizd'#601'n '#246'd'#601'nilmi'#351
+      FieldName = 'INTRPAYED'
+    end
+    object ODSPayInfoINTR_DUEPAYED: TFloatField
+      DisplayLabel = 'Gecikmi'#351' faizd'#601'n '#246'd'#601'nilmi'#351
+      FieldName = 'INTR_DUEPAYED'
+    end
+    object ODSPayInfoREST: TFloatField
+      DisplayLabel = #399'sas qal'#305'q '
+      FieldName = 'REST'
+    end
+    object ODSPayInfoINTREST: TFloatField
+      DisplayLabel = 'Faiz qal'#305'q'
+      FieldName = 'INTREST'
+    end
+    object ODSPayInfoDUEREST: TFloatField
+      DisplayLabel = 'Geckmi'#351' '#601'sas qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object ODSPayInfoDUEINTEREST: TFloatField
+      DisplayLabel = 'Gecikmi'#231' faiz qal'#305'q'
+      FieldName = 'DUEINTEREST'
+    end
+    object ODSPayInfoPAY_PENALTYAMMOUNT: TFloatField
+      DisplayLabel = #214'd'#601'nilmi'#351' d'#601'bb'#601
+      FieldName = 'PAY_PENALTYAMMOUNT'
+    end
+    object ODSPayInfoPENALTYAMMOUNT: TFloatField
+      DisplayLabel = 'D'#601'bb'#601
+      FieldName = 'PENALTYAMMOUNT'
+    end
+    object ODSPayInfoFILIAL: TWideStringField
+      DisplayLabel = 'filial'
+      FieldName = 'FILIAL'
+      Size = 50
+    end
   end
 end

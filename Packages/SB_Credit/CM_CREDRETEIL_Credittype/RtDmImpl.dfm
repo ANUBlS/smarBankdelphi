@@ -952,7 +952,7 @@ object RtDataModule: TRtDataModule
   end
   object creditcatData: TOracleDataSet
     SQL.Strings = (
-      'SELECT  a.id, a.name, a.kod,a.vid_sob'
+      'SELECT  a.id, a.name, a.kod,a.vid_sob,a.agro_kod'
       '  FROM cm_creditcat a'
       'where '
       'vid_sob=:vid_sob'
@@ -962,9 +962,10 @@ object RtDataModule: TRtDataModule
       0400000001000000100000003A005600490044005F0053004F00420003000000
       0000000000000000}
     QBEDefinition.QBEFieldDefs = {
-      05000000040000000400000049004400010000000000080000004E0041004D00
+      05000000050000000400000049004400010000000000080000004E0041004D00
       4500010000000000060000004B004F0044000100000000000E00000056004900
-      44005F0053004F004200010000000000}
+      44005F0053004F004200010000000000100000004100470052004F005F004B00
+      4F004400010000000000}
     Session = sboapiDataModule.SBSession
     Left = 59
     Top = 541
@@ -981,6 +982,9 @@ object RtDataModule: TRtDataModule
     end
     object creditcatDataVID_SOB: TFloatField
       FieldName = 'VID_SOB'
+    end
+    object creditcatDataAGRO_KOD: TFloatField
+      FieldName = 'AGRO_KOD'
     end
   end
   object DataSrcActivities: TDataSource

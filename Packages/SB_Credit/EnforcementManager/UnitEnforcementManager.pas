@@ -70,6 +70,7 @@ type
     procedure SpeedButton5Click(Sender: TObject);
     procedure SpeedButton6Click(Sender: TObject);
     procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
   private
     { Private declarations }
     FEvents: IEnforcementManagerEvents;
@@ -151,7 +152,7 @@ type
 
 implementation
 
-uses ComObj, ComServ, DataModEnforcement;
+uses ComObj, ComServ, DataModEnforcement, AdminParametrIcra;
 
 {$R *.DFM}
 
@@ -539,6 +540,26 @@ begin
   end;
   DBLExecutive.KeyValue:=-1;
   DBLCourt.KeyValue:=-1;
+end;
+
+procedure TEnforcementManager.SpeedButton4Click(Sender: TObject);
+begin
+  DataModuleEnforcement.ODSAdminGroups.Active:=true;
+  DataModuleEnforcement.ODSAdminIn.Active:=true;
+  with DataModuleEnforcement.ODSEnforcementAdmin do
+  begin
+      Open;
+      if (UpperCase(Session.LogonUsername) = 'SMART')  or (UpperCase(Session.LogonUsername) ='ELVIN')
+        or (UpperCase(Session.LogonUsername) ='ELMIR')
+      then
+      begin
+         FormParametr.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş Qadağandır!','Administratora müraciət edin!!!',0);
+      end;
+   end;
+
 end;
 
 procedure TEnforcementManager.SpeedButton5Click(Sender: TObject);

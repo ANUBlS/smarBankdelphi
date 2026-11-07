@@ -263,6 +263,25 @@ type
     Ods_RefinancedReasonCode: TOracleDataSet;
     Ods_IsProjectFinanced: TOracleDataSet;
     dsrc_IsProjectFinanced: TDataSource;
+    ods_Insurance: TOracleDataSet;
+    ods_InsuranceID: TIntegerField;
+    ods_InsuranceNAME: TWideStringField;
+    ods_InsuranceSID: TWideStringField;
+    InsSrc: TDataSource;
+    ods_ins_status: TOracleDataSet;
+    dsrc__ins_status: TDataSource;
+    PersonLinkKOMISION: TFloatField;
+    PersonLinkXIDMETHAQQI: TFloatField;
+    PercentID: TFloatField;
+    PercentBPER: TFloatField;
+    PercentEPER: TFloatField;
+    PercentFAIZ: TFloatField;
+    PercentGECFAIZ: TFloatField;
+    PercentPENYA: TFloatField;
+    PercentMEHSETID: TFloatField;
+    PercentAYLIQFAIZ: TFloatField;
+    PercentKOMISSIA: TFloatField;
+    creditcatDataAGRO_KOD: TFloatField;
     procedure DataModuleDestroy(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
     procedure PersonLinkApplyRecord(Sender: TOracleDataSet; Action: Char;
@@ -300,7 +319,8 @@ AutoExpire.Open;
 ods_paymethod.Open;
 UsrGroups.Open;
 Aim_Set.Open;
-
+ods_Insurance.Open;
+ods_ins_status.Open;
 PortfolioType.Open;
 IntRateTypeCode.Open;
 SubsidyByGov.Open;
@@ -351,7 +371,8 @@ BusEntityLegalStatus.CloseAll;
 FundingSourceCode.CloseAll;
 GeneralPurposeCode.CloseAll;
 JudicialStatusCode.CloseAll;
-
+ods_Insurance.CloseAll;
+ods_ins_status.CloseAll;
 
 end;
 

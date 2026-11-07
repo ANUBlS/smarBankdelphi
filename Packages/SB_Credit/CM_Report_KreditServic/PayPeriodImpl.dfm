@@ -1,0 +1,390 @@
+object PayForm: TPayForm
+  Left = 282
+  Top = 324
+  ClientHeight = 148
+  ClientWidth = 366
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 202
+    Top = 119
+    Width = 82
+    Height = 28
+    Caption = 'Q'#601'bul'
+    Flat = True
+    Glyph.Data = {
+      66010000424D6601000000000000760000002800000016000000140000000100
+      040000000000F000000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+      5555555555005555555555555555555555005555555555555555555555005555
+      5555544555555555550055555555422455555555550055555554222245555555
+      5500555555422222245555555500555554222A2222455555550055555222A5A2
+      22455555550055555A2A555A222455555500555555A55555A222455555005555
+      555555555A222455550055555555555555A222455500555555555555555A2224
+      55005555555555555555A222450055555555555555555A224500555555555555
+      555555A225005555555555555555555A55005555555555555555555555005555
+      55555555555555555500}
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 284
+    Top = 119
+    Width = 82
+    Height = 28
+    Caption = 'Ba'#287'la'
+    Flat = True
+    Glyph.Data = {
+      36050000424D3605000000000000360400002800000010000000100000000100
+      08000000000000010000CE0E0000D80E00000001000000000000000000008080
+      8000000080000080800000800000808000008000000080008000408080004040
+      0000FF80000080400000FF00400000408000FFFFFF00C0C0C0000000FF0000FF
+      FF0000FF0000FFFF0000FF000000FF00FF0080FFFF0080FF0000FFFF8000FF80
+      80008000FF004080FF00C0DCC000F0CAA6000008000000000800000808000804
+      00000800080008080800130E0800040314001008100010101000151414001311
+      1F002525210018133F004E0C11004D1D0F00681C1000561D21006B1C21004A3B
+      36005655560077141800741324008F0E2200940F30008818230084292300893C
+      400011097E004C4B75005A6B6300666666005A73630065706D00736D6D007373
+      73007878730073737B0077777B00945D670096706D007B7B7B00837B8100947B
+      73009C7B730084847B008484840084848C0090878700948C8E00948C94008C94
+      9400949494009C9494009C9C940094949C009C949C009C9C9C00A80F2300AD18
+      2900A9083100A5143500AF102B00AD0C3900BC072B00C10D3600AD1E2900A82C
+      2700AD183900A9293100BE1B2900BD183100C01F3100B2154200A9213900B121
+      3D00B5214200AB2C3900A9294200A92F4600BB1B4000B5294200BD293900B929
+      4600C7184200CC253E00C1254A00CF254E00AC3F3200AB3F4200AE354A00AD4A
+      4200C1383D00C6314A00CE314A00BD394A00AD3D4F00BD355200AD475000BD42
+      5200C8395100C1425A00CC3F5E00B3524200B5525300B54E5E00B85C5B00C654
+      5000D95F5100F6624600B2606A00C15A6B00CC586500CC5D6F00B7848300DD7C
+      6E00E89889000C08B5000D0DE1001010EF000000F7000808F7000D0DFC001B1B
+      ED003A3AE2002222FB003939FF006E6ECD005656FF007777FF009494A5009C9C
+      A500A59CA500A5A5A500ADA5A5009494AD00A5A5AD00ADA5AD00A5A7B500A0A0
+      C6009B9BDB008C8CFF009494FF009C9CFF00A5A5FF00B5A5A500BDA5A500B5AD
+      A500BDADA500ADADAD00B5ADAD00B5B5AD00B1ADB500C6A7AA00C9B1AE00D6B1
+      A900EDB0A900FFAFA200FFB5AD00FFBDAD00B5B5B500BDB5B500BDBDB500ADAD
+      BD00B9B5BD00B3B3DB00B1B1FF00C1B9B900BDBDC600CBBBBA00E5BBB700C6C6
+      C600DABDC600C1C1D600BDBDFF00D6C6C600DEC6C600CEC6CE00D6C6CE00DEC6
+      CE00CECECE00D6CECE00D6D6CE00D2CED600D6D6D600DECECE00DECED600DED6
+      D600D6D6DE00DED6DE00F4C8BE00F0CFCB00FFD6C600E7CED600E7D6D600F1D3
+      D600FFD6CE00DEDEDE00E7DED600E7E7D600EBD6DE00E7DEDE00FFD6D600FFDE
+      D600D2D2EF00C6C6FF00CECEFF00D6D6FF00DEDEE700DEDEFF00E7DEE700E7E7
+      E700E7E7FF00EFDEDE00EFE7E700EFE7EF00F7E7E700FFDEDE00FFE7DE00FFE7
+      E700EFEFEF00EFEFFF00F7EFEF00F7EFF700FFEFE700FFEFEF000F0F01010F0F
+      0F0F0F0F0F0F0F0F0F0F0F100202010F0F0F0F0F10010F0F0F0F0F1002020201
+      0F0F0F100202010F0F0F0F1002020202010F1002020202010F0F0F0F10020202
+      02010202020202010F0F0F0F0F100202020202020202010F0F0F0F0F0F0F1002
+      0202020202010F0F0F0F0F0F0F0F0F0202020202010F0F0F0F0F0F0F0F0F0F10
+      02020202010F0F0F0F0F0F0F0F0F100202020202010F0F0F0F0F0F0F0F100202
+      0201020202010F0F0F0F0F0F10020202010F10020202010F0F0F0F0F10020201
+      0F0F0F10020202010F0F0F0F0F10020F0F0F0F0F100202020F0F0F0F0F0F0F0F
+      0F0F0F0F0F1002100F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F}
+    OnClick = SpeedButton2Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 366
+    Height = 52
+    Align = alTop
+    Caption = 'Tarix aral'#305#287#305
+    TabOrder = 0
+    ExplicitWidth = 425
+    object Label1: TLabel
+      Left = 178
+      Top = 21
+      Width = 12
+      Height = 13
+      Caption = '__'
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 10
+      Top = 24
+      Width = 158
+      Height = 21
+      Date = 40829.393068935180000000
+      Time = 40829.393068935180000000
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 199
+      Top = 24
+      Width = 158
+      Height = 21
+      Date = 40829.393068935180000000
+      Time = 40829.393068935180000000
+      TabOrder = 1
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 51
+    Width = 188
+    Height = 67
+    Caption = 'Kreditin tipi'
+    TabOrder = 1
+    object DBLookupComboboxEh7: TDBLookupComboboxEh
+      Left = 3
+      Top = 19
+      Width = 182
+      Height = 21
+      EditButtons = <>
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      KeyField = 'ID'
+      ListField = 'DESCRIPTION'
+      ListSource = DataSource1
+      ParentFont = False
+      TabOrder = 0
+      Visible = True
+    end
+    object CheckBox1: TCheckBox
+      Left = 4
+      Top = 43
+      Width = 97
+      Height = 17
+      Caption = 'T'#601'tbiq et'
+      TabOrder = 1
+    end
+  end
+  object RadioGroup1: TRadioGroup
+    Left = 187
+    Top = 51
+    Width = 184
+    Height = 67
+    Caption = 'Kreditin maliy'#601'l'#601#351'm'#601' m'#601'nb'#601'yi'
+    TabOrder = 2
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 190
+    Top = 70
+    Width = 176
+    Height = 21
+    EditButtons = <>
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    KeyField = 'ID'
+    ListField = 'DESCRIPTION'
+    ListSource = DataSource2
+    ParentFont = False
+    TabOrder = 3
+    Visible = True
+  end
+  object CheckBox2: TCheckBox
+    Left = 191
+    Top = 94
+    Width = 97
+    Height = 17
+    Caption = 'T'#601'tbiq et'
+    TabOrder = 4
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 16
+    object OracleDataSet1TEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object OracleDataSet1PRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object OracleDataSet1ARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object OracleDataSet1CLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_credittypes')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000001E000000520045004E00
+      45005700410042004C0045005300540041005400550053000100000000000A00
+      0000490054005900500045000100000000000C000000490043004C0041005300
+      5300010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000100000004300410052004400540059005000450001000000
+      0000140000004F0055005400420041004C0041004E0043004500010000000000
+      1A000000440055004500500045005200530045004E0054004400410059000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 72
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet2RENEWABLESTATUS: TFloatField
+      FieldName = 'RENEWABLESTATUS'
+    end
+    object OracleDataSet2ITYPE: TFloatField
+      FieldName = 'ITYPE'
+    end
+    object OracleDataSet2ICLASS: TFloatField
+      FieldName = 'ICLASS'
+    end
+    object OracleDataSet2DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object OracleDataSet2CARDTYPE: TFloatField
+      FieldName = 'CARDTYPE'
+    end
+    object OracleDataSet2OUTBALANCE: TFloatField
+      FieldName = 'OUTBALANCE'
+    end
+    object OracleDataSet2DUEPERSENTDAY: TFloatField
+      FieldName = 'DUEPERSENTDAY'
+    end
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_usergroups')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E0001000000000010000000420041004E00
+      4B005F004B004F004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 16
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet3DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object OracleDataSet3BANK_KOD: TWideStringField
+      FieldName = 'BANK_KOD'
+      Size = 2
+    end
+  end
+  object Main: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.numberofcredit,b.name,o.paydate,o.payedamt,o.payedintam' +
+        't,o.payeddueamt,o.payeddueintamt,o.payedpenaltyamt from cm_activ' +
+        'e_credits p,cm_boorowerinfo b ,cm_payments o '
+      'where p.id=b.creditid and p.id=o.creditid'
+      'and o.paydate between :bdat and :edat'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0E00000050004100590044004100540045000100000000001000000050004100
+      59004500440041004D0054000100000000001600000050004100590045004400
+      49004E00540041004D0054000100000000001C00000050004100590045004400
+      44005500450049004E00540041004D0054000100000000001E00000050004100
+      590045004400500045004E0041004C005400590041004D005400010000000000
+      160000005000410059004500440044005500450041004D005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 104
+    object MainNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavile No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object MainNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object MainPAYDATE: TDateTimeField
+      DisplayLabel = #214'd'#601'ni'#351' tarixi'
+      FieldName = 'PAYDATE'
+    end
+    object MainPAYEDAMT: TFloatField
+      DisplayLabel = #399'sasdan '#246'd'#601'ni'#351
+      FieldName = 'PAYEDAMT'
+    end
+    object MainPAYEDINTAMT: TFloatField
+      DisplayLabel = 'Faizd'#601'n  '#246'd'#601'ni'#351
+      FieldName = 'PAYEDINTAMT'
+    end
+    object MainPAYEDDUEAMT: TFloatField
+      DisplayLabel = 'Gec '#601'sasdan '#246'd'#601'ni'#351
+      FieldName = 'PAYEDDUEAMT'
+    end
+    object MainPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = 'Gec faizd'#601'n  '#246'd'#601'ni'#351
+      FieldName = 'PAYEDDUEINTAMT'
+    end
+    object MainPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = 'Penyadan  '#246'd'#601'ni'#351
+      FieldName = 'PAYEDPENALTYAMT'
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet2
+    Left = 88
+    Top = 72
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet3
+    Left = 288
+    Top = 24
+  end
+  object MisExcelExport: TCMExcelExport
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    BorderTitles.Weight = bwThick
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clBlack
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    BorderData.BorderColor = clBlue
+    BorderData.Weight = bwThin
+    BorderData.LineStyle = blLine
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssValues
+    SummaryCalculation = scSUM
+    Left = 324
+    Top = 51
+  end
+end
